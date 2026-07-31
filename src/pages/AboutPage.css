@@ -1,0 +1,699 @@
+/* ==========================================
+   ABOUT PAGE — INNOVEITY TECH CLONE & THEME
+   ========================================== */
+
+/* Outer Cream Mat Frame (#E8E8DF) */
+.about-exact-clone-page {
+  background-color: #082823;
+  min-height: 100vh;
+  padding-top: 80px;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+.about-cream-mat-frame {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 30px 60px 30px;
+}
+
+/* Internal Dark Header Bar */
+.about-internal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 0 36px 0;
+  border-bottom: 1px solid rgba(232, 196, 119, 0.2);
+  margin-bottom: 20px;
+}
+
+.cico-brand-title {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+.nav-links-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.nav-item {
+  color: rgba(216, 216, 208, 0.85);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-item:hover, .nav-item.active {
+  color: #e8c477;
+}
+
+.gold-cta-button {
+  background: linear-gradient(135deg, #10b981 0%, #0d3b34 100%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 22px;
+  border-radius: 20px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  transition: all 0.3s ease;
+}
+
+.gold-cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.45);
+}
+
+/* ⭐ Split-Screen Grid Layout */
+.about-split-screen {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: #0d3b34;
+  border-radius: 20px 20px 0 0;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(232, 196, 119, 0.15);
+  align-items: stretch;
+}
+
+/* Left Column Styling */
+.about-left-column {
+  padding: 60px 50px;
+  background-color: #0d3b34;
+  display: flex;
+  flex-direction: column;
+}
+
+.about-sections-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+}
+
+/* Section 1: Hero */
+.display-hero-gold {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 76px;
+  font-weight: 700;
+  color: #e8c477;
+  line-height: 0.95;
+  margin: 0 0 12px 0;
+  letter-spacing: -1px;
+}
+
+.sub-heading-white {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 24px 0;
+  letter-spacing: -0.5px;
+}
+
+.body-muted-paragraph {
+  font-size: 15px;
+  line-height: 1.65;
+  color: rgba(216, 216, 208, 0.85);
+  max-width: 520px;
+}
+
+/* Section 2: Kinetic Statement */
+.statement-section {
+  position: relative;
+}
+
+.display-statement-gold {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: #e8c477;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin: 0 0 40px 0;
+}
+
+.skew-word-item {
+  color: #e8c477;
+  transition: color 0.2s ease;
+}
+
+.thin-divider-line {
+  height: 1px;
+  background: rgba(232, 196, 119, 0.2);
+  width: 100%;
+}
+
+/* Section 3: Philosophy */
+.philosophy-white-title {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 56px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.8px;
+}
+
+.philosophy-text {
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ⭐ Right Column Styling (Seamless Top-to-Bottom Layout with Zero Gaps) */
+.about-right-column {
+  position: relative;
+  background-color: #082823;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sticky-building-container {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  min-height: 440px;
+  overflow: hidden;
+}
+
+.sticky-building-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.teal-tint-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, rgba(8, 40, 35, 0.7) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* Ropes Overlay */
+.suspension-ropes-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0 22%;
+}
+
+.rope {
+  width: 1.5px;
+  height: 100%;
+  opacity: 0.8;
+}
+
+.rope-orange {
+  background: linear-gradient(180deg, rgba(249, 115, 22, 0.85) 0%, rgba(249, 115, 22, 0.2) 100%);
+}
+
+.rope-red {
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.85) 0%, rgba(239, 68, 68, 0.2) 100%);
+}
+
+.rope-black {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.2) 100%);
+}
+
+/* ⭐ Impact Cards Wrapper (Fixed at bottom edge with ZERO gap) */
+.always-visible-impact-wrapper {
+  padding: 30px 40px !important;
+  background-color: #0d3b34 !important;
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid rgba(232, 196, 119, 0.15);
+  margin-top: auto;
+}
+
+.impact-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  max-width: 480px;
+  margin-bottom: 0 !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.impact-card {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(232, 196, 119, 0.3) !important;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  opacity: 1 !important;
+  visibility: visible !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.impact-card:hover {
+  background: rgba(232, 196, 119, 0.12) !important;
+  border-color: #e8c477 !important;
+  transform: translateY(-2px);
+}
+
+.impact-number {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: #e8c477 !important;
+  line-height: 1;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.impact-label {
+  font-size: 12px;
+  color: rgba(216, 216, 208, 0.9) !important;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  display: block;
+}
+
+/* ⭐ Full-Width Marquee Badges Section */
+.full-width-marquee-section {
+  grid-column: 1 / -1;
+  background-color: #082823;
+  padding: 24px 0;
+  border-top: 1px solid rgba(232, 196, 119, 0.2);
+  border-bottom: 1px solid rgba(232, 196, 119, 0.2);
+  overflow: hidden;
+}
+
+.marquee-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  width: 100%;
+}
+
+.marquee-track {
+  display: inline-flex;
+  gap: 16px;
+  animation: marqueeScroll 25s linear infinite;
+}
+
+.badge-pill {
+  background: rgba(13, 59, 52, 0.9);
+  border: 1.5px solid rgba(232, 196, 119, 0.4);
+  color: #e8c477;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 8px 22px;
+  border-radius: 25px;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ⭐ SECTION — STRUCTURED DELIVERY STEP-BY-STEP STAGGERED PIPELINE */
+.structured-delivery-section {
+  background-color: #082823;
+  padding: 90px 20px 60px 20px;
+  border-top: 1px solid rgba(232, 196, 119, 0.2);
+  border-bottom: 1px solid rgba(232, 196, 119, 0.2);
+  position: relative;
+  overflow: hidden;
+  font-family: 'Outfit', 'Inter', sans-serif;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.structured-delivery-container {
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.sd-badge-wrapper {
+  margin-bottom: 20px;
+}
+
+.sd-badge {
+  background: rgba(232, 196, 119, 0.12);
+  border: 1px solid rgba(232, 196, 119, 0.35);
+  color: #e8c477;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border-radius: 20px;
+  letter-spacing: 0.4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.sd-badge-sparkle {
+  font-size: 12px;
+  color: #e8c477;
+}
+
+.sd-main-title {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  margin: 0 0 6px 0;
+  text-align: center;
+}
+
+.sd-gradient-title {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 44px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #10b981 0%, #34d399 40%, #e8c477 75%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  margin: 0 0 20px 0;
+  text-align: center;
+}
+
+.sd-description {
+  font-size: 15px;
+  color: rgba(216, 216, 208, 0.85);
+  max-width: 650px;
+  margin: 0 auto 70px auto;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ⭐ 4-Step Staggered Staircase Pipeline Grid (Perfectly Centered) */
+.sd-pipeline-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto 30px auto;
+  text-align: left;
+  position: relative;
+  min-height: 260px;
+  justify-items: center;
+  justify-content: center;
+}
+
+.sd-step-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+  transition: transform 0.4s ease;
+  width: 100%;
+  max-width: 190px;
+  margin: 0 auto;
+}
+
+/* ⭐ Exact Step-by-Step Staggered Elevating Offsets */
+.sd-step-col.step-1 {
+  transform: translateY(90px);
+}
+
+.sd-step-col.step-2 {
+  transform: translateY(60px);
+}
+
+.sd-step-col.step-3 {
+  transform: translateY(30px);
+}
+
+.sd-step-col.step-4 {
+  transform: translateY(0px);
+}
+
+.sd-step-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.sd-step-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid #e8c477;
+  background: #082823;
+  box-shadow: 0 0 12px rgba(232, 196, 119, 0.8);
+}
+
+.sd-step-title {
+  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.4px;
+}
+
+.sd-pillar-line {
+  width: 2px;
+  height: 120px;
+  background: linear-gradient(180deg, #e8c477 0%, #10b981 50%, rgba(16, 185, 129, 0.05) 100%);
+  margin-left: 4px;
+  margin-bottom: -105px;
+  border-radius: 2px;
+}
+
+.sd-step-list {
+  list-style: none;
+  padding: 0 0 0 20px;
+  margin: 12px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.sd-step-list li {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(216, 216, 208, 0.85);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.sd-step-list li.highlight-item {
+  color: #e8c477;
+  font-weight: 600;
+}
+
+.sd-step-list li:hover {
+  color: #e8c477;
+  transform: translateX(4px);
+}
+
+/* ⭐ Exact Intersecting Wave Mesh Graphic Container (Centered) */
+.sd-wave-graphic {
+  width: 100%;
+  max-width: 1080px;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  margin: 30px auto -30px auto;
+}
+
+.sd-wave-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Full-Width Black #0A0A0A Footer */
+.black-footer-section {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  border-radius: 0 0 20px 20px;
+  padding: 55px 48px 35px 48px;
+  position: relative;
+  z-index: 2;
+}
+
+.footer-inner-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-top-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1.5fr;
+  gap: 35px;
+  align-items: flex-start;
+}
+
+.cico-footer-brand {
+  font-family: 'Barlow Condensed', 'Anton', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 20px 0;
+  letter-spacing: -0.5px;
+}
+
+.gold-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #e8c477;
+  margin: 0 0 10px 0;
+  text-transform: capitalize;
+}
+
+.cico-news-form {
+  display: flex;
+  align-items: center;
+}
+
+.cico-news-form input {
+  background: transparent;
+  border: 1px solid rgba(216, 216, 208, 0.35);
+  padding: 9px 12px;
+  color: #ffffff;
+  font-size: 13px;
+  border-radius: 6px 0 0 6px;
+  outline: none;
+  width: 170px;
+}
+
+.cico-news-form input:focus {
+  border-color: #e8c477;
+}
+
+.cico-news-btn {
+  background: #e8c477;
+  color: #0a0a0a;
+  border: none;
+  padding: 9px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.cico-news-btn:hover {
+  background: #ffffff;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-links a {
+  color: rgba(216, 216, 208, 0.8);
+  font-size: 13.5px;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #e8c477;
+}
+
+.footer-contact-text {
+  font-size: 13.5px;
+  color: rgba(216, 216, 208, 0.8);
+  line-height: 1.6;
+}
+
+.footer-bottom-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 40px;
+  padding-top: 24px;
+  text-align: center;
+  font-size: 13px;
+  color: rgba(216, 216, 208, 0.6);
+}
+
+/* Scroll-Reveal Fades */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Responsive Queries (<992px Stack) */
+@media (max-width: 992px) {
+  .about-cream-mat-frame { padding: 0 20px 40px 20px; }
+  .about-split-screen { grid-template-columns: 1fr; }
+  .about-left-column { padding: 30px 24px; }
+  .display-hero-gold { font-size: 58px; }
+  .sub-heading-white { font-size: 32px; }
+  .display-statement-gold { font-size: 28px; }
+  .philosophy-white-title { font-size: 44px; }
+  
+  .sd-main-title, .sd-gradient-title { font-size: 34px; }
+  .sd-pipeline-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+  .sd-step-col.step-1, .sd-step-col.step-2, .sd-step-col.step-3, .sd-step-col.step-4 {
+    transform: translateY(0);
+    max-width: 100%;
+  }
+
+  .impact-grid { max-width: 100%; }
+
+  .about-right-column { height: auto; }
+  .sticky-building-container { position: relative; height: 350px; top: 0; }
+  
+  .footer-top-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .black-footer-section { padding: 35px 24px; }
+}
+
+@media (max-width: 600px) {
+  .about-internal-nav { flex-direction: column; align-items: flex-start; gap: 15px; }
+  .display-hero-gold { font-size: 46px; }
+  .sub-heading-white { font-size: 24px; }
+  .display-statement-gold { font-size: 22px; }
+  .philosophy-white-title { font-size: 36px; }
+  .sd-main-title, .sd-gradient-title { font-size: 26px; }
+  .sd-pipeline-grid { grid-template-columns: 1fr; gap: 24px; }
+  .impact-grid { grid-template-columns: 1fr; }
+  .about-right-column { height: auto; }
+  .sticky-building-container { height: 260px; }
+  .footer-top-grid { grid-template-columns: 1fr; }
+}

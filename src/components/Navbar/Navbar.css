@@ -1,0 +1,220 @@
+.navbar-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  padding: 1.2rem 0;
+  transition: all 0.4s ease;
+  background: linear-gradient(180deg, rgba(8, 12, 18, 0.95) 0%, rgba(8, 12, 18, 0.82) 70%, rgba(8, 12, 18, 0.6) 100%);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+.navbar-header.header-scrolled {
+  padding: 0.8rem 0;
+  background: rgba(8, 12, 18, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Logo Brand Styling */
+.brand-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.innoveity-brand-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.innoveity-logo-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.innoveity-brand-text-col {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.innoveity-brand-main-title {
+  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+}
+
+.brand-green {
+  color: #00a878;
+}
+
+.brand-v-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.v-gold-badge {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 7px solid #f59e0b;
+  z-index: 2;
+}
+
+.innoveity-brand-sub-title {
+  font-size: 0.52rem;
+  font-weight: 800;
+  color: #00a878;
+  letter-spacing: 2.2px;
+  margin-top: 2px;
+}
+
+/* Nav Links */
+.navbar-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 2.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link-item {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  padding: 4px 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.nav-link-item:hover,
+.nav-link-item.nav-link-active {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.nav-link-item::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: #10b981;
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+
+.nav-link-item:hover::after,
+.nav-link-item.nav-link-active::after {
+  width: 100%;
+}
+
+/* Right Action Pill Button */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.pill-btn-contact {
+  background: #ffffff;
+  color: #0b0f19;
+  border-radius: 9999px;
+  padding: 5px 6px 5px 22px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pill-btn-contact:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
+  background: #f8fafc;
+}
+
+.pill-btn-contact .arrow-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.pill-btn-contact:hover .arrow-circle {
+  background: #059669;
+  transform: rotate(45deg);
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+  display: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 992px) {
+  .navbar-nav-links {
+    position: absolute;
+    top: -1000px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    background: rgba(11, 15, 25, 0.98);
+    backdrop-filter: blur(20px);
+    padding: 2rem 0;
+    gap: 1.5rem;
+    transition: all 0.4s ease;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .navbar-nav-links.mobile-active {
+    top: 70px;
+  }
+
+  .mobile-toggle {
+    display: block;
+  }
+}

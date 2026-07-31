@@ -1,0 +1,307 @@
+.contact-modern-section {
+  background-color: #ffffff;
+  padding: 60px 0;
+  color: #0f172a;
+}
+
+.contact-max-wrapper {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Top Header Banner Card - Emerald Green Theme */
+.contact-top-banner {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #e0f2fe 100%);
+  border-radius: 28px;
+  padding: 55px 30px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.08);
+}
+
+.banner-sparkle-left {
+  position: absolute;
+  top: -10px;
+  left: -10px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.banner-circle-right {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  pointer-events: none;
+  opacity: 0.85;
+}
+
+.banner-pill-badge {
+  background: #ffffff;
+  color: #059669;
+  border-radius: 9999px;
+  padding: 6px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.banner-main-title {
+  font-family: 'Plus Jakarta Sans', var(--font-family);
+  font-size: 52px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -1.8px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+/* Main 2-Column Grid */
+.contact-main-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+/* Left Column - Info & Map Card */
+.contact-info-card {
+  background: #f8fafc;
+  border-radius: 24px;
+  padding: 28px;
+  border: 1px solid #f1f5f9;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-grid-items {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px 16px;
+  margin-bottom: 20px;
+}
+
+.info-grid-items .full-width {
+  grid-column: span 2;
+}
+
+.info-detail-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.info-green-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: #d1fae5;
+  color: #059669;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.info-detail-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.detail-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #059669;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Map Box */
+.contact-map-box {
+  position: relative;
+  height: 200px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #f1f5f9;
+  border: 1px solid #e2e8f0;
+}
+
+.map-grid-overlay {
+  width: 100%;
+  height: 100%;
+}
+
+.map-pin-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.pin-circle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+  position: relative;
+  z-index: 2;
+}
+
+.pulse-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.25);
+  animation: mapPulse 2s infinite ease-out;
+  z-index: 1;
+}
+
+@keyframes mapPulse {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
+}
+
+/* Right Column - Form Card */
+.contact-form-card {
+  background: #f8fafc;
+  border-radius: 24px;
+  padding: 32px;
+  border: 1px solid #f1f5f9;
+}
+
+.contact-form-elements {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-two-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.form-field-group label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 8px;
+}
+
+.form-field-group input,
+.form-field-group textarea {
+  background: #f0fdf4;
+  border: 1px solid #d1fae5;
+  border-radius: 12px;
+  padding: 13px 18px;
+  font-size: 14px;
+  color: #0f172a;
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+
+.form-field-group textarea {
+  border-radius: 14px;
+  resize: vertical;
+}
+
+.form-field-group input:focus,
+.form-field-group textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.form-field-group input::placeholder,
+.form-field-group textarea::placeholder {
+  color: #94a3b8;
+}
+
+.form-submit-row {
+  display: flex;
+  margin-top: 6px;
+}
+
+.pill-btn-send {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border-radius: 9999px;
+  padding: 13px 38px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pill-btn-send:hover {
+  box-shadow: 0 12px 30px rgba(16, 185, 129, 0.5);
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 992px) {
+  .contact-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .banner-main-title {
+    font-size: 38px;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .form-two-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid-items {
+    grid-template-columns: 1fr;
+  }
+
+  .info-grid-items .full-width {
+    grid-column: span 1;
+  }
+
+  .contact-top-banner {
+    padding: 40px 20px;
+  }
+
+  .banner-main-title {
+    font-size: 30px;
+  }
+}

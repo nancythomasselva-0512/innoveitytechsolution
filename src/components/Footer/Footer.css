@@ -1,0 +1,270 @@
+.footer-wrapper {
+  background-color: #ffffff;
+  padding-top: 20px;
+  padding-bottom: 40px;
+  color: #ffffff;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Top CTA Banner Card */
+.footer-cta-card {
+  background: linear-gradient(135deg, #022c22 0%, #064e3b 50%, #042f2e 100%);
+  border-radius: 24px;
+  padding: 55px 40px;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  box-shadow: 0 15px 35px rgba(2, 44, 34, 0.2);
+}
+
+.cta-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.cta-pill-badge {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #a7f3d0;
+  border-radius: 9999px;
+  padding: 6px 18px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 22px;
+  display: inline-flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.cta-main-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 44px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
+  margin: 0 0 28px 0;
+  position: relative;
+  z-index: 2;
+}
+
+.cta-btn-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
+}
+
+.pill-btn-get-started {
+  background: #ffffff;
+  color: #0b0f19;
+  border-radius: 9999px;
+  padding: 6px 6px 6px 24px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.pill-btn-get-started:hover {
+  transform: translateY(-2px) scale(1.02);
+  background: #f8fafc;
+  box-shadow: 0 12px 30px rgba(255, 255, 255, 0.25);
+}
+
+.cta-arrow-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #10b981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.pill-btn-get-started:hover .cta-arrow-circle {
+  background: #059669;
+  transform: rotate(45deg);
+}
+
+.pill-btn-see-options {
+  background: rgba(255, 255, 255, 0.06);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
+  padding: 13px 28px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.pill-btn-see-options:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Main Dark Footer Area */
+.footer-main-dark {
+  background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
+  border-radius: 28px;
+  padding: 50px 40px 30px 40px;
+  color: #94a3b8;
+}
+
+.footer-columns-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1.2fr 1fr 1fr 1fr;
+  gap: 30px;
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Col 1 Brand & Registration */
+.footer-brand-logo-box {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.brand-legal-info p {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 0 4px 0;
+}
+
+/* Column Titles & Lists */
+.footer-col-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 18px 0;
+}
+
+.footer-col-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.footer-col-list li {
+  color: #94a3b8;
+  line-height: 1.5;
+}
+
+.footer-col-list a {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.3s ease, padding-left 0.3s ease;
+  display: inline-block;
+}
+
+.footer-col-list a:hover {
+  color: #ffffff;
+}
+
+.social-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+  font-size: 14px;
+}
+
+/* Bottom Legal Bar */
+.footer-legal-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  margin-top: 45px;
+  padding-top: 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.legal-links {
+  display: flex;
+  gap: 24px;
+}
+
+.legal-links a {
+  color: #64748b;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.legal-links a:hover {
+  color: #ffffff;
+}
+
+.legal-center-logo span {
+  font-size: 18px;
+  color: #10b981;
+}
+
+.copyright-text {
+  color: #64748b;
+}
+
+/* Responsive Media Queries */
+@media screen and (max-width: 1024px) {
+  .footer-columns-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 20px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cta-main-title {
+    font-size: 32px;
+  }
+
+  .footer-columns-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .footer-legal-bar {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .footer-columns-grid {
+    grid-template-columns: 1fr;
+  }
+}

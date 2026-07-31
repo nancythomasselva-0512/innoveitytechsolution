@@ -1,0 +1,18 @@
+/* Letter-by-Letter Reveal Animation Styles */
+
+.letter-reveal-paragraph {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: #2c3e3a;
+  font-weight: 500;
+  margin: 0 auto;
+  max-width: 850px;
+  overflow: visible;
+}
+
+.sp-intro-letter-reveal {
+  font-size: 1.2rem;
+  color: #0d3b34;
+  font-weight: 600;
+  line-height: 1.8;
+}
