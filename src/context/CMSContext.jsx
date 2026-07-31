@@ -145,12 +145,12 @@ export const CMSProvider = ({ children }) => {
 
   const [homeContent, setHomeContent] = useState(() => {
     const saved = localStorage.getItem('cms_home');
-    return saved ? { ...defaultHomeContent, ...JSON.parse(saved) } : defaultHomeContent;
+    return saved ? JSON.parse(saved) : defaultHomeContent;
   });
 
   const [aboutContent, setAboutContent] = useState(() => {
     const saved = localStorage.getItem('cms_about');
-    return saved ? { ...defaultAboutContent, ...JSON.parse(saved) } : defaultAboutContent;
+    return saved ? JSON.parse(saved) : defaultAboutContent;
   });
 
   // Sync to LocalStorage
