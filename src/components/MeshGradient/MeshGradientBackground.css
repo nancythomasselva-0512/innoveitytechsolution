@@ -1,0 +1,123 @@
+/* 
+  Innoveity Tech Solution - Brand Theme Mesh Gradient (Emerald & Forest Green)
+*/
+
+.mesh-gradient-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #082823 0%, #0d3b34 40%, #059669 75%, #10b981 100%);
+  box-shadow: 0 25px 60px rgba(13, 59, 52, 0.25);
+  color: #ffffff;
+}
+
+.mesh-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  filter: blur(65px);
+  -webkit-filter: blur(65px);
+  opacity: 0.95;
+}
+
+/* Mesh Animated Color Blobs */
+.mesh-blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform, opacity;
+  animation: floatMeshBlob 18s ease-in-out infinite alternate;
+}
+
+/* Deep Forest Dark Green - Top Left Glow */
+.blob-forest-dark {
+  width: 65%;
+  height: 140%;
+  top: -25%;
+  left: -20%;
+  background: radial-gradient(circle, #082823 0%, #0d3b34 60%, transparent 100%);
+  animation-duration: 20s;
+}
+
+/* Deep Teal / Cyan - Middle Upper Glow */
+.blob-teal-cyan {
+  width: 55%;
+  height: 110%;
+  top: -35%;
+  left: 25%;
+  background: radial-gradient(circle, #0d9488 0%, #06b6d4 55%, transparent 100%);
+  animation-duration: 15s;
+  animation-delay: -3s;
+}
+
+/* Vibrant Emerald Green - Primary Brand Glow Center */
+.blob-emerald-primary {
+  width: 60%;
+  height: 120%;
+  bottom: -20%;
+  left: 30%;
+  background: radial-gradient(circle, #10b981 0%, #059669 65%, transparent 100%);
+  animation-duration: 22s;
+  animation-delay: -7s;
+}
+
+/* Bright Mint Green - Top Right Glow */
+.blob-mint-bright {
+  width: 55%;
+  height: 120%;
+  top: -20%;
+  right: -15%;
+  background: radial-gradient(circle, #34d399 0%, #059669 60%, transparent 100%);
+  animation-duration: 24s;
+  animation-delay: -10s;
+}
+
+/* Dark Forest Base Accent - Bottom Right */
+.blob-forest-accent {
+  width: 50%;
+  height: 90%;
+  bottom: -30%;
+  right: 10%;
+  background: radial-gradient(circle, #0d3b34 0%, #06221d 75%, transparent 100%);
+  animation-duration: 19s;
+  animation-delay: -5s;
+}
+
+/* Subtle Micro Grain Overlay */
+.mesh-noise-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 0);
+  background-size: 28px 28px;
+  opacity: 0.35;
+}
+
+/* Content Container */
+.mesh-content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+/* Hero Variant - Full Width Rounded Bottom */
+.mesh-variant-hero {
+  border-radius: 0 0 32px 32px;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+  .mesh-gradient-wrapper {
+    border-radius: 20px;
+  }
+  
+  .mesh-canvas {
+    filter: blur(50px);
+    -webkit-filter: blur(50px);
+  }
+}

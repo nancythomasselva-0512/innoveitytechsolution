@@ -1,33 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  FiHome, FiUsers, FiFileText, FiSettings, 
-  FiBell, FiSearch, FiMessageSquare, FiActivity,
-  FiLogOut, FiMenu, FiX 
+  FiHome, FiFolder, FiUsers, FiFileText, FiPhone, 
+  FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink,
+  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings
 } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
+import { InnoveityBrandLogo } from '../components/Navbar/Navbar';
 import './AdminPage.css';
 
 const AdminPage = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeTab, setActiveTab] = useState('dashboard');
-  
+  const [activeTab, setActiveTab] = useState('overview');
+  const [notification, setNotification] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
   const { 
-    projects, addProject, deleteProject,
+    projects, addProject, updateProject, deleteProject,
     team, addTeamMember, updateTeamMember, deleteTeamMember,
     contact, updateContact,
-    homeContent, updateHomeContent,
-    aboutContent, updateAboutContent
+    homeContent, updateHomeContent
   } = useCMS();
 
-  // Temporary state for new items
-  const [newProject, setNewProject] = useState({ title: '', category: '', description: '', image: '' });
+  // CMS Form States
+  const [newProject, setNewProject] = useState({ title: '', category: 'Web Development', description: '', image: '' });
   const [newTeam, setNewTeam] = useState({ name: '', role: '', image: '' });
   const [editContact, setEditContact] = useState(contact || {});
   const [editHome, setEditHome] = useState(homeContent || {});
-  const [editAbout, setEditAbout] = useState(aboutContent || {});
-  
-  // State for inline editing
+
+  // Edit Modal States
+  const [editingProjectId, setEditingProjectId] = useState(null);
+  const [editProjectData, setEditProjectData] = useState({ title: '', category: 'Web Development', description: '', image: '' });
   const [editingTeamId, setEditingTeamId] = useState(null);
   const [editTeamData, setEditTeamData] = useState({ name: '', role: '', image: '' });
 
@@ -35,8 +38,14 @@ const AdminPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
+  useEffect(() => {
+    setEditContact(contact || {});
+    setEditHome(homeContent || {});
+  }, [contact, homeContent]);
+
+  const triggerNotification = (msg) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(''), 4000);
   };
 
   const handleImageUpload = (e, setter, stateObj) => {
@@ -50,461 +59,826 @@ const AdminPage = () => {
     }
   };
 
+  // CMS Handlers
+  const handleAddProjectSubmit = (e) => {
+    e.preventDefault();
+    if (!newProject.title || !newProject.description) return;
+    addProject(newProject);
+    setNewProject({ title: '', category: 'Web Development', description: '', image: '' });
+    triggerNotification('New project added successfully!');
+  };
+
+  const handleStartEditProject = (p) => {
+    setEditingProjectId(p.id);
+    setEditProjectData({ title: p.title, category: p.category, description: p.description, image: p.image });
+  };
+
+  const handleSaveEditProject = (e) => {
+    e.preventDefault();
+    updateProject(editingProjectId, editProjectData);
+    setEditingProjectId(null);
+    triggerNotification('Project updated successfully!');
+  };
+
+  const handleAddTeamSubmit = (e) => {
+    e.preventDefault();
+    if (!newTeam.name || !newTeam.role) return;
+    addTeamMember(newTeam);
+    setNewTeam({ name: '', role: '', image: '' });
+    triggerNotification('Team member added successfully!');
+  };
+
+  const handleStartEditTeam = (m) => {
+    setEditingTeamId(m.id);
+    setEditTeamData({ name: m.name, role: m.role, image: m.image });
+  };
+
+  const handleSaveEditTeam = (e) => {
+    e.preventDefault();
+    updateTeamMember(editingTeamId, editTeamData);
+    setEditingTeamId(null);
+    triggerNotification('Team member updated successfully!');
+  };
+
+  const handleSaveContact = (e) => {
+    e.preventDefault();
+    updateContact(editContact);
+    triggerNotification('Contact details updated!');
+  };
+
+  const handleSaveHome = (e) => {
+    e.preventDefault();
+    updateHomeContent(editHome);
+    triggerNotification('Homepage content copy updated!');
+  };
+
   return (
     <div className="admin-layout">
-      {/* Sidebar */}
-      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
-        <div className="sidebar-header">
-          <h2 className="admin-logo">Inno<span>Admin</span></h2>
-          <button className="close-sidebar-btn" onClick={toggleSidebar}>
-            <FiX />
-          </button>
+
+      {/* EDIT PROJECT MODAL OVERLAY */}
+      {editingProjectId && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card">
+            <div className="dash-modal-header">
+              <h3 className="dash-modal-title">Edit Project Details</h3>
+              <button className="dash-modal-close-btn" onClick={() => setEditingProjectId(null)}><FiX /></button>
+            </div>
+            <form onSubmit={handleSaveEditProject} className="dash-form-grid">
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Project Title</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  value={editProjectData.title}
+                  onChange={(e) => setEditProjectData({ ...editProjectData, title: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Category</label>
+                <select 
+                  className="dash-input-styled"
+                  value={editProjectData.category}
+                  onChange={(e) => setEditProjectData({ ...editProjectData, category: e.target.value })}
+                >
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile App Engineering">Mobile App Engineering</option>
+                  <option value="Custom Enterprise Software">Custom Enterprise Software</option>
+                  <option value="Cloud & AI Infrastructure">Cloud & AI Infrastructure</option>
+                  <option value="AI Language Platform">AI Language Platform</option>
+                  <option value="Medical Conference Website">Medical Conference Website</option>
+                  <option value="Form Building Tool">Form Building Tool</option>
+                  <option value="E-Learning Portal">E-Learning Portal</option>
+                  <option value="Corporate Website">Corporate Website</option>
+                </select>
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Description</label>
+                <textarea 
+                  className="dash-input-styled"
+                  style={{ height: '90px' }}
+                  value={editProjectData.description}
+                  onChange={(e) => setEditProjectData({ ...editProjectData, description: e.target.value })}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Upload New Image (Optional)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="dash-input-styled"
+                  onChange={(e) => handleImageUpload(e, setEditProjectData, editProjectData)}
+                />
+                {editProjectData.image && (
+                  <img src={editProjectData.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                )}
+              </div>
+
+              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button type="submit" className="action-pill-btn primary-pill">
+                  <FiCheck /> Save Changes
+                </button>
+                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingProjectId(null)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
+      )}
+
+      {/* EDIT TEAM MEMBER MODAL OVERLAY */}
+      {editingTeamId && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card">
+            <div className="dash-modal-header">
+              <h3 className="dash-modal-title">Edit Team Member</h3>
+              <button className="dash-modal-close-btn" onClick={() => setEditingTeamId(null)}><FiX /></button>
+            </div>
+            <form onSubmit={handleSaveEditTeam} className="dash-form-grid">
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Member Name</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  value={editTeamData.name}
+                  onChange={(e) => setEditTeamData({ ...editTeamData, name: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Role / Position</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  value={editTeamData.role}
+                  onChange={(e) => setEditTeamData({ ...editTeamData, role: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Profile Picture (Optional)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="dash-input-styled"
+                  onChange={(e) => handleImageUpload(e, setEditTeamData, editTeamData)}
+                />
+                {editTeamData.image && (
+                  <img src={editTeamData.image} alt="Preview" style={{ marginTop: '10px', width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
+                )}
+              </div>
+
+              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button type="submit" className="action-pill-btn primary-pill">
+                  <FiCheck /> Save Changes
+                </button>
+                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingTeamId(null)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      
+      {/* VERTICAL SIDEBAR MENU */}
+      <aside className={`dash-vertical-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
         
-        <div className="sidebar-user">
-          <div className="user-avatar">AD</div>
+        <div className="sidebar-top-brand">
+          {sidebarOpen ? (
+            <>
+              <InnoveityBrandLogo size={20} showText={true} />
+              <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
+                <FiX />
+              </button>
+            </>
+          ) : (
+            <button className="sidebar-toggle-btn closed-expand-btn" onClick={() => setSidebarOpen(true)} title="Expand Menu" style={{ margin: '0 auto' }}>
+              <FiMenu />
+            </button>
+          )}
+        </div>
+
+        {/* User Card */}
+        <div className="sidebar-user-card">
+          <div className="dash-avatar-circle">AD</div>
           <div className="user-info">
-            <h4>Admin User</h4>
-            <p>Content Manager</p>
+            <h4>Admin Workspace</h4>
+            <span className="user-role-tag">Content Manager</span>
           </div>
         </div>
 
-        <nav className="sidebar-nav">
-          <ul>
-            <li className={activeTab === 'dashboard' ? 'active' : ''}>
-              <a href="#dashboard" onClick={(e) => { e.preventDefault(); setActiveTab('dashboard'); }}><FiHome /> Dashboard</a>
-            </li>
-            <li className={activeTab === 'home' ? 'active' : ''}>
-              <a href="#home" onClick={(e) => { e.preventDefault(); setActiveTab('home'); }}><FiFileText /> Home Page</a>
-            </li>
-            <li className={activeTab === 'about' ? 'active' : ''}>
-              <a href="#about" onClick={(e) => { e.preventDefault(); setActiveTab('about'); }}><FiFileText /> About Us</a>
-            </li>
-            <li className={activeTab === 'projects' ? 'active' : ''}>
-              <a href="#projects" onClick={(e) => { e.preventDefault(); setActiveTab('projects'); }}><FiFileText /> Projects</a>
-            </li>
-            <li className={activeTab === 'inquiries' ? 'active' : ''}>
-              <a href="#inquiries" onClick={(e) => { e.preventDefault(); setActiveTab('inquiries'); }}><FiMessageSquare /> Inquiries</a>
-            </li>
-            <li className={activeTab === 'analytics' ? 'active' : ''}>
-              <a href="#analytics" onClick={(e) => { e.preventDefault(); setActiveTab('analytics'); }}><FiActivity /> Analytics</a>
-            </li>
-            <li className={activeTab === 'team' ? 'active' : ''}>
-              <a href="#team" onClick={(e) => { e.preventDefault(); setActiveTab('team'); }}><FiUsers /> Our Team</a>
-            </li>
-            <li className={activeTab === 'contact' ? 'active' : ''}>
-              <a href="#contact" onClick={(e) => { e.preventDefault(); setActiveTab('contact'); }}><FiBell /> Contact Settings</a>
-            </li>
-          </ul>
+        {/* Vertical Navigation Items */}
+        <nav className="sidebar-nav-menu">
+          <span className="nav-section-title">Main Menu</span>
+          
+          <button 
+            className={`nav-item-btn ${activeTab === 'overview' ? 'active' : ''}`}
+            onClick={() => setActiveTab('overview')}
+          >
+            <span className="nav-icon"><FiHome /></span>
+            <span className="nav-label">Overview</span>
+          </button>
+
+          <button 
+            className={`nav-item-btn ${activeTab === 'projects' ? 'active' : ''}`}
+            onClick={() => setActiveTab('projects')}
+          >
+            <span className="nav-icon"><FiFolder /></span>
+            <span className="nav-label">Projects</span>
+            <span className="nav-badge">{projects ? projects.length : 0}</span>
+          </button>
+
+          <button 
+            className={`nav-item-btn ${activeTab === 'team' ? 'active' : ''}`}
+            onClick={() => setActiveTab('team')}
+          >
+            <span className="nav-icon"><FiUsers /></span>
+            <span className="nav-label">Team Roster</span>
+            <span className="nav-badge">{team ? team.length : 0}</span>
+          </button>
+
+          <span className="nav-section-title">Site Content</span>
+
+          <button 
+            className={`nav-item-btn ${activeTab === 'home' ? 'active' : ''}`}
+            onClick={() => setActiveTab('home')}
+          >
+            <span className="nav-icon"><FiFileText /></span>
+            <span className="nav-label">Homepage</span>
+          </button>
+
+          <button 
+            className={`nav-item-btn ${activeTab === 'contact' ? 'active' : ''}`}
+            onClick={() => setActiveTab('contact')}
+          >
+            <span className="nav-icon"><FiPhone /></span>
+            <span className="nav-label">Contact Details</span>
+          </button>
         </nav>
-        
-        <div className="sidebar-footer">
-          <Link to="/" className="logout-btn">
-            <FiLogOut /> Return to Site
+
+        {/* Sidebar Footer Link */}
+        <div className="sidebar-footer-box">
+          <Link to="/super-admin" className="logout-nav-btn">
+            <FiSettings /> <span className="logout-text">Super Admin</span>
           </Link>
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="admin-main">
-        {/* Top Header */}
-        <header className="admin-header">
-          <div className="header-left">
-            <button className="toggle-sidebar-btn" onClick={toggleSidebar}>
-              <FiMenu />
-            </button>
-            <div className="search-bar">
-              <FiSearch className="search-icon" />
-              <input type="text" placeholder="Search projects or clients..." />
-            </div>
+      {/* MAIN WORKSPACE AREA */}
+      <div className="dash-main-area">
+        
+        {/* TOP HEADER */}
+        <header className="dash-top-header">
+          <div className="dash-header-title">
+            <h1>
+              {activeTab === 'overview' && 'Admin Overview'}
+              {activeTab === 'projects' && 'Manage Projects'}
+              {activeTab === 'team' && 'Team Roster Management'}
+              {activeTab === 'home' && 'Homepage Content'}
+              {activeTab === 'contact' && 'Contact & Communication Settings'}
+            </h1>
+            <p>Welcome back! Synchronized live with CMS.</p>
           </div>
-          
-          <div className="header-right">
-            <button className="notification-btn">
-              <FiBell />
-              <span className="badge">3</span>
-            </button>
-            <div className="profile-btn">
-              <div className="avatar-small">AD</div>
+
+          <div className="dash-header-right">
+            {notification && (
+              <div className="promo-mint-btn">
+                <FiCheckCircle /> {notification}
+              </div>
+            )}
+
+            <div className="dash-search-pill">
+              <FiSearch />
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
+
+            <Link to="/super-admin" className="dash-round-btn" title="Super Admin Settings">
+              <FiSettings />
+            </Link>
+
+            <Link to="/" className="btn-live-preview" target="_blank">
+              Live Preview <FiExternalLink />
+            </Link>
           </div>
         </header>
 
-        {/* Content Area Rendering Based on Active Tab */}
-        <div className="admin-content-area">
-          
-          {activeTab === 'dashboard' && (
-            <>
-              <div className="page-header">
-                <h1>Admin Dashboard</h1>
-                <p>Welcome back! Here's what's happening with your content today.</p>
+        {/* TAB 1: OVERVIEW ONLY - RENDERS THE ANALYTICS WIDGETS */}
+        {activeTab === 'overview' && (
+          <>
+            {/* TOP WIDGETS GRID */}
+            <div className="dash-widgets-grid">
+              
+              {/* WIDGET 1: REAL CMS OVERVIEW CARD */}
+              <div className="dash-card card-total-overview">
+                <div>
+                  <span className="overview-top-label">Total Live CMS Projects</span>
+                  <div className="overview-big-digit">
+                    {projects ? projects.length : 0}<span className="decimal"> Active</span>
+                  </div>
+
+                  <div className="overview-pills-row">
+                    <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('projects')}>
+                      <FiPlus /> Add Project
+                    </button>
+                    <button className="action-pill-btn" onClick={() => setActiveTab('team')}>
+                      <FiUsers /> Roster
+                    </button>
+                  </div>
+                </div>
+
+                <div className="mini-cards-row">
+                  <div className="mini-card-blue">
+                    <span className="card-number-val">Featured</span>
+                    <span className="card-holder-name">{projects && projects[0] ? projects[0].title : 'Web Solutions'}</span>
+                  </div>
+
+                  <div className="mini-card-mint">
+                    <span className="card-number-val">Team Roster</span>
+                    <span className="card-holder-name">{team ? team.length : 0} Engineers</span>
+                  </div>
+
+                  <div className="mini-card-dark-btn" onClick={() => setActiveTab('projects')}>
+                    +
+                  </div>
+                </div>
               </div>
 
-              {/* Metric Cards */}
-              <div className="metrics-grid">
-                <div className="metric-card">
-                  <div className="metric-icon projects"><FiFileText /></div>
-                  <div className="metric-details">
-                    <h3>Total Projects</h3>
-                    <h2>24</h2>
-                    <p className="positive">+3 this month</p>
+              {/* WIDGET 2: PASTEL BLUE BAR CHART */}
+              <div className="dash-card card-bar-chart">
+                <div className="chart-header-row">
+                  <h3 className="chart-title">Activity Trends</h3>
+                  <button className="chart-dropdown-pill">Month v</button>
+                </div>
+
+                <div className="bar-chart-visual">
+                  <div className="bar-col">
+                    <div className="bar-fill" style={{ height: '40%' }}></div>
+                    <span className="bar-month-label">Jun</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill" style={{ height: '60%' }}></div>
+                    <span className="bar-month-label">Jul</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill" style={{ height: '50%' }}></div>
+                    <span className="bar-month-label">Aug</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill highlight" style={{ height: '90%' }}></div>
+                    <span className="bar-month-label">Sep</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill" style={{ height: '70%' }}></div>
+                    <span className="bar-month-label">Oct</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill highlight" style={{ height: '85%' }}></div>
+                    <span className="bar-month-label">Nov</span>
+                  </div>
+                  <div className="bar-col">
+                    <div className="bar-fill" style={{ height: '45%' }}></div>
+                    <span className="bar-month-label">Dec</span>
                   </div>
                 </div>
-                
-                <div className="metric-card">
-                  <div className="metric-icon clients"><FiUsers /></div>
-                  <div className="metric-details">
-                    <h3>Active Clients</h3>
-                    <h2>18</h2>
-                    <p className="positive">+2 this week</p>
+
+                <div className="promo-mint-box">
+                  <div>
+                    <div className="promo-mint-title">Manage Content</div>
+                    <span style={{ fontSize: '0.78rem', color: '#475569' }}>Synchronized live with CMS</span>
                   </div>
-                </div>
-                
-                <div className="metric-card">
-                  <div className="metric-icon messages"><FiMessageSquare /></div>
-                  <div className="metric-details">
-                    <h3>New Inquiries</h3>
-                    <h2>12</h2>
-                    <p className="negative">-1 since yesterday</p>
-                  </div>
+                  <button className="promo-mint-btn" onClick={() => setActiveTab('home')}>
+                    Edit Copy
+                  </button>
                 </div>
               </div>
 
-              {/* Recent Activity Table */}
-              <div className="dashboard-panel">
-                <div className="panel-header">
-                  <h3>Recent Project Updates</h3>
-                  <button className="btn-primary">Add New Project</button>
-                </div>
-                
-                <div className="table-responsive">
-                  <table className="admin-table">
-                    <thead>
-                      <tr>
-                        <th>Project Name</th>
-                        <th>Category</th>
-                        <th>Status</th>
-                        <th>Last Modified</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>Enterprise Cloud Migration</td>
-                        <td>Cloud Solutions</td>
-                        <td><span className="status-badge active">Published</span></td>
-                        <td>Today, 10:23 AM</td>
-                        <td><button className="btn-text">Edit</button></td>
-                      </tr>
-                      <tr>
-                        <td>BioMed Summit</td>
-                        <td>Medical Conference</td>
-                        <td><span className="status-badge draft">Draft</span></td>
-                        <td>Yesterday, 4:15 PM</td>
-                        <td><button className="btn-text">Edit</button></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </>
-          )}
-
-          {activeTab === 'home' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Edit Home Page</h3>
-                <button className="btn-primary" onClick={() => updateHomeContent(editHome)}>Save Changes</button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Kicker Tag</label>
-                  <input type="text" value={editHome.kicker || ''} onChange={e => setEditHome({...editHome, kicker: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Title (Line 1)</label>
-                  <input type="text" value={editHome.titleLine1 || ''} onChange={e => setEditHome({...editHome, titleLine1: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Title (Line 2)</label>
-                  <input type="text" value={editHome.titleLine2 || ''} onChange={e => setEditHome({...editHome, titleLine2: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Description</label>
-                  <textarea value={editHome.description || ''} onChange={e => setEditHome({...editHome, description: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '100px' }} />
-                </div>
-                
-                <div style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                  <h4>About Summary Section</h4>
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>About Kicker</label>
-                  <input type="text" value={editHome.aboutKicker || ''} onChange={e => setEditHome({...editHome, aboutKicker: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>About Title</label>
-                  <textarea value={editHome.aboutTitle || ''} onChange={e => setEditHome({...editHome, aboutTitle: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '60px' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>About Description</label>
-                  <textarea value={editHome.aboutDesc || ''} onChange={e => setEditHome({...editHome, aboutDesc: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '100px' }} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Feature 1 Title</label>
-                    <input type="text" value={editHome.aboutFeature1Title || ''} onChange={e => setEditHome({...editHome, aboutFeature1Title: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Feature 1 Desc</label>
-                    <input type="text" value={editHome.aboutFeature1Desc || ''} onChange={e => setEditHome({...editHome, aboutFeature1Desc: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Feature 2 Title</label>
-                    <input type="text" value={editHome.aboutFeature2Title || ''} onChange={e => setEditHome({...editHome, aboutFeature2Title: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Feature 2 Desc</label>
-                    <input type="text" value={editHome.aboutFeature2Desc || ''} onChange={e => setEditHome({...editHome, aboutFeature2Desc: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
+              {/* WIDGET 3: PASTEL MINT ACTIVITY LIST */}
+              <div className="dash-card card-mint-activity">
+                <div className="chart-header-row">
+                  <h3 className="chart-title">Recent Actions</h3>
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#0f172a', cursor: 'pointer' }}>See All</span>
                 </div>
 
-                <div style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                  <h4>Services Section Header</h4>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Services Title 1</label>
-                    <input type="text" value={editHome.servicesMainTitle1 || ''} onChange={e => setEditHome({...editHome, servicesMainTitle1: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Services Title 2 (Highlighted)</label>
-                    <input type="text" value={editHome.servicesMainTitle2 || ''} onChange={e => setEditHome({...editHome, servicesMainTitle2: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Services Subtitle</label>
-                  <textarea value={editHome.servicesSubtitle || ''} onChange={e => setEditHome({...editHome, servicesSubtitle: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '60px' }} />
-                </div>
-
-                <div style={{ marginTop: '20px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-                  <h4>Service Cards</h4>
-                </div>
-                {(editHome.servicesList || []).map((service, index) => (
-                  <div key={index} style={{ padding: '15px', border: '1px solid #eee', borderRadius: '8px', marginBottom: '10px' }}>
-                    <div style={{ display: 'flex', gap: '15px', marginBottom: '10px' }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ display: 'block', fontSize: '12px', marginBottom: '5px' }}>Service {index + 1} Title</label>
-                        <input type="text" value={service.title} onChange={e => {
-                          const newList = [...editHome.servicesList];
-                          newList[index].title = e.target.value;
-                          setEditHome({...editHome, servicesList: newList});
-                        }} style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', color: '#333' }} />
+                <div className="activity-list">
+                  <div className="activity-item">
+                    <div className="activity-item-left">
+                      <div className="activity-icon-circle"><FiFolder /></div>
+                      <div>
+                        <h4 className="activity-item-title">Portfolio Updated</h4>
+                        <span className="activity-item-time">10 mins ago</span>
                       </div>
                     </div>
-                    <div>
-                      <label style={{ display: 'block', fontSize: '12px', marginBottom: '5px' }}>Description</label>
-                      <textarea value={service.desc} onChange={e => {
-                        const newList = [...editHome.servicesList];
-                        newList[index].desc = e.target.value;
-                        setEditHome({...editHome, servicesList: newList});
-                      }} style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', minHeight: '60px', color: '#333' }} />
+                    <span className="activity-value-badge">+{projects ? projects.length : 0} Projects</span>
+                  </div>
+
+                  <div className="activity-item">
+                    <div className="activity-item-left">
+                      <div className="activity-icon-circle"><FiUsers /></div>
+                      <div>
+                        <h4 className="activity-item-title">Team Member Added</h4>
+                        <span className="activity-item-time">1 hour ago</span>
+                      </div>
                     </div>
+                    <span className="activity-value-badge">+{team ? team.length : 0} Members</span>
                   </div>
+
+                  <div className="activity-item">
+                    <div className="activity-item-left">
+                      <div className="activity-icon-circle"><FiPhone /></div>
+                      <div>
+                        <h4 className="activity-item-title">Notification Email</h4>
+                        <span className="activity-item-time">Active target</span>
+                      </div>
+                    </div>
+                    <span className="activity-value-badge">websitet96@gmail</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            {/* BOTTOM ROW WIDGETS */}
+            <div className="dash-bottom-grid">
+              
+              <div className="dash-card card-spline-graph">
+                <div className="chart-header-row">
+                  <div>
+                    <h3 className="chart-title">CMS System Performance & Traffic</h3>
+                    <span style={{ fontSize: '0.82rem', color: '#64748b' }}>Response time 42ms • 100% Uptime</span>
+                  </div>
+                  <button className="chart-dropdown-pill">Dec 06 v</button>
+                </div>
+
+                <div className="spline-svg-wrapper">
+                  <svg width="100%" height="100%" viewBox="0 0 600 180" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45"/>
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.0"/>
+                      </linearGradient>
+                    </defs>
+                    <path d="M0 130 Q100 50 200 80 T400 30 T600 90 L600 180 L0 180 Z" fill="url(#areaGrad)" />
+                    <path d="M0 130 Q100 50 200 80 T400 30 T600 90" fill="none" stroke="#0284c7" strokeWidth="3.5" />
+                    <path d="M0 150 Q120 110 220 120 T420 60 T600 110" fill="none" stroke="#10b981" strokeWidth="2.5" />
+                    <circle cx="400" cy="30" r="6" fill="#0284c7" stroke="#ffffff" strokeWidth="3" />
+                  </svg>
+                </div>
+              </div>
+
+              <div className="dash-card card-gauge-score">
+                <div className="chart-header-row" style={{ width: '100%' }}>
+                  <h3 className="chart-title">System Score</h3>
+                  <span style={{ fontSize: '0.8rem', color: '#64748b', cursor: 'pointer' }}>See More</span>
+                </div>
+
+                <div className="gauge-svg-container">
+                  <svg width="220" height="120" viewBox="0 0 200 110">
+                    <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e2e8f0" strokeWidth="16" strokeLinecap="round" />
+                    <path d="M 20 100 A 80 80 0 0 1 165 60" fill="none" stroke="url(#mintGaugeArc)" strokeWidth="16" strokeLinecap="round" />
+                    <defs>
+                      <linearGradient id="mintGaugeArc" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#f59e0b" />
+                        <stop offset="50%" stopColor="#10b981" />
+                        <stop offset="100%" stopColor="#0284c7" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+
+                <div className="gauge-score-number">1240</div>
+                <div className="gauge-score-label">Live Content Performance</div>
+
+                <button className="gauge-action-btn" onClick={() => setActiveTab('projects')}>
+                  Manage Projects
+                </button>
+              </div>
+
+            </div>
+          </>
+        )}
+
+        {/* TAB 2: PROJECTS MANAGEMENT WORKSPACE */}
+        {activeTab === 'projects' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row">
+              <h3 className="chart-title">Add New Project</h3>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            <div className="dash-form-wrapper">
+              <form onSubmit={handleAddProjectSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Project Title</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    placeholder="e.g. Enterprise Cloud ERP" 
+                    value={newProject.title}
+                    onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Category</label>
+                  <select 
+                    className="dash-input-styled"
+                    value={newProject.category}
+                    onChange={(e) => setNewProject({ ...newProject, category: e.target.value })}
+                  >
+                    <option value="Web Development">Web Development</option>
+                    <option value="Mobile App Engineering">Mobile App Engineering</option>
+                    <option value="Custom Enterprise Software">Custom Enterprise Software</option>
+                    <option value="Cloud & AI Infrastructure">Cloud & AI Infrastructure</option>
+                  </select>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Description</label>
+                  <textarea 
+                    className="dash-input-styled"
+                    placeholder="Description of project features and technology stack..."
+                    value={newProject.description}
+                    onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Upload Project Image</label>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    className="dash-input-styled"
+                    onChange={(e) => handleImageUpload(e, setNewProject, newProject)}
+                  />
+                  {newProject.image && (
+                    <img src={newProject.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                  )}
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Save Project
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="chart-header-row" style={{ marginTop: '36px' }}>
+              <h3 className="chart-title">Existing Portfolio Projects ({projects ? projects.length : 0})</h3>
+            </div>
+
+            <table className="dash-cms-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '70px' }}>Image</th>
+                  <th style={{ width: '220px' }}>Title</th>
+                  <th style={{ width: '180px' }}>Category</th>
+                  <th>Description</th>
+                  <th style={{ width: '160px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {projects && projects.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      <img src={p.image || '/service_software.png'} alt={p.title} style={{ width: '46px', height: '46px', borderRadius: '12px', objectFit: 'cover' }} />
+                    </td>
+                    <td><strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>{p.title}</strong></td>
+                    <td><span className="category-badge-pill">{p.category}</span></td>
+                    <td style={{ color: '#475569', fontSize: '0.86rem', lineHeight: '1.5' }}>{p.description}</td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <button className="chart-dropdown-pill" onClick={() => handleStartEditProject(p)}>
+                          <FiEdit2 /> Edit
+                        </button>
+                        <button className="promo-mint-btn" style={{ background: '#f87171', color: '#fff' }} onClick={() => deleteProject(p.id)}>
+                          <FiTrash2 /> Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
                 ))}
-              </div>
-            </div>
-          )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-          {activeTab === 'about' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Edit About Us Page</h3>
-                <button className="btn-primary" onClick={() => updateAboutContent(editAbout)}>Save Changes</button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '600px' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Main Kinetic Statement</label>
-                  <textarea value={editAbout.mainStatement || ''} onChange={e => setEditAbout({...editAbout, mainStatement: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '80px' }} />
-                </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Scrolling Badges (comma separated)</label>
-                  <input type="text" value={editAbout.badges || ''} onChange={e => setEditAbout({...editAbout, badges: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 1 Number</label>
-                    <input type="text" value={editAbout.stat1Number || ''} onChange={e => setEditAbout({...editAbout, stat1Number: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 1 Label</label>
-                    <input type="text" value={editAbout.stat1Label || ''} onChange={e => setEditAbout({...editAbout, stat1Label: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 2 Number</label>
-                    <input type="text" value={editAbout.stat2Number || ''} onChange={e => setEditAbout({...editAbout, stat2Number: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 2 Label</label>
-                    <input type="text" value={editAbout.stat2Label || ''} onChange={e => setEditAbout({...editAbout, stat2Label: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 3 Number</label>
-                    <input type="text" value={editAbout.stat3Number || ''} onChange={e => setEditAbout({...editAbout, stat3Number: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 3 Label</label>
-                    <input type="text" value={editAbout.stat3Label || ''} onChange={e => setEditAbout({...editAbout, stat3Label: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 4 Number</label>
-                    <input type="text" value={editAbout.stat4Number || ''} onChange={e => setEditAbout({...editAbout, stat4Number: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                  <div>
-                    <label style={{ display: 'block', marginBottom: '5px' }}>Stat 4 Label</label>
-                    <input type="text" value={editAbout.stat4Label || ''} onChange={e => setEditAbout({...editAbout, stat4Label: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                  </div>
-                </div>
-              </div>
+        {/* TAB 3: TEAM ROSTER WORKSPACE */}
+        {activeTab === 'team' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row">
+              <h3 className="chart-title">Add Team Member</h3>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
             </div>
-          )}
 
-          {activeTab === 'projects' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Manage Projects</h3>
-              </div>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                <input type="text" placeholder="Title" value={newProject.title} onChange={e => setNewProject({...newProject, title: e.target.value})} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                <input type="text" placeholder="Category" value={newProject.category} onChange={e => setNewProject({...newProject, category: e.target.value})} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                <input type="text" placeholder="Description" value={newProject.description} onChange={e => setNewProject({...newProject, description: e.target.value})} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setNewProject, newProject)} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', backgroundColor: 'white' }} />
-                {newProject.image && <img src={newProject.image} alt="Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
-                <button className="btn-primary" onClick={() => { if(newProject.title) { addProject({...newProject, technologies: [], highlights: []}); setNewProject({title:'', category:'', description:'', image:''}) } }}>Add</button>
-              </div>
-              <div className="table-responsive">
-                <table className="admin-table">
-                  <thead><tr><th>Title</th><th>Category</th><th>Action</th></tr></thead>
-                  <tbody>
-                    {projects.map(p => (
-                      <tr key={p.id}>
-                        <td>{p.title}</td>
-                        <td>{p.category}</td>
-                        <td><button onClick={() => deleteProject(p.id)} style={{ color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'inquiries' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Customer Inquiries</h3>
-              </div>
-              <p>All contact form submissions will appear here...</p>
-            </div>
-          )}
-
-          {activeTab === 'analytics' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Website Analytics</h3>
-              </div>
-              <p>Traffic and engagement charts will be displayed here...</p>
-            </div>
-          )}
-
-          {activeTab === 'team' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Manage Our Team</h3>
-              </div>
-              <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-                <input type="text" placeholder="Name" value={newTeam.name} onChange={e => setNewTeam({...newTeam, name: e.target.value})} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                <input type="text" placeholder="Role" value={newTeam.role} onChange={e => setNewTeam({...newTeam, role: e.target.value})} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
-                <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, setNewTeam, newTeam)} style={{ padding: '8px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', backgroundColor: 'white' }} />
-                {newTeam.image && <img src={newTeam.image} alt="Preview" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
-                <button className="btn-primary" onClick={() => { if(newTeam.name) { addTeamMember(newTeam); setNewTeam({name:'', role:'', image:''}) } }}>Add Member</button>
-              </div>
-              <div className="table-responsive">
-                <table className="admin-table">
-                  <thead><tr><th>Name</th><th>Role</th><th>Action</th></tr></thead>
-                  <tbody>
-                    {team.map(m => (
-                      <tr key={m.id}>
-                        {editingTeamId === m.id ? (
-                          <>
-                            <td>
-                              <input type="text" value={editTeamData.name} onChange={e => setEditTeamData({...editTeamData, name: e.target.value})} style={{ padding: '4px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', width: '100%' }} />
-                            </td>
-                            <td>
-                              <input type="text" value={editTeamData.role} onChange={e => setEditTeamData({...editTeamData, role: e.target.value})} style={{ padding: '4px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', width: '100%' }} />
-                            </td>
-                            <td>
-                              <div style={{ display: 'flex', gap: '5px' }}>
-                                <button onClick={() => { updateTeamMember(m.id, editTeamData); setEditingTeamId(null); }} style={{ color: 'green', background: 'none', border: 'none', cursor: 'pointer' }}>Save</button>
-                                <button onClick={() => setEditingTeamId(null)} style={{ color: 'gray', background: 'none', border: 'none', cursor: 'pointer' }}>Cancel</button>
-                              </div>
-                            </td>
-                          </>
-                        ) : (
-                          <>
-                            <td>{m.name}</td>
-                            <td>{m.role}</td>
-                            <td>
-                              <div style={{ display: 'flex', gap: '10px' }}>
-                                <button onClick={() => { setEditingTeamId(m.id); setEditTeamData({ name: m.name, role: m.role, image: m.image }); }} style={{ color: '#10b981', background: 'none', border: 'none', cursor: 'pointer' }}>Edit</button>
-                                <button onClick={() => deleteTeamMember(m.id)} style={{ color: 'red', background: 'none', border: 'none', cursor: 'pointer' }}>Delete</button>
-                              </div>
-                            </td>
-                          </>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'contact' && (
-            <div className="dashboard-panel">
-              <div className="panel-header">
-                <h3>Contact Settings</h3>
-                <button className="btn-primary" onClick={() => updateContact(editContact)}>Save Changes</button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', maxWidth: '500px' }}>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Email</label>
-                  <input type="text" value={editContact.email} onChange={e => setEditContact({...editContact, email: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
+            <div className="dash-form-wrapper">
+              <form onSubmit={handleAddTeamSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Member Name</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Arifbillah" 
+                    className="dash-input-styled"
+                    value={newTeam.name}
+                    onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
+                    required
+                  />
                 </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Phone</label>
-                  <input type="text" value={editContact.phone} onChange={e => setEditContact({...editContact, phone: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333' }} />
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Role / Position</label>
+                  <input 
+                    type="text" 
+                    placeholder="e.g. Lead Software Architect" 
+                    className="dash-input-styled"
+                    value={newTeam.role}
+                    onChange={(e) => setNewTeam({ ...newTeam, role: e.target.value })}
+                    required
+                  />
                 </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Address</label>
-                  <textarea value={editContact.address} onChange={e => setEditContact({...editContact, address: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '80px' }} />
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Profile Picture</label>
+                  <input 
+                    type="file" 
+                    accept="image/*"
+                    className="dash-input-styled"
+                    onChange={(e) => handleImageUpload(e, setNewTeam, newTeam)}
+                  />
+                  {newTeam.image && (
+                    <img src={newTeam.image} alt="Preview" style={{ marginTop: '10px', width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover' }} />
+                  )}
                 </div>
-                <div>
-                  <label style={{ display: 'block', marginBottom: '5px' }}>Business Hours</label>
-                  <textarea value={editContact.businessHours} onChange={e => setEditContact({...editContact, businessHours: e.target.value})} style={{ width: '100%', padding: '10px', borderRadius: '4px', border: '1px solid #ccc', color: '#333', minHeight: '80px' }} />
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Add Member
+                  </button>
                 </div>
-              </div>
+              </form>
             </div>
-          )}
-        </div>
+
+            <div className="chart-header-row" style={{ marginTop: '36px' }}>
+              <h3 className="chart-title">Current Team Roster ({team ? team.length : 0})</h3>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
+              {team && team.map((m) => (
+                <div key={m.id} style={{ background: '#f8fafc', padding: '20px', borderRadius: '20px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
+                  <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #10b981', marginBottom: '10px' }} />
+                  <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
+                  <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#10b981', fontWeight: 700 }}>{m.role}</p>
+
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                    <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
+                      <FiEdit2 /> Edit
+                    </button>
+                    <button className="promo-mint-btn" style={{ background: '#f87171', color: '#fff' }} onClick={() => deleteTeamMember(m.id)}>
+                      <FiTrash2 /> Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 4: CONTACT DETAILS WORKSPACE */}
+        {activeTab === 'contact' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row">
+              <h3 className="chart-title">Contact & Communication Settings</h3>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            <div className="dash-form-wrapper">
+              <form onSubmit={handleSaveContact} className="dash-form-grid">
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Target Notification Email</label>
+                  <input 
+                    type="email" 
+                    className="dash-input-styled"
+                    value={editContact.email || ''}
+                    onChange={(e) => setEditContact({ ...editContact, email: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Phone Number</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    value={editContact.phone || ''}
+                    onChange={(e) => setEditContact({ ...editContact, phone: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Office Address</label>
+                  <textarea 
+                    className="dash-input-styled"
+                    value={editContact.address || ''}
+                    onChange={(e) => setEditContact({ ...editContact, address: e.target.value })}
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Contact Details
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 5: HOMEPAGE SITE COPY WORKSPACE */}
+        {activeTab === 'home' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row">
+              <h3 className="chart-title">Homepage Content Editor</h3>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            <div className="dash-form-wrapper">
+              <form onSubmit={handleSaveHome} className="dash-form-grid">
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Hero Kicker Badge</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    value={editHome.kicker || ''}
+                    onChange={(e) => setEditHome({ ...editHome, kicker: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Title Line 1</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    value={editHome.titleLine1 || ''}
+                    onChange={(e) => setEditHome({ ...editHome, titleLine1: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Title Line 2</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    value={editHome.titleLine2 || ''}
+                    onChange={(e) => setEditHome({ ...editHome, titleLine2: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Hero Description</label>
+                  <textarea 
+                    className="dash-input-styled"
+                    value={editHome.description || ''}
+                    onChange={(e) => setEditHome({ ...editHome, description: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Homepage Content
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
       </div>
+
     </div>
   );
 };

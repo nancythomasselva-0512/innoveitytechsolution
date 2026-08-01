@@ -61,9 +61,9 @@ export const CMSProvider = ({ children }) => {
   ];
 
   const defaultContact = {
-    email: 'contact@innoveitytechsolution.com',
-    phone: '+91 XXXXX XXXXX',
-    address: 'Chennai,\nTamil Nadu, India'
+    email: 'websitet96@gmail.com',
+    phone: '+91 9876543210',
+    address: 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'
   };
 
   const defaultHomeContent = {
@@ -139,7 +139,7 @@ export const CMSProvider = ({ children }) => {
   });
 
   const [contact, setContact] = useState(() => {
-    const saved = localStorage.getItem('cms_contact');
+    const saved = localStorage.getItem('cms_contact_v3');
     return saved ? JSON.parse(saved) : defaultContact;
   });
 
@@ -163,7 +163,7 @@ export const CMSProvider = ({ children }) => {
   }, [team]);
 
   useEffect(() => {
-    localStorage.setItem('cms_contact', JSON.stringify(contact));
+    localStorage.setItem('cms_contact_v3', JSON.stringify(contact));
   }, [contact]);
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FiCheck, FiChevronRight, FiCheckCircle, FiUsers } from 'react-icons/fi';
 import { Mail, Phone, Clock } from 'lucide-react';
 import { useCMS } from '../context/CMSContext';
+import MeshGradientBackground from '../components/MeshGradient/MeshGradientBackground';
 import './TeamPage.css';
 
 const useScrollObserver = () => {
@@ -54,18 +55,22 @@ const TeamPage = () => {
   return (
     <div className="team-page">
       
-      {/* Brand Message */}
-      <section className="team-hero">
-        <div className="container relative-z">
-          <h1 className="hero-animated-title">
-            <span className="text-gradient">Building Innovative Digital Solutions</span><br />
-            for Modern Businesses
-          </h1>
-          <p className="hero-animated-subtitle">
-            Innoveity Tech Solution delivers innovative, scalable, and reliable technology solutions that help organizations streamline operations, enhance customer experiences, and accelerate digital transformation.
-          </p>
-        </div>
-      </section>
+      {/* ⭐ Brand Message / Hero with Dynamic Theme Mesh Gradient */}
+      <MeshGradientBackground className="team-hero-mesh-wrapper" variant="hero">
+        <section className="team-hero">
+          <div className="container relative-z">
+            <span className="team-hero-badge">INNOVEITY TECH SOLUTION</span>
+            <h1 className="hero-animated-title">
+              <span className="text-gradient-mesh">Building Innovative Digital Solutions</span><br />
+              for Modern Businesses
+            </h1>
+            <p className="hero-animated-subtitle">
+              Innoveity Tech Solution delivers innovative, scalable, and reliable technology solutions that help organizations streamline operations, enhance customer experiences, and accelerate digital transformation.
+            </p>
+          </div>
+        </section>
+      </MeshGradientBackground>
+
 
       {/* Our Team */}
       <section className="team-section relative-overflow">

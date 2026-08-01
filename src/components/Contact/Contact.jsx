@@ -1,216 +1,285 @@
 import React, { useState } from 'react';
-import { FiPhone, FiMail, FiMapPin } from 'react-icons/fi';
-import { motion } from 'framer-motion';
+import { 
+  FiPhone, FiMail, FiMapPin, FiClock, 
+  FiUser, FiBriefcase, FiFileText, FiCheckCircle 
+} from 'react-icons/fi';
+import { useCMS } from '../../context/CMSContext';
 import './Contact.css';
 
 const Contact = () => {
+  const { contact } = useCMS();
+
   const [formData, setFormData] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
+    phone: '',
+    company: '',
     subject: '',
     message: ''
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Thank you for reaching out to Innoveity Tech Solution! Your message has been sent successfully.");
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    if (formData.firstName && formData.email && formData.message) {
+      setIsSubmitting(true);
+      try {
+        await fetch("https://formsubmit.co/ajax/websitet96@gmail.com", {
+          method: "POST",
+          headers: { 
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            _subject: `New Contact Inquiry from ${formData.firstName} ${formData.lastName}`,
+            name: `${formData.firstName} ${formData.lastName}`.trim(),
+            email: formData.email,
+            phone: formData.phone || 'N/A',
+            company: formData.company || 'N/A',
+            subject: formData.subject || 'General Inquiry',
+            message: formData.message
+          })
+        });
+      } catch (err) {
+        console.error("Notification submission log:", err);
+      } finally {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({
+            firstName: '',
+            lastName: '',
+            email: '',
+            phone: '',
+            company: '',
+            subject: '',
+            message: ''
+          });
+        }, 5000);
+      }
+    }
   };
 
   return (
     <section id="contact" className="contact-modern-section section-padding">
       <div className="container contact-max-wrapper">
         
-        {/* Top Header Banner Card */}
-        <motion.div 
-          className="contact-top-banner"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.3 }}
-          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Sparkle Vector Top-Left */}
-          <div className="banner-sparkle-left">
-            <svg width="100" height="100" viewBox="0 0 100 100" fill="none">
-              <path d="M50 0 C50 25 75 50 100 50 C75 50 50 75 50 100 C50 75 25 50 0 50 C25 50 50 25 50 0 Z" fill="rgba(167, 243, 208, 0.45)" />
-              <path d="M20 10 C20 18 28 25 35 25 C28 25 20 32 20 40 C20 32 12 25 5 25 C12 25 20 18 20 10 Z" fill="rgba(110, 231, 183, 0.55)" />
-            </svg>
-          </div>
-
-          {/* Lightning Circle Right */}
-          <div className="banner-circle-right">
-            <svg width="160" height="160" viewBox="0 0 160 160" fill="none">
-              <circle cx="80" cy="80" r="70" stroke="rgba(167, 243, 208, 0.55)" strokeWidth="6" />
-              <path d="M85 45 L65 85 H85 L75 115 L95 75 H75 Z" fill="rgba(110, 231, 183, 0.65)" />
-            </svg>
-          </div>
-
-          {/* Centered Top Badge */}
-          <div className="banner-pill-badge">
-            <span>Innoveity / Contact</span>
-          </div>
-
-          {/* Main Title */}
-          <h2 className="banner-main-title">Lets Work Together</h2>
-        </motion.div>
-
-        {/* Main 2-Column Grid */}
-        <div className="contact-main-grid">
+        {/* Main Centered White Glass Card */}
+        <div className="contact-main-card-container">
           
-          {/* Left Column: Info & Map Card */}
-          <motion.div 
-            className="contact-info-card"
-            initial={{ opacity: 0, x: -35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.65 }}
-          >
-            {/* Top Contact Details Row */}
-            <div className="info-grid-items">
-              {/* Call us */}
-              <div className="info-detail-box">
-                <div className="info-green-icon">
-                  <FiPhone size={20} />
+          {/* Left Column: Contact Information */}
+          <div className="contact-info-col">
+            
+            <h2 className="info-title">Contact information</h2>
+            <p className="info-subtitle">
+              We help you find direction, remove friction, and keep your business moving forward—strategically and confidently.
+            </p>
+
+            <div className="info-items-list">
+              
+              {/* Phone */}
+              <div className="info-item-row">
+                <div className="info-icon-outline">
+                  <FiPhone />
                 </div>
-                <div className="info-detail-text">
-                  <span className="detail-label">CALL US</span>
-                  <p className="detail-value">+1 (555) 325 - 2543</p>
-                </div>
+                <span className="info-text-val">{contact?.phone || '+1 561 301 4406'}</span>
               </div>
 
               {/* Email */}
-              <div className="info-detail-box">
-                <div className="info-green-icon">
-                  <FiMail size={20} />
+              <div className="info-item-row">
+                <div className="info-icon-outline">
+                  <FiMail />
                 </div>
-                <div className="info-detail-text">
-                  <span className="detail-label">EMAIL</span>
-                  <p className="detail-value">hello@innoveitytech.com</p>
-                </div>
+                <span className="info-text-val">{contact?.email || 'contact@innoveitytechsolution.com'}</span>
               </div>
 
-              {/* Location */}
-              <div className="info-detail-box full-width">
-                <div className="info-green-icon">
-                  <FiMapPin size={20} />
+              {/* Address */}
+              <div className="info-item-row">
+                <div className="info-icon-outline">
+                  <FiMapPin />
                 </div>
-                <div className="info-detail-text">
-                  <span className="detail-label">LOCATION</span>
-                  <p className="detail-value">123 Innovation Drive, Tech City, TC 90210</p>
-                </div>
+                <span className="info-text-val">{contact?.address ? contact.address.replace('\n', ', ').replace(',,', ',') : 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</span>
               </div>
+
+              {/* Business Hours */}
+              <div className="info-item-row">
+                <div className="info-icon-outline">
+                  <FiClock />
+                </div>
+                <span className="info-text-val">Monday – Friday, 9:00 AM – 6:00 PM</span>
+              </div>
+
             </div>
 
-            {/* Embedded City Map Vector Illustration */}
-            <div className="contact-map-box">
-              <div className="map-grid-overlay">
-                <svg width="100%" height="100%" viewBox="0 0 400 200" preserveAspectRatio="none">
-                  {/* Street Lines */}
-                  <rect width="400" height="200" fill="#f1f5f9" />
-                  <path d="M0 40 H400 M0 110 H400 M0 160 H400" stroke="#ffffff" strokeWidth="12" />
-                  <path d="M70 0 V200 M180 0 V200 M310 0 V200" stroke="#ffffff" strokeWidth="12" />
-                  <path d="M30 0 L140 200" stroke="#ffffff" strokeWidth="8" />
-                  {/* Street Names */}
-                  <text x="80" y="32" fill="#94a3b8" fontSize="10" fontWeight="600">Innovation Blvd</text>
-                  <text x="190" y="102" fill="#94a3b8" fontSize="10" fontWeight="600">Tech Center Ave</text>
-                </svg>
-              </div>
-
-              {/* Location Marker Pin */}
-              <div className="map-pin-pulse">
-                <div className="pin-circle">
-                  <FiMapPin size={18} color="#ffffff" />
-                </div>
-                <div className="pulse-ring"></div>
-              </div>
+            {/* Interactive Map Frame */}
+            <div className="contact-map-frame">
+              <iframe 
+                title="Innoveity Tech Location Map"
+                src="https://maps.google.com/maps?q=MCC%20MRF%20Innovation%20Park%20East%20Tambaram%20Chennai%20600059&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                width="100%" 
+                height="100%" 
+                style={{ border: 0 }} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="no-referrer-when-downgrade"
+              ></iframe>
             </div>
-          </motion.div>
 
-          {/* Right Column: Contact Form Card */}
-          <motion.div 
-            className="contact-form-card"
-            initial={{ opacity: 0, x: 35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.65, delay: 0.15 }}
-          >
-            <form className="contact-form-elements" onSubmit={handleSubmit}>
-              
-              {/* Row 1: Name & Email */}
-              <div className="form-two-cols">
-                <div className="form-field-group">
-                  <label htmlFor="name">Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    placeholder="Arifbillah" 
-                    value={formData.name}
-                    onChange={handleChange}
-                    required 
-                  />
+          </div>
+
+          {/* Right Column: Send Us a Message Form */}
+          <div className="contact-form-col">
+            
+            <h2 className="form-title">Send Us a Message</h2>
+            <p className="form-subtitle">
+              Fill up the form and our team will get back to you within 24 hours.
+            </p>
+
+            {isSubmitted ? (
+              <div className="form-success-box">
+                <FiCheckCircle className="success-icon" />
+                <h3>Message Sent Successfully!</h3>
+                <p>Thank you for reaching out to Innoveity Tech Solution. We will contact you shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="modern-contact-form">
+                
+                {/* Row 1: First Name & Last Name */}
+                <div className="form-row-2col">
+                  <div className="input-group-with-icon">
+                    <label htmlFor="firstName">First name</label>
+                    <div className="input-wrapper">
+                      <FiUser className="input-field-icon" />
+                      <input 
+                        type="text" 
+                        id="firstName"
+                        name="firstName" 
+                        placeholder="Enter first name"
+                        value={formData.firstName}
+                        onChange={handleInputChange}
+                        required 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="input-group-with-icon">
+                    <label htmlFor="lastName">Last name</label>
+                    <div className="input-wrapper">
+                      <FiUser className="input-field-icon" />
+                      <input 
+                        type="text" 
+                        id="lastName"
+                        name="lastName" 
+                        placeholder="Enter last name"
+                        value={formData.lastName}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
                 </div>
 
-                <div className="form-field-group">
-                  <label htmlFor="email">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="hello@innoveitytech.com" 
-                    value={formData.email}
-                    onChange={handleChange}
-                    required 
-                  />
+                {/* Row 2: Email & Phone */}
+                <div className="form-row-2col">
+                  <div className="input-group-with-icon">
+                    <label htmlFor="email">Email</label>
+                    <div className="input-wrapper">
+                      <FiMail className="input-field-icon" />
+                      <input 
+                        type="email" 
+                        id="email"
+                        name="email" 
+                        placeholder="Enter email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        required 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="input-group-with-icon">
+                    <label htmlFor="phone">Phone</label>
+                    <div className="input-wrapper">
+                      <FiPhone className="input-field-icon" />
+                      <input 
+                        type="tel" 
+                        id="phone"
+                        name="phone" 
+                        placeholder="Enter phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Row 2: Subject */}
-              <div className="form-field-group">
-                <label htmlFor="subject">Subject</label>
-                <input 
-                  type="text" 
-                  id="subject" 
-                  name="subject" 
-                  placeholder="How can we help your business?" 
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
+                {/* Row 3: Company Name & Subject */}
+                <div className="form-row-2col">
+                  <div className="input-group-with-icon">
+                    <label htmlFor="company">Company Name</label>
+                    <div className="input-wrapper">
+                      <FiBriefcase className="input-field-icon" />
+                      <input 
+                        type="text" 
+                        id="company"
+                        name="company" 
+                        placeholder="Enter company name"
+                        value={formData.company}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
 
-              {/* Row 3: Leave us messages */}
-              <div className="form-field-group">
-                <label htmlFor="message">Lave us messages</label>
-                <textarea 
-                  id="message" 
-                  name="message" 
-                  rows="4" 
-                  placeholder="Tell us about your project requirements..." 
-                  value={formData.message}
-                  onChange={handleChange}
-                  required 
-                ></textarea>
-              </div>
+                  <div className="input-group-with-icon">
+                    <label htmlFor="subject">Subject</label>
+                    <div className="input-wrapper">
+                      <FiFileText className="input-field-icon" />
+                      <input 
+                        type="text" 
+                        id="subject"
+                        name="subject" 
+                        placeholder="Enter Subject"
+                        value={formData.subject}
+                        onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-              {/* Submit Button */}
-              <div className="form-submit-row">
-                <motion.button 
-                  type="submit" 
-                  className="pill-btn-send"
-                  whileHover={{ scale: 1.03, translateY: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  Send Messages
-                </motion.button>
-              </div>
+                {/* Row 4: Message Textarea */}
+                <div className="input-group-with-icon full-width-group">
+                  <label htmlFor="message">Message</label>
+                  <div className="input-wrapper textarea-wrapper">
+                    <textarea 
+                      id="message" 
+                      name="message" 
+                      placeholder="Type here . . ."
+                      rows="4"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      required
+                    ></textarea>
+                  </div>
+                </div>
 
-            </form>
-          </motion.div>
+                {/* Submit Button */}
+                <div className="form-action-row">
+                  <button type="submit" className="btn-modern-send" disabled={isSubmitting}>
+                    {isSubmitting ? 'Sending Message...' : 'Send Message'}
+                  </button>
+                </div>
+
+              </form>
+            )}
+
+          </div>
 
         </div>
 

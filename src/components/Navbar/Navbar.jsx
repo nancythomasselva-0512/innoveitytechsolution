@@ -4,33 +4,36 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX, FiArrowUpRight } from 'react-icons/fi';
 import './Navbar.css';
 
-export const InnoveityBrandLogo = ({ size = 36, showText = true }) => (
-  <div className="innoveity-brand-wrap">
-    <div className="innoveity-logo-icon-box">
-      <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
-        {/* Gold Dot for 'i' */}
-        <rect x="4" y="6" width="5.5" height="5.5" fill="#f59e0b" rx="1.5" />
-        {/* Outer V Line */}
-        <path d="M5 16L20 37L37 16" stroke="#00a878" strokeWidth="5" strokeLinecap="square" strokeLinejoin="miter" />
-        {/* Inner V Line */}
-        <path d="M12 16L20 27L29 16" stroke="#00a878" strokeWidth="4.5" strokeLinecap="square" strokeLinejoin="miter" />
-        {/* Top Right Bar */}
-        <path d="M29 16H39" stroke="#00a878" strokeWidth="4.5" strokeLinecap="square" />
-      </svg>
-    </div>
-
+export const InnoveityBrandLogo = ({ size = 20, showText = true }) => (
+  <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+    <img
+      src="/logo-transparent.png"
+      alt="Innoveity Tech Logo"
+      style={{
+        height: `${size}px`,
+        width: 'auto',
+        objectFit: 'contain',
+        display: 'block'
+      }}
+      onError={(e) => {
+        e.target.onerror = null;
+        e.target.src = '/logo.png';
+      }}
+    />
     {showText && (
-      <div className="innoveity-brand-text-col">
-        <div className="innoveity-brand-main-title">
-          <span className="brand-green">INNO</span>
-          <span className="brand-v-container">
-            <span className="v-gold-badge"></span>
-            <span className="brand-green">V</span>
-          </span>
-          <span className="brand-green">EITY</span>
-        </div>
-        <span className="innoveity-brand-sub-title">TECH SOLUTIONS</span>
-      </div>
+      <span className="innoveity-brand-sub-title" style={{
+        fontFamily: 'var(--font-heading)',
+        fontSize: '0.56rem',
+        fontWeight: 800,
+        letterSpacing: '2.4px',
+        color: '#00a878',
+        marginTop: '2px',
+        paddingLeft: '32px',
+        textTransform: 'uppercase',
+        lineHeight: 1
+      }}>
+        TECH SOLUTIONS
+      </span>
     )}
   </div>
 );
@@ -66,7 +69,7 @@ const Navbar = () => {
 
   const handleNavClick = (link) => {
     setIsMobileMenuOpen(false);
-    
+
     if (link.isPage) {
       navigate(link.to);
     } else if (!isHome) {
@@ -96,11 +99,11 @@ const Navbar = () => {
         <div className="navbar-brand">
           {isHome ? (
             <ScrollLink to="home" smooth={true} duration={500} className="brand-link">
-              <InnoveityBrandLogo size={36} showText={true} />
+              <InnoveityBrandLogo size={20} showText={true} />
             </ScrollLink>
           ) : (
             <RouterLink to="/" className="brand-link">
-              <InnoveityBrandLogo size={36} showText={true} />
+              <InnoveityBrandLogo size={20} showText={true} />
             </RouterLink>
           )}
         </div>
