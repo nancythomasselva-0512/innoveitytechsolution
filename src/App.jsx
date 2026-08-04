@@ -20,15 +20,25 @@ import RefundPolicyPage from './pages/RefundPolicyPage';
 import { useCMS } from './context/CMSContext';
 import './App.css';
 
-const ProtectedAdminRoute = ({ children, requiredRole }) => {
+const AdminRouteDispatcher = () => {
   const { currentUser } = useCMS();
 
   if (!currentUser) {
-    return <Navigate to="/admin/login" replace />;
+    return <AdminLoginPage />;
   }
 
-  if (requiredRole === 'Super Admin' && currentUser.role !== 'Super Admin') {
-    return <Navigate to="/admin/login" replace />;
+  if (currentUser.role === 'Super Admin') {
+    return <SuperAdminPage />;
+  }
+
+  return <AdminPage />;
+};
+
+const ProtectedSuperAdminRoute = ({ children }) => {
+  const { currentUser } = useCMS();
+
+  if (!currentUser || currentUser.role !== 'Super Admin') {
+    return <Navigate to="/admin" replace />;
   }
 
   return children;
@@ -67,22 +77,15 @@ function App() {
           <Route path="/privacy" element={<PrivacyPolicyPage />} />
           <Route path="/terms-of-service" element={<TermsPage />} />
           <Route path="/refund-policy" element={<RefundPolicyPage />} />
-          <Route path="/login" element={<AdminLoginPage />} />
-          <Route path="/admin/login" element={<AdminLoginPage />} />
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedAdminRoute requiredRole="Admin">
-                <AdminPage />
-              </ProtectedAdminRoute>
-            } 
-          />
+          <Route path="/login" element={<Navigate to="/admin" replace />} />
+          <Route path="/admin/login" element={<Navigate to="/admin" replace />} />
+          <Route path="/admin" element={<AdminRouteDispatcher />} />
           <Route 
             path="/super-admin" 
             element={
-              <ProtectedAdminRoute requiredRole="Super Admin">
+              <ProtectedSuperAdminRoute>
                 <SuperAdminPage />
-              </ProtectedAdminRoute>
+              </ProtectedSuperAdminRoute>
             } 
           />
         </Routes>
