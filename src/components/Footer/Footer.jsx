@@ -141,6 +141,7 @@ const Footer = () => {
               <Link to="/privacy-policy">Privacy Policy</Link>
               <Link to="/terms-of-service">Terms of Service</Link>
               <Link to="/refund-policy">Refund Policy</Link>
+              <Link to="/login" style={{ color: '#10b981', display: 'inline-flex', alignItems: 'center', gap: '4px' }}><FiLock size={12} /> Admin Portal</Link>
             </div>
 
             <div className="legal-center-logo">
