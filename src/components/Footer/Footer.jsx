@@ -4,11 +4,13 @@ import { FiArrowUpRight, FiLock } from 'react-icons/fi';
 import { FaXTwitter, FaInstagram, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
 import { InnoveityBrandLogo } from '../Navbar/Navbar';
+import { useCMS } from '../../context/CMSContext';
 import './Footer.css';
 
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { contact } = useCMS();
 
   const handleGetStarted = () => {
     navigate('/contact');
@@ -77,10 +79,9 @@ const Footer = () => {
               </div>
               <div className="brand-legal-info">
                 <p>Operated by Innoveity Tech Solution Ltd.</p>
-                <p>MCC MRF Innovation Park, East Tambaram</p>
-                <p>Chennai - 600059, Tamil Nadu, India</p>
-                <p><a href="tel:+917904327211" style={{ color: 'inherit', textDecoration: 'none' }}>+91 7904327211</a></p>
-                <p><a href="mailto:aachinancy@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>aachinancy@gmail.com</a></p>
+                <p>{contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</p>
+                <p><a href={`tel:${contact?.phone || '+91 7904327211'}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contact?.phone || '+91 7904327211'}</a></p>
+                <p><a href={`mailto:${contact?.email || 'aachinancy@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contact?.email || 'aachinancy@gmail.com'}</a></p>
               </div>
             </div>
 
@@ -88,10 +89,9 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Address & Desk</h4>
               <ul className="footer-col-list address-list">
-                <li>MCC MRF Innovation Park</li>
-                <li>East Tambaram, Chennai - 600059</li>
-                <li>Phone: <a href="tel:+917904327211" style={{ color: '#10b981', textDecoration: 'none' }}>+91 7904327211</a></li>
-                <li>Email: <a href="mailto:aachinancy@gmail.com" style={{ color: '#10b981', textDecoration: 'none' }}>aachinancy@gmail.com</a></li>
+                <li>{contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</li>
+                <li>Phone: <a href={`tel:${contact?.phone || '+91 7904327211'}`} style={{ color: '#10b981', textDecoration: 'none' }}>{contact?.phone || '+91 7904327211'}</a></li>
+                <li>Email: <a href={`mailto:${contact?.email || 'aachinancy@gmail.com'}`} style={{ color: '#10b981', textDecoration: 'none' }}>{contact?.email || 'aachinancy@gmail.com'}</a></li>
                 <li>Hours: Mon - Fri, 9:00 AM - 6:00 PM</li>
               </ul>
             </div>
