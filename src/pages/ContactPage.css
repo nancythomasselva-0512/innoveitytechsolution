@@ -1,18 +1,205 @@
-/* 
-  Innoveity Tech Solution - Modern Reference Contact Us Page Styles
-  Inspired by crisp white card layout with soft ambient mesh background
-*/
-
 .contact-modern-page {
   position: relative;
   min-height: 100vh;
-  padding: 120px 24px 80px;
+  padding: 135px 24px 70px;
   background: linear-gradient(135deg, #dce4ed 0%, #eef2f6 45%, #e2e8f0 100%);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   font-family: var(--font-family);
   overflow: hidden;
+}
+
+/* Editorial Dynamic Word Rotator Hero Section */
+.contact-rotator-hero {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 1100px;
+  width: 100%;
+  margin-bottom: 2.5rem;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.rotator-line-1 {
+  font-family: var(--font-heading);
+  font-size: 3.4rem;
+  font-weight: 650;
+  color: #0f172a;
+  letter-spacing: -0.8px;
+  line-height: 1.15;
+}
+
+.rotator-text-normal {
+  font-style: normal;
+}
+
+.rotator-text-italic {
+  font-style: italic;
+  font-weight: 650;
+  color: #10b981;
+  margin-right: 0.15em;
+}
+
+.rotator-line-2 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.reach-out-pill-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.5rem;
+  border-radius: 50px;
+  border: 1.5px solid #0f172a;
+  background: transparent;
+  color: #0f172a;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.reach-out-pill-btn:hover {
+  background: #0f172a;
+  color: #ffffff;
+  transform: scale(1.03);
+}
+
+.rotator-email-link {
+  font-family: var(--font-heading);
+  font-size: 3.1rem;
+  font-weight: 650;
+  color: #10b981;
+  text-decoration: underline;
+  text-underline-offset: 8px;
+  text-decoration-thickness: 2.5px;
+  transition: all 0.3s ease;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+}
+
+.rotator-email-link:hover {
+  color: #059669;
+  opacity: 0.95;
+}
+
+.rotator-line-3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  font-family: var(--font-heading);
+  font-size: 3.4rem;
+  font-weight: 650;
+  color: #0f172a;
+  line-height: 1.15;
+  letter-spacing: -0.8px;
+  flex-wrap: wrap;
+}
+
+.rotator-underline-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: 0 0.2rem;
+}
+
+.descriptor-word {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.underline-stroke {
+  width: 120px;
+  height: 2px;
+  background: #0f172a;
+}
+
+.rotating-word-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 310px;
+  height: 1.3em;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+
+.rotating-word-text {
+  font-family: var(--font-heading);
+  font-size: 3.4rem;
+  font-weight: 650;
+  color: #0f172a;
+  white-space: nowrap;
+  letter-spacing: -0.8px;
+  text-align: center;
+}
+
+.rotator-star-icon {
+  color: #10b981;
+  font-size: 2.2rem;
+  margin-left: 0.2rem;
+  animation: spinStar 14s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spinStar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 992px) {
+  .rotator-line-1,
+  .rotator-line-3,
+  .rotating-word-text {
+    font-size: 2.6rem;
+  }
+
+  .rotator-email-link {
+    font-size: 2.2rem;
+  }
+
+  .rotating-word-container {
+    min-width: 260px;
+  }
+}
+
+@media (max-width: 640px) {
+  .rotator-line-1,
+  .rotator-line-3,
+  .rotating-word-text {
+    font-size: 2rem;
+  }
+
+  .rotator-email-link {
+    font-size: 1.7rem;
+  }
+
+  .underline-stroke {
+    width: 90px;
+  }
+
+  .rotating-word-container {
+    min-width: 200px;
+  }
 }
 
 /* Ambient Canvas Background Blur Blobs */

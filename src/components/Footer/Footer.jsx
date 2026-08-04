@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { FiArrowUpRight, FiLock } from 'react-icons/fi';
 import { FaXTwitter, FaInstagram, FaFacebookF, FaLinkedinIn } from 'react-icons/fa6';
 import { motion } from 'framer-motion';
@@ -18,7 +18,7 @@ const Footer = () => {
     navigate('/services');
   };
 
-  const hideCtaBanner = location.pathname === '/projects' || location.pathname === '/services' || location.pathname === '/team' || location.pathname === '/contact';
+  const hideCtaBanner = location.pathname === '/projects' || location.pathname === '/services' || location.pathname === '/team' || location.pathname === '/contact' || location.pathname.startsWith('/privacy') || location.pathname.startsWith('/terms') || location.pathname.startsWith('/refund');
 
   return (
     <footer className="footer-wrapper">
@@ -77,22 +77,22 @@ const Footer = () => {
               </div>
               <div className="brand-legal-info">
                 <p>Operated by Innoveity Tech Solution Ltd.</p>
-                <p>Reg. nr: 42103092209</p>
-                <p>Reg. date: 09.04.2019</p>
-                <p>123 Innovation Drive, Tech City, TC 90210</p>
-                <p>+1 (555) 123-4567</p>
+                <p>MCC MRF Innovation Park, East Tambaram</p>
+                <p>Chennai - 600059, Tamil Nadu, India</p>
+                <p><a href="tel:+917904327211" style={{ color: 'inherit', textDecoration: 'none' }}>+91 7904327211</a></p>
+                <p><a href="mailto:aachinancy@gmail.com" style={{ color: 'inherit', textDecoration: 'none' }}>aachinancy@gmail.com</a></p>
               </div>
             </div>
 
             {/* Column 2: Address */}
             <div className="footer-col">
-              <h4 className="footer-col-title">Address</h4>
+              <h4 className="footer-col-title">Address & Desk</h4>
               <ul className="footer-col-list address-list">
-                <li>123 Innovation Drive, Tech City</li>
-                <li>TC 90210, United States</li>
-                <li>Phone: +1 (555) 123-4567</li>
-                <li>Email: hello@innoveitytech.com</li>
-                <li>License Nr. 06.06.08.728/537</li>
+                <li>MCC MRF Innovation Park</li>
+                <li>East Tambaram, Chennai - 600059</li>
+                <li>Phone: <a href="tel:+917904327211" style={{ color: '#10b981', textDecoration: 'none' }}>+91 7904327211</a></li>
+                <li>Email: <a href="mailto:aachinancy@gmail.com" style={{ color: '#10b981', textDecoration: 'none' }}>aachinancy@gmail.com</a></li>
+                <li>Hours: Mon - Fri, 9:00 AM - 6:00 PM</li>
               </ul>
             </div>
 
@@ -116,7 +116,7 @@ const Footer = () => {
                 <li><a href="/about">About Us</a></li>
                 <li><a href="/team">Our Team</a></li>
                 <li><a href="/projects">Portfolio & Projects</a></li>
-                <li><a href="/projects">Tech Insights</a></li>
+                <li><a href="/privacy-policy">Privacy Policy</a></li>
                 <li><a href="/team">Careers</a></li>
                 <li><a href="/contact">Verification</a></li>
               </ul>
@@ -138,9 +138,9 @@ const Footer = () => {
           {/* Bottom Legal & Copyright Bar */}
           <div className="footer-legal-bar">
             <div className="legal-links">
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Use</a>
-              <a href="#">Cookie Consent</a>
+              <Link to="/privacy-policy">Privacy Policy</Link>
+              <Link to="/terms-of-service">Terms of Service</Link>
+              <Link to="/refund-policy">Refund Policy</Link>
             </div>
 
             <div className="legal-center-logo">

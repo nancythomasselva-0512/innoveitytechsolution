@@ -388,8 +388,8 @@ const AboutPage = () => {
                 <ul className="footer-links">
                   <li><Link to="/about">Our Team</Link></li>
                   <li><Link to="/services">Careers</Link></li>
-                  <li><Link to="/contact">Privacy Policy</Link></li>
-                  <li><Link to="/contact">Terms of Service</Link></li>
+                  <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                  <li><Link to="/terms-of-service">Terms of Service</Link></li>
                 </ul>
               </div>
 

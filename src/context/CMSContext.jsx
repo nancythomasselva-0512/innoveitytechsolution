@@ -61,8 +61,8 @@ export const CMSProvider = ({ children }) => {
   ];
 
   const defaultContact = {
-    email: 'websitet96@gmail.com',
-    phone: '+91 9876543210',
+    email: 'aachinancy@gmail.com',
+    phone: '+91 7904327211',
     address: 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'
   };
 
@@ -198,6 +198,245 @@ export const CMSProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  const defaultSeoSettings = {
+    metaTitle: 'Innoveity Tech Solution | Enterprise Software & AI Cloud Engineering',
+    metaDescription: 'Innoveity Tech Solution is a leading software development & digital transformation agency offering Web, Mobile, AI, and Cloud Infrastructure.',
+    keywords: 'software development, web development, mobile apps, AI solutions, cloud infrastructure, Chennai IT company, Innoveity Tech',
+    ogImage: '/Innoveity.png',
+    canonicalUrl: 'https://innoveitytech.com',
+    robotsTxt: 'User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /super-admin\nSitemap: https://innoveitytech.com/sitemap.xml',
+    googleAnalyticsId: 'G-INNOVEITY2026',
+    author: 'Innoveity Tech Solution Private Limited'
+  };
+
+  const defaultPageSeoSettings = {
+    home: {
+      title: 'Innoveity Tech Solution | Enterprise Software & AI Cloud Engineering',
+      description: 'Innoveity Tech Solution is a leading software development & digital transformation agency in Chennai offering Web, Mobile, AI, and Cloud Infrastructure.',
+      keywords: 'software development, web development, mobile apps, AI solutions, cloud infrastructure, Chennai IT company, Innoveity Tech',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/'
+    },
+    about: {
+      title: 'About Us | Innoveity Tech Solution - Technology Leadership',
+      description: 'Learn about Innoveity Tech Solution, our mission, vision, engineering team, and commitment to delivering cutting-edge software solutions.',
+      keywords: 'about innoveity, tech leadership, software team, Chennai IT company, IT experts',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/about'
+    },
+    services: {
+      title: 'Services & Engineering Capabilities | Innoveity Tech Solution',
+      description: 'Explore our integrated technology solutions including Web Development, Mobile Engineering, Custom Enterprise Software, and Cloud Infrastructure.',
+      keywords: 'web development services, mobile app development, custom software, cloud AI infrastructure',
+      ogImage: '/service_web.png',
+      canonicalUrl: 'https://innoveitytech.com/services'
+    },
+    projects: {
+      title: 'Portfolio & Case Studies | Innoveity Tech Solution',
+      description: 'Discover our portfolio of successful software products, enterprise SaaS applications, AI language platforms, and mobile apps.',
+      keywords: 'software portfolio, client case studies, web development projects, AI SaaS apps',
+      ogImage: '/fluentia.png',
+      canonicalUrl: 'https://innoveitytech.com/projects'
+    },
+    contact: {
+      title: 'Contact Us | Get in Touch with Innoveity Tech Solution',
+      description: 'Reach out to Innoveity Tech Solution for consultation, project inquiries, or technology partnerships.',
+      keywords: 'contact innoveity, hire software developers, IT consultation Chennai',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/contact'
+    },
+    team: {
+      title: 'Our Team & Leadership | Innoveity Tech Solution',
+      description: 'Meet the talented software architects, engineers, and technology strategists at Innoveity Tech Solution.',
+      keywords: 'innoveity team, software engineers, tech leadership, developers Chennai',
+      ogImage: '/Arifbillah.jpeg',
+      canonicalUrl: 'https://innoveitytech.com/team'
+    },
+    privacy: {
+      title: 'Privacy Policy | Innoveity Tech Solution',
+      description: 'Read the official Privacy Policy of Innoveity Tech Solution regarding data protection, user privacy, and security.',
+      keywords: 'privacy policy, data protection, innoveity privacy',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/privacy-policy'
+    },
+    terms: {
+      title: 'Terms of Service | Innoveity Tech Solution',
+      description: 'Terms of service and operational agreements governing the use of Innoveity Tech Solution website and digital products.',
+      keywords: 'terms of service, user agreement, innoveity terms',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/terms-of-service'
+    },
+    refund: {
+      title: 'Refund & Cancellation Policy | Innoveity Tech Solution',
+      description: 'Official refund, project cancellation, and billing policies for Innoveity Tech Solution software development services.',
+      keywords: 'refund policy, cancellation policy, innoveity terms',
+      ogImage: '/Innoveity.png',
+      canonicalUrl: 'https://innoveitytech.com/refund-policy'
+    }
+  };
+
+  const defaultCustomFields = {
+    home: [
+      { id: 1, label: 'Secondary Banner', value: 'Special Technology Solutions 2026' }
+    ],
+    about: [
+      { id: 1, label: 'Vision Tagline', value: 'Empowering Next-Gen Software Architecture' }
+    ],
+    contact: [
+      { id: 1, label: 'Support Desk Hotline', value: '+91 7904327211 (24x7 Direct)' }
+    ],
+    seo: [
+      { id: 1, label: 'Schema Markup Type', value: 'Organization / LocalBusiness' }
+    ]
+  };
+
+  const defaultAdminAccounts = [
+    {
+      id: 1,
+      name: 'Super Admin Master',
+      email: 'innoveitytech@gmail.com',
+      password: 'superadmin123',
+      role: 'Super Admin',
+      status: 'Active',
+      lastLogin: 'Just now'
+    },
+    {
+      id: 2,
+      name: 'Admin Content Manager',
+      email: 'innoveityadmin@gmail.com',
+      password: 'admin123',
+      role: 'Admin',
+      status: 'Active',
+      lastLogin: '10 mins ago'
+    }
+  ];
+
+// Client-Side Security & Data Obfuscation Helpers
+const encryptData = (data) => {
+  try {
+    const jsonString = JSON.stringify(data);
+    return btoa(encodeURIComponent(jsonString));
+  } catch (e) {
+    return JSON.stringify(data);
+  }
+};
+
+const decryptData = (encryptedString, fallback) => {
+  if (!encryptedString) return fallback;
+  try {
+    const jsonString = decodeURIComponent(atob(encryptedString));
+    return JSON.parse(jsonString);
+  } catch (e) {
+    try {
+      return JSON.parse(encryptedString);
+    } catch (err) {
+      return fallback;
+    }
+  }
+};
+
+  const [adminUsers, setAdminUsers] = useState(() => {
+    const saved = localStorage.getItem('cms_admin_sec_v1');
+    return saved ? decryptData(saved, defaultAdminAccounts) : defaultAdminAccounts;
+  });
+
+  const [currentUser, setCurrentUser] = useState(() => {
+    const saved = localStorage.getItem('cms_session_sec_v1');
+    return saved ? decryptData(saved, null) : null;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cms_admin_sec_v1', encryptData(adminUsers));
+  }, [adminUsers]);
+
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
+    } else {
+      localStorage.removeItem('cms_session_sec_v1');
+    }
+  }, [currentUser]);
+
+  const addAdminUser = (user) => {
+    const newUser = {
+      id: Date.now(),
+      name: user.name,
+      email: user.email.toLowerCase().trim(),
+      password: user.password || 'admin123',
+      role: user.role || 'Admin',
+      status: 'Active',
+      lastLogin: 'Never'
+    };
+    setAdminUsers(prev => [...prev, newUser]);
+    return newUser;
+  };
+
+  const deleteAdminUser = (id) => {
+    setAdminUsers(prev => prev.filter(u => u.id !== id));
+  };
+
+  const toggleUserStatus = (id) => {
+    setAdminUsers(prev => prev.map(u => u.id === id ? { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' } : u));
+  };
+
+  const loginAdmin = (email, password, requiredRole) => {
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const found = adminUsers.find(u => u.email.toLowerCase() === cleanEmail);
+
+    if (!found) {
+      return { success: false, message: 'Account with this email does not exist.' };
+    }
+
+    if (found.password !== password) {
+      return { success: false, message: 'Invalid password. Please try again.' };
+    }
+
+    if (found.status !== 'Active') {
+      return { success: false, message: 'This account has been suspended. Contact Super Admin.' };
+    }
+
+    if (requiredRole === 'Super Admin' && found.role !== 'Super Admin') {
+      return { success: false, message: 'Access denied: Super Admin privileges required.' };
+    }
+
+    const updatedUser = { ...found, lastLogin: 'Just now' };
+    setAdminUsers(prev => prev.map(u => u.id === found.id ? updatedUser : u));
+    setCurrentUser(updatedUser);
+
+    return { success: true, user: updatedUser };
+  };
+
+  const logoutAdmin = () => {
+    setCurrentUser(null);
+  };
+
+  const [seoSettings, setSeoSettings] = useState(() => {
+    const saved = localStorage.getItem('cms_seo_v1');
+    return saved ? JSON.parse(saved) : defaultSeoSettings;
+  });
+
+  const [pageSeoSettings, setPageSeoSettings] = useState(() => {
+    const saved = localStorage.getItem('cms_page_seo_v1');
+    return saved ? JSON.parse(saved) : defaultPageSeoSettings;
+  });
+
+  const [customFields, setCustomFields] = useState(() => {
+    const saved = localStorage.getItem('cms_custom_fields_v1');
+    return saved ? JSON.parse(saved) : defaultCustomFields;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('cms_seo_v1', JSON.stringify(seoSettings));
+  }, [seoSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('cms_page_seo_v1', JSON.stringify(pageSeoSettings));
+  }, [pageSeoSettings]);
+
+  useEffect(() => {
+    localStorage.setItem('cms_custom_fields_v1', JSON.stringify(customFields));
+  }, [customFields]);
+
   // Actions
   const addProject = (project) => setProjects([...projects, { ...project, id: Date.now() }]);
   const updateProject = (id, updatedProject) => {
@@ -214,6 +453,28 @@ export const CMSProvider = ({ children }) => {
   const updateContact = (updatedContact) => setContact(updatedContact);
   const updateHomeContent = (newContent) => setHomeContent(newContent);
   const updateAboutContent = (newContent) => setAboutContent(newContent);
+  const updateSeoSettings = (newSeo) => setSeoSettings(newSeo);
+  
+  const updatePageSeoSettings = (pageKey, newPageSeo) => {
+    setPageSeoSettings(prev => ({
+      ...prev,
+      [pageKey]: { ...prev[pageKey], ...newPageSeo }
+    }));
+  };
+
+  const addCustomField = (pageKey, field) => {
+    setCustomFields(prev => ({
+      ...prev,
+      [pageKey]: [...(prev[pageKey] || []), { id: Date.now(), ...field }]
+    }));
+  };
+
+  const deleteCustomField = (pageKey, id) => {
+    setCustomFields(prev => ({
+      ...prev,
+      [pageKey]: (prev[pageKey] || []).filter(f => f.id !== id)
+    }));
+  };
 
   return (
     <CMSContext.Provider value={{
@@ -221,9 +482,15 @@ export const CMSProvider = ({ children }) => {
       team, addTeamMember, updateTeamMember, deleteTeamMember,
       contact, updateContact,
       homeContent, updateHomeContent,
-      aboutContent, updateAboutContent
+      aboutContent, updateAboutContent,
+      seoSettings, updateSeoSettings,
+      pageSeoSettings, updatePageSeoSettings,
+      customFields, addCustomField, deleteCustomField,
+      adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
+      currentUser, loginAdmin, logoutAdmin
     }}>
       {children}
     </CMSContext.Provider>
   );
 };
+

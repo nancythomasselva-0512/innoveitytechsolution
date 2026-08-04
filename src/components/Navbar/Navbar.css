@@ -4,21 +4,22 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 0.8rem 0;
+  padding: 1.25rem 0;
   transition: all 0.4s ease;
-  background: linear-gradient(180deg, rgba(8, 12, 18, 0.95) 0%, rgba(8, 12, 18, 0.82) 70%, rgba(8, 12, 18, 0.6) 100%);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  background: linear-gradient(135deg, rgba(8, 32, 28, 0.92) 0%, rgba(13, 59, 52, 0.88) 50%, rgba(8, 24, 21, 0.92) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 10px 35px rgba(8, 40, 35, 0.3);
 }
 
 .navbar-header.header-scrolled {
-  padding: 0.55rem 0;
-  background: rgba(8, 12, 18, 0.96);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  padding: 0.8rem 0;
+  background: rgba(8, 30, 26, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.35);
+  box-shadow: 0 14px 45px rgba(5, 30, 25, 0.5);
 }
 
 .navbar-wrapper {
@@ -152,28 +153,28 @@
   background: #ffffff;
   color: #0b0f19;
   border-radius: 9999px;
-  padding: 5px 6px 5px 22px;
+  padding: 3px 4px 3px 14px;
   font-weight: 700;
-  font-size: 0.85rem;
-  letter-spacing: 0.8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.5px;
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .pill-btn-contact:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
   background: #f8fafc;
 }
 
 .pill-btn-contact .arrow-circle {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: #10b981;
   color: #ffffff;

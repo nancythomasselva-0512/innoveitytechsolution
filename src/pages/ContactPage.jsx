@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FiPhone, FiMail, FiMapPin, FiClock, 
   FiUser, FiBriefcase, FiFileText, FiCheckCircle 
 } from 'react-icons/fi';
+import emailjs from '@emailjs/browser';
 import { useCMS } from '../context/CMSContext';
 import './ContactPage.css';
 
@@ -12,6 +14,23 @@ const ContactPage = () => {
   }, []);
 
   const { contact } = useCMS();
+
+  // Dynamic rotating words for hero heading
+  const rotatingWords = [
+    'collaborations.',
+    'new projects.',
+    'experiences.',
+    'digital products.',
+    'innovative ideas.'
+  ];
+  const [wordIndex, setWordIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setWordIndex((prevIndex) => (prevIndex + 1) % rotatingWords.length);
+    }, 2500);
+    return () => clearInterval(timer);
+  }, []);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -34,25 +53,60 @@ const ContactPage = () => {
     e.preventDefault();
     if (formData.firstName && formData.email && formData.message) {
       setIsSubmitting(true);
+
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_mnicjda";
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_y0z2q8n";
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "3gidmTWvW9XfHvxyK";
+      const targetEmail = (contact && contact.email) ? contact.email : "aachinancy@gmail.com";
+
+      const fullDetailsSummary = `
+📌 NEW WEBSITE CONTACT INQUIRY
+----------------------------------------
+👤 Name: ${formData.firstName} ${formData.lastName}`.trim() + `
+📧 Sender Email: ${formData.email}
+📞 Phone Number: ${formData.phone || 'N/A'}
+🏢 Company/Org: ${formData.company || 'N/A'}
+🏷️ Subject: ${formData.subject || 'General Inquiry'}
+
+💬 Message Content:
+${formData.message}
+----------------------------------------
+`;
+
+      const templateParams = {
+        from_name: `${formData.firstName} ${formData.lastName}`.trim(),
+        user_name: `${formData.firstName} ${formData.lastName}`.trim(),
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        from_email: formData.email,
+        user_email: formData.email,
+        reply_to: formData.email,
+        email: formData.email,
+        phone: formData.phone || 'N/A',
+        company: formData.company || 'N/A',
+        subject: formData.subject || 'General Inquiry',
+        message: fullDetailsSummary,
+        to_email: targetEmail,
+        to_name: 'Innoveity Admin'
+      };
+
       try {
-        await fetch("https://formsubmit.co/ajax/websitet96@gmail.com", {
-          method: "POST",
-          headers: { 
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          body: JSON.stringify({
-            _subject: `New Contact Inquiry from ${formData.firstName} ${formData.lastName}`,
-            name: `${formData.firstName} ${formData.lastName}`.trim(),
-            email: formData.email,
-            phone: formData.phone || 'N/A',
-            company: formData.company || 'N/A',
-            subject: formData.subject || 'General Inquiry',
-            message: formData.message
-          })
-        });
+        emailjs.init(publicKey);
+        const res = await emailjs.send(serviceId, templateId, templateParams, publicKey);
+        console.log("EmailJS response log:", res);
       } catch (err) {
-        console.error("Notification submission log:", err);
+        console.warn("EmailJS primary send fallback triggered:", err);
+        try {
+          await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
+            method: "POST",
+            headers: { 
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(templateParams)
+          });
+        } catch (fallbackErr) {
+          console.error("Form submission fallback error:", fallbackErr);
+        }
       } finally {
         setIsSubmitting(false);
         setIsSubmitted(true);
@@ -67,7 +121,7 @@ const ContactPage = () => {
             subject: '',
             message: ''
           });
-        }, 5000);
+        }, 4000);
       }
     }
   };
@@ -81,8 +135,49 @@ const ContactPage = () => {
         <div className="canvas-blob blob-bottom-right"></div>
       </div>
 
+      {/* Editorial Dynamic Word Rotator Hero Section */}
+      <div className="contact-rotator-hero">
+        <div className="rotator-line-1">
+          <span className="rotator-text-normal">Let’s make </span>
+          <span className="rotator-text-italic">something </span>
+          <span className="rotator-text-normal">great!</span>
+        </div>
+
+        <div className="rotator-line-2">
+          <a href="#contact-form" className="reach-out-pill-btn">
+            Reach out
+          </a>
+          <a href="mailto:contact@innoveitytech.com" className="rotator-email-link">
+            contact@innoveitytech.com
+          </a>
+        </div>
+
+        <div className="rotator-line-3">
+          <span className="rotator-text-normal">for </span>
+          <div className="rotator-underline-wrapper">
+            <span className="descriptor-word">wonderful</span>
+            <div className="underline-stroke"></div>
+          </div>
+          <div className="rotating-word-container">
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={rotatingWords[wordIndex]}
+                initial={{ y: 24, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -24, opacity: 0 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="rotating-word-text"
+              >
+                {rotatingWords[wordIndex]}
+              </motion.span>
+            </AnimatePresence>
+          </div>
+          <span className="rotator-star-icon">✳</span>
+        </div>
+      </div>
+
       {/* Main Centered White Glass Card */}
-      <div className="contact-main-card-container">
+      <div className="contact-main-card-container" id="contact-form">
         
         {/* Left Column: Contact Information */}
         <div className="contact-info-col">
@@ -95,20 +190,20 @@ const ContactPage = () => {
           <div className="info-items-list">
             
             {/* Phone */}
-            <div className="info-item-row">
+            <a href={`tel:${(contact.phone || '+91 7904327211').replace(/\s+/g, '')}`} className="info-item-row" style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="info-icon-outline">
                 <FiPhone />
               </div>
-              <span className="info-text-val">{contact.phone || '+1 561 301 4406'}</span>
-            </div>
+              <span className="info-text-val">{contact.phone || '+91 7904327211'}</span>
+            </a>
 
             {/* Email */}
-            <div className="info-item-row">
+            <a href={`mailto:${contact.email || 'aachinancy@gmail.com'}`} className="info-item-row" style={{ textDecoration: 'none', color: 'inherit' }}>
               <div className="info-icon-outline">
                 <FiMail />
               </div>
-              <span className="info-text-val">{contact.email || 'contact@innoveitytechsolution.com'}</span>
-            </div>
+              <span className="info-text-val">{contact.email || 'aachinancy@gmail.com'}</span>
+            </a>
 
             {/* Address */}
             <div className="info-item-row">

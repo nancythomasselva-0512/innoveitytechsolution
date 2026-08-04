@@ -1,9 +1,10 @@
 import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import BackToTop from './components/UI/BackToTop';
 import LoadingScreen from './components/UI/LoadingScreen';
+import SEOHead from './components/UI/SEOHead';
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import TeamPage from './pages/TeamPage';
@@ -12,15 +13,35 @@ import ProjectsPage from './pages/ProjectsPage';
 import ContactPage from './pages/ContactPage';
 import AdminPage from './pages/AdminPage';
 import SuperAdminPage from './pages/SuperAdminPage';
+import AdminLoginPage from './pages/AdminLoginPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
+import RefundPolicyPage from './pages/RefundPolicyPage';
+import { useCMS } from './context/CMSContext';
 import './App.css';
+
+const ProtectedAdminRoute = ({ children, requiredRole }) => {
+  const { currentUser } = useCMS();
+
+  if (!currentUser) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  if (requiredRole === 'Super Admin' && currentUser.role !== 'Super Admin') {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  return children;
+};
 
 function App() {
   const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/super-admin');
+  const isAdminRoute = location.pathname.startsWith('/admin') || location.pathname.startsWith('/super-admin') || location.pathname === '/login';
   const hideGlobalFooter = location.pathname.startsWith('/about') || isAdminRoute;
 
   return (
     <div className="app-container">
+      <SEOHead />
       <LoadingScreen />
       
       {/* Floating Background Elements - Hide on admin routes */}
@@ -42,8 +63,28 @@ function App() {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/contact" element={<ContactPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-          <Route path="/super-admin" element={<SuperAdminPage />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="/privacy" element={<PrivacyPolicyPage />} />
+          <Route path="/terms-of-service" element={<TermsPage />} />
+          <Route path="/refund-policy" element={<RefundPolicyPage />} />
+          <Route path="/login" element={<AdminLoginPage />} />
+          <Route path="/admin/login" element={<AdminLoginPage />} />
+          <Route 
+            path="/admin" 
+            element={
+              <ProtectedAdminRoute requiredRole="Admin">
+                <AdminPage />
+              </ProtectedAdminRoute>
+            } 
+          />
+          <Route 
+            path="/super-admin" 
+            element={
+              <ProtectedAdminRoute requiredRole="Super Admin">
+                <SuperAdminPage />
+              </ProtectedAdminRoute>
+            } 
+          />
         </Routes>
       </main>
       

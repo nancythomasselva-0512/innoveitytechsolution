@@ -64,7 +64,6 @@ const Navbar = () => {
     { name: 'Projects', to: '/projects', isPage: true },
     { name: 'Services', to: '/services', isPage: true },
     { name: 'Our Team', to: '/team', isPage: true },
-    { name: 'Contact Us', to: '/contact', isPage: true },
   ];
 
   const handleNavClick = (link) => {
@@ -142,7 +141,7 @@ const Navbar = () => {
           <button className="pill-btn-contact" onClick={handleContactClick}>
             <span>CONTACT US</span>
             <div className="arrow-circle">
-              <FiArrowUpRight size={18} />
+              <FiArrowUpRight size={14} />
             </div>
           </button>
 
