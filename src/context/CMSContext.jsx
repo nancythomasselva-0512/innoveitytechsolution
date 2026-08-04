@@ -341,7 +341,9 @@ const decryptData = (encryptedString, fallback) => {
   });
 
   const [currentUser, setCurrentUser] = useState(() => {
-    const saved = localStorage.getItem('cms_session_sec_v1');
+    // Clear legacy localStorage session if present
+    localStorage.removeItem('cms_session_sec_v1');
+    const saved = sessionStorage.getItem('cms_session_sec_v1');
     return saved ? decryptData(saved, null) : null;
   });
 
@@ -351,8 +353,9 @@ const decryptData = (encryptedString, fallback) => {
 
   useEffect(() => {
     if (currentUser) {
-      localStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
+      sessionStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
     } else {
+      sessionStorage.removeItem('cms_session_sec_v1');
       localStorage.removeItem('cms_session_sec_v1');
     }
   }, [currentUser]);
