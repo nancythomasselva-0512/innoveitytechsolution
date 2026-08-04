@@ -12,8 +12,15 @@ const Services = () => {
 
   const services = homeContent?.servicesList || [];
 
-  const handleExploreService = (path) => {
-    navigate(path);
+  const handleExploreService = (service) => {
+    const targetId = service?.id || 'web-dev';
+    navigate(`/services#service-card-${targetId}`);
+    setTimeout(() => {
+      const element = document.getElementById(`service-card-${targetId}`);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 150);
   };
 
   const containerVariants = {
@@ -106,7 +113,7 @@ const Services = () => {
                 <div className="service-action-row">
                   <motion.button 
                     className="pill-btn-explore" 
-                    onClick={() => handleExploreService(service.link)}
+                    onClick={() => handleExploreService(service)}
                     whileHover={{ scale: 1.04, x: 2 }}
                     whileTap={{ scale: 0.96 }}
                   >

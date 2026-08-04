@@ -32,7 +32,19 @@ const ServicesPage = () => {
   const marqueeTrackRef = useRef(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      const hashId = window.location.hash.replace('#', '');
+      const cleanServiceId = hashId.replace('service-card-', '');
+      setActiveCardId(cleanServiceId);
+      setTimeout(() => {
+        const el = document.getElementById(hashId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 350);
+    } else {
+      window.scrollTo(0, 0);
+    }
   }, []);
   
   useScrollObserver();
