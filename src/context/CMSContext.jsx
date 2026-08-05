@@ -51,6 +51,62 @@ export const CMSProvider = ({ children }) => {
     },
   ];
 
+  const defaultShowcaseHeader = {
+    badge: 'OUR PROJECTS',
+    titleLine1: 'We Help Brands',
+    titleHighlight: 'Win in the Digital Space',
+    subtitle: 'An engineering solution agency building strategy-driven systems, high-impact web applications, and enterprise digital platforms that stand out.',
+    ctaText: 'View Our Work'
+  };
+
+  const defaultShowcaseProjects = [
+    {
+      id: 'space-room',
+      tag: 'Architecture & Cloud',
+      title: 'Space to Room',
+      subtitle: 'Building Scalable Digital Workspaces',
+      description: 'High-performance cloud infrastructure & structural analytics for enterprise real estate and urban development.',
+      image: '/tech_blog_featured.png',
+      tech: ['AWS', 'React', 'Node.js', 'PostgreSQL']
+    },
+    {
+      id: 'ai-advisor',
+      tag: 'AI & Analytics',
+      title: 'AI Financial Advisor',
+      subtitle: 'Personalized Intelligence Engine',
+      description: 'Real-time predictive machine learning models and intuitive wealth management dashboards.',
+      image: '/tech_blog_2.png',
+      tech: ['Python', 'TensorFlow', 'React Native', 'Redis']
+    },
+    {
+      id: 'eclipse-studio',
+      tag: 'Web Engineering',
+      title: 'Eclipse Studio',
+      subtitle: 'Creative Brand & Digital Experience',
+      description: 'We believe digital design is about freezing emotions, energy, and atmosphere into seamless user interfaces.',
+      image: '/tech_blog_1.png',
+      tech: ['Next.js', 'Framer Motion', 'Tailwind', 'WebGL']
+    },
+    {
+      id: 'telehealth',
+      tag: 'Mobile Platform',
+      title: 'TeleHealth Care',
+      subtitle: 'HIPAA-Compliant Medical Suite',
+      description: 'Connecting patients with medical specialists via sub-50ms HD video streaming and instant prescribing.',
+      image: '/tech_blog_3.png',
+      tech: ['React Native', 'WebRTC', 'GraphQL', 'Docker']
+    },
+    {
+      id: 'altrix-fleet',
+      tag: 'IoT Telematics',
+      title: 'Altrix Logistics',
+      subtitle: 'Smart Fleet Operations',
+      description: 'Real-time telematics tracking and automated route optimization processing 1M+ sensor data points per minute.',
+      image: '/hero-bg.png',
+      tech: ['Go', 'Kafka', 'MongoDB', 'Vue.js']
+    }
+  ];
+
   const defaultTeam = [
     { id: 1, name: 'Praveen', role: 'Team Member', image: '/Praveen.jpeg' },
     { id: 2, name: 'Nancy', role: 'Team Member', image: '/Nancy.jpeg' },
@@ -153,10 +209,28 @@ export const CMSProvider = ({ children }) => {
     return saved ? JSON.parse(saved) : defaultAboutContent;
   });
 
+  const [showcaseHeader, setShowcaseHeader] = useState(() => {
+    const saved = localStorage.getItem('cms_showcase_header_v2');
+    return saved ? JSON.parse(saved) : defaultShowcaseHeader;
+  });
+
+  const [showcaseProjects, setShowcaseProjects] = useState(() => {
+    const saved = localStorage.getItem('cms_showcase_projects_v2');
+    return saved ? JSON.parse(saved) : defaultShowcaseProjects;
+  });
+
   // Sync to LocalStorage
   useEffect(() => {
     localStorage.setItem('cms_projects', JSON.stringify(projects));
   }, [projects]);
+
+  useEffect(() => {
+    localStorage.setItem('cms_showcase_header_v2', JSON.stringify(showcaseHeader));
+  }, [showcaseHeader]);
+
+  useEffect(() => {
+    localStorage.setItem('cms_showcase_projects_v2', JSON.stringify(showcaseProjects));
+  }, [showcaseProjects]);
 
   useEffect(() => {
     localStorage.setItem('cms_team_v2', JSON.stringify(team));
@@ -180,10 +254,16 @@ export const CMSProvider = ({ children }) => {
       if (e.key === 'cms_projects' && e.newValue) {
         setProjects(JSON.parse(e.newValue));
       }
+      if (e.key === 'cms_showcase_header_v2' && e.newValue) {
+        setShowcaseHeader(JSON.parse(e.newValue));
+      }
+      if (e.key === 'cms_showcase_projects_v2' && e.newValue) {
+        setShowcaseProjects(JSON.parse(e.newValue));
+      }
       if (e.key === 'cms_team_v2' && e.newValue) {
         setTeam(JSON.parse(e.newValue));
       }
-      if (e.key === 'cms_contact' && e.newValue) {
+      if (e.key === 'cms_contact_v3' && e.newValue) {
         setContact(JSON.parse(e.newValue));
       }
       if (e.key === 'cms_home' && e.newValue) {
@@ -447,6 +527,33 @@ const decryptData = (encryptedString, fallback) => {
   };
   const deleteProject = (id) => setProjects(projects.filter(p => p.id !== id));
 
+  const addShowcaseProject = (project) => {
+    const techArray = Array.isArray(project.tech)
+      ? project.tech
+      : (typeof project.tech === 'string' ? project.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
+    const newCard = {
+      ...project,
+      id: project.id || `showcase-${Date.now()}`,
+      tech: techArray
+    };
+    setShowcaseProjects([...showcaseProjects, newCard]);
+  };
+
+  const updateShowcaseProject = (id, updatedProject) => {
+    const techArray = Array.isArray(updatedProject.tech)
+      ? updatedProject.tech
+      : (typeof updatedProject.tech === 'string' ? updatedProject.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
+    setShowcaseProjects(showcaseProjects.map(p => p.id === id ? { ...p, ...updatedProject, tech: techArray } : p));
+  };
+
+  const deleteShowcaseProject = (id) => {
+    setShowcaseProjects(showcaseProjects.filter(p => p.id !== id));
+  };
+
+  const updateShowcaseHeader = (newHeader) => {
+    setShowcaseHeader(prev => ({ ...prev, ...newHeader }));
+  };
+
   const addTeamMember = (member) => setTeam([...team, { ...member, id: Date.now() }]);
   const updateTeamMember = (id, updatedMember) => {
     setTeam(team.map(m => m.id === id ? { ...m, ...updatedMember } : m));
@@ -482,6 +589,8 @@ const decryptData = (encryptedString, fallback) => {
   return (
     <CMSContext.Provider value={{
       projects, addProject, updateProject, deleteProject,
+      showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
+      showcaseHeader, updateShowcaseHeader,
       team, addTeamMember, updateTeamMember, deleteTeamMember,
       contact, updateContact,
       homeContent, updateHomeContent,

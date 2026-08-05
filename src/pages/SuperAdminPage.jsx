@@ -48,6 +48,8 @@ const SuperAdminPage = () => {
 
   const { 
     projects, addProject, updateProject, deleteProject,
+    showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
+    showcaseHeader, updateShowcaseHeader,
     team, addTeamMember, updateTeamMember, deleteTeamMember,
     contact, updateContact,
     homeContent, updateHomeContent,
@@ -67,6 +69,8 @@ const SuperAdminPage = () => {
 
   // CMS Form States
   const [newProject, setNewProject] = useState({ title: '', category: 'Web Development', description: '', image: '' });
+  const [editShowcaseHeader, setEditShowcaseHeader] = useState(showcaseHeader || {});
+  const [newShowcaseCard, setNewShowcaseCard] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
   const [newTeam, setNewTeam] = useState({ name: '', role: '', image: '' });
   const [editContact, setEditContact] = useState(contact || {});
   const [editHome, setEditHome] = useState(homeContent || {});
@@ -79,6 +83,10 @@ const SuperAdminPage = () => {
   useEffect(() => {
     if (seoSettings) setEditSeo(seoSettings);
   }, [seoSettings]);
+
+  useEffect(() => {
+    if (showcaseHeader) setEditShowcaseHeader(showcaseHeader);
+  }, [showcaseHeader]);
 
   useEffect(() => {
     if (pageSeoSettings && pageSeoSettings[selectedSeoPage]) {
@@ -95,9 +103,52 @@ const SuperAdminPage = () => {
     triggerNotification(`SEO & Meta Configuration Saved for ${selectedSeoPage.toUpperCase()} Page!`);
   };
 
+  const handleSaveShowcaseHeaderSubmit = (e) => {
+    e.preventDefault();
+    if (updateShowcaseHeader) {
+      updateShowcaseHeader(editShowcaseHeader);
+      triggerNotification('3D Showcase Section Header updated successfully!');
+    }
+  };
+
+  const handleAddShowcaseSubmit = (e) => {
+    e.preventDefault();
+    if (!newShowcaseCard.title || !newShowcaseCard.description) return;
+    if (addShowcaseProject) {
+      addShowcaseProject(newShowcaseCard);
+      setNewShowcaseCard({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
+      triggerNotification('New 3D Showcase Card added successfully!');
+    }
+  };
+
   // Edit Modal States
   const [editingProjectId, setEditingProjectId] = useState(null);
   const [editProjectData, setEditProjectData] = useState({ title: '', category: 'Web Development', description: '', image: '' });
+
+  const [editingShowcaseId, setEditingShowcaseId] = useState(null);
+  const [editShowcaseData, setEditShowcaseData] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
+
+  const handleStartEditShowcase = (card) => {
+    setEditingShowcaseId(card.id);
+    setEditShowcaseData({
+      tag: card.tag || '',
+      title: card.title || '',
+      subtitle: card.subtitle || '',
+      description: card.description || '',
+      image: card.image || '',
+      tech: Array.isArray(card.tech) ? card.tech.join(', ') : (card.tech || '')
+    });
+  };
+
+  const handleSaveEditShowcase = (e) => {
+    e.preventDefault();
+    if (updateShowcaseProject) {
+      updateShowcaseProject(editingShowcaseId, editShowcaseData);
+      setEditingShowcaseId(null);
+      triggerNotification('3D Showcase Card updated successfully!');
+    }
+  };
+
   const [editingTeamId, setEditingTeamId] = useState(null);
   const [editTeamData, setEditTeamData] = useState({ name: '', role: '', image: '' });
 
@@ -286,6 +337,99 @@ const SuperAdminPage = () => {
   return (
     <div className="admin-layout">
 
+      {/* EDIT 3D SHOWCASE CARD MODAL OVERLAY */}
+      {editingShowcaseId && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card">
+            <div className="dash-modal-header">
+              <h3 className="dash-modal-title">Edit 3D Showcase Card</h3>
+              <button className="dash-modal-close-btn" onClick={() => setEditingShowcaseId(null)}><FiX /></button>
+            </div>
+            <form onSubmit={handleSaveEditShowcase} className="dash-form-grid">
+              <div className="dash-field-group">
+                <label className="dash-label">Category Tag / Badge</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  placeholder="e.g. Web Engineering"
+                  value={editShowcaseData.tag}
+                  onChange={(e) => setEditShowcaseData({ ...editShowcaseData, tag: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group">
+                <label className="dash-label">Project Title</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  placeholder="e.g. Eclipse Studio"
+                  value={editShowcaseData.title}
+                  onChange={(e) => setEditShowcaseData({ ...editShowcaseData, title: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Subtitle / Tagline</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  placeholder="e.g. Creative Brand & Digital Experience"
+                  value={editShowcaseData.subtitle}
+                  onChange={(e) => setEditShowcaseData({ ...editShowcaseData, subtitle: e.target.value })}
+                  required
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Description</label>
+                <textarea 
+                  className="dash-input-styled"
+                  style={{ height: '90px' }}
+                  value={editShowcaseData.description}
+                  onChange={(e) => setEditShowcaseData({ ...editShowcaseData, description: e.target.value })}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Tech Stack (Comma Separated)</label>
+                <input 
+                  type="text" 
+                  className="dash-input-styled"
+                  placeholder="e.g. Next.js, Framer Motion, Tailwind, WebGL"
+                  value={editShowcaseData.tech}
+                  onChange={(e) => setEditShowcaseData({ ...editShowcaseData, tech: e.target.value })}
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Upload New Card Image (Optional)</label>
+                <input 
+                  type="file" 
+                  accept="image/*"
+                  className="dash-input-styled"
+                  onChange={(e) => handleImageUpload(e, setEditShowcaseData, editShowcaseData)}
+                />
+                {editShowcaseData.image && (
+                  <img src={editShowcaseData.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                )}
+              </div>
+
+              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                <button type="submit" className="action-pill-btn primary-pill">
+                  <FiCheck /> Save Showcase Card
+                </button>
+                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingShowcaseId(null)}>
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* EDIT PROJECT MODAL OVERLAY */}
       {editingProjectId && (
         <div className="dash-modal-backdrop">
@@ -424,7 +568,7 @@ const SuperAdminPage = () => {
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
-              <InnoveityBrandLogo size={20} showText={true} />
+              <InnoveityBrandLogo size={28} showText={true} />
               <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
                 <FiX />
               </button>
@@ -986,11 +1130,233 @@ const SuperAdminPage = () => {
         {/* TAB 2: PROJECTS MANAGEMENT */}
         {activeTab === 'projects' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-            <div className="chart-header-row">
-              <h3 className="chart-title">Add New Project</h3>
+
+            {/* ⭐ SECTION 1: 3D ROTATOR SHOWCASE CONTENT EDITOR */}
+            <div className="chart-header-row" style={{ marginBottom: '16px' }}>
+              <div>
+                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#0d3b34', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiLayers style={{ color: '#10b981' }} /> Projects 3D Showcase (Rotator Section)
+                </h3>
+                <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
+                  Manage the 3D rotating arc cards carousel shown on Homepage & Projects Hero.
+                </p>
+              </div>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
+            </div>
+
+            {/* Showcase Header Form */}
+            <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Showcase Section Header Copy</h4>
+              <form onSubmit={handleSaveShowcaseHeaderSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Badge Pill Text</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. OUR PROJECTS" 
+                    value={editShowcaseHeader.badge || ''} 
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, badge: e.target.value })} 
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Title Line 1</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. We Help Brands" 
+                    value={editShowcaseHeader.titleLine1 || ''} 
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleLine1: e.target.value })} 
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Title Highlight (Accent Text)</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. Win in the Digital Space" 
+                    value={editShowcaseHeader.titleHighlight || ''} 
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleHighlight: e.target.value })} 
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">CTA Button Label</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. View Our Work" 
+                    value={editShowcaseHeader.ctaText || ''} 
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, ctaText: e.target.value })} 
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Subtitle / Description</label>
+                  <textarea 
+                    className="dash-input-styled" 
+                    style={{ height: '70px' }}
+                    placeholder="Subtitle text..." 
+                    value={editShowcaseHeader.subtitle || ''} 
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, subtitle: e.target.value })} 
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Update Showcase Header
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Add Showcase Card Form */}
+            <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Add New 3D Showcase Card</h4>
+              <form onSubmit={handleAddShowcaseSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Category Tag / Badge</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. Web Engineering" 
+                    value={newShowcaseCard.tag} 
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tag: e.target.value })} 
+                    required 
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Project Title</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. Eclipse Studio" 
+                    value={newShowcaseCard.title} 
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, title: e.target.value })} 
+                    required 
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Subtitle / Tagline</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. Creative Brand & Digital Experience" 
+                    value={newShowcaseCard.subtitle} 
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, subtitle: e.target.value })} 
+                    required 
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Description</label>
+                  <textarea 
+                    className="dash-input-styled" 
+                    placeholder="Detailed description of the showcase project..." 
+                    value={newShowcaseCard.description} 
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, description: e.target.value })} 
+                    required 
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Tech Stack (Comma Separated)</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled" 
+                    placeholder="e.g. Next.js, Framer Motion, Tailwind, WebGL" 
+                    value={newShowcaseCard.tech} 
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tech: e.target.value })} 
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Upload Showcase Image</label>
+                  <input 
+                    type="file" 
+                    accept="image/*" 
+                    className="dash-input-styled" 
+                    onChange={(e) => handleImageUpload(e, setNewShowcaseCard, newShowcaseCard)} 
+                  />
+                  {newShowcaseCard.image && (
+                    <img src={newShowcaseCard.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                  )}
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Add Showcase Card
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Showcase Cards Table */}
+            <div className="chart-header-row" style={{ marginTop: '20px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>
+                Active 3D Showcase Cards ({showcaseProjects ? showcaseProjects.length : 0})
+              </h4>
+            </div>
+
+            <table className="dash-cms-table" style={{ marginBottom: '36px' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '70px' }}>Image</th>
+                  <th style={{ width: '180px' }}>Title & Tag</th>
+                  <th style={{ width: '200px' }}>Subtitle</th>
+                  <th>Description & Tech Stack</th>
+                  <th style={{ width: '160px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {showcaseProjects && showcaseProjects.map((card) => {
+                  const techList = Array.isArray(card.tech)
+                    ? card.tech
+                    : typeof card.tech === 'string'
+                      ? card.tech.split(',').map(t => t.trim()).filter(Boolean)
+                      : [];
+                  return (
+                    <tr key={card.id}>
+                      <td>
+                        <img src={card.image || '/tech_blog_1.png'} alt={card.title} style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }} />
+                      </td>
+                      <td>
+                        <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block' }}>{card.title}</strong>
+                        <span className="category-badge-pill" style={{ marginTop: '4px' }}>{card.tag}</span>
+                      </td>
+                      <td style={{ color: '#047857', fontWeight: 600, fontSize: '0.84rem' }}>{card.subtitle}</td>
+                      <td>
+                        <p style={{ color: '#475569', fontSize: '0.84rem', margin: '0 0 6px 0', lineHeight: '1.4' }}>{card.description}</p>
+                        <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                          {techList.map((t, idx) => (
+                            <span key={idx} style={{ background: '#f1f5f9', color: '#334155', fontSize: '0.7rem', padding: '2px 6px', borderRadius: '6px', fontWeight: 600 }}>{t}</span>
+                          ))}
+                        </div>
+                      </td>
+                      <td>
+                        <div style={{ display: 'flex', gap: '6px' }}>
+                          <button className="chart-dropdown-pill" onClick={() => handleStartEditShowcase(card)}>
+                            <FiEdit2 /> Edit
+                          </button>
+                          <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteShowcaseProject(card.id)}>
+                            <FiTrash2 /> Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            {/* ⭐ SECTION 2: CASE STUDIES PORTFOLIO MANAGEMENT */}
+            <div className="chart-header-row" style={{ marginTop: '36px', borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
+              <h3 className="chart-title">Add New Case Study Project</h3>
             </div>
 
             <div className="dash-form-wrapper">

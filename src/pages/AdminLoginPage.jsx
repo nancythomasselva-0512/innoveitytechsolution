@@ -9,6 +9,16 @@ const AdminLoginPage = () => {
   const navigate = useNavigate();
   const { loginAdmin, currentUser } = useCMS();
 
+  React.useEffect(() => {
+    if (currentUser) {
+      if (currentUser.role === 'Super Admin') {
+        navigate('/super-admin', { replace: true });
+      } else {
+        navigate('/admin', { replace: true });
+      }
+    }
+  }, [currentUser, navigate]);
+
   const [roleMode, setRoleMode] = useState('Super Admin'); // 'Super Admin' | 'Admin'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -77,7 +87,7 @@ const AdminLoginPage = () => {
         {/* Header Branding */}
         <div className="login-brand-header">
           <Link to="/" className="login-brand-logo-link">
-            <InnoveityBrandLogo />
+            <InnoveityBrandLogo size={36} showText={true} />
           </Link>
           <h2 className="login-title">Portal Authorization</h2>
           <p className="login-subtitle">Sign in to access your administrative control system</p>

@@ -1,8 +1,13 @@
 /* 
   Innoveity Tech Solution - Official Brand Emerald Green Admin & Super Admin Theme
-  Typography: Plus Jakarta Sans / Outfit / Inter
+  Typography: Times New Roman (Super Admin & Admin pages)
   Palette: Emerald Green (#10b981), Forest Dark Green (#0d3b34), Mint (#d1fae5), Pure White (#ffffff)
 */
+
+.admin-layout,
+.admin-layout * {
+  font-family: 'Times New Roman', Times, serif !important;
+}
 
 .admin-layout {
   display: flex;
@@ -11,7 +16,6 @@
   overflow: hidden;
   background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 45%, #e6f4f1 100%);
   color: #0d3b34;
-  font-family: var(--font-family);
   padding: 20px;
   gap: 20px;
   box-sizing: border-box;
@@ -200,15 +204,15 @@
 
 .nav-item-btn:hover {
   color: #0d3b34;
-  background: #f0fdf4;
+  background: rgba(13, 59, 52, 0.08);
 }
 
 .nav-item-btn.active {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  color: #0d3b34;
+  background: linear-gradient(135deg, #0d3b34 0%, #082823 100%);
+  color: #ffffff;
   font-weight: 800;
-  border-color: #6ee7b7;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.2);
+  border: 1px solid #10b981;
+  box-shadow: 0 6px 18px rgba(13, 59, 52, 0.3);
 }
 
 .nav-icon {
@@ -220,7 +224,7 @@
 }
 
 .nav-item-btn.active .nav-icon {
-  color: #0d3b34;
+  color: #34d399;
 }
 
 .nav-badge {
@@ -232,6 +236,12 @@
   padding: 2px 8px;
   border-radius: 20px;
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.12);
+}
+
+.nav-item-btn.active .nav-badge {
+  background: #10b981;
+  color: #ffffff;
+  box-shadow: none;
 }
 
 /* Sidebar Footer */
@@ -852,27 +862,48 @@ select.dash-input-styled {
   position: fixed;
   top: 0;
   left: 0;
+  right: 0;
+  bottom: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(13, 59, 52, 0.45);
-  backdrop-filter: blur(6px);
-  z-index: 1000;
+  background: rgba(6, 30, 22, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 99999;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
-.dash-modal-card {
-  background: #ffffff;
+.dash-modal-card,
+.dash-modal-box {
+  background: #ffffff !important;
   border-radius: 24px;
   width: 100%;
   max-width: 580px;
-  padding: 28px;
-  box-shadow: 0 20px 50px rgba(13, 59, 52, 0.2);
-  border: 1px solid #d1fae5;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: 28px 32px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+  border: 1px solid #d1fae5 !important;
+  position: relative;
+  box-sizing: border-box;
+  color: #0f172a !important;
   animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: auto;
+}
+
+.dash-modal-card::-webkit-scrollbar,
+.dash-modal-box::-webkit-scrollbar {
+  width: 6px;
+}
+.dash-modal-card::-webkit-scrollbar-thumb,
+.dash-modal-box::-webkit-scrollbar-thumb {
+  background: #10b981;
+  border-radius: 10px;
 }
 
 @keyframes modalFadeIn {
@@ -887,12 +918,17 @@ select.dash-input-styled {
 }
 
 .dash-modal-header {
+  position: sticky;
+  top: -28px;
+  background: #ffffff;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-bottom: 16px;
-  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 14px;
   margin-bottom: 20px;
+  margin-top: -8px;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .dash-modal-title {
@@ -1472,52 +1508,6 @@ select.dash-input-styled {
 
 .donezo-sidebar-promo-btn:hover {
   background: #059669;
-}
-
-/* ULTRA-PREMIUM MODAL DIALOG STYLES */
-.dash-modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(6, 30, 22, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 99999;
-  padding: 20px;
-  animation: fadeInModal 0.25s ease forwards;
-}
-
-@keyframes fadeInModal {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.dash-modal-box {
-  background: #ffffff !important;
-  border-radius: 24px;
-  padding: 28px 32px;
-  width: 100%;
-  max-width: 560px;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-  color: #0f172a;
-}
-
-.dash-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 20px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e2e8f0;
 }
 
 .dash-modal-title {

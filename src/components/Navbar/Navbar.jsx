@@ -4,39 +4,44 @@ import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX, FiArrowUpRight } from 'react-icons/fi';
 import './Navbar.css';
 
-export const InnoveityBrandLogo = ({ size = 20, showText = true }) => (
-  <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
-    <img
-      src="/logo-transparent.png"
-      alt="Innoveity Tech Logo"
-      style={{
-        height: `${size}px`,
-        width: 'auto',
-        objectFit: 'contain',
-        display: 'block'
-      }}
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = '/logo.png';
-      }}
-    />
-    {showText && (
-      <span className="innoveity-brand-sub-title" style={{
-        fontFamily: 'var(--font-heading)',
-        fontSize: '0.56rem',
-        fontWeight: 800,
-        letterSpacing: '2.4px',
-        color: '#00a878',
-        marginTop: '2px',
-        paddingLeft: '32px',
-        textTransform: 'uppercase',
-        lineHeight: 1
-      }}>
-        TECH SOLUTIONS
-      </span>
-    )}
-  </div>
-);
+export const InnoveityBrandLogo = ({ size = 28, showText = true }) => {
+  const subFontSize = `${Math.max(0.5, size * 0.021)}rem`;
+  const subPadding = `${Math.max(22, size * 1.15)}px`;
+
+  return (
+    <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+      <img
+        src="/logo-transparent.png"
+        alt="Innoveity Tech Logo"
+        style={{
+          height: `${size}px`,
+          width: 'auto',
+          objectFit: 'contain',
+          display: 'block'
+        }}
+        onError={(e) => {
+          e.target.onerror = null;
+          e.target.src = '/Innoveity.png';
+        }}
+      />
+      {showText && (
+        <span className="innoveity-brand-sub-title" style={{
+          fontFamily: 'var(--font-heading)',
+          fontSize: subFontSize,
+          fontWeight: 800,
+          letterSpacing: '2.2px',
+          color: '#00a878',
+          marginTop: '2px',
+          paddingLeft: subPadding,
+          textTransform: 'uppercase',
+          lineHeight: 1
+        }}>
+          TECH SOLUTIONS
+        </span>
+      )}
+    </div>
+  );
+};
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);

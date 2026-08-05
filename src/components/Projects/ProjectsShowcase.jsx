@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiArrowUpRight } from 'react-icons/fi';
+import { useCMS } from '../../context/CMSContext';
 import './ProjectsShowcase.css';
 
-const projectsList = [
+const defaultProjectsList = [
   {
     id: 'space-room',
     tag: 'Architecture & Cloud',
@@ -53,15 +54,25 @@ const projectsList = [
 ];
 
 const ProjectsShowcase = () => {
+  const cms = useCMS() || {};
+  const showcaseProjects = (cms.showcaseProjects && cms.showcaseProjects.length > 0) ? cms.showcaseProjects : defaultProjectsList;
+  const showcaseHeader = cms.showcaseHeader || {
+    badge: 'OUR PROJECTS',
+    titleLine1: 'We Help Brands',
+    titleHighlight: 'Win in the Digital Space',
+    subtitle: 'An engineering solution agency building strategy-driven systems, high-impact web applications, and enterprise digital platforms that stand out.',
+    ctaText: 'View Our Work'
+  };
+
   const [activeIndex, setActiveIndex] = useState(2); // Center active card
   const [isPaused, setIsPaused] = useState(false);
   const navigate = useNavigate();
 
-  const totalCards = projectsList.length;
+  const totalCards = showcaseProjects.length;
 
   // ⭐ Continuous Auto-Rotate Loop (1.6s per rotation step)
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || totalCards === 0) return;
 
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % totalCards);
@@ -83,24 +94,24 @@ const ProjectsShowcase = () => {
         <div className="showcase-header">
           <div className="showcase-badge-pill">
             <span className="bracket-left">[</span>
-            <span className="badge-text">OUR PROJECTS</span>
+            <span className="badge-text">{showcaseHeader.badge || 'OUR PROJECTS'}</span>
             <span className="bracket-right">]</span>
           </div>
 
           <h2 className="showcase-main-title">
-            We Help Brands <br />
-            <span className="title-highlight">Win in the Digital Space</span>
+            {showcaseHeader.titleLine1 || 'We Help Brands'} <br />
+            <span className="title-highlight">{showcaseHeader.titleHighlight || 'Win in the Digital Space'}</span>
           </h2>
 
           <p className="showcase-subtitle">
-            An engineering solution agency building strategy-driven systems, high-impact web applications, and enterprise digital platforms that stand out.
+            {showcaseHeader.subtitle}
           </p>
 
           <button 
             className="showcase-cta-btn" 
             onClick={() => navigate('/projects')}
           >
-            <span>View Our Work</span>
+            <span>{showcaseHeader.ctaText || 'View Our Work'}</span>
             <span className="cta-arrow-circle">
               <FiArrowUpRight />
             </span>
@@ -118,7 +129,7 @@ const ProjectsShowcase = () => {
 
           {/* 3D Arc Track */}
           <div className="showcase-cards-arc">
-            {projectsList.map((project, idx) => {
+            {showcaseProjects.map((project, idx) => {
               // Calculate shortest circular offset (-2, -1, 0, 1, 2)
               let offset = idx - activeIndex;
               if (offset > 2) offset -= totalCards;
@@ -176,9 +187,15 @@ const ProjectsShowcase = () => {
                 opacity = 0.45;
               }
 
+              const techPills = Array.isArray(project.tech)
+                ? project.tech
+                : typeof project.tech === 'string'
+                  ? project.tech.split(',').map(t => t.trim()).filter(Boolean)
+                  : [];
+
               return (
                 <motion.div
-                  key={project.id}
+                  key={project.id || idx}
                   className={`showcase-fan-card ${isCenter ? 'is-active-center' : ''}`}
                   onClick={() => handleCardClick(idx)}
                   animate={{
@@ -198,7 +215,7 @@ const ProjectsShowcase = () => {
                   {/* Card Image Container */}
                   <div className="card-mockup-frame">
                     <img 
-                      src={project.image} 
+                      src={project.image || '/tech_blog_1.png'} 
                       alt={project.title} 
                       className="card-mockup-img" 
                     />
@@ -213,7 +230,7 @@ const ProjectsShowcase = () => {
                     <p className="card-mockup-desc">{project.description}</p>
                     
                     <div className="card-tech-pills">
-                      {project.tech.map((t, i) => (
+                      {techPills.map((t, i) => (
                         <span key={i} className="tech-pill-item">{t}</span>
                       ))}
                     </div>
