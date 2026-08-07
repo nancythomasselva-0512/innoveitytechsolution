@@ -50,7 +50,29 @@ const TeamPage = () => {
     'Long-term technical support and maintenance'
   ];
 
-  const { team: teamMembers, contact } = useCMS();
+  const { team: teamMembers = [], contact = {}, teamHeaderContent = {} } = useCMS();
+
+  const leadershipBadge = teamHeaderContent.leadershipBadge || 'EXECUTIVE LEADERSHIP';
+  const leadershipTitleLine1 = teamHeaderContent.leadershipTitleLine1 || 'Founder &';
+  const leadershipTitleHighlight = teamHeaderContent.leadershipTitleHighlight || 'Executive Leadership';
+  const leadershipSubtitle = teamHeaderContent.leadershipSubtitle || 'Guiding our technology vision, strategic growth, and engineering excellence.';
+  
+  const teamTitle = teamHeaderContent.teamTitle || (leadershipMembers?.length > 0 ? 'Our Engineering & Creative Experts' : 'Meet Our Experts');
+  const teamSubtitle = teamHeaderContent.teamSubtitle || 'The brilliant minds behind our innovative solutions.';
+
+  const defaultLeadership = [
+    { id: 101, name: 'Founder & CEO', role: 'Founder & Managing Director', category: 'Leadership', image: '/Founder.jpeg' },
+    { id: 102, name: 'Co-Founder & CEO', role: 'Chief Executive Officer', category: 'Leadership', image: '/CEO.jpeg' }
+  ];
+
+  const actualLeadership = teamMembers.filter(m => 
+    m.category === 'Leadership' || 
+    m.role?.toLowerCase().includes('founder') || 
+    m.role?.toLowerCase().includes('ceo')
+  );
+
+  const leadershipMembers = actualLeadership.length > 0 ? actualLeadership : defaultLeadership;
+  const generalMembers = teamMembers.filter(m => !actualLeadership.some(l => l.id === m.id));
 
   return (
     <div className="team-page">
@@ -107,16 +129,48 @@ const TeamPage = () => {
         </div>
       </section>
 
-      {/* Meet Our Team Grid */}
+      {/* ⭐ Leadership & Executive Board Section (Founder & CEO) */}
+      <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
+        <div className="container">
+          <div className="leadership-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+            <span className="leadership-badge-pill">{leadershipBadge}</span>
+            <h2 className="team-section-title animate-on-scroll" style={{ textAlign: 'center', marginTop: '12px' }}>
+              {leadershipTitleLine1} <span className="gradient-text">{leadershipTitleHighlight}</span>
+            </h2>
+            <p className="why-intro animate-on-scroll" style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto' }}>
+              {leadershipSubtitle}
+            </p>
+          </div>
+
+          <div className="leadership-members-grid animate-on-scroll">
+            {leadershipMembers.map((member) => (
+              <div className="leadership-card" key={member.id}>
+                <div className="leadership-card-top-pill">★ LEADERSHIP</div>
+                <div className="leadership-image-wrapper">
+                  <img src={member.image || '/Founder.jpeg'} alt={member.name} className="leadership-image" />
+                </div>
+                <div className="leadership-info">
+                  <h3>{member.name}</h3>
+                  <p className="leadership-role">{member.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Our Team / Experts Grid */}
       <section className="team-section" style={{ background: 'var(--bg-color)' }}>
         <div className="container">
-          <h2 className="team-section-title animate-on-scroll" style={{ textAlign: 'center' }}>Meet Our Experts</h2>
+          <h2 className="team-section-title animate-on-scroll" style={{ textAlign: 'center' }}>
+            {teamTitle}
+          </h2>
           <p className="why-intro animate-on-scroll" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            The brilliant minds behind our innovative solutions.
+            {teamSubtitle}
           </p>
           
           <div className="team-members-grid animate-on-scroll">
-            {teamMembers.map((member) => (
+            {(generalMembers.length > 0 ? generalMembers : teamMembers).map((member) => (
               <div className="team-member-card" key={member.id}>
                 <div className="member-image-wrapper">
                   <img src={member.image} alt={member.name} className="member-image" />
@@ -168,21 +222,21 @@ const TeamPage = () => {
                   <div className="detail-icon-badge"><Mail size={24} /></div>
                   <div className="detail-text-col">
                     <span className="detail-label">Email</span>
-                    <span className="detail-value"><a href={`mailto:${contact.email}`}>{contact.email}</a></span>
+                    <span className="detail-value"><a href={`mailto:${contact?.email || 'aachinancy@gmail.com'}`}>{contact?.email || 'aachinancy@gmail.com'}</a></span>
                   </div>
                 </div>
                 <div className="detail-item-stacked" style={{ '--stagger': 1 }}>
                   <div className="detail-icon-badge"><Phone size={24} /></div>
                   <div className="detail-text-col">
                     <span className="detail-label">Phone</span>
-                    <span className="detail-value">{contact.phone}</span>
+                    <span className="detail-value">{contact?.phone || '+91 7904327211'}</span>
                   </div>
                 </div>
                 <div className="detail-item-stacked" style={{ '--stagger': 2 }}>
                   <div className="detail-icon-badge"><Clock size={24} /></div>
                   <div className="detail-text-col">
                     <span className="detail-label">Business Hours</span>
-                    <span className="detail-value" style={{ whiteSpace: 'pre-wrap' }}>{contact.businessHours}</span>
+                    <span className="detail-value" style={{ whiteSpace: 'pre-wrap' }}>{contact?.businessHours || 'Mon - Sat: 9:00 AM - 6:00 PM'}</span>
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { 
   FiHome, FiFolder, FiUsers, FiFileText, FiPhone, FiInfo, FiDatabase,
   FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink, FiCalendar, FiClock, FiVideo,
-  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers
+  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
@@ -47,10 +47,11 @@ const AdminPage = () => {
     projects, addProject, updateProject, deleteProject,
     showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
     showcaseHeader, updateShowcaseHeader,
-    team, addTeamMember, updateTeamMember, deleteTeamMember,
+    team, addTeamMember, updateTeamMember, deleteTeamMember, moveTeamMemberUp, moveTeamMemberDown,
+    teamHeaderContent, updateTeamHeaderContent,
     contact, updateContact,
     homeContent, updateHomeContent,
-    adminUsers, addAdminUser, currentUser, logoutAdmin
+    adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache
   } = useCMS();
 
   const users = adminUsers || [];
@@ -77,7 +78,8 @@ const AdminPage = () => {
   const [newProject, setNewProject] = useState({ title: '', category: 'Web Development', description: '', image: '' });
   const [editShowcaseHeader, setEditShowcaseHeader] = useState(showcaseHeader || {});
   const [newShowcaseCard, setNewShowcaseCard] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
-  const [newTeam, setNewTeam] = useState({ name: '', role: '', image: '' });
+  const [newTeam, setNewTeam] = useState({ name: '', role: '', category: 'Team Member', image: '' });
+  const [editTeamHeader, setEditTeamHeader] = useState(teamHeaderContent || {});
   const [editContact, setEditContact] = useState(contact || {});
   const [editHome, setEditHome] = useState(homeContent || {});
 
@@ -89,11 +91,20 @@ const AdminPage = () => {
   const [editShowcaseData, setEditShowcaseData] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
 
   const [editingTeamId, setEditingTeamId] = useState(null);
-  const [editTeamData, setEditTeamData] = useState({ name: '', role: '', image: '' });
+  const [editTeamData, setEditTeamData] = useState({ name: '', role: '', category: 'Team Member', image: '' });
 
   useEffect(() => {
     if (showcaseHeader) setEditShowcaseHeader(showcaseHeader);
-  }, [showcaseHeader]);
+    if (teamHeaderContent) setEditTeamHeader(teamHeaderContent);
+  }, [showcaseHeader, teamHeaderContent]);
+
+  const handleSaveTeamHeaderSubmit = (e) => {
+    e.preventDefault();
+    if (updateTeamHeaderContent) {
+      updateTeamHeaderContent(editTeamHeader);
+      triggerNotification('Team Section Headings & Subtitles updated!');
+    }
+  };
 
   const handleSaveShowcaseHeaderSubmit = (e) => {
     e.preventDefault();
@@ -184,13 +195,18 @@ const AdminPage = () => {
     e.preventDefault();
     if (!newTeam.name || !newTeam.role) return;
     addTeamMember(newTeam);
-    setNewTeam({ name: '', role: '', image: '' });
+    setNewTeam({ name: '', role: '', category: 'Team Member', image: '' });
     triggerNotification('Team member added successfully!');
   };
 
   const handleStartEditTeam = (m) => {
     setEditingTeamId(m.id);
-    setEditTeamData({ name: m.name, role: m.role, image: m.image });
+    setEditTeamData({ 
+      name: m.name, 
+      role: m.role, 
+      category: m.category || (m.role?.toLowerCase().includes('founder') || m.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member'),
+      image: m.image 
+    });
   };
 
   const handleSaveEditTeam = (e) => {
@@ -353,12 +369,12 @@ const AdminPage = () => {
                 )}
               </div>
 
-              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <div className="dash-modal-actions">
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setEditingShowcaseId(null)}>
+                  Cancel
+                </button>
                 <button type="submit" className="action-pill-btn primary-pill">
                   <FiCheck /> Save Showcase Card
-                </button>
-                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingShowcaseId(null)}>
-                  Cancel
                 </button>
               </div>
             </form>
@@ -429,12 +445,12 @@ const AdminPage = () => {
                 )}
               </div>
 
-              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <div className="dash-modal-actions">
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setEditingProjectId(null)}>
+                  Cancel
+                </button>
                 <button type="submit" className="action-pill-btn primary-pill">
                   <FiCheck /> Save Changes
-                </button>
-                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingProjectId(null)}>
-                  Cancel
                 </button>
               </div>
             </form>
@@ -474,6 +490,18 @@ const AdminPage = () => {
               </div>
 
               <div className="dash-field-group full-width">
+                <label className="dash-label">Category / Position Tier</label>
+                <select 
+                  className="dash-input-styled"
+                  value={editTeamData.category}
+                  onChange={(e) => setEditTeamData({ ...editTeamData, category: e.target.value })}
+                >
+                  <option value="Leadership">Leadership (Founder & CEO)</option>
+                  <option value="Team Member">Team Member</option>
+                </select>
+              </div>
+
+              <div className="dash-field-group full-width">
                 <label className="dash-label">Profile Picture (Optional)</label>
                 <input 
                   type="file" 
@@ -486,12 +514,12 @@ const AdminPage = () => {
                 )}
               </div>
 
-              <div className="dash-field-group full-width" style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+              <div className="dash-modal-actions">
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setEditingTeamId(null)}>
+                  Cancel
+                </button>
                 <button type="submit" className="action-pill-btn primary-pill">
                   <FiCheck /> Save Changes
-                </button>
-                <button type="button" className="chart-dropdown-pill" onClick={() => setEditingTeamId(null)}>
-                  Cancel
                 </button>
               </div>
             </form>
@@ -620,6 +648,20 @@ const AdminPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            <button 
+              className="btn-live-preview" 
+              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer' }}
+              onClick={() => {
+                if (window.confirm('Are you sure you want to clear all system & CMS cache? This will reset all CMS cache storage.')) {
+                  clearAllCmsCache();
+                  triggerNotification('⚡ System & CMS Cache cleared successfully!');
+                }
+              }}
+              title="Clear all browser and CMS storage cache"
+            >
+              <FiRefreshCw /> Clear Cache
+            </button>
 
             <Link to="/super-admin" className="dash-round-btn" title="Super Admin Settings">
               <FiSettings />
@@ -1373,11 +1415,94 @@ const AdminPage = () => {
         {/* TAB 3: TEAM ROSTER WORKSPACE */}
         {activeTab === 'team' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            
+            {/* ⭐ SECTION 0: EDIT TEAM SECTION HEADINGS & SUBTITLES */}
             <div className="chart-header-row">
-              <h3 className="chart-title">Add Team Member</h3>
+              <h3 className="chart-title">Edit Team Section Headings & Subtitles</h3>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
+            </div>
+
+            <div className="dash-form-wrapper" style={{ marginBottom: '32px' }}>
+              <form onSubmit={handleSaveTeamHeaderSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Leadership Badge Tag</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    placeholder="e.g. EXECUTIVE LEADERSHIP"
+                    value={editTeamHeader.leadershipBadge || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipBadge: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Leadership Heading Title (Line 1)</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    placeholder="e.g. Founder &"
+                    value={editTeamHeader.leadershipTitleLine1 || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipTitleLine1: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Leadership Heading Highlight</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    placeholder="e.g. Executive Leadership"
+                    value={editTeamHeader.leadershipTitleHighlight || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipTitleHighlight: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Leadership Subtitle Sentence</label>
+                  <textarea 
+                    className="dash-input-styled"
+                    style={{ height: '60px' }}
+                    placeholder="e.g. Guiding our technology vision, strategic growth, and engineering excellence."
+                    value={editTeamHeader.leadershipSubtitle || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipSubtitle: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width" style={{ borderTop: '1px dashed #e2e8f0', paddingTop: '16px', marginTop: '8px' }}>
+                  <label className="dash-label">Team Members Section Title</label>
+                  <input 
+                    type="text" 
+                    className="dash-input-styled"
+                    placeholder="e.g. Our Engineering & Creative Experts"
+                    value={editTeamHeader.teamTitle || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, teamTitle: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Team Members Section Subtitle Sentence</label>
+                  <textarea 
+                    className="dash-input-styled"
+                    style={{ height: '60px' }}
+                    placeholder="e.g. The brilliant minds behind our innovative solutions."
+                    value={editTeamHeader.teamSubtitle || ''}
+                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, teamSubtitle: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Headings & Subtitles
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* ⭐ SECTION 1: ADD TEAM MEMBER */}
+            <div className="chart-header-row" style={{ borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
+              <h3 className="chart-title">Add Team Member</h3>
             </div>
 
             <div className="dash-form-wrapper">
@@ -1398,12 +1523,24 @@ const AdminPage = () => {
                   <label className="dash-label">Role / Position</label>
                   <input 
                     type="text" 
-                    placeholder="e.g. Lead Software Architect" 
+                    placeholder="e.g. Founder & Managing Director" 
                     className="dash-input-styled"
                     value={newTeam.role}
                     onChange={(e) => setNewTeam({ ...newTeam, role: e.target.value })}
                     required
                   />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Category / Tier</label>
+                  <select 
+                    className="dash-input-styled"
+                    value={newTeam.category}
+                    onChange={(e) => setNewTeam({ ...newTeam, category: e.target.value })}
+                  >
+                    <option value="Leadership">Leadership (Founder & CEO)</option>
+                    <option value="Team Member">Team Member</option>
+                  </select>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -1427,28 +1564,124 @@ const AdminPage = () => {
               </form>
             </div>
 
-            <div className="chart-header-row" style={{ marginTop: '36px' }}>
-              <h3 className="chart-title">Current Team Roster ({team ? team.length : 0})</h3>
-            </div>
+            {/* SECTION 1: LEADERSHIP ROSTER (FOUNDER & CEO) */}
+            {(() => {
+              const leadershipList = (team || []).filter(m => 
+                m.category === 'Leadership' || 
+                m.role?.toLowerCase().includes('founder') || 
+                m.role?.toLowerCase().includes('ceo')
+              );
+              const teamList = (team || []).filter(m => !leadershipList.some(l => l.id === m.id));
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
-              {team && team.map((m) => (
-                <div key={m.id} style={{ background: '#f8fafc', padding: '20px', borderRadius: '20px', border: '1px solid #e2e8f0', textAlign: 'center' }}>
-                  <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #10b981', marginBottom: '10px' }} />
-                  <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                  <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#10b981', fontWeight: 700 }}>{m.role}</p>
-
-                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                    <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
-                      <FiEdit2 /> Edit
-                    </button>
-                    <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
-                      <FiTrash2 /> Remove
-                    </button>
+              return (
+                <>
+                  <div className="chart-header-row" style={{ marginTop: '36px' }}>
+                    <h3 className="chart-title" style={{ color: '#047857', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      ★ Executive Leadership Roster (Founder & CEO) ({leadershipList.length})
+                    </h3>
                   </div>
-                </div>
-              ))}
-            </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
+                    {leadershipList.map((m, idx) => (
+                      <div key={m.id} style={{ 
+                        background: '#ecfdf5', 
+                        padding: '20px', 
+                        borderRadius: '20px', 
+                        border: '2px solid #10b981', 
+                        textAlign: 'center',
+                        position: 'relative'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          top: '12px',
+                          right: '12px',
+                          background: '#059669',
+                          color: 'white',
+                          fontSize: '0.68rem',
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: '12px',
+                          textTransform: 'uppercase'
+                        }}>
+                          ★ Leadership
+                        </span>
+
+                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #059669', marginBottom: '10px', marginTop: '10px' }} />
+                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#047857', fontWeight: 700 }}>{m.role}</p>
+
+                        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                          <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
+                            <FiArrowUp />
+                          </button>
+                          <button className="chart-dropdown-pill" title="Move Down" onClick={() => moveTeamMemberDown(m.id)} disabled={idx === leadershipList.length - 1} style={{ opacity: idx === leadershipList.length - 1 ? 0.4 : 1, cursor: idx === leadershipList.length - 1 ? 'not-allowed' : 'pointer' }}>
+                            <FiArrowDown />
+                          </button>
+                          <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
+                            <FiEdit2 /> Edit
+                          </button>
+                          <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
+                            <FiTrash2 /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* SECTION 2: TEAM MEMBERS & EXPERTS ROSTER */}
+                  <div className="chart-header-row" style={{ marginTop: '40px', borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
+                    <h3 className="chart-title">Engineering & Creative Team Roster ({teamList.length})</h3>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
+                    {teamList.map((m, idx) => (
+                      <div key={m.id} style={{ 
+                        background: '#f8fafc', 
+                        padding: '20px', 
+                        borderRadius: '20px', 
+                        border: '1px solid #e2e8f0', 
+                        textAlign: 'center',
+                        position: 'relative'
+                      }}>
+                        <span style={{
+                          position: 'absolute',
+                          top: '12px',
+                          right: '12px',
+                          background: '#64748b',
+                          color: 'white',
+                          fontSize: '0.68rem',
+                          fontWeight: 800,
+                          padding: '3px 8px',
+                          borderRadius: '12px',
+                          textTransform: 'uppercase'
+                        }}>
+                          Member
+                        </span>
+
+                        <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #10b981', marginBottom: '10px', marginTop: '10px' }} />
+                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#10b981', fontWeight: 700 }}>{m.role}</p>
+
+                        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                          <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
+                            <FiArrowUp />
+                          </button>
+                          <button className="chart-dropdown-pill" title="Move Down" onClick={() => moveTeamMemberDown(m.id)} disabled={idx === teamList.length - 1} style={{ opacity: idx === teamList.length - 1 ? 0.4 : 1, cursor: idx === teamList.length - 1 ? 'not-allowed' : 'pointer' }}>
+                            <FiArrowDown />
+                          </button>
+                          <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
+                            <FiEdit2 /> Edit
+                          </button>
+                          <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
+                            <FiTrash2 /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
           </div>
         )}
 

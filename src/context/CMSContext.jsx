@@ -108,13 +108,24 @@ export const CMSProvider = ({ children }) => {
   ];
 
   const defaultTeam = [
-    { id: 1, name: 'Praveen', role: 'Team Member', image: '/Praveen.jpeg' },
-    { id: 2, name: 'Nancy', role: 'Team Member', image: '/Nancy.jpeg' },
-    { id: 3, name: 'Raghul', role: 'Team Member', image: '/Raghul.jpeg' },
-    { id: 4, name: 'Zubariya', role: 'Team Member', image: '/Zubariya.jpeg' },
-    { id: 5, name: 'Yeshwanth', role: 'Team Member', image: '/Yeshwanth.jpeg' },
-    { id: 6, name: 'Anto', role: 'Team Member', image: '/Anto.jpeg' }
+    { id: 101, name: 'Founder & CEO', role: 'Founder & Managing Director', category: 'Leadership', image: '/Founder.jpeg' },
+    { id: 102, name: 'Co-Founder & CEO', role: 'Chief Executive Officer', category: 'Leadership', image: '/CEO.jpeg' },
+    { id: 1, name: 'Praveen', role: 'Team Member', category: 'Team Member', image: '/Praveen.jpeg' },
+    { id: 2, name: 'Nancy', role: 'Team Member', category: 'Team Member', image: '/Nancy.jpeg' },
+    { id: 3, name: 'Raghul', role: 'Team Member', category: 'Team Member', image: '/Raghul.jpeg' },
+    { id: 4, name: 'Zubariya', role: 'Team Member', category: 'Team Member', image: '/Zubariya.jpeg' },
+    { id: 5, name: 'Yeshwanth', role: 'Team Member', category: 'Team Member', image: '/Yeshwanth.jpeg' },
+    { id: 6, name: 'Anto', role: 'Team Member', category: 'Team Member', image: '/Anto.jpeg' }
   ];
+
+  const defaultTeamHeaderContent = {
+    leadershipBadge: 'EXECUTIVE LEADERSHIP',
+    leadershipTitleLine1: 'Founder &',
+    leadershipTitleHighlight: 'Executive Leadership',
+    leadershipSubtitle: 'Guiding our technology vision, strategic growth, and engineering excellence.',
+    teamTitle: 'Our Engineering & Creative Experts',
+    teamSubtitle: 'The brilliant minds behind our innovative solutions.'
+  };
 
   const defaultContact = {
     email: 'aachinancy@gmail.com',
@@ -190,8 +201,35 @@ export const CMSProvider = ({ children }) => {
   });
 
   const [team, setTeam] = useState(() => {
-    const saved = localStorage.getItem('cms_team_v2');
-    return saved ? JSON.parse(saved) : defaultTeam;
+    let currentTeam = defaultTeam;
+    const savedV3 = localStorage.getItem('cms_team_v3');
+    if (savedV3) {
+      currentTeam = JSON.parse(savedV3);
+    } else {
+      const savedV2 = localStorage.getItem('cms_team_v2');
+      if (savedV2) {
+        currentTeam = JSON.parse(savedV2).map(m => ({
+          ...m,
+          category: m.category || (m.role?.toLowerCase().includes('founder') || m.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member')
+        }));
+      }
+    }
+    // Ensure Founder & CEO leadership members are included
+    const hasLeadership = currentTeam.some(m => 
+      m.category === 'Leadership' || 
+      m.role?.toLowerCase().includes('founder') || 
+      m.role?.toLowerCase().includes('ceo')
+    );
+    if (!hasLeadership) {
+      const defaultLeadership = defaultTeam.filter(m => m.category === 'Leadership');
+      currentTeam = [...defaultLeadership, ...currentTeam];
+    }
+    return currentTeam;
+  });
+
+  const [teamHeaderContent, setTeamHeaderContent] = useState(() => {
+    const saved = localStorage.getItem('cms_team_header_v1');
+    return saved ? JSON.parse(saved) : defaultTeamHeaderContent;
   });
 
   const [contact, setContact] = useState(() => {
@@ -233,8 +271,12 @@ export const CMSProvider = ({ children }) => {
   }, [showcaseProjects]);
 
   useEffect(() => {
-    localStorage.setItem('cms_team_v2', JSON.stringify(team));
+    localStorage.setItem('cms_team_v3', JSON.stringify(team));
   }, [team]);
+
+  useEffect(() => {
+    localStorage.setItem('cms_team_header_v1', JSON.stringify(teamHeaderContent));
+  }, [teamHeaderContent]);
 
   useEffect(() => {
     localStorage.setItem('cms_contact_v3', JSON.stringify(contact));
@@ -260,7 +302,7 @@ export const CMSProvider = ({ children }) => {
       if (e.key === 'cms_showcase_projects_v2' && e.newValue) {
         setShowcaseProjects(JSON.parse(e.newValue));
       }
-      if (e.key === 'cms_team_v2' && e.newValue) {
+      if (e.key === 'cms_team_v3' && e.newValue) {
         setTeam(JSON.parse(e.newValue));
       }
       if (e.key === 'cms_contact_v3' && e.newValue) {
@@ -554,12 +596,55 @@ const decryptData = (encryptedString, fallback) => {
     setShowcaseHeader(prev => ({ ...prev, ...newHeader }));
   };
 
-  const addTeamMember = (member) => setTeam([...team, { ...member, id: Date.now() }]);
+  const addTeamMember = (member) => {
+    const newMember = {
+      id: Date.now(),
+      name: member.name,
+      role: member.role,
+      category: member.category || (member.role?.toLowerCase().includes('founder') || member.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member'),
+      image: member.image || ''
+    };
+    if (newMember.category === 'Leadership') {
+      setTeam(prev => [newMember, ...prev]);
+    } else {
+      setTeam(prev => [...prev, newMember]);
+    }
+  };
+
   const updateTeamMember = (id, updatedMember) => {
     setTeam(team.map(m => m.id === id ? { ...m, ...updatedMember } : m));
   };
+
   const deleteTeamMember = (id) => setTeam(team.filter(m => m.id !== id));
-  
+
+  const moveTeamMemberUp = (id) => {
+    setTeam(prev => {
+      const index = prev.findIndex(m => m.id === id);
+      if (index <= 0) return prev;
+      const copy = [...prev];
+      const temp = copy[index - 1];
+      copy[index - 1] = copy[index];
+      copy[index] = temp;
+      return copy;
+    });
+  };
+
+  const moveTeamMemberDown = (id) => {
+    setTeam(prev => {
+      const index = prev.findIndex(m => m.id === id);
+      if (index === -1 || index >= prev.length - 1) return prev;
+      const copy = [...prev];
+      const temp = copy[index + 1];
+      copy[index + 1] = copy[index];
+      copy[index] = temp;
+      return copy;
+    });
+  };
+
+  const updateTeamHeaderContent = (newHeader) => {
+    setTeamHeaderContent(prev => ({ ...prev, ...newHeader }));
+  };
+
   const updateContact = (updatedContact) => setContact(updatedContact);
   const updateHomeContent = (newContent) => setHomeContent(newContent);
   const updateAboutContent = (newContent) => setAboutContent(newContent);
@@ -586,12 +671,54 @@ const decryptData = (encryptedString, fallback) => {
     }));
   };
 
+  const clearAllCmsCache = () => {
+    const keysToRemove = [
+      'cms_projects',
+      'cms_showcase_header_v2',
+      'cms_showcase_projects_v2',
+      'cms_team',
+      'cms_team_v2',
+      'cms_team_v3',
+      'cms_team_header_v1',
+      'cms_contact',
+      'cms_contact_v2',
+      'cms_contact_v3',
+      'cms_home',
+      'cms_about',
+      'cms_seo',
+      'cms_page_seo_v1',
+      'cms_custom_fields_v1'
+    ];
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    if ('caches' in window) {
+      caches.keys().then(names => {
+        names.forEach(name => caches.delete(name));
+      }).catch(err => console.log('Cache Storage clear notice:', err));
+    }
+
+    setProjects(defaultProjects);
+    setShowcaseHeader(defaultShowcaseHeader);
+    setShowcaseProjects(defaultShowcaseProjects);
+    setTeam(defaultTeam);
+    setTeamHeaderContent(defaultTeamHeaderContent);
+    setContact(defaultContact);
+    setHomeContent(defaultHomeContent);
+    setAboutContent(defaultAboutContent);
+    setSeoSettings(defaultSeoSettings);
+    setPageSeoSettings(defaultPageSeoSettings);
+    setCustomFields({});
+
+    return true;
+  };
+
   return (
     <CMSContext.Provider value={{
       projects, addProject, updateProject, deleteProject,
       showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
       showcaseHeader, updateShowcaseHeader,
-      team, addTeamMember, updateTeamMember, deleteTeamMember,
+      team, addTeamMember, updateTeamMember, deleteTeamMember, moveTeamMemberUp, moveTeamMemberDown,
+      teamHeaderContent, updateTeamHeaderContent,
       contact, updateContact,
       homeContent, updateHomeContent,
       aboutContent, updateAboutContent,
@@ -599,7 +726,8 @@ const decryptData = (encryptedString, fallback) => {
       pageSeoSettings, updatePageSeoSettings,
       customFields, addCustomField, deleteCustomField,
       adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
-      currentUser, loginAdmin, logoutAdmin
+      currentUser, loginAdmin, logoutAdmin,
+      clearAllCmsCache
     }}>
       {children}
     </CMSContext.Provider>

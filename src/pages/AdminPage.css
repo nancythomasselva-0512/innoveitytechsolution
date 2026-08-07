@@ -958,6 +958,71 @@ select.dash-input-styled {
   color: #0f172a;
 }
 
+/* MODAL ACTION BUTTONS & PILLS */
+.dash-modal-actions {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  margin-top: 20px !important;
+  padding-top: 16px !important;
+  border-top: 1px dashed #cbd5e1 !important;
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.action-pill-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 10px 22px !important;
+  border-radius: 50px !important;
+  font-size: 0.88rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  border: 1px solid #a7f3d0 !important;
+  background: #ecfdf5 !important;
+  color: #047857 !important;
+  text-decoration: none !important;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1) !important;
+  width: auto !important;
+}
+
+.action-pill-btn:hover {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 6px 18px rgba(16, 185, 129, 0.2) !important;
+}
+
+.action-pill-btn.primary-pill {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35) !important;
+}
+
+.action-pill-btn.primary-pill:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.45) !important;
+  transform: translateY(-2px) !important;
+}
+
+.action-pill-btn.secondary-pill {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: none !important;
+}
+
+.action-pill-btn.secondary-pill:hover {
+  background: #e2e8f0 !important;
+  color: #0f172a !important;
+}
+
 /* Category Badge Pill Fix */
 .category-badge-pill {
   display: inline-block;
