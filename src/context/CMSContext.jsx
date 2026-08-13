@@ -1,13 +1,11 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
-  isSupabaseConfigured,
-  supabase,
-  fetchCmsSettingFromSupabase,
-  saveCmsSettingToSupabase,
-  fetchCollectionFromSupabase,
-  upsertItemToSupabase,
-  deleteItemFromSupabase
-} from '../lib/supabaseClient';
+  isMySqlConfigured,
+  fetchAllFromMySql,
+  saveCmsSettingToMySql,
+  upsertItemToMySql,
+  deleteItemFromMySql
+} from '../lib/mysqlClient';
 
 const CMSContext = createContext();
 
@@ -326,9 +324,9 @@ export const CMSProvider = ({ children }) => {
   };
 
   // Database Connection Status ('connected' | 'connecting' | 'fallback')
-  const [dbStatus, setDbStatus] = useState(() => isSupabaseConfigured() ? 'connecting' : 'fallback');
+  const [dbStatus, setDbStatus] = useState(() => isMySqlConfigured() ? 'connecting' : 'fallback');
 
-  // Primary CMS State (Directly populated from Centralized Cloud Database)
+  // Primary CMS State (Directly populated from MySQL Database)
   const [projects, setProjects] = useState(defaultProjects);
   const [team, setTeam] = useState(defaultTeam);
   const [teamHeaderContent, setTeamHeaderContent] = useState(defaultTeamHeaderContent);
@@ -353,138 +351,108 @@ export const CMSProvider = ({ children }) => {
     else sessionStorage.removeItem('cms_session_sec_v1');
   }, [currentUser]);
 
-  // Load latest data from Centralized Supabase Cloud PostgreSQL
-  const fetchLatestFromSupabase = useCallback(async () => {
-    if (!isSupabaseConfigured() || !supabase) {
+  // Load latest data from MySQL Database API
+  const fetchLatestFromMySql = useCallback(async () => {
+    if (!isMySqlConfigured()) {
       setDbStatus('fallback');
       return;
     }
 
     try {
-      // Fetch Collections
-      const [remoteProjects, remoteShowcase, remoteTeam, remoteAdmins] = await Promise.all([
-        fetchCollectionFromSupabase('cms_projects', defaultProjects),
-        fetchCollectionFromSupabase('cms_showcase_projects', defaultShowcaseProjects),
-        fetchCollectionFromSupabase('cms_team', defaultTeam),
-        fetchCollectionFromSupabase('cms_admin_users', defaultAdminAccounts)
-      ]);
+      const data = await fetchAllFromMySql();
+      if (!data) {
+        setDbStatus('fallback');
+        return;
+      }
 
-      if (remoteProjects && remoteProjects.length > 0) setProjects(remoteProjects);
-      if (remoteShowcase && remoteShowcase.length > 0) setShowcaseProjects(remoteShowcase);
-      if (remoteTeam && remoteTeam.length > 0) setTeam(remoteTeam);
-      if (remoteAdmins && remoteAdmins.length > 0) setAdminUsers(remoteAdmins);
+      if (data.projects && data.projects.length > 0) setProjects(data.projects);
+      if (data.showcaseProjects && data.showcaseProjects.length > 0) setShowcaseProjects(data.showcaseProjects);
+      if (data.team && data.team.length > 0) setTeam(data.team);
+      if (data.adminUsers && data.adminUsers.length > 0) setAdminUsers(data.adminUsers);
 
-      // Fetch Key-Value Settings
-      const [
-        sHeader, tHeader, sContact, sHome, sAbout, sSeo, sPageSeo, sCustomFields
-      ] = await Promise.all([
-        fetchCmsSettingFromSupabase('showcase_header', defaultShowcaseHeader),
-        fetchCmsSettingFromSupabase('team_header', defaultTeamHeaderContent),
-        fetchCmsSettingFromSupabase('contact', defaultContact),
-        fetchCmsSettingFromSupabase('home_content', defaultHomeContent),
-        fetchCmsSettingFromSupabase('about_content', defaultAboutContent),
-        fetchCmsSettingFromSupabase('seo_settings', defaultSeoSettings),
-        fetchCmsSettingFromSupabase('page_seo_settings', defaultPageSeoSettings),
-        fetchCmsSettingFromSupabase('custom_fields', defaultCustomFields)
-      ]);
-
-      if (sHeader) setShowcaseHeader(sHeader);
-      if (tHeader) setTeamHeaderContent(tHeader);
-      if (sContact) setContact(sContact);
-      if (sHome) setHomeContent(sHome);
-      if (sAbout) setAboutContent(sAbout);
-      if (sSeo) setSeoSettings(sSeo);
-      if (sPageSeo) setPageSeoSettings(sPageSeo);
-      if (sCustomFields) setCustomFields(sCustomFields);
+      const s = data.settings || {};
+      if (s.showcase_header) setShowcaseHeader(s.showcase_header);
+      if (s.team_header) setTeamHeaderContent(s.team_header);
+      if (s.contact) setContact(s.contact);
+      if (s.home_content) setHomeContent(s.home_content);
+      if (s.about_content) setAboutContent(s.about_content);
+      if (s.seo_settings) setSeoSettings(s.seo_settings);
+      if (s.page_seo_settings) setPageSeoSettings(s.page_seo_settings);
+      if (s.custom_fields) setCustomFields(s.custom_fields);
 
       setDbStatus('connected');
     } catch (err) {
-      console.warn('[Supabase Cloud DB] Error syncing:', err);
+      console.warn('[MySQL DB] Error syncing:', err);
       setDbStatus('fallback');
     }
   }, []);
 
-  // Dual Live Sync Engine: Supabase Realtime WebSockets + 3-Second Live Polling Backup
+  // Live Sync Engine: 3-Second Live Polling from MySQL Database
   useEffect(() => {
-    fetchLatestFromSupabase();
+    fetchLatestFromMySql();
 
     let pollInterval = null;
-    let channel = null;
-
-    if (isSupabaseConfigured() && supabase) {
-      // 1. WebSocket Realtime Push
-      channel = supabase.channel('supabase_realtime_cms')
-        .on('postgres_changes', { event: '*', schema: 'public' }, () => {
-          fetchLatestFromSupabase();
-        })
-        .subscribe((status) => {
-          if (status === 'SUBSCRIBED') {
-            setDbStatus('connected');
-          }
-        });
-
-      // 2. Live Polling Every 3 Seconds (Fail-safe Backup Sync)
+    if (isMySqlConfigured()) {
       pollInterval = setInterval(() => {
-        fetchLatestFromSupabase();
+        fetchLatestFromMySql();
       }, 3000);
     }
 
     return () => {
-      if (channel) supabase.removeChannel(channel);
       if (pollInterval) clearInterval(pollInterval);
     };
-  }, [fetchLatestFromSupabase]);
+  }, [fetchLatestFromMySql]);
 
-  // Seed / Push Master dataset to Supabase Cloud DB
+  // Seed / Push Master dataset to MySQL Database
   const seedCloudDatabase = async () => {
-    if (!isSupabaseConfigured() || !supabase) {
-      alert('Supabase credentials are missing in .env! Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY first.');
+    if (!isMySqlConfigured()) {
+      alert('MySQL API configuration is missing in .env!');
       return false;
     }
 
     try {
       setDbStatus('connecting');
 
-      for (const p of projects) await upsertItemToSupabase('cms_projects', p);
-      for (const sp of showcaseProjects) await upsertItemToSupabase('cms_showcase_projects', sp);
-      for (const tm of team) await upsertItemToSupabase('cms_team', tm);
-      for (const au of adminUsers) await upsertItemToSupabase('cms_admin_users', au);
+      for (const p of projects) await upsertItemToMySql('cms_projects', p);
+      for (const sp of showcaseProjects) await upsertItemToMySql('cms_showcase_projects', sp);
+      for (const tm of team) await upsertItemToMySql('cms_team', tm);
+      for (const au of adminUsers) await upsertItemToMySql('cms_admin_users', au);
 
-      await saveCmsSettingToSupabase('showcase_header', showcaseHeader);
-      await saveCmsSettingToSupabase('team_header', teamHeaderContent);
-      await saveCmsSettingToSupabase('contact', contact);
-      await saveCmsSettingToSupabase('home_content', homeContent);
-      await saveCmsSettingToSupabase('about_content', aboutContent);
-      await saveCmsSettingToSupabase('seo_settings', seoSettings);
-      await saveCmsSettingToSupabase('page_seo_settings', pageSeoSettings);
-      await saveCmsSettingToSupabase('custom_fields', customFields);
+      await saveCmsSettingToMySql('showcase_header', showcaseHeader);
+      await saveCmsSettingToMySql('team_header', teamHeaderContent);
+      await saveCmsSettingToMySql('contact', contact);
+      await saveCmsSettingToMySql('home_content', homeContent);
+      await saveCmsSettingToMySql('about_content', aboutContent);
+      await saveCmsSettingToMySql('seo_settings', seoSettings);
+      await saveCmsSettingToMySql('page_seo_settings', pageSeoSettings);
+      await saveCmsSettingToMySql('custom_fields', customFields);
 
       setDbStatus('connected');
-      alert('Successfully seeded all website data to Supabase Cloud Database! Live sync active across all devices.');
+      alert('Successfully seeded all website data to MySQL Database! Live sync active across all devices.');
       return true;
     } catch (err) {
-      console.error('Error seeding Supabase Cloud DB:', err);
-      alert(`Error seeding Supabase Cloud DB: ${err.message}`);
+      console.error('Error seeding MySQL DB:', err);
+      alert(`Error seeding MySQL DB: ${err.message}`);
       return false;
     }
   };
 
-  // CRUD Actions synced with Centralized Cloud Database
+  // CRUD Actions synced with MySQL Database
   const addProject = async (project) => {
     const newProj = { ...project, id: Date.now() };
     setProjects(prev => [...prev, newProj]);
-    await upsertItemToSupabase('cms_projects', newProj);
+    await upsertItemToMySql('cms_projects', newProj);
   };
 
   const updateProject = async (id, updatedProject) => {
     const merged = { ...projects.find(p => p.id === id), ...updatedProject, id };
     setProjects(prev => prev.map(p => p.id === id ? merged : p));
-    await upsertItemToSupabase('cms_projects', merged);
+    await upsertItemToMySql('cms_projects', merged);
   };
 
   const deleteProject = async (id) => {
     setProjects(prev => prev.filter(p => p.id !== id));
-    await deleteItemFromSupabase('cms_projects', id);
+    await deleteItemFromMySql('cms_projects', id);
   };
 
   const addShowcaseProject = async (project) => {
@@ -497,7 +465,7 @@ export const CMSProvider = ({ children }) => {
       tech: techArray
     };
     setShowcaseProjects(prev => [...prev, newCard]);
-    await upsertItemToSupabase('cms_showcase_projects', newCard);
+    await upsertItemToMySql('cms_showcase_projects', newCard);
   };
 
   const updateShowcaseProject = async (id, updatedProject) => {
@@ -506,18 +474,18 @@ export const CMSProvider = ({ children }) => {
       : (typeof updatedProject.tech === 'string' ? updatedProject.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
     const merged = { ...showcaseProjects.find(p => p.id === id), ...updatedProject, id, tech: techArray };
     setShowcaseProjects(prev => prev.map(p => p.id === id ? merged : p));
-    await upsertItemToSupabase('cms_showcase_projects', merged);
+    await upsertItemToMySql('cms_showcase_projects', merged);
   };
 
   const deleteShowcaseProject = async (id) => {
     setShowcaseProjects(prev => prev.filter(p => p.id !== id));
-    await deleteItemFromSupabase('cms_showcase_projects', id);
+    await deleteItemFromMySql('cms_showcase_projects', id);
   };
 
   const updateShowcaseHeader = async (newHeader) => {
     const updated = { ...showcaseHeader, ...newHeader };
     setShowcaseHeader(updated);
-    await saveCmsSettingToSupabase('showcase_header', updated);
+    await saveCmsSettingToMySql('showcase_header', updated);
   };
 
   const addTeamMember = async (member) => {
@@ -529,18 +497,18 @@ export const CMSProvider = ({ children }) => {
       image: member.image || ''
     };
     setTeam(prev => newMember.category === 'Leadership' ? [newMember, ...prev] : [...prev, newMember]);
-    await upsertItemToSupabase('cms_team', newMember);
+    await upsertItemToMySql('cms_team', newMember);
   };
 
   const updateTeamMember = async (id, updatedMember) => {
     const merged = { ...team.find(m => m.id === id), ...updatedMember, id };
     setTeam(prev => prev.map(m => m.id === id ? merged : m));
-    await upsertItemToSupabase('cms_team', merged);
+    await upsertItemToMySql('cms_team', merged);
   };
 
   const deleteTeamMember = async (id) => {
     setTeam(prev => prev.filter(m => m.id !== id));
-    await deleteItemFromSupabase('cms_team', id);
+    await deleteItemFromMySql('cms_team', id);
   };
 
   const moveTeamMemberUp = (id) => {
@@ -570,27 +538,27 @@ export const CMSProvider = ({ children }) => {
   const updateTeamHeaderContent = async (newHeader) => {
     const updated = { ...teamHeaderContent, ...newHeader };
     setTeamHeaderContent(updated);
-    await saveCmsSettingToSupabase('team_header', updated);
+    await saveCmsSettingToMySql('team_header', updated);
   };
 
   const updateContact = async (updatedContact) => {
     setContact(updatedContact);
-    await saveCmsSettingToSupabase('contact', updatedContact);
+    await saveCmsSettingToMySql('contact', updatedContact);
   };
 
   const updateHomeContent = async (newContent) => {
     setHomeContent(newContent);
-    await saveCmsSettingToSupabase('home_content', newContent);
+    await saveCmsSettingToMySql('home_content', newContent);
   };
 
   const updateAboutContent = async (newContent) => {
     setAboutContent(newContent);
-    await saveCmsSettingToSupabase('about_content', newContent);
+    await saveCmsSettingToMySql('about_content', newContent);
   };
 
   const updateSeoSettings = async (newSeo) => {
     setSeoSettings(newSeo);
-    await saveCmsSettingToSupabase('seo_settings', newSeo);
+    await saveCmsSettingToMySql('seo_settings', newSeo);
   };
 
   const updatePageSeoSettings = async (pageKey, newPageSeo) => {
@@ -599,7 +567,7 @@ export const CMSProvider = ({ children }) => {
       [pageKey]: { ...pageSeoSettings[pageKey], ...newPageSeo }
     };
     setPageSeoSettings(updated);
-    await saveCmsSettingToSupabase('page_seo_settings', updated);
+    await saveCmsSettingToMySql('page_seo_settings', updated);
   };
 
   const addCustomField = async (pageKey, field) => {
@@ -608,7 +576,7 @@ export const CMSProvider = ({ children }) => {
       [pageKey]: [...(customFields[pageKey] || []), { id: Date.now(), ...field }]
     };
     setCustomFields(updated);
-    await saveCmsSettingToSupabase('custom_fields', updated);
+    await saveCmsSettingToMySql('custom_fields', updated);
   };
 
   const deleteCustomField = async (pageKey, id) => {
@@ -617,7 +585,7 @@ export const CMSProvider = ({ children }) => {
       [pageKey]: (customFields[pageKey] || []).filter(f => f.id !== id)
     };
     setCustomFields(updated);
-    await saveCmsSettingToSupabase('custom_fields', updated);
+    await saveCmsSettingToMySql('custom_fields', updated);
   };
 
   const addAdminUser = async (user) => {
@@ -631,13 +599,13 @@ export const CMSProvider = ({ children }) => {
       lastLogin: 'Never'
     };
     setAdminUsers(prev => [...prev, newUser]);
-    await upsertItemToSupabase('cms_admin_users', newUser);
+    await upsertItemToMySql('cms_admin_users', newUser);
     return newUser;
   };
 
   const deleteAdminUser = async (id) => {
     setAdminUsers(prev => prev.filter(u => u.id !== id));
-    await deleteItemFromSupabase('cms_admin_users', id);
+    await deleteItemFromMySql('cms_admin_users', id);
   };
 
   const toggleUserStatus = async (id) => {
@@ -649,7 +617,7 @@ export const CMSProvider = ({ children }) => {
       }
       return u;
     }));
-    if (updatedUser) await upsertItemToSupabase('cms_admin_users', updatedUser);
+    if (updatedUser) await upsertItemToMySql('cms_admin_users', updatedUser);
   };
 
   const loginAdmin = (email, password, requiredRole) => {
@@ -672,7 +640,7 @@ export const CMSProvider = ({ children }) => {
     const updatedUser = { ...found, lastLogin: 'Just now' };
     setAdminUsers(prev => prev.map(u => u.id === found.id ? updatedUser : u));
     setCurrentUser(updatedUser);
-    upsertItemToSupabase('cms_admin_users', updatedUser);
+    upsertItemToMySql('cms_admin_users', updatedUser);
 
     return { success: true, user: updatedUser };
   };
@@ -701,7 +669,7 @@ export const CMSProvider = ({ children }) => {
     <CMSContext.Provider value={{
       dbStatus,
       seedCloudDatabase,
-      fetchLatestFromSupabase,
+      fetchLatestFromMySql,
       projects, addProject, updateProject, deleteProject,
       showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
       showcaseHeader, updateShowcaseHeader,

@@ -30,21 +30,24 @@ const Contact = () => {
     e.preventDefault();
     if (formData.firstName && formData.email && formData.message) {
       setIsSubmitting(true);
+      const targetEmail = (contact && contact.email) ? contact.email : "aachinancy@gmail.com";
+
       try {
-        await fetch("https://formsubmit.co/ajax/websitet96@gmail.com", {
+        await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
           method: "POST",
           headers: { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            _subject: `New Contact Inquiry from ${formData.firstName} ${formData.lastName}`,
+            _subject: `📌 New Contact Inquiry from ${formData.firstName} ${formData.lastName}`,
             name: `${formData.firstName} ${formData.lastName}`.trim(),
             email: formData.email,
             phone: formData.phone || 'N/A',
             company: formData.company || 'N/A',
             subject: formData.subject || 'General Inquiry',
-            message: formData.message
+            message: formData.message,
+            to_email: targetEmail
           })
         });
       } catch (err) {
@@ -69,6 +72,7 @@ const Contact = () => {
   };
 
   return (
+
     <section id="contact" className="contact-modern-section section-padding">
       <div className="container contact-max-wrapper">
         

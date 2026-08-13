@@ -59,7 +59,7 @@ const SuperAdminPage = () => {
     pageSeoSettings, updatePageSeoSettings,
     adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
     currentUser, logoutAdmin, clearAllCmsCache,
-    dbStatus, seedCloudDatabase, fetchLatestFromSupabase
+    dbStatus, seedCloudDatabase, fetchLatestFromMySql
   } = useCMS();
 
   const users = adminUsers || [];
@@ -2459,7 +2459,7 @@ const SuperAdminPage = () => {
         {activeTab === 'database' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
             <div className="chart-header-row">
-              <h3 className="chart-title">Centralized Supabase Cloud PostgreSQL Database</h3>
+              <h3 className="chart-title">Centralized Production MySQL Database</h3>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
@@ -2488,14 +2488,14 @@ const SuperAdminPage = () => {
                 }} />
                 <div>
                   <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
-                    {dbStatus === 'connected' && 'Supabase Cloud DB Connected (Realtime Active)'}
-                    {dbStatus === 'connecting' && 'Connecting to Supabase Cloud DB...'}
-                    {dbStatus === 'fallback' && 'Database Mode: Local Fallback (Supabase Keys Pending)'}
+                    {dbStatus === 'connected' && 'MySQL Database Connected (Live 3s Polling Active)'}
+                    {dbStatus === 'connecting' && 'Connecting to MySQL Database...'}
+                    {dbStatus === 'fallback' && 'Database Mode: Local Fallback (MySQL Credentials Pending)'}
                   </strong>
                   <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
                     {dbStatus === 'connected' 
-                      ? 'Live sync active across all devices & sessions via Supabase PostgreSQL.' 
-                      : 'Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env to connect your cloud DB.'}
+                      ? 'Live sync active across all devices & sessions via MySQL Database.' 
+                      : 'Add VITE_MYSQL_API_URL and MYSQL credentials to your .env to connect your MySQL DB.'}
                   </p>
                 </div>
               </div>
@@ -2504,26 +2504,27 @@ const SuperAdminPage = () => {
                 <button
                   className="action-pill-btn primary-pill"
                   onClick={async () => {
-                    if (window.confirm('Push current website master data to Supabase Cloud PostgreSQL?')) {
+                    if (window.confirm('Push current website master data to MySQL Database?')) {
                       await seedCloudDatabase();
-                      triggerNotification('⚡ Supabase Cloud DB seeded successfully!');
+                      triggerNotification('⚡ MySQL DB seeded successfully!');
                     }
                   }}
                 >
-                  <FiZap /> Seed / Push Data to Supabase
+                  <FiZap /> Seed / Push Data to MySQL DB
                 </button>
                 <button
                   className="action-pill-btn"
                   style={{ background: '#ffffff', border: '1px solid #cbd5e1' }}
                   onClick={async () => {
-                    await fetchLatestFromSupabase();
-                    triggerNotification('Sync complete with Supabase Cloud DB');
+                    await fetchLatestFromMySql();
+                    triggerNotification('Sync complete with MySQL Database');
                   }}
                 >
                   <FiRefreshCw /> Fetch Latest Cloud Data
                 </button>
               </div>
             </div>
+
 
             <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '24px 0 16px' }}>
               Generate an encrypted JSON backup snapshot or manage cache storage.
