@@ -1,6 +1,7 @@
 {
-  "timestamp": "2026-08-04T12:41:00.000Z",
-  "system": "Innoveity Tech Solution CMS Database",
+  "timestamp": "2026-08-07T12:00:00.000Z",
+  "system": "Innoveity Tech Solution CMS Complete Master Database Backup",
+  "version": "v3.2.0",
   "projects": [
     {
       "id": 1,
@@ -45,18 +46,132 @@
       "image": "/Innoveity.png"
     }
   ],
-  "team": [
-    { "id": 1, "name": "Praveen", "role": "Team Member", "image": "/Praveen.jpeg" },
-    { "id": 2, "name": "Nancy", "role": "Team Member", "image": "/Nancy.jpeg" },
-    { "id": 3, "name": "Raghul", "role": "Team Member", "image": "/Raghul.jpeg" },
-    { "id": 4, "name": "Zubariya", "role": "Team Member", "image": "/Zubariya.jpeg" },
-    { "id": 5, "name": "Yeshwanth", "role": "Team Member", "image": "/Yeshwanth.jpeg" },
-    { "id": 6, "name": "Anto", "role": "Team Member", "image": "/Anto.jpeg" }
+  "showcaseHeader": {
+    "badge": "CURATED WORK",
+    "titleLine1": "Highlighted Showcase &",
+    "titleHighlight": "Featured Projects",
+    "subtitle": "Discover our recent web applications, mobile platforms, and enterprise solutions engineered with modern web technologies."
+  },
+  "showcaseProjects": [
+    {
+      "id": 1,
+      "tag": "Web Engineering",
+      "title": "Eclipse Studio",
+      "subtitle": "Creative Brand & Digital Experience",
+      "description": "A high-performance digital portfolio with interactive 3D web graphics and modern motion design.",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+      "tech": ["Next.js", "Framer Motion", "Tailwind", "WebGL"]
+    },
+    {
+      "id": 2,
+      "tag": "SaaS Platform",
+      "title": "Aether Cloud",
+      "subtitle": "Enterprise Cloud Management",
+      "description": "Real-time analytics dashboard monitoring distributed cloud infrastructure with instant alerts.",
+      "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      "tech": ["React", "TypeScript", "Node.js", "GraphQL"]
+    },
+    {
+      "id": 3,
+      "tag": "Mobile App",
+      "title": "Luminary Health",
+      "subtitle": "Telehealth & Patient Portal",
+      "description": "Comprehensive mobile platform connecting doctors and patients with encrypted video consultations.",
+      "image": "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1200&q=80",
+      "tech": ["React Native", "Firebase", "WebRTC", "PostgreSQL"]
+    }
   ],
+  "team": [
+    {
+      "id": 101,
+      "name": "Founder & CEO",
+      "role": "Founder & Managing Director",
+      "category": "Leadership",
+      "image": "/Founder.jpeg"
+    },
+    {
+      "id": 102,
+      "name": "Co-Founder & CEO",
+      "role": "Chief Executive Officer",
+      "category": "Leadership",
+      "image": "/CEO.jpeg"
+    },
+    {
+      "id": 1,
+      "name": "Praveen N",
+      "role": "Full Stack Developer",
+      "category": "Team Member",
+      "image": "/Arifbillah.jpeg"
+    },
+    {
+      "id": 2,
+      "name": "Nancy Narmadha T",
+      "role": "Full Stack Developer",
+      "category": "Team Member",
+      "image": "/Nancy.jpeg"
+    },
+    {
+      "id": 3,
+      "name": "Raghul Prasath J",
+      "role": "Full Stack Developer",
+      "category": "Team Member",
+      "image": "/Raghul.jpeg"
+    },
+    {
+      "id": 4,
+      "name": "Zubairya Salam Khan",
+      "role": "Full Stack Developer",
+      "category": "Team Member",
+      "image": "/Zubariya.jpeg"
+    },
+    {
+      "id": 5,
+      "name": "Yeshwanth",
+      "role": "Team Member",
+      "category": "Team Member",
+      "image": "/Yeshwanth.jpeg"
+    },
+    {
+      "id": 6,
+      "name": "Anto",
+      "role": "Team Member",
+      "category": "Team Member",
+      "image": "/Anto.jpeg"
+    }
+  ],
+  "teamHeaderContent": {
+    "leadershipBadge": "EXECUTIVE LEADERSHIP",
+    "leadershipTitleLine1": "Founder &",
+    "leadershipTitleHighlight": "Executive Leadership",
+    "leadershipSubtitle": "Guiding our technology vision, strategic growth, and engineering excellence.",
+    "teamTitle": "Our Engineering & Creative Experts",
+    "teamSubtitle": "The brilliant minds behind our innovative solutions."
+  },
   "contact": {
     "email": "aachinancy@gmail.com",
     "phone": "+91 7904327211",
-    "address": "MCC MRF Innovation Park, East Tambaram, Chennai - 600059"
+    "address": "MCC MRF Innovation Park, East Tambaram, Chennai - 600059",
+    "businessHours": "Mon - Fri: 9:00 AM - 6:00 PM IST"
+  },
+  "homeContent": {
+    "kicker": "INNOVEITY TECH SOLUTION",
+    "titleLine1": "Building Innovative",
+    "titleLine2": "Digital Solutions for Modern Businesses",
+    "description": "Innoveity Tech Solution delivers innovative, scalable, and reliable technology solutions that help organizations streamline operations, enhance customer experiences, and accelerate digital transformation.",
+    "image": "/Innoveity.png"
+  },
+  "aboutContent": {
+    "titleLine1": "Engineering Digital Excellence,",
+    "titleLine2": "Empowering Business Growth",
+    "subtitle": "Innoveity Tech Solution is a forward-thinking technology agency committed to delivering high-performance digital solutions.",
+    "image": "/Innoveity.png"
+  },
+  "seoSettings": {
+    "metaTitle": "Innoveity Tech Solution | Enterprise Software & AI Cloud Engineering",
+    "metaDescription": "Innoveity Tech Solution is a leading software development & digital transformation agency offering Web, Mobile, AI, and Cloud Infrastructure.",
+    "keywords": "software development, web development, mobile apps, AI solutions, cloud infrastructure, Chennai IT company, Innoveity Tech",
+    "ogImage": "/Innoveity.png",
+    "canonicalUrl": "https://innoveitytech.com"
   },
   "adminUsers": [
     {
@@ -73,12 +188,5 @@
       "role": "Admin",
       "status": "Active"
     }
-  ],
-  "seoSettings": {
-    "metaTitle": "Innoveity Tech Solution | Enterprise Software & AI Cloud Engineering",
-    "metaDescription": "Innoveity Tech Solution is a leading software development & digital transformation agency offering Web, Mobile, AI, and Cloud Infrastructure.",
-    "keywords": "software development, web development, mobile apps, AI solutions, cloud infrastructure, Chennai IT company, Innoveity Tech",
-    "ogImage": "/Innoveity.png",
-    "canonicalUrl": "https://innoveitytech.com"
-  }
+  ]
 }

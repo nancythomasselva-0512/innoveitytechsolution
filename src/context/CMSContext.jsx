@@ -1,4 +1,13 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import {
+  isSupabaseConfigured,
+  supabase,
+  fetchCmsSettingFromSupabase,
+  saveCmsSettingToSupabase,
+  fetchCollectionFromSupabase,
+  upsertItemToSupabase,
+  deleteItemFromSupabase
+} from '../lib/supabaseClient';
 
 const CMSContext = createContext();
 
@@ -134,13 +143,10 @@ export const CMSProvider = ({ children }) => {
   };
 
   const defaultHomeContent = {
-    // Hero
     kicker: 'FUTURE-READY TECHNOLOGY SOLUTIONS',
     titleLine1: 'Innoveity Tech',
     titleLine2: 'Solution',
     description: 'Empowering businesses with innovative software development, AI-powered solutions, cloud technologies, mobile applications, web development, and digital transformation services that help organizations achieve sustainable growth.',
-    
-    // About Summary
     aboutKicker: "Let's Innovate Together",
     aboutTitle: 'Who We Are &\nOur Vision With You',
     aboutDesc: 'Innoveity Tech Solution is a forward-thinking technology partner dedicated to empowering businesses with innovative, secure, and scalable digital solutions. From custom software development to comprehensive digital transformations, we combine deep technical expertise with a customer-first approach to turn complex challenges into competitive advantages.',
@@ -148,8 +154,6 @@ export const CMSProvider = ({ children }) => {
     aboutFeature1Desc: 'Tailored enterprise applications designed to scale seamlessly.',
     aboutFeature2Title: 'Digital Transformation',
     aboutFeature2Desc: 'Integrating cutting-edge AI & cloud infrastructure into workflows.',
-
-    // Services
     servicesMainTitle1: 'Integrated Technology',
     servicesMainTitle2: 'Solutions',
     servicesSubtitle: 'Comprehensive software engineering, mobile development, and cloud services designed to accelerate your growth.',
@@ -193,132 +197,6 @@ export const CMSProvider = ({ children }) => {
     stat4Number: "99%",
     stat4Label: "Client Success"
   };
-
-  // State
-  const [projects, setProjects] = useState(() => {
-    const saved = localStorage.getItem('cms_projects');
-    return saved ? JSON.parse(saved) : defaultProjects;
-  });
-
-  const [team, setTeam] = useState(() => {
-    let currentTeam = defaultTeam;
-    const savedV3 = localStorage.getItem('cms_team_v3');
-    if (savedV3) {
-      currentTeam = JSON.parse(savedV3);
-    } else {
-      const savedV2 = localStorage.getItem('cms_team_v2');
-      if (savedV2) {
-        currentTeam = JSON.parse(savedV2).map(m => ({
-          ...m,
-          category: m.category || (m.role?.toLowerCase().includes('founder') || m.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member')
-        }));
-      }
-    }
-    // Ensure Founder & CEO leadership members are included
-    const hasLeadership = currentTeam.some(m => 
-      m.category === 'Leadership' || 
-      m.role?.toLowerCase().includes('founder') || 
-      m.role?.toLowerCase().includes('ceo')
-    );
-    if (!hasLeadership) {
-      const defaultLeadership = defaultTeam.filter(m => m.category === 'Leadership');
-      currentTeam = [...defaultLeadership, ...currentTeam];
-    }
-    return currentTeam;
-  });
-
-  const [teamHeaderContent, setTeamHeaderContent] = useState(() => {
-    const saved = localStorage.getItem('cms_team_header_v1');
-    return saved ? JSON.parse(saved) : defaultTeamHeaderContent;
-  });
-
-  const [contact, setContact] = useState(() => {
-    const saved = localStorage.getItem('cms_contact_v3');
-    return saved ? JSON.parse(saved) : defaultContact;
-  });
-
-  const [homeContent, setHomeContent] = useState(() => {
-    const saved = localStorage.getItem('cms_home');
-    return saved ? JSON.parse(saved) : defaultHomeContent;
-  });
-
-  const [aboutContent, setAboutContent] = useState(() => {
-    const saved = localStorage.getItem('cms_about');
-    return saved ? JSON.parse(saved) : defaultAboutContent;
-  });
-
-  const [showcaseHeader, setShowcaseHeader] = useState(() => {
-    const saved = localStorage.getItem('cms_showcase_header_v2');
-    return saved ? JSON.parse(saved) : defaultShowcaseHeader;
-  });
-
-  const [showcaseProjects, setShowcaseProjects] = useState(() => {
-    const saved = localStorage.getItem('cms_showcase_projects_v2');
-    return saved ? JSON.parse(saved) : defaultShowcaseProjects;
-  });
-
-  // Sync to LocalStorage
-  useEffect(() => {
-    localStorage.setItem('cms_projects', JSON.stringify(projects));
-  }, [projects]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_showcase_header_v2', JSON.stringify(showcaseHeader));
-  }, [showcaseHeader]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_showcase_projects_v2', JSON.stringify(showcaseProjects));
-  }, [showcaseProjects]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_team_v3', JSON.stringify(team));
-  }, [team]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_team_header_v1', JSON.stringify(teamHeaderContent));
-  }, [teamHeaderContent]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_contact_v3', JSON.stringify(contact));
-  }, [contact]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_home', JSON.stringify(homeContent));
-  }, [homeContent]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_about', JSON.stringify(aboutContent));
-  }, [aboutContent]);
-
-  // Sync across tabs
-  useEffect(() => {
-    const handleStorageChange = (e) => {
-      if (e.key === 'cms_projects' && e.newValue) {
-        setProjects(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_showcase_header_v2' && e.newValue) {
-        setShowcaseHeader(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_showcase_projects_v2' && e.newValue) {
-        setShowcaseProjects(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_team_v3' && e.newValue) {
-        setTeam(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_contact_v3' && e.newValue) {
-        setContact(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_home' && e.newValue) {
-        setHomeContent(JSON.parse(e.newValue));
-      }
-      if (e.key === 'cms_about' && e.newValue) {
-        setAboutContent(JSON.parse(e.newValue));
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
 
   const defaultSeoSettings = {
     metaTitle: 'Innoveity Tech Solution | Enterprise Software & AI Cloud Engineering',
@@ -398,18 +276,10 @@ export const CMSProvider = ({ children }) => {
   };
 
   const defaultCustomFields = {
-    home: [
-      { id: 1, label: 'Secondary Banner', value: 'Special Technology Solutions 2026' }
-    ],
-    about: [
-      { id: 1, label: 'Vision Tagline', value: 'Empowering Next-Gen Software Architecture' }
-    ],
-    contact: [
-      { id: 1, label: 'Support Desk Hotline', value: '+91 7904327211 (24x7 Direct)' }
-    ],
-    seo: [
-      { id: 1, label: 'Schema Markup Type', value: 'Organization / LocalBusiness' }
-    ]
+    home: [{ id: 1, label: 'Secondary Banner', value: 'Special Technology Solutions 2026' }],
+    about: [{ id: 1, label: 'Vision Tagline', value: 'Empowering Next-Gen Software Architecture' }],
+    contact: [{ id: 1, label: 'Support Desk Hotline', value: '+91 7904327211 (24x7 Direct)' }],
+    seo: [{ id: 1, label: 'Schema Markup Type', value: 'Organization / LocalBusiness' }]
   };
 
   const defaultAdminAccounts = [
@@ -433,143 +303,191 @@ export const CMSProvider = ({ children }) => {
     }
   ];
 
-// Client-Side Security & Data Obfuscation Helpers
-const encryptData = (data) => {
-  try {
-    const jsonString = JSON.stringify(data);
-    return btoa(encodeURIComponent(jsonString));
-  } catch (e) {
-    return JSON.stringify(data);
-  }
-};
-
-const decryptData = (encryptedString, fallback) => {
-  if (!encryptedString) return fallback;
-  try {
-    const jsonString = decodeURIComponent(atob(encryptedString));
-    return JSON.parse(jsonString);
-  } catch (e) {
+  // Helper security functions for transient session encryption
+  const encryptData = (data) => {
     try {
-      return JSON.parse(encryptedString);
-    } catch (err) {
-      return fallback;
+      return btoa(encodeURIComponent(JSON.stringify(data)));
+    } catch (e) {
+      return JSON.stringify(data);
     }
-  }
-};
+  };
 
-  const [adminUsers, setAdminUsers] = useState(() => {
-    const saved = localStorage.getItem('cms_admin_sec_v1');
-    return saved ? decryptData(saved, defaultAdminAccounts) : defaultAdminAccounts;
-  });
+  const decryptData = (encryptedString, fallback) => {
+    if (!encryptedString) return fallback;
+    try {
+      return JSON.parse(decodeURIComponent(atob(encryptedString)));
+    } catch (e) {
+      try {
+        return JSON.parse(encryptedString);
+      } catch (err) {
+        return fallback;
+      }
+    }
+  };
 
+  // Database Connection Status ('connected' | 'connecting' | 'fallback')
+  const [dbStatus, setDbStatus] = useState(() => isSupabaseConfigured() ? 'connecting' : 'fallback');
+
+  // Primary CMS State (Directly populated from Centralized Cloud Database)
+  const [projects, setProjects] = useState(defaultProjects);
+  const [team, setTeam] = useState(defaultTeam);
+  const [teamHeaderContent, setTeamHeaderContent] = useState(defaultTeamHeaderContent);
+  const [contact, setContact] = useState(defaultContact);
+  const [homeContent, setHomeContent] = useState(defaultHomeContent);
+  const [aboutContent, setAboutContent] = useState(defaultAboutContent);
+  const [showcaseHeader, setShowcaseHeader] = useState(defaultShowcaseHeader);
+  const [showcaseProjects, setShowcaseProjects] = useState(defaultShowcaseProjects);
+  const [seoSettings, setSeoSettings] = useState(defaultSeoSettings);
+  const [pageSeoSettings, setPageSeoSettings] = useState(defaultPageSeoSettings);
+  const [customFields, setCustomFields] = useState(defaultCustomFields);
+  const [adminUsers, setAdminUsers] = useState(defaultAdminAccounts);
+
+  // Transient Admin Session
   const [currentUser, setCurrentUser] = useState(() => {
-    // Clear legacy localStorage session if present
-    localStorage.removeItem('cms_session_sec_v1');
     const saved = sessionStorage.getItem('cms_session_sec_v1');
     return saved ? decryptData(saved, null) : null;
   });
 
   useEffect(() => {
-    localStorage.setItem('cms_admin_sec_v1', encryptData(adminUsers));
-  }, [adminUsers]);
-
-  useEffect(() => {
-    if (currentUser) {
-      sessionStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
-    } else {
-      sessionStorage.removeItem('cms_session_sec_v1');
-      localStorage.removeItem('cms_session_sec_v1');
-    }
+    if (currentUser) sessionStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
+    else sessionStorage.removeItem('cms_session_sec_v1');
   }, [currentUser]);
 
-  const addAdminUser = (user) => {
-    const newUser = {
-      id: Date.now(),
-      name: user.name,
-      email: user.email.toLowerCase().trim(),
-      password: user.password || 'admin123',
-      role: user.role || 'Admin',
-      status: 'Active',
-      lastLogin: 'Never'
+  // Load latest data from Centralized Supabase Cloud PostgreSQL
+  const fetchLatestFromSupabase = useCallback(async () => {
+    if (!isSupabaseConfigured() || !supabase) {
+      setDbStatus('fallback');
+      return;
+    }
+
+    try {
+      // Fetch Collections
+      const [remoteProjects, remoteShowcase, remoteTeam, remoteAdmins] = await Promise.all([
+        fetchCollectionFromSupabase('cms_projects', defaultProjects),
+        fetchCollectionFromSupabase('cms_showcase_projects', defaultShowcaseProjects),
+        fetchCollectionFromSupabase('cms_team', defaultTeam),
+        fetchCollectionFromSupabase('cms_admin_users', defaultAdminAccounts)
+      ]);
+
+      if (remoteProjects && remoteProjects.length > 0) setProjects(remoteProjects);
+      if (remoteShowcase && remoteShowcase.length > 0) setShowcaseProjects(remoteShowcase);
+      if (remoteTeam && remoteTeam.length > 0) setTeam(remoteTeam);
+      if (remoteAdmins && remoteAdmins.length > 0) setAdminUsers(remoteAdmins);
+
+      // Fetch Key-Value Settings
+      const [
+        sHeader, tHeader, sContact, sHome, sAbout, sSeo, sPageSeo, sCustomFields
+      ] = await Promise.all([
+        fetchCmsSettingFromSupabase('showcase_header', defaultShowcaseHeader),
+        fetchCmsSettingFromSupabase('team_header', defaultTeamHeaderContent),
+        fetchCmsSettingFromSupabase('contact', defaultContact),
+        fetchCmsSettingFromSupabase('home_content', defaultHomeContent),
+        fetchCmsSettingFromSupabase('about_content', defaultAboutContent),
+        fetchCmsSettingFromSupabase('seo_settings', defaultSeoSettings),
+        fetchCmsSettingFromSupabase('page_seo_settings', defaultPageSeoSettings),
+        fetchCmsSettingFromSupabase('custom_fields', defaultCustomFields)
+      ]);
+
+      if (sHeader) setShowcaseHeader(sHeader);
+      if (tHeader) setTeamHeaderContent(tHeader);
+      if (sContact) setContact(sContact);
+      if (sHome) setHomeContent(sHome);
+      if (sAbout) setAboutContent(sAbout);
+      if (sSeo) setSeoSettings(sSeo);
+      if (sPageSeo) setPageSeoSettings(sPageSeo);
+      if (sCustomFields) setCustomFields(sCustomFields);
+
+      setDbStatus('connected');
+    } catch (err) {
+      console.warn('[Supabase Cloud DB] Error syncing:', err);
+      setDbStatus('fallback');
+    }
+  }, []);
+
+  // Dual Live Sync Engine: Supabase Realtime WebSockets + 3-Second Live Polling Backup
+  useEffect(() => {
+    fetchLatestFromSupabase();
+
+    let pollInterval = null;
+    let channel = null;
+
+    if (isSupabaseConfigured() && supabase) {
+      // 1. WebSocket Realtime Push
+      channel = supabase.channel('supabase_realtime_cms')
+        .on('postgres_changes', { event: '*', schema: 'public' }, () => {
+          fetchLatestFromSupabase();
+        })
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            setDbStatus('connected');
+          }
+        });
+
+      // 2. Live Polling Every 3 Seconds (Fail-safe Backup Sync)
+      pollInterval = setInterval(() => {
+        fetchLatestFromSupabase();
+      }, 3000);
+    }
+
+    return () => {
+      if (channel) supabase.removeChannel(channel);
+      if (pollInterval) clearInterval(pollInterval);
     };
-    setAdminUsers(prev => [...prev, newUser]);
-    return newUser;
-  };
+  }, [fetchLatestFromSupabase]);
 
-  const deleteAdminUser = (id) => {
-    setAdminUsers(prev => prev.filter(u => u.id !== id));
-  };
-
-  const toggleUserStatus = (id) => {
-    setAdminUsers(prev => prev.map(u => u.id === id ? { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' } : u));
-  };
-
-  const loginAdmin = (email, password, requiredRole) => {
-    const cleanEmail = (email || '').toLowerCase().trim();
-    const found = adminUsers.find(u => u.email.toLowerCase() === cleanEmail);
-
-    if (!found) {
-      return { success: false, message: 'Account with this email does not exist.' };
+  // Seed / Push Master dataset to Supabase Cloud DB
+  const seedCloudDatabase = async () => {
+    if (!isSupabaseConfigured() || !supabase) {
+      alert('Supabase credentials are missing in .env! Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY first.');
+      return false;
     }
 
-    if (found.password !== password) {
-      return { success: false, message: 'Invalid password. Please try again.' };
+    try {
+      setDbStatus('connecting');
+
+      for (const p of projects) await upsertItemToSupabase('cms_projects', p);
+      for (const sp of showcaseProjects) await upsertItemToSupabase('cms_showcase_projects', sp);
+      for (const tm of team) await upsertItemToSupabase('cms_team', tm);
+      for (const au of adminUsers) await upsertItemToSupabase('cms_admin_users', au);
+
+      await saveCmsSettingToSupabase('showcase_header', showcaseHeader);
+      await saveCmsSettingToSupabase('team_header', teamHeaderContent);
+      await saveCmsSettingToSupabase('contact', contact);
+      await saveCmsSettingToSupabase('home_content', homeContent);
+      await saveCmsSettingToSupabase('about_content', aboutContent);
+      await saveCmsSettingToSupabase('seo_settings', seoSettings);
+      await saveCmsSettingToSupabase('page_seo_settings', pageSeoSettings);
+      await saveCmsSettingToSupabase('custom_fields', customFields);
+
+      setDbStatus('connected');
+      alert('Successfully seeded all website data to Supabase Cloud Database! Live sync active across all devices.');
+      return true;
+    } catch (err) {
+      console.error('Error seeding Supabase Cloud DB:', err);
+      alert(`Error seeding Supabase Cloud DB: ${err.message}`);
+      return false;
     }
-
-    if (found.status !== 'Active') {
-      return { success: false, message: 'This account has been suspended. Contact Super Admin.' };
-    }
-
-    if (requiredRole === 'Super Admin' && found.role !== 'Super Admin') {
-      return { success: false, message: 'Access denied: Super Admin privileges required.' };
-    }
-
-    const updatedUser = { ...found, lastLogin: 'Just now' };
-    setAdminUsers(prev => prev.map(u => u.id === found.id ? updatedUser : u));
-    setCurrentUser(updatedUser);
-
-    return { success: true, user: updatedUser };
   };
 
-  const logoutAdmin = () => {
-    setCurrentUser(null);
+  // CRUD Actions synced with Centralized Cloud Database
+  const addProject = async (project) => {
+    const newProj = { ...project, id: Date.now() };
+    setProjects(prev => [...prev, newProj]);
+    await upsertItemToSupabase('cms_projects', newProj);
   };
 
-  const [seoSettings, setSeoSettings] = useState(() => {
-    const saved = localStorage.getItem('cms_seo_v1');
-    return saved ? JSON.parse(saved) : defaultSeoSettings;
-  });
-
-  const [pageSeoSettings, setPageSeoSettings] = useState(() => {
-    const saved = localStorage.getItem('cms_page_seo_v1');
-    return saved ? JSON.parse(saved) : defaultPageSeoSettings;
-  });
-
-  const [customFields, setCustomFields] = useState(() => {
-    const saved = localStorage.getItem('cms_custom_fields_v1');
-    return saved ? JSON.parse(saved) : defaultCustomFields;
-  });
-
-  useEffect(() => {
-    localStorage.setItem('cms_seo_v1', JSON.stringify(seoSettings));
-  }, [seoSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_page_seo_v1', JSON.stringify(pageSeoSettings));
-  }, [pageSeoSettings]);
-
-  useEffect(() => {
-    localStorage.setItem('cms_custom_fields_v1', JSON.stringify(customFields));
-  }, [customFields]);
-
-  // Actions
-  const addProject = (project) => setProjects([...projects, { ...project, id: Date.now() }]);
-  const updateProject = (id, updatedProject) => {
-    setProjects(projects.map(p => p.id === id ? { ...p, ...updatedProject } : p));
+  const updateProject = async (id, updatedProject) => {
+    const merged = { ...projects.find(p => p.id === id), ...updatedProject, id };
+    setProjects(prev => prev.map(p => p.id === id ? merged : p));
+    await upsertItemToSupabase('cms_projects', merged);
   };
-  const deleteProject = (id) => setProjects(projects.filter(p => p.id !== id));
 
-  const addShowcaseProject = (project) => {
+  const deleteProject = async (id) => {
+    setProjects(prev => prev.filter(p => p.id !== id));
+    await deleteItemFromSupabase('cms_projects', id);
+  };
+
+  const addShowcaseProject = async (project) => {
     const techArray = Array.isArray(project.tech)
       ? project.tech
       : (typeof project.tech === 'string' ? project.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
@@ -578,25 +496,31 @@ const decryptData = (encryptedString, fallback) => {
       id: project.id || `showcase-${Date.now()}`,
       tech: techArray
     };
-    setShowcaseProjects([...showcaseProjects, newCard]);
+    setShowcaseProjects(prev => [...prev, newCard]);
+    await upsertItemToSupabase('cms_showcase_projects', newCard);
   };
 
-  const updateShowcaseProject = (id, updatedProject) => {
+  const updateShowcaseProject = async (id, updatedProject) => {
     const techArray = Array.isArray(updatedProject.tech)
       ? updatedProject.tech
       : (typeof updatedProject.tech === 'string' ? updatedProject.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
-    setShowcaseProjects(showcaseProjects.map(p => p.id === id ? { ...p, ...updatedProject, tech: techArray } : p));
+    const merged = { ...showcaseProjects.find(p => p.id === id), ...updatedProject, id, tech: techArray };
+    setShowcaseProjects(prev => prev.map(p => p.id === id ? merged : p));
+    await upsertItemToSupabase('cms_showcase_projects', merged);
   };
 
-  const deleteShowcaseProject = (id) => {
-    setShowcaseProjects(showcaseProjects.filter(p => p.id !== id));
+  const deleteShowcaseProject = async (id) => {
+    setShowcaseProjects(prev => prev.filter(p => p.id !== id));
+    await deleteItemFromSupabase('cms_showcase_projects', id);
   };
 
-  const updateShowcaseHeader = (newHeader) => {
-    setShowcaseHeader(prev => ({ ...prev, ...newHeader }));
+  const updateShowcaseHeader = async (newHeader) => {
+    const updated = { ...showcaseHeader, ...newHeader };
+    setShowcaseHeader(updated);
+    await saveCmsSettingToSupabase('showcase_header', updated);
   };
 
-  const addTeamMember = (member) => {
+  const addTeamMember = async (member) => {
     const newMember = {
       id: Date.now(),
       name: member.name,
@@ -604,18 +528,20 @@ const decryptData = (encryptedString, fallback) => {
       category: member.category || (member.role?.toLowerCase().includes('founder') || member.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member'),
       image: member.image || ''
     };
-    if (newMember.category === 'Leadership') {
-      setTeam(prev => [newMember, ...prev]);
-    } else {
-      setTeam(prev => [...prev, newMember]);
-    }
+    setTeam(prev => newMember.category === 'Leadership' ? [newMember, ...prev] : [...prev, newMember]);
+    await upsertItemToSupabase('cms_team', newMember);
   };
 
-  const updateTeamMember = (id, updatedMember) => {
-    setTeam(team.map(m => m.id === id ? { ...m, ...updatedMember } : m));
+  const updateTeamMember = async (id, updatedMember) => {
+    const merged = { ...team.find(m => m.id === id), ...updatedMember, id };
+    setTeam(prev => prev.map(m => m.id === id ? merged : m));
+    await upsertItemToSupabase('cms_team', merged);
   };
 
-  const deleteTeamMember = (id) => setTeam(team.filter(m => m.id !== id));
+  const deleteTeamMember = async (id) => {
+    setTeam(prev => prev.filter(m => m.id !== id));
+    await deleteItemFromSupabase('cms_team', id);
+  };
 
   const moveTeamMemberUp = (id) => {
     setTeam(prev => {
@@ -641,62 +567,121 @@ const decryptData = (encryptedString, fallback) => {
     });
   };
 
-  const updateTeamHeaderContent = (newHeader) => {
-    setTeamHeaderContent(prev => ({ ...prev, ...newHeader }));
+  const updateTeamHeaderContent = async (newHeader) => {
+    const updated = { ...teamHeaderContent, ...newHeader };
+    setTeamHeaderContent(updated);
+    await saveCmsSettingToSupabase('team_header', updated);
   };
 
-  const updateContact = (updatedContact) => setContact(updatedContact);
-  const updateHomeContent = (newContent) => setHomeContent(newContent);
-  const updateAboutContent = (newContent) => setAboutContent(newContent);
-  const updateSeoSettings = (newSeo) => setSeoSettings(newSeo);
-  
-  const updatePageSeoSettings = (pageKey, newPageSeo) => {
-    setPageSeoSettings(prev => ({
-      ...prev,
-      [pageKey]: { ...prev[pageKey], ...newPageSeo }
-    }));
+  const updateContact = async (updatedContact) => {
+    setContact(updatedContact);
+    await saveCmsSettingToSupabase('contact', updatedContact);
   };
 
-  const addCustomField = (pageKey, field) => {
-    setCustomFields(prev => ({
-      ...prev,
-      [pageKey]: [...(prev[pageKey] || []), { id: Date.now(), ...field }]
-    }));
+  const updateHomeContent = async (newContent) => {
+    setHomeContent(newContent);
+    await saveCmsSettingToSupabase('home_content', newContent);
   };
 
-  const deleteCustomField = (pageKey, id) => {
-    setCustomFields(prev => ({
-      ...prev,
-      [pageKey]: (prev[pageKey] || []).filter(f => f.id !== id)
+  const updateAboutContent = async (newContent) => {
+    setAboutContent(newContent);
+    await saveCmsSettingToSupabase('about_content', newContent);
+  };
+
+  const updateSeoSettings = async (newSeo) => {
+    setSeoSettings(newSeo);
+    await saveCmsSettingToSupabase('seo_settings', newSeo);
+  };
+
+  const updatePageSeoSettings = async (pageKey, newPageSeo) => {
+    const updated = {
+      ...pageSeoSettings,
+      [pageKey]: { ...pageSeoSettings[pageKey], ...newPageSeo }
+    };
+    setPageSeoSettings(updated);
+    await saveCmsSettingToSupabase('page_seo_settings', updated);
+  };
+
+  const addCustomField = async (pageKey, field) => {
+    const updated = {
+      ...customFields,
+      [pageKey]: [...(customFields[pageKey] || []), { id: Date.now(), ...field }]
+    };
+    setCustomFields(updated);
+    await saveCmsSettingToSupabase('custom_fields', updated);
+  };
+
+  const deleteCustomField = async (pageKey, id) => {
+    const updated = {
+      ...customFields,
+      [pageKey]: (customFields[pageKey] || []).filter(f => f.id !== id)
+    };
+    setCustomFields(updated);
+    await saveCmsSettingToSupabase('custom_fields', updated);
+  };
+
+  const addAdminUser = async (user) => {
+    const newUser = {
+      id: Date.now(),
+      name: user.name,
+      email: user.email.toLowerCase().trim(),
+      password: user.password || 'admin123',
+      role: user.role || 'Admin',
+      status: 'Active',
+      lastLogin: 'Never'
+    };
+    setAdminUsers(prev => [...prev, newUser]);
+    await upsertItemToSupabase('cms_admin_users', newUser);
+    return newUser;
+  };
+
+  const deleteAdminUser = async (id) => {
+    setAdminUsers(prev => prev.filter(u => u.id !== id));
+    await deleteItemFromSupabase('cms_admin_users', id);
+  };
+
+  const toggleUserStatus = async (id) => {
+    let updatedUser = null;
+    setAdminUsers(prev => prev.map(u => {
+      if (u.id === id) {
+        updatedUser = { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' };
+        return updatedUser;
+      }
+      return u;
     }));
+    if (updatedUser) await upsertItemToSupabase('cms_admin_users', updatedUser);
+  };
+
+  const loginAdmin = (email, password, requiredRole) => {
+    const cleanEmail = (email || '').toLowerCase().trim();
+    const found = adminUsers.find(u => u.email.toLowerCase() === cleanEmail);
+
+    if (!found) {
+      return { success: false, message: 'Account with this email does not exist.' };
+    }
+    if (found.password !== password) {
+      return { success: false, message: 'Invalid password. Please try again.' };
+    }
+    if (found.status !== 'Active') {
+      return { success: false, message: 'This account has been suspended. Contact Super Admin.' };
+    }
+    if (requiredRole === 'Super Admin' && found.role !== 'Super Admin') {
+      return { success: false, message: 'Access denied: Super Admin privileges required.' };
+    }
+
+    const updatedUser = { ...found, lastLogin: 'Just now' };
+    setAdminUsers(prev => prev.map(u => u.id === found.id ? updatedUser : u));
+    setCurrentUser(updatedUser);
+    upsertItemToSupabase('cms_admin_users', updatedUser);
+
+    return { success: true, user: updatedUser };
+  };
+
+  const logoutAdmin = () => {
+    setCurrentUser(null);
   };
 
   const clearAllCmsCache = () => {
-    const keysToRemove = [
-      'cms_projects',
-      'cms_showcase_header_v2',
-      'cms_showcase_projects_v2',
-      'cms_team',
-      'cms_team_v2',
-      'cms_team_v3',
-      'cms_team_header_v1',
-      'cms_contact',
-      'cms_contact_v2',
-      'cms_contact_v3',
-      'cms_home',
-      'cms_about',
-      'cms_seo',
-      'cms_page_seo_v1',
-      'cms_custom_fields_v1'
-    ];
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-
-    if ('caches' in window) {
-      caches.keys().then(names => {
-        names.forEach(name => caches.delete(name));
-      }).catch(err => console.log('Cache Storage clear notice:', err));
-    }
-
     setProjects(defaultProjects);
     setShowcaseHeader(defaultShowcaseHeader);
     setShowcaseProjects(defaultShowcaseProjects);
@@ -714,6 +699,9 @@ const decryptData = (encryptedString, fallback) => {
 
   return (
     <CMSContext.Provider value={{
+      dbStatus,
+      seedCloudDatabase,
+      fetchLatestFromSupabase,
       projects, addProject, updateProject, deleteProject,
       showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
       showcaseHeader, updateShowcaseHeader,
@@ -733,4 +721,3 @@ const decryptData = (encryptedString, fallback) => {
     </CMSContext.Provider>
   );
 };
-

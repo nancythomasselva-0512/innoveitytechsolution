@@ -58,7 +58,8 @@ const SuperAdminPage = () => {
     seoSettings, updateSeoSettings,
     pageSeoSettings, updatePageSeoSettings,
     adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
-    currentUser, logoutAdmin, clearAllCmsCache
+    currentUser, logoutAdmin, clearAllCmsCache,
+    dbStatus, seedCloudDatabase, fetchLatestFromSupabase
   } = useCMS();
 
   const users = adminUsers || [];
@@ -2454,21 +2455,82 @@ const SuperAdminPage = () => {
           </div>
         )}
 
-        {/* TAB 8: BACKUPS */}
+        {/* TAB 8: DATABASE & BACKUPS */}
         {activeTab === 'database' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
             <div className="chart-header-row">
-              <h3 className="chart-title">1-Click Database Export & Snapshot</h3>
+              <h3 className="chart-title">Centralized Supabase Cloud PostgreSQL Database</h3>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
             </div>
-            <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '16px 0 24px' }}>
-              Generate an encrypted JSON backup of all CMS contents, portfolio items, team rosters, and contact settings.
+
+            {/* Cloud Status Badge */}
+            <div style={{
+              margin: '20px 0',
+              padding: '16px 20px',
+              borderRadius: '14px',
+              background: dbStatus === 'connected' ? '#ecfdf5' : (dbStatus === 'connecting' ? '#eff6ff' : '#fff7ed'),
+              border: `1px solid ${dbStatus === 'connected' ? '#a7f3d0' : (dbStatus === 'connecting' ? '#bfdbfe' : '#fde68a')}`,
+              display: 'flex',
+              alignItems: 'center',
+              justify: 'space-between',
+              flexWrap: 'wrap',
+              gap: '12px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  background: dbStatus === 'connected' ? '#10b981' : (dbStatus === 'connecting' ? '#3b82f6' : '#f59e0b'),
+                  boxShadow: dbStatus === 'connected' ? '0 0 8px #10b981' : 'none'
+                }} />
+                <div>
+                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                    {dbStatus === 'connected' && 'Supabase Cloud DB Connected (Realtime Active)'}
+                    {dbStatus === 'connecting' && 'Connecting to Supabase Cloud DB...'}
+                    {dbStatus === 'fallback' && 'Database Mode: Local Fallback (Supabase Keys Pending)'}
+                  </strong>
+                  <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                    {dbStatus === 'connected' 
+                      ? 'Live sync active across all devices & sessions via Supabase PostgreSQL.' 
+                      : 'Add VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to your .env to connect your cloud DB.'}
+                  </p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <button
+                  className="action-pill-btn primary-pill"
+                  onClick={async () => {
+                    if (window.confirm('Push current website master data to Supabase Cloud PostgreSQL?')) {
+                      await seedCloudDatabase();
+                      triggerNotification('⚡ Supabase Cloud DB seeded successfully!');
+                    }
+                  }}
+                >
+                  <FiZap /> Seed / Push Data to Supabase
+                </button>
+                <button
+                  className="action-pill-btn"
+                  style={{ background: '#ffffff', border: '1px solid #cbd5e1' }}
+                  onClick={async () => {
+                    await fetchLatestFromSupabase();
+                    triggerNotification('Sync complete with Supabase Cloud DB');
+                  }}
+                >
+                  <FiRefreshCw /> Fetch Latest Cloud Data
+                </button>
+              </div>
+            </div>
+
+            <p style={{ color: '#64748b', fontSize: '0.9rem', margin: '24px 0 16px' }}>
+              Generate an encrypted JSON backup snapshot or manage cache storage.
             </p>
             <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
               <button className="action-pill-btn primary-pill" onClick={exportBackupJSON}>
-                <FiDownloadCloud /> Export JSON Backup
+                <FiDownloadCloud /> Export JSON Backup Snapshot
               </button>
               <button 
                 className="action-pill-btn" 
@@ -2480,11 +2542,12 @@ const SuperAdminPage = () => {
                   }
                 }}
               >
-                <FiRefreshCw /> Clear All System Cache
+                <FiRefreshCw /> Clear Local Cache
               </button>
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
