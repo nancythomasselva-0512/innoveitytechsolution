@@ -43,21 +43,36 @@ VITE_EMAILJS_SERVICE_ID=your-service-id
 VITE_EMAILJS_TEMPLATE_ID=your-template-id
 VITE_EMAILJS_PUBLIC_KEY=your-public-key
 
-# Centralized Supabase Cloud Database Configuration
-VITE_SUPABASE_URL=https://your-supabase-project-id.supabase.co
-VITE_SUPABASE_ANON_KEY=your-supabase-anon-key
+# Centralized MySQL API & Server Configuration
+VITE_MYSQL_API_URL=http://localhost:5000/api/cms
+
+# MySQL Database Credentials
+MYSQL_HOST=localhost
+MYSQL_USER=root
+MYSQL_PASSWORD=
+MYSQL_DATABASE=innoveity_db
+MYSQL_PORT=3306
 ```
 
-### 3. Setup Supabase Database Schema
-1. Open your project in [Supabase Dashboard](https://supabase.com/dashboard).
-2. Go to **SQL Editor** and execute the commands in [`supabase_schema.sql`](./supabase_schema.sql).
+### 3. Setup MySQL Database Schema & Seed Data
+Execute the automatic setup script to create database tables and seed initial CMS data:
+```bash
+npm run db:seed
+```
+*(Alternatively, execute [`mysql_schema.sql`](./mysql_schema.sql) in phpMyAdmin / MySQL CLI).*
 
-### 4. Run Development Server
+### 4. Run Backend Express Server
+```bash
+npm run server
+```
+
+### 5. Run Frontend Development Server
+In a separate terminal window:
 ```bash
 npm run dev
 ```
 
-### 5. Build for Production
+### 6. Build for Production
 ```bash
 npm run build
 ```

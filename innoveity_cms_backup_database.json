@@ -8,42 +8,42 @@
       "title": "Fluentia AI Language Platform",
       "category": "AI Language Platform",
       "description": "Experience high-performance, local client-side AI language processing and dynamic contextual learning within an intuitive web platform.",
-      "image": "/fluentia.png"
+      "image": "/tech_blog_featured.png"
     },
     {
       "id": 2,
       "title": "BioMed Summit",
       "category": "Medical Conference Website",
       "description": "A fully responsive and user-friendly medical conference platform designed to handle registrations, scheduling, and speaker profiles.",
-      "image": "/BioMed.png"
+      "image": "/tech_blog_3.png"
     },
     {
       "id": 3,
       "title": "Formbuilder SaaS",
       "category": "Form Building Tool",
       "description": "A robust SaaS solution that allows users to create, manage, and analyze custom forms with advanced conditional logic.",
-      "image": "/Formbuilder.png"
+      "image": "/service_software.png"
     },
     {
       "id": 4,
       "title": "Frankloo App",
       "category": "Mobile App (Concept)",
       "description": "A modern, accessible mobile application concept tailored for specialized service bookings and real-time tracking.",
-      "image": "/Frankloo.png"
+      "image": "/service_mobile.png"
     },
     {
       "id": 5,
       "title": "IGH Educational Platform",
       "category": "E-Learning Portal",
       "description": "An interactive, feature-rich e-learning platform connecting students and educators with secure video streaming and material distribution.",
-      "image": "/IGH.png"
+      "image": "/service_web.png"
     },
     {
       "id": 6,
       "title": "Innoveity Corporate Site",
       "category": "Corporate Website",
       "description": "The official corporate presence for Innoveity Tech Solution, showcasing our engineering capabilities, team, and services.",
-      "image": "/Innoveity.png"
+      "image": "/service_cloud.png"
     }
   ],
   "showcaseHeader": {

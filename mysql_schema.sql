@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `cms_projects` (
     `title` VARCHAR(255) NOT NULL,
     `category` VARCHAR(255) DEFAULT NULL,
     `description` TEXT DEFAULT NULL,
-    `image` TEXT DEFAULT NULL,
+    `image` LONGTEXT DEFAULT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS `cms_showcase_projects` (
     `title` VARCHAR(255) NOT NULL,
     `subtitle` VARCHAR(255) DEFAULT NULL,
     `description` TEXT DEFAULT NULL,
-    `image` TEXT DEFAULT NULL,
+    `image` LONGTEXT DEFAULT NULL,
     `tech` LONGTEXT DEFAULT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `cms_team` (
     `name` VARCHAR(255) NOT NULL,
     `role` VARCHAR(255) DEFAULT NULL,
     `category` VARCHAR(255) DEFAULT 'Team Member',
-    `image` TEXT DEFAULT NULL,
+    `image` LONGTEXT DEFAULT NULL,
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

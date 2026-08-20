@@ -381,16 +381,19 @@
 }
 
 .btn-live-preview {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   background: linear-gradient(135deg, #10b981, #059669);
   color: #ffffff;
-  padding: 9px 20px;
+  padding: 10px 22px;
   border-radius: 50px;
   text-decoration: none;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
   transition: all 0.3s ease;
 }

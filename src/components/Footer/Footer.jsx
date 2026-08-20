@@ -10,7 +10,7 @@ import './Footer.css';
 const Footer = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { contact } = useCMS();
+  const { contact, headerFooterSettings } = useCMS();
 
   const handleGetStarted = () => {
     navigate('/contact');
@@ -21,6 +21,21 @@ const Footer = () => {
   };
 
   const hideCtaBanner = location.pathname === '/projects' || location.pathname === '/services' || location.pathname === '/team' || location.pathname === '/contact' || location.pathname.startsWith('/privacy') || location.pathname.startsWith('/terms') || location.pathname.startsWith('/refund');
+
+  const operatingCompany = headerFooterSettings?.operatingCompany || 'Operated by Innoveity Tech Solution Ltd.';
+  const address = headerFooterSettings?.address || contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059';
+  const phone = headerFooterSettings?.phone || contact?.phone || '+91 7904327211';
+  const email = headerFooterSettings?.email || contact?.email || 'aachinancy@gmail.com';
+  const hours = headerFooterSettings?.hours || 'Mon - Fri, 9:00 AM - 6:00 PM';
+  const twitterUrl = headerFooterSettings?.twitterUrl || '#';
+  const instagramUrl = headerFooterSettings?.instagramUrl || '#';
+  const facebookUrl = headerFooterSettings?.facebookUrl || '#';
+  const linkedinUrl = headerFooterSettings?.linkedinUrl || '#';
+  const ctaBadge = headerFooterSettings?.ctaBadge || 'SMART, SCALABLE';
+  const ctaTitle = headerFooterSettings?.ctaTitle || 'Ready To Begin Building Digital Future Securely?';
+  const ctaPrimaryBtnText = headerFooterSettings?.ctaPrimaryBtnText || 'Get Started';
+  const ctaSecondaryBtnText = headerFooterSettings?.ctaSecondaryBtnText || 'See Technology Options';
+  const copyrightText = headerFooterSettings?.copyrightText || `© ${new Date().getFullYear()} Innoveity Tech Solution. All rights reserved.`;
 
   return (
     <footer className="footer-wrapper">
@@ -41,26 +56,25 @@ const Footer = () => {
           {/* Centered Top Kicker Badge */}
           <div className="cta-pill-badge">
             <FiLock size={12} style={{ marginRight: '6px' }} />
-            <span>SMART, SCALABLE</span>
+            <span>{ctaBadge}</span>
           </div>
 
           {/* Large Title */}
-          <h2 className="cta-main-title">
-            Ready To Begin Building<br />
-            Digital Future Securely?
+          <h2 className="cta-main-title" style={{ whiteSpace: 'pre-line' }}>
+            {ctaTitle}
           </h2>
 
           {/* Action Buttons */}
           <div className="cta-btn-group">
             <button className="pill-btn-get-started" onClick={handleGetStarted}>
-              <span>Get Started</span>
+              <span>{ctaPrimaryBtnText}</span>
               <div className="cta-arrow-circle">
                 <FiArrowUpRight size={16} />
               </div>
             </button>
 
             <button className="pill-btn-see-options" onClick={handleExploreOptions}>
-              See Technology Options
+              {ctaSecondaryBtnText}
             </button>
           </div>
         </motion.div>
@@ -75,13 +89,13 @@ const Footer = () => {
             {/* Column 1: Brand & Registration */}
             <div className="footer-col col-brand">
               <div className="footer-brand-logo-box">
-                <InnoveityBrandLogo size={32} showText={true} />
+                <InnoveityBrandLogo size={40} showText={true} />
               </div>
               <div className="brand-legal-info">
-                <p>Operated by Innoveity Tech Solution Ltd.</p>
-                <p>{contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</p>
-                <p><a href={`tel:${contact?.phone || '+91 7904327211'}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contact?.phone || '+91 7904327211'}</a></p>
-                <p><a href={`mailto:${contact?.email || 'aachinancy@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'none' }}>{contact?.email || 'aachinancy@gmail.com'}</a></p>
+                <p>{operatingCompany}</p>
+                <p>{address}</p>
+                <p><a href={`tel:${phone}`} style={{ color: 'inherit', textDecoration: 'none' }}>{phone}</a></p>
+                <p><a href={`mailto:${email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{email}</a></p>
               </div>
             </div>
 
@@ -89,10 +103,10 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Address & Desk</h4>
               <ul className="footer-col-list address-list">
-                <li>{contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</li>
-                <li>Phone: <a href={`tel:${contact?.phone || '+91 7904327211'}`} style={{ color: '#10b981', textDecoration: 'none' }}>{contact?.phone || '+91 7904327211'}</a></li>
-                <li>Email: <a href={`mailto:${contact?.email || 'aachinancy@gmail.com'}`} style={{ color: '#10b981', textDecoration: 'none' }}>{contact?.email || 'aachinancy@gmail.com'}</a></li>
-                <li>Hours: Mon - Fri, 9:00 AM - 6:00 PM</li>
+                <li>{address}</li>
+                <li>Phone: <a href={`tel:${phone}`} style={{ color: '#10b981', textDecoration: 'none' }}>{phone}</a></li>
+                <li>Email: <a href={`mailto:${email}`} style={{ color: '#10b981', textDecoration: 'none' }}>{email}</a></li>
+                <li>Hours: {hours}</li>
               </ul>
             </div>
 
@@ -100,6 +114,7 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Solutions</h4>
               <ul className="footer-col-list">
+                <li><a href="/media">Media Division</a></li>
                 <li><a href="/services">Web Development</a></li>
                 <li><a href="/services">Mobile Engineering</a></li>
                 <li><a href="/services">Enterprise Software</a></li>
@@ -126,10 +141,10 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Connect</h4>
               <ul className="footer-col-list social-list">
-                <li><a href="#"><FaXTwitter className="social-icon" /> X.com</a></li>
-                <li><a href="#"><FaInstagram className="social-icon" /> Instagram</a></li>
-                <li><a href="#"><FaFacebookF className="social-icon" /> Facebook</a></li>
-                <li><a href="#"><FaLinkedinIn className="social-icon" /> LinkedIn</a></li>
+                <li><a href={twitterUrl} target="_blank" rel="noopener noreferrer"><FaXTwitter className="social-icon" /> X.com</a></li>
+                <li><a href={instagramUrl} target="_blank" rel="noopener noreferrer"><FaInstagram className="social-icon" /> Instagram</a></li>
+                <li><a href={facebookUrl} target="_blank" rel="noopener noreferrer"><FaFacebookF className="social-icon" /> Facebook</a></li>
+                <li><a href={linkedinUrl} target="_blank" rel="noopener noreferrer"><FaLinkedinIn className="social-icon" /> LinkedIn</a></li>
               </ul>
             </div>
 
@@ -148,7 +163,7 @@ const Footer = () => {
             </div>
 
             <div className="copyright-text">
-              © {new Date().getFullYear()} Innoveity Tech Solution. All rights reserved.
+              {copyrightText}
             </div>
           </div>
 

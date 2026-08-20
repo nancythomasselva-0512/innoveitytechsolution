@@ -17,6 +17,7 @@ import AdminLoginPage from './pages/AdminLoginPage';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import RefundPolicyPage from './pages/RefundPolicyPage';
+import MediaPage from './pages/MediaPage';
 import { useCMS } from './context/CMSContext';
 import './App.css';
 
@@ -71,6 +72,8 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/team" element={<TeamPage />} />
           <Route path="/services" element={<ServicesPage />} />
+          <Route path="/media" element={<MediaPage />} />
+          <Route path="/media-division" element={<MediaPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />

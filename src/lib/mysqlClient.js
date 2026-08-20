@@ -40,7 +40,10 @@ export const upsertItemToMySql = async (table, item) => {
       body: JSON.stringify(item)
     });
     const data = await res.json();
-    return data.success;
+    if (!res.ok || !data.success) {
+      console.error(`[MySQL API] Upsert to '${table}' failed:`, data?.message || res.statusText);
+    }
+    return data?.success || false;
   } catch (err) {
     console.error(`[MySQL API] Error upserting to '${table}':`, err);
     return false;

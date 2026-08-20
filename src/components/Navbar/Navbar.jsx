@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Link as ScrollLink } from 'react-scroll';
 import { Link as RouterLink, useLocation, useNavigate } from 'react-router-dom';
 import { FiMenu, FiX, FiArrowUpRight } from 'react-icons/fi';
+import { useCMS } from '../../context/CMSContext';
 import './Navbar.css';
 
-export const InnoveityBrandLogo = ({ size = 28, showText = true }) => {
+export const InnoveityBrandLogo = ({ size = 28, showText = true, subTextOverride }) => {
+  const cms = useCMS ? useCMS() : null;
+  const brandSub = subTextOverride || cms?.headerFooterSettings?.brandSubTitle || 'TECH SOLUTIONS';
   const subFontSize = `${Math.max(0.5, size * 0.021)}rem`;
-  const subPadding = `${Math.max(22, size * 1.15)}px`;
+  const subPadding = `${Math.max(22, size * 1.35)}px`;
 
   return (
     <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
       <img
-        src="/logo-transparent.png"
+        src="/Innoveity.png"
         alt="Innoveity Tech Logo"
         style={{
           height: `${size}px`,
@@ -21,7 +24,7 @@ export const InnoveityBrandLogo = ({ size = 28, showText = true }) => {
         }}
         onError={(e) => {
           e.target.onerror = null;
-          e.target.src = '/Innoveity.png';
+          e.target.src = '/logo-transparent.png';
         }}
       />
       {showText && (
@@ -36,7 +39,7 @@ export const InnoveityBrandLogo = ({ size = 28, showText = true }) => {
           textTransform: 'uppercase',
           lineHeight: 1
         }}>
-          TECH SOLUTIONS
+          {brandSub}
         </span>
       )}
     </div>
@@ -48,6 +51,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { headerFooterSettings } = useCMS();
   const isHome = location.pathname === '/';
 
   useEffect(() => {
@@ -63,13 +67,17 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
+  const defaultNavLinks = [
     { name: 'Home', to: 'home', isPage: false },
     { name: 'About Us', to: '/about', isPage: true },
     { name: 'Projects', to: '/projects', isPage: true },
     { name: 'Services', to: '/services', isPage: true },
+    { name: 'Media Division', to: '/media', isPage: true },
     { name: 'Our Team', to: '/team', isPage: true },
   ];
+
+  const navLinks = headerFooterSettings?.navLinks || defaultNavLinks;
+  const contactBtnText = headerFooterSettings?.contactBtnText || 'CONTACT US';
 
   const handleNavClick = (link) => {
     setIsMobileMenuOpen(false);
@@ -103,11 +111,11 @@ const Navbar = () => {
         <div className="navbar-brand">
           {isHome ? (
             <ScrollLink to="home" smooth={true} duration={500} className="brand-link">
-              <InnoveityBrandLogo size={20} showText={true} />
+              <InnoveityBrandLogo size={38} showText={true} />
             </ScrollLink>
           ) : (
             <RouterLink to="/" className="brand-link">
-              <InnoveityBrandLogo size={20} showText={true} />
+              <InnoveityBrandLogo size={38} showText={true} />
             </RouterLink>
           )}
         </div>
@@ -144,7 +152,7 @@ const Navbar = () => {
         {/* Right Action Button */}
         <div className="navbar-actions">
           <button className="pill-btn-contact" onClick={handleContactClick}>
-            <span>CONTACT US</span>
+            <span>{contactBtnText}</span>
             <div className="arrow-circle">
               <FiArrowUpRight size={14} />
             </div>

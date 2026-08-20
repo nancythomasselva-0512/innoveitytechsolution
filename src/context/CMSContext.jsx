@@ -12,49 +12,49 @@ const CMSContext = createContext();
 export const useCMS = () => useContext(CMSContext);
 
 export const CMSProvider = ({ children }) => {
-  // Default Initial Data
+  // Default Initial Data (Using AI-Generated High Resolution Renders)
   const defaultProjects = [
     {
       id: 1,
-      title: 'Fluentia AI Language Platform',
-      category: 'AI Language Platform',
+      title: 'AI Neural Engine',
+      category: 'Artificial Intelligence',
       description: 'Experience high-performance, local client-side AI language processing and dynamic contextual learning within an intuitive web platform.',
-      image: '/fluentia.png',
+      image: '/tech_blog_featured.png',
     },
     {
       id: 2,
-      title: 'BioMed Summit',
-      category: 'Medical Conference Website',
-      description: 'A fully responsive and user-friendly medical conference platform designed to handle registrations, scheduling, and speaker profiles.',
-      image: '/BioMed.png',
+      title: 'Cloud Data Core',
+      category: 'Data Infrastructure',
+      description: 'A fully responsive and scalable data center telemetry platform designed for high-availability enterprise cloud workloads.',
+      image: '/tech_blog_3.png',
     },
     {
       id: 3,
-      title: 'Formbuilder SaaS',
-      category: 'Form Building Tool',
+      title: 'SaaS Workspace',
+      category: 'Enterprise Software',
       description: 'A robust SaaS solution that allows users to create, manage, and analyze custom forms with advanced conditional logic.',
-      image: '/Formbuilder.png',
+      image: '/service_software.png',
     },
     {
       id: 4,
-      title: 'Frankloo App',
-      category: 'Mobile App (Concept)',
+      title: 'Mobile Suite',
+      category: 'Mobile App Engineering',
       description: 'A modern, accessible mobile application concept tailored for specialized service bookings and real-time tracking.',
-      image: '/Frankloo.png',
+      image: '/service_mobile.png',
     },
     {
       id: 5,
-      title: 'IGH Educational Platform',
-      category: 'E-Learning Portal',
+      title: 'EduStream Hub',
+      category: 'E-Learning Platform',
       description: 'An interactive, feature-rich e-learning platform connecting students and educators with secure video streaming and material distribution.',
-      image: '/IGH.png',
+      image: '/service_web.png',
     },
     {
       id: 6,
-      title: 'Innoveity Corporate Site',
-      category: 'Corporate Website',
+      title: 'Core Systems',
+      category: 'Digital Transformation',
       description: 'The official corporate presence for Innoveity Tech Solution, showcasing our engineering capabilities, team, and services.',
-      image: '/Innoveity.png',
+      image: '/service_cloud.png',
     },
   ];
 
@@ -135,8 +135,8 @@ export const CMSProvider = ({ children }) => {
   };
 
   const defaultContact = {
-    email: 'aachinancy@gmail.com',
-    phone: '+91 7904327211',
+    email: 'innoveitytech@gmail.com',
+    phone: '+91 0908765432',
     address: 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'
   };
 
@@ -280,6 +280,86 @@ export const CMSProvider = ({ children }) => {
     seo: [{ id: 1, label: 'Schema Markup Type', value: 'Organization / LocalBusiness' }]
   };
 
+  const defaultMediaContent = {
+    hero: {
+      badge: 'INNOVEITY MEDIA',
+      subBadge: 'Creative. Strategic. Data-Driven.',
+      title: 'MEDIA DIVISION',
+      tagline1: 'Creative Stories.',
+      tagline2: 'Powerful Visuals.',
+      tagline3: 'Digital Growth.',
+      description: 'Our Media Division brings together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.',
+      bgImage: '/media_hero_bg.png'
+    },
+    deckCards: [
+      { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', image: '/deck_arch_gold.png' },
+      { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', image: '/deck_lifestyle.png' },
+      { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', image: '/deck_green_chair.png' },
+      { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', image: '/deck_fashion.png' },
+      { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'Product Commercial', image: '/deck_product.png' }
+    ],
+    services: [
+      { num: '01', title: 'Social Media Management', desc: 'Strategic management of your social media presence with consistent, engaging and brand-focused content.', tag: 'Brand Growth' },
+      { num: '02', title: 'Content Creation', desc: 'Creative content designed around your brand, audience and business objectives.', tag: 'Creative Craft' },
+      { num: '03', title: 'Reels & Short-Form Videos', desc: 'High-quality reels and short-form videos built for attention, engagement and reach.', tag: 'Viral Reach' },
+      { num: '04', title: 'Creative Design', desc: 'Premium visual creatives for campaigns, promotions, announcements and digital platforms.', tag: 'Visual Identity' },
+      { num: '05', title: 'Video Production', desc: 'Professional video production for brands, products, events, campaigns and corporate communication.', tag: 'Cinematic Excellence' },
+      { num: '06', title: 'Photography', desc: 'Product, corporate, event and promotional photography with a focus on strong visual storytelling.', tag: 'Storytelling' },
+      { num: '07', title: 'Performance Marketing', desc: 'Targeted digital advertising designed to reach the right audience and support measurable business growth.', tag: 'Data Driven' },
+      { num: '08', title: 'SEO', desc: "Search engine optimization customized according to each client's business, industry, competition and objectives.", tag: 'Organic Growth' }
+    ],
+    capabilities: [
+      { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', quote: 'High-quality visual production using professional camera systems and production equipment.', badge: '★ 4.9/5 • 8K RED & ARRI Cinema Systems', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cameraman-setting-up-a-camera-42861-large.mp4', poster: '/cap_camera_prod.png' },
+      { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', quote: 'From brand films to promotional content, we create visually engaging stories built around your message.', badge: '★ 5.0/5 • Anamorphic Commercial Films', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-filmmaker-with-a-camera-on-a-tripod-42862-large.mp4', poster: '/cap_cinematic_vid.png' },
+      { id: 'gimbal-motion', title: 'GIMBAL & MOTION', quote: 'Smooth, dynamic camera movements for reels, advertisements, events and cinematic brand content.', badge: '★ 4.9/5 • 3-Axis Stabilized Motion', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cameraman-filming-an-actor-with-a-stabilizer-42864-large.mp4', poster: '/cap_gimbal_motion.png' },
+      { id: 'aerial-content', title: 'AERIAL CONTENT', quote: 'Drone-based visuals for locations, events, real estate, institutions, hospitality and brand campaigns.', badge: '★ 5.0/5 • 4K Drone Cinematography', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-city-at-sunset-41584-large.mp4', poster: '/cap_aerial_drone.png' },
+      { id: 'post-production', title: 'POST-PRODUCTION', quote: 'Professional editing, colour correction, sound design, motion graphics and final delivery optimized for each platform.', badge: '★ 4.9/5 • Color Grading & Motion FX', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-video-editing-software-timeline-43343-large.mp4', poster: '/cap_post_production.png' }
+    ],
+    whyChooseUs: [
+      { title: 'Creative First', desc: 'Ideas that make your brand stand out.' },
+      { title: 'Quality Driven', desc: 'Professional production and attention to detail.' },
+      { title: 'Strategy Led', desc: 'Every piece of content has a purpose.' },
+      { title: 'Performance Focused', desc: 'We create content with business results in mind.' },
+      { title: 'End-to-End Execution', desc: 'From concept and production to publishing and optimization.' }
+    ],
+    audienceTypes: ['Brands', 'Businesses', 'Startups', 'Institutions', 'Events', 'Products', 'Personal Brands'],
+    cta: {
+      brandTag: 'INNOVEITY MEDIA',
+      heading: "LET'S CREATE SOMETHING THAT MOVES",
+      subheadingLine1: 'Your brand has a story.',
+      subheadingLine2: "Let's tell it better.",
+      badges: 'Creative • Strategic • Data-Driven',
+      btnText: 'START YOUR MEDIA PROJECT'
+    }
+  };
+
+  const defaultHeaderFooterSettings = {
+    brandSubTitle: 'TECH SOLUTIONS',
+    contactBtnText: 'CONTACT US',
+    navLinks: [
+      { id: 1, name: 'Home', to: 'home', isPage: false },
+      { id: 2, name: 'About Us', to: '/about', isPage: true },
+      { id: 3, name: 'Projects', to: '/projects', isPage: true },
+      { id: 4, name: 'Services', to: '/services', isPage: true },
+      { id: 5, name: 'Media Division', to: '/media', isPage: true },
+      { id: 6, name: 'Our Team', to: '/team', isPage: true }
+    ],
+    operatingCompany: 'Operated by Innoveity Tech Solution Ltd.',
+    address: 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059',
+    phone: '+91 0908765432',
+    email: 'innoveitytech@gmail.com',
+    hours: 'Mon - Fri, 9:00 AM - 6:00 PM',
+    twitterUrl: 'https://x.com/innoveitytech',
+    instagramUrl: 'https://instagram.com/innoveitytech',
+    facebookUrl: 'https://facebook.com/innoveitytech',
+    linkedinUrl: 'https://linkedin.com/company/innoveitytech',
+    ctaBadge: 'SMART, SCALABLE',
+    ctaTitle: 'Ready To Begin Building Digital Future Securely?',
+    ctaPrimaryBtnText: 'Get Started',
+    ctaSecondaryBtnText: 'See Technology Options',
+    copyrightText: '© 2026 Innoveity Tech Solution. All rights reserved.'
+  };
+
   const defaultAdminAccounts = [
     {
       id: 1,
@@ -323,28 +403,62 @@ export const CMSProvider = ({ children }) => {
     }
   };
 
+  // LocalStorage Persistence Helpers
+  const loadLocalState = (key, fallback) => {
+    try {
+      const saved = localStorage.getItem(`cms_${key}_v2`);
+      return saved ? JSON.parse(saved) : fallback;
+    } catch (e) {
+      return fallback;
+    }
+  };
+
+  const saveLocalState = (key, value) => {
+    try {
+      localStorage.setItem(`cms_${key}_v2`, JSON.stringify(value));
+      localStorage.setItem('cms_has_local_edits_v2', 'true');
+    } catch (e) {
+      console.warn(`[LocalStorage] Error saving ${key}:`, e);
+    }
+  };
+
   // Database Connection Status ('connected' | 'connecting' | 'fallback')
   const [dbStatus, setDbStatus] = useState(() => isMySqlConfigured() ? 'connecting' : 'fallback');
 
-  // Primary CMS State (Directly populated from MySQL Database)
-  const [projects, setProjects] = useState(defaultProjects);
-  const [team, setTeam] = useState(defaultTeam);
-  const [teamHeaderContent, setTeamHeaderContent] = useState(defaultTeamHeaderContent);
-  const [contact, setContact] = useState(defaultContact);
-  const [homeContent, setHomeContent] = useState(defaultHomeContent);
-  const [aboutContent, setAboutContent] = useState(defaultAboutContent);
-  const [showcaseHeader, setShowcaseHeader] = useState(defaultShowcaseHeader);
-  const [showcaseProjects, setShowcaseProjects] = useState(defaultShowcaseProjects);
-  const [seoSettings, setSeoSettings] = useState(defaultSeoSettings);
-  const [pageSeoSettings, setPageSeoSettings] = useState(defaultPageSeoSettings);
-  const [customFields, setCustomFields] = useState(defaultCustomFields);
-  const [adminUsers, setAdminUsers] = useState(defaultAdminAccounts);
+  // Primary CMS State (Directly populated from LocalStorage & MySQL Database)
+  const [projects, setProjects] = useState(() => loadLocalState('projects', defaultProjects));
+  const [team, setTeam] = useState(() => loadLocalState('team', defaultTeam));
+  const [teamHeaderContent, setTeamHeaderContent] = useState(() => loadLocalState('team_header', defaultTeamHeaderContent));
+  const [contact, setContact] = useState(() => loadLocalState('contact', defaultContact));
+  const [homeContent, setHomeContent] = useState(() => loadLocalState('home_content', defaultHomeContent));
+  const [aboutContent, setAboutContent] = useState(() => loadLocalState('about_content', defaultAboutContent));
+  const [mediaContent, setMediaContent] = useState(() => loadLocalState('media_content', defaultMediaContent));
+  const [showcaseHeader, setShowcaseHeader] = useState(() => loadLocalState('showcase_header', defaultShowcaseHeader));
+  const [showcaseProjects, setShowcaseProjects] = useState(() => loadLocalState('showcase_projects', defaultShowcaseProjects));
+  const [seoSettings, setSeoSettings] = useState(() => loadLocalState('seo_settings', defaultSeoSettings));
+  const [pageSeoSettings, setPageSeoSettings] = useState(() => loadLocalState('page_seo_settings', defaultPageSeoSettings));
+  const [customFields, setCustomFields] = useState(() => loadLocalState('custom_fields', defaultCustomFields));
+  const [headerFooterSettings, setHeaderFooterSettings] = useState(() => loadLocalState('header_footer', defaultHeaderFooterSettings));
+  const [adminUsers, setAdminUsers] = useState(() => loadLocalState('admin_users', defaultAdminAccounts));
 
-  // Transient Admin Session
-  const [currentUser, setCurrentUser] = useState(() => {
-    const saved = sessionStorage.getItem('cms_session_sec_v1');
-    return saved ? decryptData(saved, null) : null;
-  });
+  // Auto-persist all CMS state to LocalStorage
+  useEffect(() => { saveLocalState('projects', projects); }, [projects]);
+  useEffect(() => { saveLocalState('team', team); }, [team]);
+  useEffect(() => { saveLocalState('team_header', teamHeaderContent); }, [teamHeaderContent]);
+  useEffect(() => { saveLocalState('contact', contact); }, [contact]);
+  useEffect(() => { saveLocalState('home_content', homeContent); }, [homeContent]);
+  useEffect(() => { saveLocalState('about_content', aboutContent); }, [aboutContent]);
+  useEffect(() => { saveLocalState('media_content', mediaContent); }, [mediaContent]);
+  useEffect(() => { saveLocalState('showcase_header', showcaseHeader); }, [showcaseHeader]);
+  useEffect(() => { saveLocalState('showcase_projects', showcaseProjects); }, [showcaseProjects]);
+  useEffect(() => { saveLocalState('seo_settings', seoSettings); }, [seoSettings]);
+  useEffect(() => { saveLocalState('page_seo_settings', pageSeoSettings); }, [pageSeoSettings]);
+  useEffect(() => { saveLocalState('custom_fields', customFields); }, [customFields]);
+  useEffect(() => { saveLocalState('header_footer', headerFooterSettings); }, [headerFooterSettings]);
+  useEffect(() => { saveLocalState('admin_users', adminUsers); }, [adminUsers]);
+
+  // Transient Admin Session (Starts null so /admin always prompts login)
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     if (currentUser) sessionStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
@@ -355,6 +469,13 @@ export const CMSProvider = ({ children }) => {
   const fetchLatestFromMySql = useCallback(async () => {
     if (!isMySqlConfigured()) {
       setDbStatus('fallback');
+      return;
+    }
+
+    // Protect local user modifications from being overwritten by 3-second background polling
+    const hasLocalEdits = localStorage.getItem('cms_has_local_edits_v2') === 'true';
+    if (hasLocalEdits) {
+      setDbStatus('connected');
       return;
     }
 
@@ -376,9 +497,11 @@ export const CMSProvider = ({ children }) => {
       if (s.contact) setContact(s.contact);
       if (s.home_content) setHomeContent(s.home_content);
       if (s.about_content) setAboutContent(s.about_content);
+      if (s.media_content) setMediaContent(s.media_content);
       if (s.seo_settings) setSeoSettings(s.seo_settings);
       if (s.page_seo_settings) setPageSeoSettings(s.page_seo_settings);
       if (s.custom_fields) setCustomFields(s.custom_fields);
+      if (s.header_footer_settings) setHeaderFooterSettings(s.header_footer_settings);
 
       setDbStatus('connected');
     } catch (err) {
@@ -423,9 +546,11 @@ export const CMSProvider = ({ children }) => {
       await saveCmsSettingToMySql('contact', contact);
       await saveCmsSettingToMySql('home_content', homeContent);
       await saveCmsSettingToMySql('about_content', aboutContent);
+      await saveCmsSettingToMySql('media_content', mediaContent);
       await saveCmsSettingToMySql('seo_settings', seoSettings);
       await saveCmsSettingToMySql('page_seo_settings', pageSeoSettings);
       await saveCmsSettingToMySql('custom_fields', customFields);
+      await saveCmsSettingToMySql('header_footer_settings', headerFooterSettings);
 
       setDbStatus('connected');
       alert('Successfully seeded all website data to MySQL Database! Live sync active across all devices.');
@@ -543,7 +668,16 @@ export const CMSProvider = ({ children }) => {
 
   const updateContact = async (updatedContact) => {
     setContact(updatedContact);
+    const updatedHF = {
+      ...headerFooterSettings,
+      phone: updatedContact.phone || headerFooterSettings.phone,
+      email: updatedContact.email || headerFooterSettings.email,
+      address: updatedContact.address || headerFooterSettings.address,
+      hours: updatedContact.hours || headerFooterSettings.hours,
+    };
+    setHeaderFooterSettings(updatedHF);
     await saveCmsSettingToMySql('contact', updatedContact);
+    await saveCmsSettingToMySql('header_footer_settings', updatedHF);
   };
 
   const updateHomeContent = async (newContent) => {
@@ -556,9 +690,32 @@ export const CMSProvider = ({ children }) => {
     await saveCmsSettingToMySql('about_content', newContent);
   };
 
+  const updateMediaContent = async (newMedia) => {
+    const updated = { ...mediaContent, ...newMedia };
+    setMediaContent(updated);
+    await saveCmsSettingToMySql('media_content', updated);
+  };
+
   const updateSeoSettings = async (newSeo) => {
     setSeoSettings(newSeo);
     await saveCmsSettingToMySql('seo_settings', newSeo);
+  };
+
+  const updateHeaderFooterSettings = async (newSettings) => {
+    const updatedHF = { ...headerFooterSettings, ...newSettings };
+    setHeaderFooterSettings(updatedHF);
+
+    const updatedContact = {
+      ...contact,
+      phone: newSettings.phone || contact.phone,
+      email: newSettings.email || contact.email,
+      address: newSettings.address || contact.address,
+      hours: newSettings.hours || contact.hours,
+    };
+    setContact(updatedContact);
+
+    await saveCmsSettingToMySql('header_footer_settings', updatedHF);
+    await saveCmsSettingToMySql('contact', updatedContact);
   };
 
   const updatePageSeoSettings = async (pageKey, newPageSeo) => {
@@ -650,6 +807,7 @@ export const CMSProvider = ({ children }) => {
   };
 
   const clearAllCmsCache = () => {
+    localStorage.clear();
     setProjects(defaultProjects);
     setShowcaseHeader(defaultShowcaseHeader);
     setShowcaseProjects(defaultShowcaseProjects);
@@ -658,9 +816,11 @@ export const CMSProvider = ({ children }) => {
     setContact(defaultContact);
     setHomeContent(defaultHomeContent);
     setAboutContent(defaultAboutContent);
+    setMediaContent(defaultMediaContent);
     setSeoSettings(defaultSeoSettings);
     setPageSeoSettings(defaultPageSeoSettings);
     setCustomFields({});
+    setHeaderFooterSettings(defaultHeaderFooterSettings);
 
     return true;
   };
@@ -678,7 +838,9 @@ export const CMSProvider = ({ children }) => {
       contact, updateContact,
       homeContent, updateHomeContent,
       aboutContent, updateAboutContent,
+      mediaContent, updateMediaContent,
       seoSettings, updateSeoSettings,
+      headerFooterSettings, updateHeaderFooterSettings,
       pageSeoSettings, updatePageSeoSettings,
       customFields, addCustomField, deleteCustomField,
       adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,

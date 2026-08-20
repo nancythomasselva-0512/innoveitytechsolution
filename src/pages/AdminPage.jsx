@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { 
+import {
   FiHome, FiFolder, FiUsers, FiFileText, FiPhone, FiInfo, FiDatabase,
-  FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink, FiCalendar, FiClock, FiVideo,
-  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown
+  FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
+  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown, FiLayout
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
@@ -43,7 +43,7 @@ const AdminPage = () => {
     return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const { 
+  const {
     projects, addProject, updateProject, deleteProject,
     showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
     showcaseHeader, updateShowcaseHeader,
@@ -51,6 +51,8 @@ const AdminPage = () => {
     teamHeaderContent, updateTeamHeaderContent,
     contact, updateContact,
     homeContent, updateHomeContent,
+    mediaContent, updateMediaContent,
+    headerFooterSettings, updateHeaderFooterSettings,
     adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache
   } = useCMS();
 
@@ -59,6 +61,68 @@ const AdminPage = () => {
   const handleLogout = () => {
     logoutAdmin();
     navigate('/admin/login');
+  };
+
+  const [editHeaderFooter, setEditHeaderFooter] = useState(headerFooterSettings || {});
+  const [newNavLink, setNewNavLink] = useState({ name: '', to: '', isPage: true });
+
+  useEffect(() => {
+    if (headerFooterSettings) setEditHeaderFooter(headerFooterSettings);
+  }, [headerFooterSettings]);
+
+  const handleSaveHeaderFooter = (e) => {
+    e.preventDefault();
+    if (updateHeaderFooterSettings) {
+      updateHeaderFooterSettings(editHeaderFooter);
+      triggerNotification('Header & Footer configuration saved successfully!');
+    }
+  };
+
+  const handleAddNavLink = (e) => {
+    e.preventDefault();
+    if (!newNavLink.name || !newNavLink.to) return;
+    const currentLinks = editHeaderFooter.navLinks || [];
+    const updatedLinks = [...currentLinks, { id: Date.now(), ...newNavLink }];
+    const updatedObj = { ...editHeaderFooter, navLinks: updatedLinks };
+    setEditHeaderFooter(updatedObj);
+    if (updateHeaderFooterSettings) {
+      updateHeaderFooterSettings(updatedObj);
+      triggerNotification(`Added navigation link "${newNavLink.name}"`);
+    }
+    setNewNavLink({ name: '', to: '', isPage: true });
+  };
+
+  const handleDeleteNavLink = (index) => {
+    const currentLinks = [...(editHeaderFooter.navLinks || [])];
+    currentLinks.splice(index, 1);
+    const updatedObj = { ...editHeaderFooter, navLinks: currentLinks };
+    setEditHeaderFooter(updatedObj);
+    if (updateHeaderFooterSettings) {
+      updateHeaderFooterSettings(updatedObj);
+      triggerNotification('Removed navigation item');
+    }
+  };
+
+  const moveNavLinkUp = (index) => {
+    if (index <= 0) return;
+    const links = [...(editHeaderFooter.navLinks || [])];
+    const temp = links[index - 1];
+    links[index - 1] = links[index];
+    links[index] = temp;
+    const updatedObj = { ...editHeaderFooter, navLinks: links };
+    setEditHeaderFooter(updatedObj);
+    if (updateHeaderFooterSettings) updateHeaderFooterSettings(updatedObj);
+  };
+
+  const moveNavLinkDown = (index) => {
+    const links = [...(editHeaderFooter.navLinks || [])];
+    if (index >= links.length - 1) return;
+    const temp = links[index + 1];
+    links[index + 1] = links[index];
+    links[index] = temp;
+    const updatedObj = { ...editHeaderFooter, navLinks: links };
+    setEditHeaderFooter(updatedObj);
+    if (updateHeaderFooterSettings) updateHeaderFooterSettings(updatedObj);
   };
 
   // Add User Form State
@@ -159,14 +223,59 @@ const AdminPage = () => {
     setTimeout(() => setNotification(''), 4000);
   };
 
+  const compressAndSetImage = (file, callback) => {
+    if (!file) return;
+
+    if (file.size > 15 * 1024 * 1024) {
+      alert('File size is over 15MB. Please choose an image file under 15MB.');
+      return;
+    }
+
+    if (file.size < 60 * 1024) {
+      const reader = new FileReader();
+      reader.onloadend = () => callback(reader.result);
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const maxDimension = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const compressed = canvas.toDataURL('image/jpeg', 0.88);
+        callback(compressed);
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleImageUpload = (e, setter, stateObj) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setter({ ...stateObj, image: reader.result });
-      };
-      reader.readAsDataURL(file);
+      compressAndSetImage(file, (compressedResult) => {
+        setter({ ...stateObj, image: compressedResult });
+      });
     }
   };
 
@@ -201,11 +310,11 @@ const AdminPage = () => {
 
   const handleStartEditTeam = (m) => {
     setEditingTeamId(m.id);
-    setEditTeamData({ 
-      name: m.name, 
-      role: m.role, 
+    setEditTeamData({
+      name: m.name,
+      role: m.role,
       category: m.category || (m.role?.toLowerCase().includes('founder') || m.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member'),
-      image: m.image 
+      image: m.image
     });
   };
 
@@ -300,8 +409,8 @@ const AdminPage = () => {
             <form onSubmit={handleSaveEditShowcase} className="dash-form-grid">
               <div className="dash-field-group">
                 <label className="dash-label">Category Tag / Badge</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   placeholder="e.g. Web Engineering"
                   value={editShowcaseData.tag}
@@ -312,8 +421,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group">
                 <label className="dash-label">Project Title</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   placeholder="e.g. Eclipse Studio"
                   value={editShowcaseData.title}
@@ -324,8 +433,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Subtitle / Tagline</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   placeholder="e.g. Creative Brand & Digital Experience"
                   value={editShowcaseData.subtitle}
@@ -336,7 +445,7 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Description</label>
-                <textarea 
+                <textarea
                   className="dash-input-styled"
                   style={{ height: '90px' }}
                   value={editShowcaseData.description}
@@ -347,8 +456,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Tech Stack (Comma Separated)</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   placeholder="e.g. Next.js, Framer Motion, Tailwind, WebGL"
                   value={editShowcaseData.tech}
@@ -358,8 +467,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Upload New Card Image (Optional)</label>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   accept="image/*"
                   className="dash-input-styled"
                   onChange={(e) => handleImageUpload(e, setEditShowcaseData, editShowcaseData)}
@@ -393,8 +502,8 @@ const AdminPage = () => {
             <form onSubmit={handleSaveEditProject} className="dash-form-grid">
               <div className="dash-field-group full-width">
                 <label className="dash-label">Project Title</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   value={editProjectData.title}
                   onChange={(e) => setEditProjectData({ ...editProjectData, title: e.target.value })}
@@ -404,7 +513,7 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Category</label>
-                <select 
+                <select
                   className="dash-input-styled"
                   value={editProjectData.category}
                   onChange={(e) => setEditProjectData({ ...editProjectData, category: e.target.value })}
@@ -423,7 +532,7 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Description</label>
-                <textarea 
+                <textarea
                   className="dash-input-styled"
                   style={{ height: '90px' }}
                   value={editProjectData.description}
@@ -434,8 +543,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Upload New Image (Optional)</label>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   accept="image/*"
                   className="dash-input-styled"
                   onChange={(e) => handleImageUpload(e, setEditProjectData, editProjectData)}
@@ -469,8 +578,8 @@ const AdminPage = () => {
             <form onSubmit={handleSaveEditTeam} className="dash-form-grid">
               <div className="dash-field-group full-width">
                 <label className="dash-label">Member Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   value={editTeamData.name}
                   onChange={(e) => setEditTeamData({ ...editTeamData, name: e.target.value })}
@@ -480,8 +589,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Role / Position</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="dash-input-styled"
                   value={editTeamData.role}
                   onChange={(e) => setEditTeamData({ ...editTeamData, role: e.target.value })}
@@ -491,7 +600,7 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Category / Position Tier</label>
-                <select 
+                <select
                   className="dash-input-styled"
                   value={editTeamData.category}
                   onChange={(e) => setEditTeamData({ ...editTeamData, category: e.target.value })}
@@ -503,8 +612,8 @@ const AdminPage = () => {
 
               <div className="dash-field-group full-width">
                 <label className="dash-label">Profile Picture (Optional)</label>
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   accept="image/*"
                   className="dash-input-styled"
                   onChange={(e) => handleImageUpload(e, setEditTeamData, editTeamData)}
@@ -526,10 +635,10 @@ const AdminPage = () => {
           </div>
         </div>
       )}
-      
+
       {/* VERTICAL SIDEBAR MENU */}
       <aside className={`dash-vertical-sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
-        
+
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
@@ -559,8 +668,8 @@ const AdminPage = () => {
         {/* Vertical Navigation Items */}
         <nav className="sidebar-nav-menu">
           <span className="nav-section-title">Admin Operations</span>
-          
-          <button 
+
+          <button
             className={`nav-item-btn ${activeTab === 'overview' ? 'active' : ''}`}
             onClick={() => setActiveTab('overview')}
           >
@@ -568,7 +677,7 @@ const AdminPage = () => {
             <span className="nav-label">Overview</span>
           </button>
 
-          <button 
+          <button
             className={`nav-item-btn ${activeTab === 'users' ? 'active' : ''}`}
             onClick={() => setActiveTab('users')}
           >
@@ -577,7 +686,7 @@ const AdminPage = () => {
             <span className="nav-badge">{users.length}</span>
           </button>
 
-          <button 
+          <button
             className={`nav-item-btn ${activeTab === 'projects' ? 'active' : ''}`}
             onClick={() => setActiveTab('projects')}
           >
@@ -586,7 +695,7 @@ const AdminPage = () => {
             <span className="nav-badge">{projects ? projects.length : 0}</span>
           </button>
 
-          <button 
+          <button
             className={`nav-item-btn ${activeTab === 'team' ? 'active' : ''}`}
             onClick={() => setActiveTab('team')}
           >
@@ -595,18 +704,26 @@ const AdminPage = () => {
             <span className="nav-badge">{team ? team.length : 0}</span>
           </button>
 
-          <button 
+          <button
             className={`nav-item-btn ${activeTab === 'contact' ? 'active' : ''}`}
             onClick={() => setActiveTab('contact')}
           >
             <span className="nav-icon"><FiPhone /></span>
             <span className="nav-label">Contact Inquiries</span>
           </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'header_footer' ? 'active' : ''}`}
+            onClick={() => setActiveTab('header_footer')}
+          >
+            <span className="nav-icon"><FiLayers /></span>
+            <span className="nav-label">Header & Footer</span>
+          </button>
         </nav>
 
         {/* Sidebar Footer Link */}
         <div className="sidebar-footer-box" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <button 
+          <button
             onClick={handleLogout}
             className="logout-nav-btn"
             style={{ width: '100%', background: '#fef2f2', color: '#ef4444', borderColor: '#fecaca', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', padding: '10px', borderRadius: '12px', border: '1px solid #fecaca', fontWeight: 700 }}
@@ -618,7 +735,7 @@ const AdminPage = () => {
 
       {/* MAIN WORKSPACE AREA */}
       <div className="dash-main-area">
-        
+
         {/* TOP HEADER */}
         <header className="dash-top-header">
           <div className="dash-header-title">
@@ -628,6 +745,7 @@ const AdminPage = () => {
               {activeTab === 'projects' && 'Projects Portfolio Operations'}
               {activeTab === 'team' && 'Team Roster Directory'}
               {activeTab === 'contact' && 'Contact Form Inquiries & Settings'}
+              {activeTab === 'header_footer' && 'Header, Footer & Navigation Settings'}
             </h1>
             <p>Admin Workspace • Synchronized live with CMS.</p>
           </div>
@@ -641,17 +759,17 @@ const AdminPage = () => {
 
             <div className="dash-search-pill">
               <FiSearch />
-              <input 
-                type="text" 
-                placeholder="Search..." 
+              <input
+                type="text"
+                placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
 
-            <button 
-              className="btn-live-preview" 
-              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer' }}
+            <button
+              className="btn-live-preview"
+              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => {
                 if (window.confirm('Are you sure you want to clear all system & CMS cache? This will reset all CMS cache storage.')) {
                   clearAllCmsCache();
@@ -667,7 +785,7 @@ const AdminPage = () => {
               <FiSettings />
             </Link>
 
-            <Link to="/" className="btn-live-preview" target="_blank">
+            <Link to="/" className="btn-live-preview" target="_blank" style={{ whiteSpace: 'nowrap' }}>
               Live Preview <FiExternalLink />
             </Link>
           </div>
@@ -718,15 +836,15 @@ const AdminPage = () => {
                 <div className="pos-card-header" style={{ marginBottom: '4px' }}>
                   <h4 className="donezo-card-title" style={{ margin: 0 }}>Project Analytics</h4>
                   <div className="pos-toggle-pills">
-                    <button 
-                      className={`pos-toggle-btn ${analyticsTimeframe === 'weekly' ? 'active' : ''}`} 
+                    <button
+                      className={`pos-toggle-btn ${analyticsTimeframe === 'weekly' ? 'active' : ''}`}
                       style={{ fontSize: '0.72rem', padding: '2px 8px', cursor: 'pointer' }}
                       onClick={() => setAnalyticsTimeframe('weekly')}
                     >
                       Weekly
                     </button>
-                    <button 
-                      className={`pos-toggle-btn ${analyticsTimeframe === 'monthly' ? 'active' : ''}`} 
+                    <button
+                      className={`pos-toggle-btn ${analyticsTimeframe === 'monthly' ? 'active' : ''}`}
                       style={{ fontSize: '0.72rem', padding: '2px 8px', cursor: 'pointer' }}
                       onClick={() => setAnalyticsTimeframe('monthly')}
                     >
@@ -737,7 +855,7 @@ const AdminPage = () => {
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
                   <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#0d3b34' }}>
-                    {analyticsTimeframe === 'weekly' 
+                    {analyticsTimeframe === 'weekly'
                       ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
                       : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
                     }
@@ -820,7 +938,7 @@ const AdminPage = () => {
                   <h4 className="donezo-card-title" style={{ margin: 0 }}>System Notifications</h4>
                   <span className="pos-stat-pill" style={{ fontSize: '0.7rem' }}>Live</span>
                 </div>
-                
+
                 <div>
                   <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#093c25', marginBottom: '4px' }}>
                     CMS Synchronization Active
@@ -843,9 +961,9 @@ const AdminPage = () => {
                   </div>
                 </div>
 
-                <button 
-                  className="action-pill-btn primary-pill" 
-                  style={{ width: '100%', justifyContent: 'center', background: '#093c25', color: '#ffffff', fontWeight: 800, padding: '10px' }} 
+                <button
+                  className="action-pill-btn primary-pill"
+                  style={{ width: '100%', justifyContent: 'center', background: '#093c25', color: '#ffffff', fontWeight: 800, padding: '10px' }}
                   onClick={() => setActiveTab('projects')}
                 >
                   ⚡ Manage Content
@@ -943,7 +1061,7 @@ const AdminPage = () => {
               {/* CARD 2: PROJECT PROGRESS */}
               <div className="donezo-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <h4 className="donezo-card-title" style={{ margin: 0 }}>Project Progress</h4>
-                
+
                 {(() => {
                   const totalP = projects ? projects.length : 0;
                   const doneP = projects ? projects.filter(p => p.image).length : 0;
@@ -960,13 +1078,13 @@ const AdminPage = () => {
                             </linearGradient>
                           </defs>
                           <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
-                          <circle 
-                            cx="70" cy="70" r="54" 
-                            fill="none" 
-                            stroke="url(#adminRingGrad)" 
-                            strokeWidth="10" 
+                          <circle
+                            cx="70" cy="70" r="54"
+                            fill="none"
+                            stroke="url(#adminRingGrad)"
+                            strokeWidth="10"
                             strokeDasharray="339.29"
-                            strokeDashoffset={dashOffset} 
+                            strokeDashoffset={dashOffset}
                             strokeLinecap="round"
                             transform="rotate(-90 70 70)"
                           />
@@ -1000,8 +1118,8 @@ const AdminPage = () => {
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  <button 
-                    onClick={() => setActiveTab('projects')} 
+                  <button
+                    onClick={() => setActiveTab('projects')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#d1fae5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
@@ -1017,8 +1135,8 @@ const AdminPage = () => {
                     </div>
                   </button>
 
-                  <button 
-                    onClick={() => setActiveTab('team')} 
+                  <button
+                    onClick={() => setActiveTab('team')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
@@ -1034,8 +1152,8 @@ const AdminPage = () => {
                     </div>
                   </button>
 
-                  <button 
-                    onClick={() => setActiveTab('users')} 
+                  <button
+                    onClick={() => setActiveTab('users')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
@@ -1051,8 +1169,8 @@ const AdminPage = () => {
                     </div>
                   </button>
 
-                  <button 
-                    onClick={() => setActiveTab('contact')} 
+                  <button
+                    onClick={() => setActiveTab('contact')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
                     <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fff7ed', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
@@ -1105,56 +1223,56 @@ const AdminPage = () => {
               <form onSubmit={handleSaveShowcaseHeaderSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Badge Pill Text</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. OUR PROJECTS" 
-                    value={editShowcaseHeader.badge || ''} 
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, badge: e.target.value })} 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. OUR PROJECTS"
+                    value={editShowcaseHeader.badge || ''}
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, badge: e.target.value })}
                   />
                 </div>
 
                 <div className="dash-field-group">
                   <label className="dash-label">Title Line 1</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. We Help Brands" 
-                    value={editShowcaseHeader.titleLine1 || ''} 
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleLine1: e.target.value })} 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. We Help Brands"
+                    value={editShowcaseHeader.titleLine1 || ''}
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleLine1: e.target.value })}
                   />
                 </div>
 
                 <div className="dash-field-group">
                   <label className="dash-label">Title Highlight (Accent Text)</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. Win in the Digital Space" 
-                    value={editShowcaseHeader.titleHighlight || ''} 
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleHighlight: e.target.value })} 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. Win in the Digital Space"
+                    value={editShowcaseHeader.titleHighlight || ''}
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleHighlight: e.target.value })}
                   />
                 </div>
 
                 <div className="dash-field-group">
                   <label className="dash-label">CTA Button Label</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. View Our Work" 
-                    value={editShowcaseHeader.ctaText || ''} 
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, ctaText: e.target.value })} 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. View Our Work"
+                    value={editShowcaseHeader.ctaText || ''}
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, ctaText: e.target.value })}
                   />
                 </div>
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Subtitle / Description</label>
-                  <textarea 
-                    className="dash-input-styled" 
+                  <textarea
+                    className="dash-input-styled"
                     style={{ height: '70px' }}
-                    placeholder="Subtitle text..." 
-                    value={editShowcaseHeader.subtitle || ''} 
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, subtitle: e.target.value })} 
+                    placeholder="Subtitle text..."
+                    value={editShowcaseHeader.subtitle || ''}
+                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, subtitle: e.target.value })}
                   ></textarea>
                 </div>
 
@@ -1172,69 +1290,69 @@ const AdminPage = () => {
               <form onSubmit={handleAddShowcaseSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Category Tag / Badge</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. Web Engineering" 
-                    value={newShowcaseCard.tag} 
-                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tag: e.target.value })} 
-                    required 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. Web Engineering"
+                    value={newShowcaseCard.tag}
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tag: e.target.value })}
+                    required
                   />
                 </div>
 
                 <div className="dash-field-group">
                   <label className="dash-label">Project Title</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. Eclipse Studio" 
-                    value={newShowcaseCard.title} 
-                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, title: e.target.value })} 
-                    required 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. Eclipse Studio"
+                    value={newShowcaseCard.title}
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, title: e.target.value })}
+                    required
                   />
                 </div>
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Subtitle / Tagline</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. Creative Brand & Digital Experience" 
-                    value={newShowcaseCard.subtitle} 
-                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, subtitle: e.target.value })} 
-                    required 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. Creative Brand & Digital Experience"
+                    value={newShowcaseCard.subtitle}
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, subtitle: e.target.value })}
+                    required
                   />
                 </div>
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Description</label>
-                  <textarea 
-                    className="dash-input-styled" 
-                    placeholder="Detailed description of the showcase project..." 
-                    value={newShowcaseCard.description} 
-                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, description: e.target.value })} 
-                    required 
+                  <textarea
+                    className="dash-input-styled"
+                    placeholder="Detailed description of the showcase project..."
+                    value={newShowcaseCard.description}
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, description: e.target.value })}
+                    required
                   ></textarea>
                 </div>
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Tech Stack (Comma Separated)</label>
-                  <input 
-                    type="text" 
-                    className="dash-input-styled" 
-                    placeholder="e.g. Next.js, Framer Motion, Tailwind, WebGL" 
-                    value={newShowcaseCard.tech} 
-                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tech: e.target.value })} 
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. Next.js, Framer Motion, Tailwind, WebGL"
+                    value={newShowcaseCard.tech}
+                    onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, tech: e.target.value })}
                   />
                 </div>
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Upload Showcase Image</label>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    className="dash-input-styled" 
-                    onChange={(e) => handleImageUpload(e, setNewShowcaseCard, newShowcaseCard)} 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="dash-input-styled"
+                    onChange={(e) => handleImageUpload(e, setNewShowcaseCard, newShowcaseCard)}
                   />
                   {newShowcaseCard.image && (
                     <img src={newShowcaseCard.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
@@ -1316,10 +1434,10 @@ const AdminPage = () => {
               <form onSubmit={handleAddProjectSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Project Title</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
-                    placeholder="e.g. Enterprise Cloud ERP" 
+                    placeholder="e.g. Enterprise Cloud ERP"
                     value={newProject.title}
                     onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
                     required
@@ -1328,7 +1446,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group">
                   <label className="dash-label">Category</label>
-                  <select 
+                  <select
                     className="dash-input-styled"
                     value={newProject.category}
                     onChange={(e) => setNewProject({ ...newProject, category: e.target.value })}
@@ -1342,7 +1460,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Description</label>
-                  <textarea 
+                  <textarea
                     className="dash-input-styled"
                     placeholder="Description of project features and technology stack..."
                     value={newProject.description}
@@ -1353,8 +1471,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Upload Project Image</label>
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     accept="image/*"
                     className="dash-input-styled"
                     onChange={(e) => handleImageUpload(e, setNewProject, newProject)}
@@ -1415,7 +1533,7 @@ const AdminPage = () => {
         {/* TAB 3: TEAM ROSTER WORKSPACE */}
         {activeTab === 'team' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-            
+
             {/* ⭐ SECTION 0: EDIT TEAM SECTION HEADINGS & SUBTITLES */}
             <div className="chart-header-row">
               <h3 className="chart-title">Edit Team Section Headings & Subtitles</h3>
@@ -1428,8 +1546,8 @@ const AdminPage = () => {
               <form onSubmit={handleSaveTeamHeaderSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Leadership Badge Tag</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
                     placeholder="e.g. EXECUTIVE LEADERSHIP"
                     value={editTeamHeader.leadershipBadge || ''}
@@ -1439,8 +1557,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group">
                   <label className="dash-label">Leadership Heading Title (Line 1)</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
                     placeholder="e.g. Founder &"
                     value={editTeamHeader.leadershipTitleLine1 || ''}
@@ -1450,8 +1568,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group">
                   <label className="dash-label">Leadership Heading Highlight</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
                     placeholder="e.g. Executive Leadership"
                     value={editTeamHeader.leadershipTitleHighlight || ''}
@@ -1461,7 +1579,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Leadership Subtitle Sentence</label>
-                  <textarea 
+                  <textarea
                     className="dash-input-styled"
                     style={{ height: '60px' }}
                     placeholder="e.g. Guiding our technology vision, strategic growth, and engineering excellence."
@@ -1472,8 +1590,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width" style={{ borderTop: '1px dashed #e2e8f0', paddingTop: '16px', marginTop: '8px' }}>
                   <label className="dash-label">Team Members Section Title</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
                     placeholder="e.g. Our Engineering & Creative Experts"
                     value={editTeamHeader.teamTitle || ''}
@@ -1483,7 +1601,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Team Members Section Subtitle Sentence</label>
-                  <textarea 
+                  <textarea
                     className="dash-input-styled"
                     style={{ height: '60px' }}
                     placeholder="e.g. The brilliant minds behind our innovative solutions."
@@ -1509,9 +1627,9 @@ const AdminPage = () => {
               <form onSubmit={handleAddTeamSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Member Name</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Arifbillah" 
+                  <input
+                    type="text"
+                    placeholder="e.g. Arifbillah"
                     className="dash-input-styled"
                     value={newTeam.name}
                     onChange={(e) => setNewTeam({ ...newTeam, name: e.target.value })}
@@ -1521,9 +1639,9 @@ const AdminPage = () => {
 
                 <div className="dash-field-group">
                   <label className="dash-label">Role / Position</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. Founder & Managing Director" 
+                  <input
+                    type="text"
+                    placeholder="e.g. Founder & Managing Director"
                     className="dash-input-styled"
                     value={newTeam.role}
                     onChange={(e) => setNewTeam({ ...newTeam, role: e.target.value })}
@@ -1533,7 +1651,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group">
                   <label className="dash-label">Category / Tier</label>
-                  <select 
+                  <select
                     className="dash-input-styled"
                     value={newTeam.category}
                     onChange={(e) => setNewTeam({ ...newTeam, category: e.target.value })}
@@ -1545,8 +1663,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Profile Picture</label>
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     accept="image/*"
                     className="dash-input-styled"
                     onChange={(e) => handleImageUpload(e, setNewTeam, newTeam)}
@@ -1566,9 +1684,9 @@ const AdminPage = () => {
 
             {/* SECTION 1: LEADERSHIP ROSTER (FOUNDER & CEO) */}
             {(() => {
-              const leadershipList = (team || []).filter(m => 
-                m.category === 'Leadership' || 
-                m.role?.toLowerCase().includes('founder') || 
+              const leadershipList = (team || []).filter(m =>
+                m.category === 'Leadership' ||
+                m.role?.toLowerCase().includes('founder') ||
                 m.role?.toLowerCase().includes('ceo')
               );
               const teamList = (team || []).filter(m => !leadershipList.some(l => l.id === m.id));
@@ -1583,11 +1701,11 @@ const AdminPage = () => {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
                     {leadershipList.map((m, idx) => (
-                      <div key={m.id} style={{ 
-                        background: '#ecfdf5', 
-                        padding: '20px', 
-                        borderRadius: '20px', 
-                        border: '2px solid #10b981', 
+                      <div key={m.id} style={{
+                        background: '#ecfdf5',
+                        padding: '20px',
+                        borderRadius: '20px',
+                        border: '2px solid #10b981',
                         textAlign: 'center',
                         position: 'relative'
                       }}>
@@ -1635,11 +1753,11 @@ const AdminPage = () => {
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
                     {teamList.map((m, idx) => (
-                      <div key={m.id} style={{ 
-                        background: '#f8fafc', 
-                        padding: '20px', 
-                        borderRadius: '20px', 
-                        border: '1px solid #e2e8f0', 
+                      <div key={m.id} style={{
+                        background: '#f8fafc',
+                        padding: '20px',
+                        borderRadius: '20px',
+                        border: '1px solid #e2e8f0',
                         textAlign: 'center',
                         position: 'relative'
                       }}>
@@ -1699,8 +1817,8 @@ const AdminPage = () => {
               <form onSubmit={handleSaveContact} className="dash-form-grid">
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Target Notification Email</label>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     className="dash-input-styled"
                     value={editContact.email || ''}
                     onChange={(e) => setEditContact({ ...editContact, email: e.target.value })}
@@ -1710,8 +1828,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Phone Number</label>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     className="dash-input-styled"
                     value={editContact.phone || ''}
                     onChange={(e) => setEditContact({ ...editContact, phone: e.target.value })}
@@ -1721,7 +1839,7 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Office Address</label>
-                  <textarea 
+                  <textarea
                     className="dash-input-styled"
                     value={editContact.address || ''}
                     onChange={(e) => setEditContact({ ...editContact, address: e.target.value })}
@@ -1731,8 +1849,8 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <label className="dash-label">Location Map / QR Asset Upload</label>
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     accept="image/*,.pdf"
                     className="dash-input-styled"
                     onChange={(e) => handleImageUpload(e, setEditContact, editContact)}
@@ -1758,9 +1876,9 @@ const AdminPage = () => {
               <form onSubmit={handleAddContactBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Channel Title / Desk</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. WhatsApp Support" 
+                  <input
+                    type="text"
+                    placeholder="e.g. WhatsApp Support"
                     className="dash-input-styled"
                     value={newContactBlock.title}
                     onChange={(e) => setNewContactBlock({ ...newContactBlock, title: e.target.value })}
@@ -1768,9 +1886,9 @@ const AdminPage = () => {
                 </div>
                 <div className="dash-field-group">
                   <label className="dash-label">Contact Link / Detail</label>
-                  <input 
-                    type="text" 
-                    placeholder="e.g. +91 9876543210" 
+                  <input
+                    type="text"
+                    placeholder="e.g. +91 9876543210"
                     className="dash-input-styled"
                     value={newContactBlock.value}
                     onChange={(e) => setNewContactBlock({ ...newContactBlock, value: e.target.value })}
@@ -1816,8 +1934,8 @@ const AdminPage = () => {
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button 
-                  className="action-pill-btn primary-pill" 
+                <button
+                  className="action-pill-btn primary-pill"
                   style={{ background: '#093c25', color: '#ffffff', border: 'none', fontWeight: 800 }}
                   onClick={() => setShowAddAdminForm(!showAddAdminForm)}
                 >
@@ -1835,9 +1953,9 @@ const AdminPage = () => {
                 <form onSubmit={handleAddAdminSubmit} className="dash-form-grid">
                   <div className="dash-field-group">
                     <label className="dash-label">Full Name</label>
-                    <input 
-                      type="text" 
-                      placeholder="e.g. Nancy Thomas" 
+                    <input
+                      type="text"
+                      placeholder="e.g. Nancy Thomas"
                       className="dash-input-styled"
                       value={newAdmin.name}
                       onChange={(e) => setNewAdmin({ ...newAdmin, name: e.target.value })}
@@ -1847,9 +1965,9 @@ const AdminPage = () => {
 
                   <div className="dash-field-group">
                     <label className="dash-label">Email Address</label>
-                    <input 
-                      type="email" 
-                      placeholder="e.g. nancy@innoveitytech.com" 
+                    <input
+                      type="email"
+                      placeholder="e.g. nancy@innoveitytech.com"
                       className="dash-input-styled"
                       value={newAdmin.email}
                       onChange={(e) => setNewAdmin({ ...newAdmin, email: e.target.value })}
@@ -1859,9 +1977,9 @@ const AdminPage = () => {
 
                   <div className="dash-field-group">
                     <label className="dash-label">Account Password</label>
-                    <input 
-                      type="text" 
-                      placeholder="Password (default: admin123)" 
+                    <input
+                      type="text"
+                      placeholder="Password (default: admin123)"
                       className="dash-input-styled"
                       value={newAdmin.password}
                       onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
@@ -1871,7 +1989,7 @@ const AdminPage = () => {
 
                   <div className="dash-field-group">
                     <label className="dash-label">User Role</label>
-                    <select 
+                    <select
                       className="dash-input-styled"
                       value={newAdmin.role}
                       onChange={(e) => setNewAdmin({ ...newAdmin, role: e.target.value })}
@@ -1917,6 +2035,341 @@ const AdminPage = () => {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* TAB: HEADER & FOOTER SETTINGS */}
+        {activeTab === 'header_footer' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row">
+              <h3 className="chart-title">Header, Footer & Social Media Management</h3>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* 1. HEADER BRANDING & CTA BUTTON */}
+            <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiLayers /> Header Logo & Button Configuration
+              </h4>
+              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Logo Sub-Title / Tagline</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. TECH SOLUTIONS"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.brandSubTitle || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, brandSubTitle: e.target.value })}
+                  />
+                  <small style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '4px' }}>Displays below the main Innoveity logo in top navbar.</small>
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Header Action Button Text</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. CONTACT US"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.contactBtnText || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, contactBtnText: e.target.value })}
+                  />
+                  <small style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '4px' }}>Text for the top right call-to-action button in header.</small>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Header Branding
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
+            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiLayers /> Navigation Bar Menu Links Manager
+              </h4>
+
+              {/* Add New Link Form */}
+              <form onSubmit={handleAddNavLink} className="dash-form-grid" style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px dashed #cbd5e1' }}>
+                <div className="dash-field-group">
+                  <label className="dash-label">Link Display Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Media Division"
+                    className="dash-input-styled"
+                    value={newNavLink.name}
+                    onChange={(e) => setNewNavLink({ ...newNavLink, name: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Target Route / Anchor ID</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. /media or home"
+                    className="dash-input-styled"
+                    value={newNavLink.to}
+                    onChange={(e) => setNewNavLink({ ...newNavLink, to: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Navigation Type</label>
+                  <select
+                    className="dash-input-styled"
+                    value={newNavLink.isPage ? 'page' : 'scroll'}
+                    onChange={(e) => setNewNavLink({ ...newNavLink, isPage: e.target.value === 'page' })}
+                  >
+                    <option value="page">Separate Page Route (e.g. /media, /about)</option>
+                    <option value="scroll">Smooth Scroll Anchor (e.g. #contact, home)</option>
+                  </select>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Add Navigation Menu Item
+                  </button>
+                </div>
+              </form>
+
+              {/* Active Navigation Menu List */}
+              <h5 style={{ margin: '0 0 12px', color: '#334155' }}>Active Navigation Bar Menu Items ({(editHeaderFooter.navLinks || []).length})</h5>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {(editHeaderFooter.navLinks || []).map((link, idx) => (
+                  <div key={link.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                          <FiArrowUp size={16} />
+                        </button>
+                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                          <FiArrowDown size={16} />
+                        </button>
+                      </div>
+                      <div>
+                        <strong style={{ color: '#0f172a', fontSize: '0.95rem' }}>{link.name}</strong>
+                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                          Target: <code style={{ background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>{link.to}</code> • {link.isPage ? 'Page Route' : 'Scroll Anchor'}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        type="button"
+                        className="promo-mint-btn"
+                        style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                        onClick={() => handleDeleteNavLink(idx)}
+                      >
+                        <FiTrash2 /> Remove Link
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
+            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiPhone /> Footer Company & Desk Contact Info
+              </h4>
+              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Operating Entity Line</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Operated by Innoveity Tech Solution Ltd."
+                    className="dash-input-styled"
+                    value={editHeaderFooter.operatingCompany || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, operatingCompany: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Physical Office Address</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. MCC MRF Innovation Park, East Tambaram, Chennai - 600059"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.address || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, address: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Direct Contact Phone</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. +91 7904327211"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.phone || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, phone: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Official Support Email</label>
+                  <input
+                    type="email"
+                    placeholder="e.g. aachinancy@gmail.com"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.email || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, email: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Working Operating Hours</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Mon - Fri, 9:00 AM - 6:00 PM"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.hours || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, hours: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Footer Contact Info
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
+            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiPhone /> Footer Social Media Links ("Connect")
+              </h4>
+              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">X.com (Twitter) Profile URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://x.com/innoveitytech"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.twitterUrl || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, twitterUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Instagram Profile URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://instagram.com/innoveitytech"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.instagramUrl || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, instagramUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Facebook Page URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://facebook.com/innoveitytech"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.facebookUrl || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, facebookUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">LinkedIn Company Page URL</label>
+                  <input
+                    type="text"
+                    placeholder="https://linkedin.com/company/innoveitytech"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.linkedinUrl || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, linkedinUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save Social Links
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
+            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FiCheck /> Footer Call-to-Action Banner & Legal Bar
+              </h4>
+              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">CTA Kicker Pill Badge</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. SMART, SCALABLE"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.ctaBadge || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaBadge: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">CTA Card Main Headline</label>
+                  <textarea
+                    placeholder="e.g. Ready To Begin Building Digital Future Securely?"
+                    className="dash-input-styled"
+                    style={{ height: '70px' }}
+                    value={editHeaderFooter.ctaTitle || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaTitle: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Primary CTA Button Text</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Get Started"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.ctaPrimaryBtnText || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaPrimaryBtnText: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Secondary CTA Button Text</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. See Technology Options"
+                    className="dash-input-styled"
+                    value={editHeaderFooter.ctaSecondaryBtnText || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaSecondaryBtnText: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Footer Copyright Notice Text</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. © 2026 Innoveity Tech Solution. All rights reserved."
+                    className="dash-input-styled"
+                    value={editHeaderFooter.copyrightText || ''}
+                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, copyrightText: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiCheck /> Save All Header & Footer Settings
+                  </button>
+                </div>
+              </form>
+            </div>
+
           </div>
         )}
       </div>
