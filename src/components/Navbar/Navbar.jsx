@@ -8,8 +8,8 @@ import './Navbar.css';
 export const InnoveityBrandLogo = ({ size = 28, showText = true, subTextOverride }) => {
   const cms = useCMS ? useCMS() : null;
   const brandSub = subTextOverride || cms?.headerFooterSettings?.brandSubTitle || 'TECH SOLUTIONS';
-  const subFontSize = `${Math.max(0.5, size * 0.021)}rem`;
-  const subPadding = `${Math.max(22, size * 1.35)}px`;
+  const subFontSize = `${Math.max(0.42, size * 0.0165)}rem`;
+  const subPadding = `${Math.max(18, size * 1.25)}px`;
 
   return (
     <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>

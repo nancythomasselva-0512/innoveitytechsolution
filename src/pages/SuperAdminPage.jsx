@@ -4,7 +4,7 @@ import {
   FiDatabase, FiBell, FiSearch, FiServer,
   FiLogOut, FiMenu, FiX, FiCheckCircle, FiAlertTriangle,
   FiDownloadCloud, FiRefreshCw, FiLock, FiCpu, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
-  FiUserPlus, FiTrash2, FiZap, FiFolder, FiFileText, FiPhone,
+  FiUserPlus, FiTrash2, FiZap, FiFolder, FiFileText, FiPhone, FiImage, FiUpload,
   FiPlus, FiEdit2, FiCheck, FiLayers, FiInfo, FiGlobe, FiShare2, FiCode, FiArrowUp, FiArrowDown, FiLayout
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
@@ -1457,17 +1457,52 @@ const SuperAdminPage = () => {
                   />
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Upload Showcase Image</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setNewShowcaseCard, newShowcaseCard)}
-                  />
-                  {newShowcaseCard.image && (
-                    <img src={newShowcaseCard.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
-                  )}
+                {/* SHOWCASE CARD IMAGE ASSET */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> Showcase Card Image Asset
+                    </label>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="showcase-card-img-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setNewShowcaseCard, newShowcaseCard)}
+                        />
+                        <label htmlFor="showcase-card-img-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload Showcase Image
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /tech_blog_1.png or data:image/jpeg;base64,..."
+                        value={newShowcaseCard.image || ''}
+                        onChange={(e) => setNewShowcaseCard({ ...newShowcaseCard, image: e.target.value })}
+                      />
+                    </div>
+                    {newShowcaseCard.image && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#f8fafc', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={newShowcaseCard.image}
+                          alt="Showcase Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setNewShowcaseCard({ ...newShowcaseCard, image: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -1580,17 +1615,52 @@ const SuperAdminPage = () => {
                   ></textarea>
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Upload Project Image</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setNewProject, newProject)}
-                  />
-                  {newProject.image && (
-                    <img src={newProject.image} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
-                  )}
+                {/* PROJECT IMAGE ASSET */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> Case Study Project Image Asset
+                    </label>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="new-project-img-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setNewProject, newProject)}
+                        />
+                        <label htmlFor="new-project-img-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload Project Image
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /project_thumb.png or data:image/jpeg;base64,..."
+                        value={newProject.image || ''}
+                        onChange={(e) => setNewProject({ ...newProject, image: e.target.value })}
+                      />
+                    </div>
+                    {newProject.image && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#f8fafc', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={newProject.image}
+                          alt="Project Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setNewProject({ ...newProject, image: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -1958,19 +2028,55 @@ const SuperAdminPage = () => {
                   ></textarea>
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Location Map / QR Asset Upload</label>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setEditContact, editContact)}
-                  />
-                  {editContact.image && (
-                    <div style={{ marginTop: '10px' }}>
-                      <img src={editContact.image} alt="Contact Asset" style={{ width: '80px', height: '80px', borderRadius: '12px', objectFit: 'cover' }} />
+                {/* LOCATION MAP / QR ASSET */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> Location Map / QR Code Media Asset
+                    </label>
+                    <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                      ★ Active Contact Asset
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*,.pdf"
+                          id="contact-qr-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setEditContact, editContact)}
+                        />
+                        <label htmlFor="contact-qr-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload Contact Asset
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /qr_map.png or data:image/jpeg;base64,..."
+                        value={editContact.image || ''}
+                        onChange={(e) => setEditContact({ ...editContact, image: e.target.value })}
+                      />
                     </div>
-                  )}
+                    {editContact.image && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={editContact.image}
+                          alt="Contact Asset Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setEditContact({ ...editContact, image: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -2175,17 +2281,55 @@ const SuperAdminPage = () => {
                   />
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Page Open Graph (OG) Social Image</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setEditPageSeo, editPageSeo)}
-                  />
-                  {editPageSeo.ogImage && (
-                    <img src={editPageSeo.ogImage} alt="OG Preview" style={{ marginTop: '8px', width: '120px', height: '65px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #cbd5e1' }} />
-                  )}
+                {/* PAGE OPEN GRAPH SOCIAL IMAGE */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> Page Open Graph (OG) Social Image
+                    </label>
+                    <span style={{ fontSize: '0.72rem', background: '#dbeafe', color: '#1d4ed8', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                      ★ Social Share Banner
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="seo-og-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setEditPageSeo, editPageSeo)}
+                        />
+                        <label htmlFor="seo-og-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload OG Social Image
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /Innoveity.png or data:image/jpeg;base64,..."
+                        value={editPageSeo.ogImage || ''}
+                        onChange={(e) => setEditPageSeo({ ...editPageSeo, ogImage: e.target.value })}
+                      />
+                    </div>
+                    {editPageSeo.ogImage && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={editPageSeo.ogImage}
+                          alt="OG Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setEditPageSeo({ ...editPageSeo, ogImage: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width" style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #cbd5e1' }}>
@@ -2283,19 +2427,55 @@ const SuperAdminPage = () => {
                   ></textarea>
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Hero Graphic / Media Banner Upload</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setEditHome, editHome)}
-                  />
-                  {editHome.image && (
-                    <div style={{ marginTop: '10px' }}>
-                      <img src={editHome.image} alt="Hero Banner" style={{ width: '120px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                {/* HERO GRAPHIC / MEDIA BANNER IMAGE ASSET */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> Hero Graphic / Media Banner Image Asset
+                    </label>
+                    <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                      ★ Live Banner Asset
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="home-hero-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setEditHome, editHome)}
+                        />
+                        <label htmlFor="home-hero-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload Hero Image
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /hero_banner.png or data:image/jpeg;base64,..."
+                        value={editHome.image || ''}
+                        onChange={(e) => setEditHome({ ...editHome, image: e.target.value })}
+                      />
                     </div>
-                  )}
+                    {editHome.image && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={editHome.image}
+                          alt="Hero Banner Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setEditHome({ ...editHome, image: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -2410,19 +2590,55 @@ const SuperAdminPage = () => {
                   />
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">About Us Photo / Media Asset Upload</label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setEditAbout, editAbout)}
-                  />
-                  {editAbout.image && (
-                    <div style={{ marginTop: '10px' }}>
-                      <img src={editAbout.image} alt="About Us Asset" style={{ width: '100px', height: '80px', borderRadius: '12px', objectFit: 'cover' }} />
+                {/* ABOUT US PHOTO / MEDIA ASSET */}
+                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <FiImage /> About Us Photo / Media Asset
+                    </label>
+                    <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                      ★ Active Media Asset
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                    <div style={{ flex: '1 1 260px' }}>
+                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          id="about-photo-upload"
+                          style={{ display: 'none' }}
+                          onChange={(e) => handleImageUpload(e, setEditAbout, editAbout)}
+                        />
+                        <label htmlFor="about-photo-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                          <FiUpload /> Upload About Image
+                        </label>
+                      </div>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. /about_team.png or data:image/jpeg;base64,..."
+                        value={editAbout.image || ''}
+                        onChange={(e) => setEditAbout({ ...editAbout, image: e.target.value })}
+                      />
                     </div>
-                  )}
+                    {editAbout.image && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={editAbout.image}
+                          alt="About Asset Preview"
+                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setEditAbout({ ...editAbout, image: '' })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Clear
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="dash-field-group full-width">
@@ -2911,72 +3127,260 @@ const SuperAdminPage = () => {
                   />
                 </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Hero Background Image Path / URL</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. /media_hero_bg.png"
-                    value={editMedia.hero?.bgImage || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, bgImage: e.target.value } })}
-                  />
+                {/* HERO BACKGROUND IMAGE MANAGEMENT */}
+                <div className="dash-field-group full-width" style={{ marginTop: '16px', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <label className="dash-label" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>
+                    <FiImage /> Hero Background Image Asset
+                  </label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
+                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        id="hero-bg-upload"
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            compressAndSetImage(file, (compressedResult) => {
+                              setEditMedia(prev => ({
+                                ...prev,
+                                hero: { ...(prev?.hero || {}), bgImage: compressedResult }
+                              }));
+                            });
+                          }
+                        }}
+                      />
+                      <label htmlFor="hero-bg-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '8px 16px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <FiUpload /> Upload Hero Background Image
+                      </label>
+                      <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Upload local image file or specify path/URL below:</span>
+                    </div>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      placeholder="e.g. /media_hero_bg.png or data:image/jpeg;base64,..."
+                      value={editMedia.hero?.bgImage || ''}
+                      onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, bgImage: e.target.value } })}
+                    />
+                    {editMedia.hero?.bgImage && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '6px', background: '#ffffff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #cbd5e1' }}>
+                        <img
+                          src={editMedia.hero.bgImage}
+                          alt="Hero Background Preview"
+                          style={{ width: '110px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                        />
+                        <div style={{ flex: 1, overflow: 'hidden' }}>
+                          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a' }}>Hero Background Preview</div>
+                          <div style={{ fontSize: '0.74rem', color: '#64748b', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
+                            {editMedia.hero.bgImage.startsWith('data:') ? 'Custom Uploaded Image (Base64)' : editMedia.hero.bgImage}
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, bgImage: '' } })}
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '6px 12px', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                        >
+                          <FiTrash2 /> Remove
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* 3D DECK CARDS IMAGE MANAGEMENT */}
-                <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>
+                <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
                   <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiLayers /> 2. 3D Deck Showcase Images Management
                   </h4>
                 </div>
 
-                {['MMAC Studio', 'Pour, Breathe, Begin', 'Muyal Heritage', 'Cinematic Urban', 'Coffee & Craft'].map((deckTitle, idx) => (
-                  <div key={idx} className="dash-field-group">
-                    <label className="dash-label">Deck Card {idx + 1} Image ({deckTitle})</label>
-                    <input
-                      type="text"
-                      className="dash-input-styled"
-                      placeholder={`e.g. /deck_${idx + 1}.png`}
-                      value={(editMedia.deckCards && editMedia.deckCards[idx]?.image) || ''}
-                      onChange={(e) => {
-                        const currentDeck = editMedia.deckCards ? [...editMedia.deckCards] : [
-                          { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', image: '/deck_arch_gold.png' },
-                          { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', image: '/deck_lifestyle.png' },
-                          { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', image: '/deck_green_chair.png' },
-                          { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', image: '/deck_fashion.png' },
-                          { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'Product Commercial', image: '/deck_product.png' }
-                        ];
-                        currentDeck[idx] = { ...currentDeck[idx], image: e.target.value };
-                        setEditMedia({ ...editMedia, deckCards: currentDeck });
-                      }}
-                    />
-                  </div>
-                ))}
+                {[
+                  { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', defaultImg: '/deck_arch_gold.png' },
+                  { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', defaultImg: '/deck_lifestyle.png' },
+                  { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', defaultImg: '/deck_green_chair.png' },
+                  { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', defaultImg: '/deck_fashion.png' },
+                  { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'High-End Studio', defaultImg: '/deck_product.png' },
+                  { id: 'editorial-design', title: 'Editorial Craft', subtitle: 'BRAND DESIGN', tag: 'Creative Studio', defaultImg: '/deck_design.png' },
+                  { id: 'digital-growth', title: 'Digital Scale', subtitle: 'PERFORMANCE MEDIA', tag: 'Growth Marketing', defaultImg: '/deck_growth.png' }
+                ].map((cardMeta, idx) => {
+                  const defaultDeckCards = [
+                    { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', image: '/deck_arch_gold.png' },
+                    { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', image: '/deck_lifestyle.png' },
+                    { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', image: '/deck_green_chair.png' },
+                    { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', image: '/deck_fashion.png' },
+                    { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'High-End Studio', image: '/deck_product.png' },
+                    { id: 'editorial-design', title: 'Editorial Craft', subtitle: 'BRAND DESIGN', tag: 'Creative Studio', image: '/deck_design.png' },
+                    { id: 'digital-growth', title: 'Digital Scale', subtitle: 'PERFORMANCE MEDIA', tag: 'Growth Marketing', image: '/deck_growth.png' }
+                  ];
+                  const currentDeck = editMedia.deckCards && editMedia.deckCards.length > 0 ? editMedia.deckCards : defaultDeckCards;
+                  const cardItem = currentDeck[idx] || cardMeta;
+                  const cardImg = cardItem.image || cardMeta.defaultImg;
+
+                  return (
+                    <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                          Deck Card {idx + 1}: {cardMeta.title} ({cardMeta.subtitle})
+                        </label>
+                        <span style={{ fontSize: '0.72rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                          {cardMeta.tag}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div style={{ flex: '1 1 260px' }}>
+                          <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id={`deck-img-upload-${idx}`}
+                              style={{ display: 'none' }}
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  compressAndSetImage(file, (compressedResult) => {
+                                    const updatedDeck = [...currentDeck];
+                                    updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: compressedResult };
+                                    setEditMedia({ ...editMedia, deckCards: updatedDeck });
+                                  });
+                                }
+                              }}
+                            />
+                            <label htmlFor={`deck-img-upload-${idx}`} className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 12px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              <FiUpload /> Upload Image
+                            </label>
+                          </div>
+                          <input
+                            type="text"
+                            className="dash-input-styled"
+                            placeholder={`e.g. /deck_${idx + 1}.png`}
+                            value={cardItem.image || ''}
+                            onChange={(e) => {
+                              const updatedDeck = [...currentDeck];
+                              updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: e.target.value };
+                              setEditMedia({ ...editMedia, deckCards: updatedDeck });
+                            }}
+                          />
+                        </div>
+                        {cardImg && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                            <img
+                              src={cardImg}
+                              alt={cardMeta.title}
+                              style={{ width: '60px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updatedDeck = [...currentDeck];
+                                updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: '' };
+                                setEditMedia({ ...editMedia, deckCards: updatedDeck });
+                              }}
+                              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                            >
+                              <FiTrash2 /> Clear
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
 
                 {/* PRODUCTION CAPABILITIES POSTER IMAGES MANAGEMENT */}
-                <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>
+                <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
                   <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiVideo /> 3. Production Capabilities Poster Images Management
                   </h4>
                 </div>
 
-                {['Camera Production', 'Cinematic Video', 'Gimbal Motion', 'Aerial Drone', 'Post Production'].map((capTitle, idx) => (
-                  <div key={idx} className="dash-field-group">
-                    <label className="dash-label">Capability {idx + 1} Poster ({capTitle})</label>
-                    <input
-                      type="text"
-                      className="dash-input-styled"
-                      placeholder={`e.g. /cap_poster_${idx + 1}.png`}
-                      value={(editMedia.capabilities && editMedia.capabilities[idx]?.poster) || ''}
-                      onChange={(e) => {
-                        const currentCaps = editMedia.capabilities ? [...editMedia.capabilities] : [];
-                        if (currentCaps[idx]) {
-                          currentCaps[idx] = { ...currentCaps[idx], poster: e.target.value };
-                          setEditMedia({ ...editMedia, capabilities: currentCaps });
-                        }
-                      }}
-                    />
-                  </div>
-                ))}
+                {[
+                  { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', badge: '★ 4.9/5 • 8K RED & ARRI Cinema Systems', defaultPoster: '/cap_camera_prod.png' },
+                  { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', badge: '★ 5.0/5 • Anamorphic Commercial Films', defaultPoster: '/cap_cinematic_vid.png' },
+                  { id: 'gimbal-motion', title: 'GIMBAL & MOTION', badge: '★ 4.9/5 • 3-Axis Stabilized Motion', defaultPoster: '/cap_gimbal_motion.png' },
+                  { id: 'aerial-content', title: 'AERIAL CONTENT', badge: '★ 5.0/5 • 4K Drone Cinematography', defaultPoster: '/cap_aerial_drone.png' },
+                  { id: 'post-production', title: 'POST-PRODUCTION', badge: '★ 4.9/5 • Color Grading & Motion FX', defaultPoster: '/cap_post_production.png' }
+                ].map((capMeta, idx) => {
+                  const defaultCapabilities = [
+                    { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', poster: '/cap_camera_prod.png' },
+                    { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', poster: '/cap_cinematic_vid.png' },
+                    { id: 'gimbal-motion', title: 'GIMBAL & MOTION', poster: '/cap_gimbal_motion.png' },
+                    { id: 'aerial-content', title: 'AERIAL CONTENT', poster: '/cap_aerial_drone.png' },
+                    { id: 'post-production', title: 'POST-PRODUCTION', poster: '/cap_post_production.png' }
+                  ];
+                  const currentCaps = editMedia.capabilities && editMedia.capabilities.length > 0 ? editMedia.capabilities : defaultCapabilities;
+                  const capItem = currentCaps[idx] || capMeta;
+                  const capPoster = capItem.poster || capMeta.defaultPoster;
+
+                  return (
+                    <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                          Capability {idx + 1}: {capMeta.title}
+                        </label>
+                        <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                          {capMeta.badge}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                        <div style={{ flex: '1 1 260px' }}>
+                          <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id={`cap-poster-upload-${idx}`}
+                              style={{ display: 'none' }}
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  compressAndSetImage(file, (compressedResult) => {
+                                    const updatedCaps = [...currentCaps];
+                                    updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: compressedResult };
+                                    setEditMedia({ ...editMedia, capabilities: updatedCaps });
+                                  });
+                                }
+                              }}
+                            />
+                            <label htmlFor={`cap-poster-upload-${idx}`} className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 12px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                              <FiUpload /> Upload Poster Image
+                            </label>
+                          </div>
+                          <input
+                            type="text"
+                            className="dash-input-styled"
+                            placeholder={`e.g. /cap_poster_${idx + 1}.png`}
+                            value={capItem.poster || ''}
+                            onChange={(e) => {
+                              const updatedCaps = [...currentCaps];
+                              updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: e.target.value };
+                              setEditMedia({ ...editMedia, capabilities: updatedCaps });
+                            }}
+                          />
+                        </div>
+                        {capPoster && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                            <img
+                              src={capPoster}
+                              alt={capMeta.title}
+                              style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                            />
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const updatedCaps = [...currentCaps];
+                                updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: '' };
+                                setEditMedia({ ...editMedia, capabilities: updatedCaps });
+                              }}
+                              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                            >
+                              <FiTrash2 /> Clear
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
 
                 {/* CALL TO ACTION CONFIGURATION */}
                 <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>

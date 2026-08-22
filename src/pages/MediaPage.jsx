@@ -347,7 +347,10 @@ const MediaPage = () => {
       
       {/* Hero Section */}
       <section className="mp-hero animate-on-scroll">
-        <div className="mp-hero-bg-overlay"></div>
+        <div
+          className="mp-hero-bg-overlay"
+          style={heroBgImage ? { backgroundImage: `url(${heroBgImage})` } : {}}
+        ></div>
         <div className="container mp-hero-container">
           
           <div className="mp-brand-pill">
