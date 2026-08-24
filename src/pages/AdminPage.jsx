@@ -53,7 +53,8 @@ const AdminPage = () => {
     homeContent, updateHomeContent,
     mediaContent, updateMediaContent,
     headerFooterSettings, updateHeaderFooterSettings,
-    adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache
+    adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache,
+    seedCloudDatabase, dbStatus
   } = useCMS();
 
   const users = adminUsers || [];
@@ -766,6 +767,20 @@ const AdminPage = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
+
+            <button
+              className="btn-live-preview"
+              style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              onClick={async () => {
+                if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
+                  const ok = await seedCloudDatabase();
+                  if (ok) triggerNotification('⚡ Successfully synced all data to Live MySQL Database!');
+                }
+              }}
+              title="Push all website data to live MySQL Database"
+            >
+              <FiDatabase /> Sync DB
+            </button>
 
             <button
               className="btn-live-preview"

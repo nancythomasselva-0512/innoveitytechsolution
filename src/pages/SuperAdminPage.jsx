@@ -887,6 +887,20 @@ const SuperAdminPage = () => {
 
             <button
               className="btn-live-preview"
+              style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              onClick={async () => {
+                if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
+                  const ok = await seedCloudDatabase();
+                  if (ok) triggerNotification('⚡ Successfully synced all data to Live MySQL Database!');
+                }
+              }}
+              title="Push all website data to live MySQL Database"
+            >
+              <FiDatabase /> Sync DB
+            </button>
+
+            <button
+              className="btn-live-preview"
               style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap' }}
               onClick={() => {
                 if (window.confirm('Are you sure you want to clear all system & CMS cache? This will reset all CMS cache storage.')) {

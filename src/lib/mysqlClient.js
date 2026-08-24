@@ -1,5 +1,4 @@
-// MySQL API Client Utility
-const API_BASE_URL = import.meta.env.VITE_MYSQL_API_URL || 'http://localhost:5000/api/cms';
+const API_BASE_URL = import.meta.env.VITE_MYSQL_API_URL || (import.meta.env.DEV ? 'http://localhost:5000/api/cms' : 'https://innoveitytech.com/api/cms');
 
 export const isMySqlConfigured = () => {
   return typeof API_BASE_URL === 'string' && API_BASE_URL.trim().length > 0;

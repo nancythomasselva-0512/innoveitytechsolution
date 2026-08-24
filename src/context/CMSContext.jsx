@@ -418,7 +418,6 @@ export const CMSProvider = ({ children }) => {
   const saveLocalState = (key, value) => {
     try {
       localStorage.setItem(`cms_${key}_v2`, JSON.stringify(value));
-      localStorage.setItem('cms_has_local_edits_v2', 'true');
     } catch (e) {
       console.warn(`[LocalStorage] Error saving ${key}:`, e);
     }
@@ -474,12 +473,8 @@ export const CMSProvider = ({ children }) => {
       return;
     }
 
-    // Protect local user modifications from being overwritten by 3-second background polling
-    const hasLocalEdits = localStorage.getItem('cms_has_local_edits_v2') === 'true';
-    if (hasLocalEdits) {
-      setDbStatus('connected');
-      return;
-    }
+    // Clean up legacy blocking flag if present in localStorage
+    localStorage.removeItem('cms_has_local_edits_v2');
 
     try {
       const data = await fetchAllFromMySql();
