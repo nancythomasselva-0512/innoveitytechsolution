@@ -26,7 +26,7 @@
 .login-glow-sphere.glow-1 {
   width: 450px;
   height: 450px;
-  background: #10b981;
+  background: #ff6b00;
   top: -100px;
   left: 10%;
 }
@@ -34,7 +34,7 @@
 .login-glow-sphere.glow-2 {
   width: 500px;
   height: 500px;
-  background: #059669;
+  background: #ea580c;
   bottom: -150px;
   right: 10%;
 }
@@ -47,10 +47,10 @@
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(255, 107, 0, 0.25);
   border-radius: 28px;
   padding: 40px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(16, 185, 129, 0.15);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 107, 0, 0.15);
   animation: loginFadeUp 0.6s ease-out;
 }
 
@@ -120,9 +120,9 @@
 }
 
 .login-role-tab.active {
-  background: #10b981;
+  background: #ff6b00;
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
 }
 
 /* Alert Boxes */
@@ -145,8 +145,8 @@
 }
 
 .login-alert-success {
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(255, 107, 0, 0.15);
+  border: 1px solid rgba(255, 107, 0, 0.4);
   color: #6ee7b7;
 }
 
@@ -180,7 +180,7 @@
 .login-input-icon {
   position: absolute;
   left: 14px;
-  color: #10b981;
+  color: #ff6b00;
   font-size: 1.1rem;
   pointer-events: none;
 }
@@ -199,9 +199,9 @@
 
 .login-input:focus {
   outline: none;
-  border-color: #10b981;
+  border-color: #ff6b00;
   background: rgba(2, 11, 6, 0.7);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.2);
 }
 
 .password-toggle-btn {
@@ -229,7 +229,7 @@
   justify-content: center;
   gap: 8px;
   padding: 14px 20px;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
   color: #ffffff;
   border: none;
   border-radius: 12px;
@@ -237,13 +237,13 @@
   font-weight: 800;
   cursor: pointer;
   transition: all 0.25s ease;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.3);
   margin-top: 6px;
 }
 
 .login-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.45);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.45);
 }
 
 .login-submit-btn:disabled {
@@ -290,8 +290,8 @@
 }
 
 .login-quick-btn:hover {
-  background: rgba(16, 185, 129, 0.15);
-  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(255, 107, 0, 0.15);
+  border-color: rgba(255, 107, 0, 0.3);
   color: #ffffff;
 }
 
@@ -309,5 +309,5 @@
 }
 
 .login-back-link:hover {
-  color: #10b981;
+  color: #ff6b00;
 }

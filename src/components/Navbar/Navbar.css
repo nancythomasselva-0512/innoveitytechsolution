@@ -4,22 +4,22 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 1.25rem 0;
-  transition: all 0.4s ease;
-  background: linear-gradient(135deg, rgba(8, 32, 28, 0.92) 0%, rgba(13, 59, 52, 0.88) 50%, rgba(8, 24, 21, 0.92) 100%);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
-  box-shadow: 0 10px 35px rgba(8, 40, 35, 0.3);
+  padding: 0.85rem 0;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 107, 0, 0.18);
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
 }
 
 .navbar-header.header-scrolled {
-  padding: 0.8rem 0;
-  background: rgba(8, 30, 26, 0.96);
+  padding: 0.65rem 0;
+  background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(16, 185, 129, 0.35);
-  box-shadow: 0 14px 45px rgba(5, 30, 25, 0.5);
+  border-bottom: 1px solid rgba(255, 107, 0, 0.28);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
 }
 
 .navbar-wrapper {
@@ -42,177 +42,132 @@
 .innoveity-brand-wrap {
   display: flex;
   align-items: center;
-  gap: 10px;
+  background: transparent;
 }
 
-.innoveity-logo-icon-box {
+.innoveity-main-logo-img:hover {
+  transform: scale(1.04);
+}
+
+/* Center Floating Glass Pill Container */
+.navbar-center-pill-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.innoveity-brand-text-col {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.innoveity-brand-main-title {
-  font-family: 'Plus Jakarta Sans', 'Outfit', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: -0.5px;
+.navbar-nav-links-pill {
   display: flex;
   align-items: center;
-}
-
-.brand-green {
-  color: #00a878;
-}
-
-.brand-v-container {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.v-gold-badge {
-  position: absolute;
-  top: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 0;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 7px solid #f59e0b;
-  z-index: 2;
-}
-
-.innoveity-brand-sub-title {
-  font-size: 0.45rem;
-  font-weight: 700;
-  color: #00a878;
-  letter-spacing: 1.8px;
-  margin-top: 1px;
-}
-
-/* Nav Links */
-.navbar-nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2.2rem;
+  gap: 6px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 107, 0, 0.2);
+  border-radius: 9999px;
+  box-shadow: 0 4px 20px rgba(255, 107, 0, 0.06);
 }
 
-.nav-link-item {
-  color: rgba(255, 255, 255, 0.92);
+.nav-pill-item {
+  display: flex;
+  align-items: center;
+}
+
+.nav-link-pill-btn {
+  color: #0b192c;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
+  padding: 8px 20px;
+  border-radius: 9999px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  padding: 4px 0;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  display: inline-block;
 }
 
-.nav-link-item:hover,
-.nav-link-item.nav-link-active {
-  color: #ffffff;
-  font-weight: 600;
+.nav-link-pill-btn:hover {
+  color: #ff6b00;
+  background: rgba(255, 107, 0, 0.08);
 }
 
-.nav-link-item::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: #10b981;
-  transition: width 0.3s ease;
-  border-radius: 2px;
+/* Active Pill - Vibrant Tech Orange Badge */
+.nav-link-pill-btn.nav-link-pill-active {
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  color: #ffffff !important;
+  font-weight: 700;
+  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
 }
 
-.nav-link-item:hover::after,
-.nav-link-item.nav-link-active::after {
-  width: 100%;
-}
-
-/* Right Action Pill Button */
+/* Right Action Orange Button */
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.pill-btn-contact {
-  background: #ffffff;
-  color: #0b0f19;
+.pill-btn-login {
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  color: #ffffff;
   border-radius: 9999px;
-  padding: 3px 4px 3px 14px;
+  padding: 10px 24px;
   font-weight: 700;
-  font-size: 0.75rem;
+  font-size: 0.88rem;
   letter-spacing: 0.5px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.35);
 }
 
-.pill-btn-contact:hover {
-  transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
-  background: #f8fafc;
-}
-
-.pill-btn-contact .arrow-circle {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #10b981;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.pill-btn-contact:hover .arrow-circle {
-  background: #059669;
-  transform: rotate(45deg);
+.pill-btn-login:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 107, 0, 0.5);
 }
 
 /* Mobile Toggle */
 .mobile-toggle {
   display: none;
-  color: #ffffff;
+  color: #0b192c;
   cursor: pointer;
 }
 
 @media screen and (max-width: 992px) {
-  .navbar-nav-links {
+  .navbar-center-pill-wrap {
     position: absolute;
     top: -1000px;
     left: 0;
     width: 100%;
-    flex-direction: column;
-    background: rgba(11, 15, 25, 0.98);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
-    padding: 2rem 0;
-    gap: 1.5rem;
+    padding: 1.5rem 0;
     transition: all 0.4s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
   }
 
-  .navbar-nav-links.mobile-active {
-    top: 70px;
+  .navbar-center-pill-wrap.mobile-active {
+    top: 60px;
+  }
+
+  .navbar-nav-links-pill {
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    gap: 0.6rem;
+  }
+
+  .nav-link-pill-btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
   }
 
   .mobile-toggle {

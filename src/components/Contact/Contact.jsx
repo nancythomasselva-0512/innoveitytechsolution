@@ -82,7 +82,7 @@ const Contact = () => {
           {/* Left Column: Contact Information */}
           <div className="contact-info-col">
             
-            <h2 className="info-title">Contact information</h2>
+            <h2 className="info-title">Contact <span className="title-gradient-accent">information</span></h2>
             <p className="info-subtitle">
               We help you find direction, remove friction, and keep your business moving forward—strategically and confidently.
             </p>
@@ -142,7 +142,7 @@ const Contact = () => {
           {/* Right Column: Send Us a Message Form */}
           <div className="contact-form-col">
             
-            <h2 className="form-title">Send Us a Message</h2>
+            <h2 className="form-title">Send Us a <span className="title-gradient-accent">Message</span></h2>
             <p className="form-subtitle">
               Fill up the form and our team will get back to you within 24 hours.
             </p>

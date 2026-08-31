@@ -103,10 +103,9 @@ const AboutSummary = () => {
 
           <h2 className="mosaic-main-heading">
             {homeContent.aboutTitle.split('\n').map((line, i) => (
-              <React.Fragment key={i}>
+              <span key={i} className={`mosaic-heading-line ${i === 1 ? 'title-gradient-accent' : ''}`}>
                 {line}
-                {i !== homeContent.aboutTitle.split('\n').length - 1 && <br />}
-              </React.Fragment>
+              </span>
             ))}
           </h2>
 
@@ -161,51 +160,6 @@ const AboutSummary = () => {
             </Link>
           </motion.div>
         </motion.div>
-
-        {/* Right Side Column: Cutout Person & Floating Rating Badges */}
-        <motion.div 
-          className="mosaic-right-col"
-          initial={{ opacity: 0, x: 40 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-        >
-          <div className="person-wrapper">
-            <div className="person-bg-circle"></div>
-            <img src="/about_person.png" alt="Innoveity Tech Professional" className="person-image" />
-            
-            {/* Floating Rating Badge */}
-            <motion.div 
-              className="floating-stat-badge badge-rating"
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-              whileHover={{ scale: 1.05 }}
-            >
-              <div className="badge-star-icon">
-                <FiStar size={16} />
-              </div>
-              <div className="badge-stat-info">
-                <strong>4.9★</strong>
-                <span>Client Rating</span>
-              </div>
-            </motion.div>
-
-            {/* Floating Reaction Badge */}
-            <motion.div 
-              className="floating-stat-badge badge-reaction"
-              initial={{ opacity: 0, scale: 0 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ type: "spring", stiffness: 260, damping: 20, delay: 0.6 }}
-              whileHover={{ scale: 1.15 }}
-            >
-              <span>🚀</span>
-            </motion.div>
-          </div>
-        </motion.div>
-
       </div>
     </section>
   );

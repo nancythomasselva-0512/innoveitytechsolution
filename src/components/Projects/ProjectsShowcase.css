@@ -1,14 +1,14 @@
 /* ==========================================
-   PROJECTS SHOWCASE — 3D PERSPECTIVE FAN STACK
+   PROJECTS SHOWCASE — 3D PERSPECTIVE FAN STACK (PURE WHITE THEME)
    ========================================== */
 
 .projects-showcase-section {
-  background-color: #082823;
-  color: #ffffff;
+  background-color: var(--bg-color, #ffffff);
+  color: #0b192c;
   padding: 90px 20px 110px 20px;
   position: relative;
   overflow: hidden;
-  font-family: 'Outfit', 'Inter', sans-serif;
+  font-family: var(--font-family);
 }
 
 .projects-showcase-container {
@@ -32,7 +32,7 @@
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #e8c477;
+  color: #ff6b00;
   margin-bottom: 20px;
   display: inline-flex;
   align-items: center;
@@ -41,39 +41,39 @@
 }
 
 .bracket-left, .bracket-right {
-  color: rgba(232, 196, 119, 0.6);
+  color: rgba(255, 107, 0, 0.6);
   font-size: 15px;
 }
 
 .showcase-main-title {
-  font-family: 'Outfit', 'Plus Jakarta Sans', sans-serif;
-  font-size: 58px;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -1.5px;
-  line-height: 1.1;
+  font-family: var(--font-heading);
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  font-weight: 800;
+  color: #082233;
+  letter-spacing: -1.2px;
+  line-height: 1.15;
   margin: 0 0 20px 0;
 }
 
 .title-highlight {
-  background: linear-gradient(135deg, #ffffff 0%, #34d399 50%, #e8c477 100%);
+  background: linear-gradient(135deg, #ff941a 0%, #ff6b00 50%, #ea580c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .showcase-subtitle {
   font-size: 16px;
-  color: rgba(216, 216, 208, 0.85);
+  color: #475569;
   line-height: 1.65;
   max-width: 620px;
   margin: 0 0 32px 0;
 }
 
-/* White Pill CTA Button */
+/* Pill CTA Button */
 .showcase-cta-btn {
-  background: #ffffff;
-  color: #082823;
-  font-family: 'Outfit', sans-serif;
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  color: #ffffff;
+  font-family: var(--font-family);
   font-size: 14px;
   font-weight: 700;
   padding: 6px 6px 6px 24px;
@@ -83,32 +83,32 @@
   display: inline-flex;
   align-items: center;
   gap: 14px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.35);
   transition: all 0.35s ease;
 }
 
 .showcase-cta-btn:hover {
   transform: translateY(-3px) scale(1.03);
-  box-shadow: 0 14px 40px rgba(16, 185, 129, 0.4), 0 0 30px rgba(232, 196, 119, 0.3);
-  background: #f4fcf9;
+  box-shadow: 0 14px 35px rgba(255, 107, 0, 0.5);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
 }
 
 .cta-arrow-circle {
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #082823;
-  color: #ffffff;
+  background: #ffffff;
+  color: #ff6b00;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
   transition: transform 0.3s ease, background 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .showcase-cta-btn:hover .cta-arrow-circle {
   transform: rotate(45deg);
-  background: #10b981;
 }
 
 /* ⭐ 3D FAN STAGE & AMBIENT GLOW AURA */
@@ -133,7 +133,7 @@
   max-width: 1000px;
   height: 320px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 50% 100%, rgba(16, 185, 129, 0.45) 0%, rgba(13, 59, 52, 0.7) 45%, rgba(8, 40, 35, 0) 80%);
+  background: radial-gradient(ellipse at 50% 100%, rgba(255, 107, 0, 0.2) 0%, rgba(255, 245, 235, 0.6) 50%, rgba(255, 255, 255, 0) 80%);
   filter: blur(40px);
   pointer-events: none;
   z-index: 0;
@@ -154,11 +154,11 @@
 .showcase-fan-card {
   position: absolute;
   width: 380px;
-  background: rgba(13, 59, 52, 0.95);
-  border: 1.5px solid rgba(232, 196, 119, 0.25);
+  background: #ffffff;
+  border: 1.5px solid rgba(15, 23, 42, 0.12);
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
   cursor: pointer;
   transform-style: preserve-3d;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
@@ -167,12 +167,12 @@
 }
 
 .showcase-fan-card.is-active-center {
-  border-color: #10b981;
-  box-shadow: 0 25px 60px rgba(16, 185, 129, 0.4), 0 0 35px rgba(232, 196, 119, 0.3);
+  border-color: #ff6b00;
+  box-shadow: 0 25px 60px rgba(255, 107, 0, 0.25), 0 0 35px rgba(255, 107, 0, 0.15);
 }
 
 .showcase-fan-card:hover {
-  border-color: #e8c477;
+  border-color: #ff6b00;
 }
 
 /* Card Mockup Frame */
@@ -181,7 +181,7 @@
   width: 100%;
   height: 220px;
   overflow: hidden;
-  background: #000000;
+  background: #f8fafc;
 }
 
 .card-mockup-img {
@@ -199,21 +199,22 @@
 .card-overlay-tint {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(8, 40, 35, 0.1) 0%, rgba(8, 40, 35, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(11, 25, 44, 0.5) 100%);
 }
 
 .card-tag-badge {
   position: absolute;
   top: 14px;
   left: 14px;
-  background: rgba(8, 40, 35, 0.85);
-  border: 1px solid rgba(232, 196, 119, 0.4);
-  color: #e8c477;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  color: #ff6b00;
   font-size: 11px;
   font-weight: 700;
   padding: 4px 12px;
   border-radius: 14px;
   letter-spacing: 0.3px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(6px);
 }
 
@@ -221,13 +222,14 @@
 .card-mockup-info {
   padding: 20px 22px 24px 22px;
   text-align: left;
+  background: #ffffff;
 }
 
 .card-mockup-title {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-heading);
   font-size: 22px;
   font-weight: 700;
-  color: #ffffff;
+  color: #082233;
   margin: 0 0 4px 0;
   letter-spacing: -0.4px;
 }
@@ -235,13 +237,13 @@
 .card-mockup-sub {
   font-size: 13px;
   font-weight: 600;
-  color: #10b981;
+  color: #ff6b00;
   margin: 0 0 10px 0;
 }
 
 .card-mockup-desc {
   font-size: 13px;
-  color: rgba(216, 216, 208, 0.8);
+  color: #475569;
   line-height: 1.5;
   margin: 0 0 16px 0;
   display: -webkit-box;
@@ -257,11 +259,11 @@
 }
 
 .tech-pill-item {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(216, 216, 208, 0.9);
+  background: #f1f5f9;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: #0b192c;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   padding: 3px 10px;
   border-radius: 12px;
 }

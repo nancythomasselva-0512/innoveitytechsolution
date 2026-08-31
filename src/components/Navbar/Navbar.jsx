@@ -5,43 +5,31 @@ import { FiMenu, FiX, FiArrowUpRight } from 'react-icons/fi';
 import { useCMS } from '../../context/CMSContext';
 import './Navbar.css';
 
-export const InnoveityBrandLogo = ({ size = 28, showText = true, subTextOverride }) => {
+export const InnoveityBrandLogo = ({ size = 50, showText = true, subTextOverride, darkBg = false }) => {
   const cms = useCMS ? useCMS() : null;
-  const brandSub = subTextOverride || cms?.headerFooterSettings?.brandSubTitle || 'TECH SOLUTIONS';
-  const subFontSize = `${Math.max(0.42, size * 0.0165)}rem`;
-  const subPadding = `${Math.max(18, size * 1.25)}px`;
+  const brandSub = subTextOverride || cms?.headerFooterSettings?.brandSubTitle || 'SMART TECHNOLOGY. CREATIVE SOLUTIONS.';
+  const logoSrc = darkBg ? '/logo-light.png' : '/logo-transparent.png';
 
   return (
-    <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: '2px' }}>
+    <div className="innoveity-brand-wrap" style={{ display: 'inline-flex', alignItems: 'center', background: 'transparent' }}>
       <img
-        src="/Innoveity.png"
-        alt="Innoveity Tech Logo"
+        src={logoSrc}
+        alt="Innoveity Tech Solution"
+        className="innoveity-main-logo-img"
         style={{
           height: `${size}px`,
           width: 'auto',
+          maxWidth: '240px',
           objectFit: 'contain',
-          display: 'block'
+          display: 'block',
+          filter: darkBg ? 'drop-shadow(0 2px 8px rgba(0,0,0,0.4))' : 'drop-shadow(0 2px 6px rgba(0,0,0,0.06))',
+          transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
         onError={(e) => {
           e.target.onerror = null;
           e.target.src = '/logo-transparent.png';
         }}
       />
-      {showText && (
-        <span className="innoveity-brand-sub-title" style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: subFontSize,
-          fontWeight: 800,
-          letterSpacing: '2.2px',
-          color: '#00a878',
-          marginTop: '2px',
-          paddingLeft: subPadding,
-          textTransform: 'uppercase',
-          lineHeight: 1
-        }}>
-          {brandSub}
-        </span>
-      )}
     </div>
   );
 };
@@ -111,56 +99,59 @@ const Navbar = () => {
         <div className="navbar-brand">
           {isHome ? (
             <ScrollLink to="home" smooth={true} duration={500} className="brand-link">
-              <InnoveityBrandLogo size={38} showText={true} />
+              <InnoveityBrandLogo size={46} darkBg={false} />
             </ScrollLink>
           ) : (
             <RouterLink to="/" className="brand-link">
-              <InnoveityBrandLogo size={38} showText={true} />
+              <InnoveityBrandLogo size={46} darkBg={false} />
             </RouterLink>
           )}
         </div>
 
-        {/* Desktop Nav Links */}
-        <ul className={`navbar-nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
-          {navLinks.map((link, index) => (
-            <li key={index} className="nav-item">
-              {isHome && !link.isPage ? (
-                <ScrollLink
-                  activeClass="nav-link-active"
-                  to={link.to}
-                  spy={true}
-                  smooth={true}
-                  offset={-80}
-                  duration={500}
-                  className="nav-link-item"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </ScrollLink>
-              ) : (
-                <a
-                  className={`nav-link-item ${location.pathname === link.to ? 'nav-link-active' : ''}`}
-                  onClick={() => handleNavClick(link)}
-                >
-                  {link.name}
-                </a>
-              )}
-            </li>
-          ))}
-        </ul>
+        {/* Center Floating Glass Pill Nav Bar */}
+        <div className={`navbar-center-pill-wrap ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+          <ul className="navbar-nav-links-pill">
+            {navLinks.map((link, index) => {
+              const isActive = (isHome && link.to === 'home') || location.pathname === link.to;
+
+              return (
+                <li key={index} className="nav-pill-item">
+                  {isHome && !link.isPage ? (
+                    <ScrollLink
+                      activeClass="nav-link-pill-active"
+                      to={link.to}
+                      spy={true}
+                      smooth={true}
+                      offset={-80}
+                      duration={500}
+                      className={`nav-link-pill-btn ${isActive ? 'nav-link-pill-active' : ''}`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.name}
+                    </ScrollLink>
+                  ) : (
+                    <a
+                      className={`nav-link-pill-btn ${isActive ? 'nav-link-pill-active' : ''}`}
+                      onClick={() => handleNavClick(link)}
+                    >
+                      {link.name}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
 
         {/* Right Action Button */}
         <div className="navbar-actions">
-          <button className="pill-btn-contact" onClick={handleContactClick}>
+          <button className="pill-btn-login" onClick={handleContactClick}>
             <span>{contactBtnText}</span>
-            <div className="arrow-circle">
-              <FiArrowUpRight size={14} />
-            </div>
           </button>
 
           {/* Mobile Toggle Icon */}
           <div className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <FiX size={26} /> : <FiMenu size={26} />}
+            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </div>
         </div>
       </div>

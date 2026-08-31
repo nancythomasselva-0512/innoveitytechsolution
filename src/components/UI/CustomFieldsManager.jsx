@@ -20,11 +20,11 @@ const CustomFieldsManager = ({ pageKey, title }) => {
   };
 
   return (
-    <div className="dash-form-wrapper" style={{ marginTop: '24px', background: '#ffffff', borderRadius: '20px', border: '1px solid #d1fae5', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
+    <div className="dash-form-wrapper" style={{ marginTop: '24px', background: '#ffffff', borderRadius: '20px', border: '1px solid #fed7aa', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <div>
-          <h4 style={{ margin: '0 0 2px', color: '#093c25', fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <FiLayers style={{ color: '#10b981' }} /> {title || 'Custom Dynamic Content Fields'}
+          <h4 style={{ margin: '0 0 2px', color: '#121212', fontSize: '1.05rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <FiLayers style={{ color: '#ff6b00' }} /> {title || 'Custom Dynamic Content Fields'}
           </h4>
           <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
             Add custom labels, keys, or sub-content fields dynamically.
@@ -34,7 +34,7 @@ const CustomFieldsManager = ({ pageKey, title }) => {
         <button 
           type="button" 
           className="action-pill-btn primary-pill"
-          style={{ background: '#093c25', color: '#ffffff', border: 'none', fontWeight: 800 }}
+          style={{ background: '#121212', color: '#ffffff', border: 'none', fontWeight: 800 }}
           onClick={() => setShowAddForm(!showAddForm)}
         >
           <FiPlus /> {showAddForm ? 'Close Form' : '+ Add Custom Field'}
@@ -68,7 +68,7 @@ const CustomFieldsManager = ({ pageKey, title }) => {
           </div>
 
           <div className="dash-field-group full-width" style={{ display: 'flex', gap: '8px' }}>
-            <button type="submit" className="action-pill-btn primary-pill" style={{ background: '#10b981', color: '#ffffff', border: 'none' }}>
+            <button type="submit" className="action-pill-btn primary-pill" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none' }}>
               <FiCheck /> Save Field
             </button>
             <button type="button" className="action-pill-btn" onClick={() => setShowAddForm(false)}>
@@ -91,13 +91,13 @@ const CustomFieldsManager = ({ pageKey, title }) => {
                 alignItems: 'center', 
                 justify: 'space-between', 
                 padding: '12px 16px', 
-                background: '#f0fdf4', 
+                background: '#fff7ed', 
                 borderRadius: '14px', 
-                border: '1px solid #d1fae5' 
+                border: '1px solid #fed7aa' 
               }}
             >
               <div>
-                <span style={{ fontSize: '0.72rem', fontWeight: 800, background: '#d1fae5', color: '#059669', padding: '2px 8px', borderRadius: '8px', marginRight: '8px' }}>
+                <span style={{ fontSize: '0.72rem', fontWeight: 800, background: '#ffedd5', color: '#ea580c', padding: '2px 8px', borderRadius: '8px', marginRight: '8px' }}>
                   {field.label}
                 </span>
                 <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#0f172a' }}>

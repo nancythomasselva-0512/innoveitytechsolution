@@ -718,7 +718,7 @@ const SuperAdminPage = () => {
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
-              <InnoveityBrandLogo size={28} showText={true} />
+              <InnoveityBrandLogo size={42} darkBg={true} />
               <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
                 <FiX />
               </button>
@@ -736,7 +736,7 @@ const SuperAdminPage = () => {
           </div>
           <div className="user-info">
             <h4>{currentUser?.name || 'System Owner'}</h4>
-            <span className="user-role-tag" style={{ color: '#10b981' }}>{currentUser?.role || 'Super Admin'}</span>
+            <span className="user-role-tag" style={{ color: '#ff6b00' }}>{currentUser?.role || 'Super Admin'}</span>
           </div>
         </div>
 
@@ -875,7 +875,7 @@ const SuperAdminPage = () => {
 
           <div className="dash-header-right">
             {notification && (
-              <div className="promo-mint-btn" style={{ background: '#d1fae5', color: '#047857' }}>
+              <div className="promo-mint-btn" style={{ background: '#fed7aa', color: '#047857' }}>
                 <FiCheckCircle /> {notification}
               </div>
             )}
@@ -887,7 +887,7 @@ const SuperAdminPage = () => {
 
             <button
               className="btn-live-preview"
-              style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
               onClick={async () => {
                 if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
                   const ok = await seedCloudDatabase();
@@ -913,7 +913,7 @@ const SuperAdminPage = () => {
               <FiRefreshCw /> Clear Cache
             </button>
 
-            <Link to="/" className="btn-live-preview" target="_blank" style={{ background: 'linear-gradient(135deg, #10b981, #059669)', whiteSpace: 'nowrap' }}>
+            <Link to="/" className="btn-live-preview" target="_blank" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', whiteSpace: 'nowrap' }}>
               Live Site <FiExternalLink />
             </Link>
           </div>
@@ -953,7 +953,7 @@ const SuperAdminPage = () => {
                 <span className="donezo-arrow-circle">↗</span>
                 <span className="donezo-stat-title">Pending Inquiries</span>
                 <div className="donezo-stat-digit">{contactBlocks ? contactBlocks.length : 0}</div>
-                <div className="donezo-badge-tag" style={{ color: '#059669' }}>Active Channels</div>
+                <div className="donezo-badge-tag" style={{ color: '#ea580c' }}>Active Channels</div>
               </div>
             </div>
 
@@ -982,13 +982,13 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#0d3b34' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#121212' }}>
                     {analyticsTimeframe === 'weekly'
                       ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
                       : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
                     }
                   </span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', background: '#ecfdf5', padding: '2px 8px', borderRadius: '12px', border: '1px solid #a7f3d0' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ea580c', background: '#fff7ed', padding: '2px 8px', borderRadius: '12px', border: '1px solid #fdba74' }}>
                     ↑ {projects ? projects.length : 0} {analyticsTimeframe === 'weekly' ? 'Items (Weekly)' : 'Items (Monthly)'}
                   </span>
                 </div>
@@ -998,8 +998,8 @@ const SuperAdminPage = () => {
                   <svg width="100%" height="100%" viewBox="0 0 400 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
                     <defs>
                       <linearGradient id="superAnalyticsGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                        <stop offset="0%" stopColor="#ff6b00" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#ff6b00" stopOpacity="0.0" />
                       </linearGradient>
                     </defs>
 
@@ -1024,7 +1024,7 @@ const SuperAdminPage = () => {
                         : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40"
                       }
                       fill="none"
-                      stroke="#093c25"
+                      stroke="#121212"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />
@@ -1032,18 +1032,18 @@ const SuperAdminPage = () => {
                     {/* DATA DOTS */}
                     {analyticsTimeframe === 'weekly' ? (
                       <>
-                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="210" cy="20" r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
+                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="210" cy="20" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
+                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
                       </>
                     ) : (
                       <>
-                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="250" cy="15" r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
+                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="250" cy="15" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
+                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
                       </>
                     )}
                   </svg>
@@ -1067,7 +1067,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#093c25', marginBottom: '4px' }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>
                     CMS Synchronization Active
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
@@ -1080,17 +1080,17 @@ const SuperAdminPage = () => {
                   <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #e2e8f0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
                       <span>Database Health</span>
-                      <span style={{ color: '#059669' }}>Optimal</span>
+                      <span style={{ color: '#ea580c' }}>Optimal</span>
                     </div>
                     <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: '100%', height: '100%', background: '#10b981' }}></div>
+                      <div style={{ width: '100%', height: '100%', background: '#ff6b00' }}></div>
                     </div>
                   </div>
                 </div>
 
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ width: '100%', justifyContent: 'center', background: '#093c25', color: '#ffffff', fontWeight: 800, padding: '10px' }}
+                  style={{ width: '100%', justifyContent: 'center', background: '#121212', color: '#ffffff', fontWeight: 800, padding: '10px' }}
                   onClick={() => setActiveTab('projects')}
                 >
                   ⚡ Manage Content
@@ -1108,12 +1108,12 @@ const SuperAdminPage = () => {
                 <div style={{ marginBottom: '10px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
                     <span>Sprint Execution</span>
-                    <span style={{ color: '#059669' }}>
+                    <span style={{ color: '#ea580c' }}>
                       {projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 100}% Completed
                     </span>
                   </div>
                   <div style={{ display: 'flex', height: '6px', borderRadius: '4px', overflow: 'hidden', background: '#e2e8f0' }}>
-                    <div style={{ width: `${projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 70}%`, background: '#10b981' }}></div>
+                    <div style={{ width: `${projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 70}%`, background: '#ff6b00' }}></div>
                     <div style={{ width: '20%', background: '#3b82f6', marginLeft: '2px' }}></div>
                     <div style={{ width: '10%', background: '#d97706', marginLeft: '2px' }}></div>
                   </div>
@@ -1124,18 +1124,18 @@ const SuperAdminPage = () => {
                     projects.slice(0, 3).map((p, idx) => (
                       <div key={p.id || idx} className="donezo-task-row">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                          <div className="donezo-task-icon-box" style={{ background: idx === 0 ? '#ecfdf5' : idx === 1 ? '#eff6ff' : '#fef3c7', color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706' }}>
+                          <div className="donezo-task-icon-box" style={{ background: idx === 0 ? '#fff7ed' : idx === 1 ? '#eff6ff' : '#fef3c7', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}>
                             {idx === 0 ? '🌐' : idx === 1 ? '⚡' : '🚀'}
                           </div>
                           <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <div className="donezo-task-title">{p.title}</div>
-                              <span style={{ fontSize: '0.68rem', color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706', fontWeight: 700 }}>
+                              <span style={{ fontSize: '0.68rem', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706', fontWeight: 700 }}>
                                 {p.image ? '100%' : '85%'}
                               </span>
                             </div>
                             <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '2px', marginTop: '4px', overflow: 'hidden' }}>
-                              <div style={{ width: p.image ? '100%' : '85%', height: '100%', background: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706' }}></div>
+                              <div style={{ width: p.image ? '100%' : '85%', height: '100%', background: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}></div>
                             </div>
                           </div>
                         </div>
@@ -1165,7 +1165,7 @@ const SuperAdminPage = () => {
                           {m.image ? (
                             <img src={m.image} alt={m.name} style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }} />
                           ) : (
-                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#d1fae5', color: '#059669', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
+                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fed7aa', color: '#ea580c', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
                               {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
                             </div>
                           )}
@@ -1198,8 +1198,8 @@ const SuperAdminPage = () => {
                         <svg width="130" height="130" viewBox="0 0 140 140">
                           <defs>
                             <linearGradient id="superRingGrad" x1="0" y1="0" x2="1" y2="1">
-                              <stop offset="0%" stopColor="#10b981" />
-                              <stop offset="100%" stopColor="#093c25" />
+                              <stop offset="0%" stopColor="#ff6b00" />
+                              <stop offset="100%" stopColor="#121212" />
                             </linearGradient>
                           </defs>
                           <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
@@ -1215,17 +1215,17 @@ const SuperAdminPage = () => {
                           />
                         </svg>
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#0d3b34', lineHeight: 1 }}>{pct}%</div>
+                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#121212', lineHeight: 1 }}>{pct}%</div>
                           <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Live Completed</div>
                         </div>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.74rem', color: '#475569', fontWeight: 700, width: '100%', background: '#f8fafc', padding: '8px 12px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#093c25' }}></span> {doneP} Completed
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#121212' }}></span> {doneP} Completed
                         </span>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span> {totalP - doneP} Active
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff6b00' }}></span> {totalP - doneP} Active
                         </span>
                       </div>
                     </>
@@ -1237,7 +1237,7 @@ const SuperAdminPage = () => {
               <div className="donezo-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <h4 className="donezo-card-title" style={{ margin: 0 }}>Quick Management</h4>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#059669', background: '#ecfdf5', padding: '3px 10px', borderRadius: '12px', border: '1px solid #a7f3d0', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c', background: '#fff7ed', padding: '3px 10px', borderRadius: '12px', border: '1px solid #fdba74', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     ⚡ System Ready
                   </span>
                 </div>
@@ -1247,7 +1247,7 @@ const SuperAdminPage = () => {
                     onClick={() => setActiveTab('projects')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#d1fae5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiFolder />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
@@ -1264,7 +1264,7 @@ const SuperAdminPage = () => {
                     onClick={() => setActiveTab('team')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiUsers />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
@@ -1312,9 +1312,9 @@ const SuperAdminPage = () => {
                   </button>
                 </div>
 
-                <div style={{ marginTop: '12px', background: '#ecfdf5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #a7f3d0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
+                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
                   <span>Live Site Status</span>
-                  <a href="/" target="_blank" rel="noreferrer" style={{ color: '#059669', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <a href="/" target="_blank" rel="noreferrer" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     Preview <FiExternalLink />
                   </a>
                 </div>
@@ -1330,8 +1330,8 @@ const SuperAdminPage = () => {
             {/* ⭐ SECTION 1: 3D ROTATOR SHOWCASE CONTENT EDITOR */}
             <div className="chart-header-row" style={{ marginBottom: '16px' }}>
               <div>
-                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#0d3b34', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FiLayers style={{ color: '#10b981' }} /> Projects 3D Showcase (Rotator Section)
+                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#121212', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiLayers style={{ color: '#ff6b00' }} /> Projects 3D Showcase (Rotator Section)
                 </h3>
                 <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
                   Manage the 3D rotating arc cards carousel shown on Homepage & Projects Hero.
@@ -1897,10 +1897,10 @@ const SuperAdminPage = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
                     {leadershipList.map((m, idx) => (
                       <div key={m.id} style={{
-                        background: '#ecfdf5',
+                        background: '#fff7ed',
                         padding: '20px',
                         borderRadius: '20px',
-                        border: '2px solid #10b981',
+                        border: '2px solid #ff6b00',
                         textAlign: 'center',
                         position: 'relative'
                       }}>
@@ -1908,7 +1908,7 @@ const SuperAdminPage = () => {
                           position: 'absolute',
                           top: '12px',
                           right: '12px',
-                          background: '#059669',
+                          background: '#ea580c',
                           color: 'white',
                           fontSize: '0.68rem',
                           fontWeight: 800,
@@ -1919,7 +1919,7 @@ const SuperAdminPage = () => {
                           ★ Leadership
                         </span>
 
-                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #059669', marginBottom: '10px', marginTop: '10px' }} />
+                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ea580c', marginBottom: '10px', marginTop: '10px' }} />
                         <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
                         <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#047857', fontWeight: 700 }}>{m.role}</p>
 
@@ -1971,9 +1971,9 @@ const SuperAdminPage = () => {
                           Member
                         </span>
 
-                        <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #10b981', marginBottom: '10px', marginTop: '10px' }} />
+                        <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ff6b00', marginBottom: '10px', marginTop: '10px' }} />
                         <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#10b981', fontWeight: 700 }}>{m.role}</p>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700 }}>{m.role}</p>
 
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
@@ -2103,7 +2103,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM CONTACT CHANNEL BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
               <form onSubmit={handleAddContactBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Channel Title / Desk</label>
@@ -2183,8 +2183,8 @@ const SuperAdminPage = () => {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '30px',
-                    border: selectedSeoPage === page.id ? '1px solid #093c25' : '1px solid #cbd5e1',
-                    background: selectedSeoPage === page.id ? '#093c25' : '#ffffff',
+                    border: selectedSeoPage === page.id ? '1px solid #121212' : '1px solid #cbd5e1',
+                    background: selectedSeoPage === page.id ? '#121212' : '#ffffff',
                     color: selectedSeoPage === page.id ? '#ffffff' : '#334155',
                     fontSize: '0.82rem',
                     fontWeight: 700,
@@ -2203,7 +2203,7 @@ const SuperAdminPage = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '20px', margin: '16px 0 24px' }}>
               {/* GOOGLE SEARCH PREVIEW */}
               <div style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-                <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>
+                <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '8px' }}>
                   🔍 Google Search Engine Preview ({selectedSeoPage.toUpperCase()} PAGE)
                 </div>
                 <div style={{ fontSize: '0.8rem', color: '#202124', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -2247,8 +2247,8 @@ const SuperAdminPage = () => {
             <div className="dash-form-wrapper">
               <form onSubmit={handleSaveSeo} className="dash-form-grid">
                 <div className="dash-field-group full-width">
-                  <h4 style={{ margin: '0 0 10px', color: '#093c25', fontSize: '1.1rem' }}>
-                    Page SEO Configuration: <span style={{ color: '#10b981', textTransform: 'uppercase' }}>{selectedSeoPage} Page</span>
+                  <h4 style={{ margin: '0 0 10px', color: '#121212', fontSize: '1.1rem' }}>
+                    Page SEO Configuration: <span style={{ color: '#ff6b00', textTransform: 'uppercase' }}>{selectedSeoPage} Page</span>
                   </h4>
                 </div>
 
@@ -2347,7 +2347,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div className="dash-field-group full-width" style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #cbd5e1' }}>
-                  <h4 style={{ margin: '0 0 10px', color: '#093c25', fontSize: '1.05rem' }}>
+                  <h4 style={{ margin: '0 0 10px', color: '#121212', fontSize: '1.05rem' }}>
                     Global Technical SEO & Indexing
                   </h4>
                 </div>
@@ -2373,7 +2373,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div className="dash-field-group full-width">
-                  <div style={{ background: '#ecfdf5', padding: '12px 16px', borderRadius: '12px', border: '1px solid #a7f3d0', color: '#059669', fontSize: '0.82rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ background: '#fff7ed', padding: '12px 16px', borderRadius: '12px', border: '1px solid #fdba74', color: '#ea580c', fontSize: '0.82rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiCheckCircle size={16} /> Live Route Watcher Active: Dynamically injecting document title, meta tags, and open-graph cards for all 9 routes.
                   </div>
                 </div>
@@ -2502,7 +2502,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM HOMEPAGE CONTENT BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem' }}>Add Custom Homepage Feature Block</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Homepage Feature Block</h4>
               <form onSubmit={handleAddHomeBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Feature Title</label>
@@ -2665,7 +2665,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM ABOUT US VALUE / MILESTONE BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem' }}>Add Custom Value / Milestone Block</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Value / Milestone Block</h4>
               <form onSubmit={handleAddAboutBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Milestone Title</label>
@@ -2728,7 +2728,7 @@ const SuperAdminPage = () => {
 
             {/* 1. HEADER BRANDING & CTA BUTTON */}
             <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayout /> Header Logo & Button Configuration
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2766,7 +2766,7 @@ const SuperAdminPage = () => {
 
             {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Navigation Bar Menu Links Manager
               </h4>
 
@@ -2822,10 +2822,10 @@ const SuperAdminPage = () => {
                   <div key={link.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
                           <FiArrowUp size={16} />
                         </button>
-                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
                           <FiArrowDown size={16} />
                         </button>
                       </div>
@@ -2854,7 +2854,7 @@ const SuperAdminPage = () => {
 
             {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Company & Desk Contact Info
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2923,7 +2923,7 @@ const SuperAdminPage = () => {
 
             {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiShare2 /> Footer Social Media Links ("Connect")
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2981,7 +2981,7 @@ const SuperAdminPage = () => {
 
             {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiZap /> Footer Call-to-Action Banner & Legal Bar
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -3066,7 +3066,7 @@ const SuperAdminPage = () => {
 
                 {/* HERO SECTION CONFIGURATION */}
                 <div className="dash-field-group full-width">
-                  <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiFilm /> 1. Hero Section Content
                   </h4>
                 </div>
@@ -3204,7 +3204,7 @@ const SuperAdminPage = () => {
 
                 {/* 3D DECK CARDS IMAGE MANAGEMENT */}
                 <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiLayers /> 2. 3D Deck Showcase Images Management
                   </h4>
                 </div>
@@ -3303,7 +3303,7 @@ const SuperAdminPage = () => {
 
                 {/* PRODUCTION CAPABILITIES POSTER IMAGES MANAGEMENT */}
                 <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiVideo /> 3. Production Capabilities Poster Images Management
                   </h4>
                 </div>
@@ -3398,7 +3398,7 @@ const SuperAdminPage = () => {
 
                 {/* CALL TO ACTION CONFIGURATION */}
                 <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiZap /> 4. Call to Action (CTA) Section
                   </h4>
                 </div>
@@ -3552,7 +3552,7 @@ const SuperAdminPage = () => {
                     <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{u.password || 'admin123'}</code></td>
                     <td><span className="category-badge-pill">{u.role}</span></td>
                     <td>
-                      <span className="action-pill-btn" style={{ background: u.status === 'Active' ? '#ecfdf5' : '#fef2f2', color: u.status === 'Active' ? '#059669' : '#ef4444' }}>
+                      <span className="action-pill-btn" style={{ background: u.status === 'Active' ? '#fff7ed' : '#fef2f2', color: u.status === 'Active' ? '#ea580c' : '#ef4444' }}>
                         {u.status}
                       </span>
                     </td>
@@ -3588,8 +3588,8 @@ const SuperAdminPage = () => {
               margin: '20px 0',
               padding: '16px 20px',
               borderRadius: '14px',
-              background: dbStatus === 'connected' ? '#ecfdf5' : (dbStatus === 'connecting' ? '#eff6ff' : '#fff7ed'),
-              border: `1px solid ${dbStatus === 'connected' ? '#a7f3d0' : (dbStatus === 'connecting' ? '#bfdbfe' : '#fde68a')}`,
+              background: dbStatus === 'connected' ? '#fff7ed' : (dbStatus === 'connecting' ? '#eff6ff' : '#fff7ed'),
+              border: `1px solid ${dbStatus === 'connected' ? '#fdba74' : (dbStatus === 'connecting' ? '#bfdbfe' : '#fde68a')}`,
               display: 'flex',
               alignItems: 'center',
               justify: 'space-between',
@@ -3601,8 +3601,8 @@ const SuperAdminPage = () => {
                   width: '12px',
                   height: '12px',
                   borderRadius: '50%',
-                  background: dbStatus === 'connected' ? '#10b981' : (dbStatus === 'connecting' ? '#3b82f6' : '#f59e0b'),
-                  boxShadow: dbStatus === 'connected' ? '0 0 8px #10b981' : 'none'
+                  background: dbStatus === 'connected' ? '#ff6b00' : (dbStatus === 'connecting' ? '#3b82f6' : '#f59e0b'),
+                  boxShadow: dbStatus === 'connected' ? '0 0 8px #ff6b00' : 'none'
                 }} />
                 <div>
                   <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>

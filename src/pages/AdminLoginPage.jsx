@@ -87,7 +87,7 @@ const AdminLoginPage = () => {
         {/* Header Branding */}
         <div className="login-brand-header">
           <Link to="/" className="login-brand-logo-link">
-            <InnoveityBrandLogo size={36} showText={true} />
+            <InnoveityBrandLogo size={52} darkBg={true} />
           </Link>
           <h2 className="login-title">Portal Authorization</h2>
           <p className="login-subtitle">Sign in to access your administrative control system</p>

@@ -1,5 +1,5 @@
 /* 
-  Innoveity Tech Solution - Brand Theme Mesh Gradient (Emerald & Forest Green)
+  Innoveity Tech Solution - Brand Theme Mesh Gradient (Pure White & Vibrant Tech Orange)
 */
 
 .mesh-gradient-wrapper {
@@ -7,9 +7,9 @@
   width: 100%;
   overflow: hidden;
   border-radius: 28px;
-  background: linear-gradient(135deg, #082823 0%, #0d3b34 40%, #059669 75%, #10b981 100%);
-  box-shadow: 0 25px 60px rgba(13, 59, 52, 0.25);
-  color: #ffffff;
+  background: linear-gradient(135deg, #ffffff 0%, #fff9f2 40%, #ffeed9 100%);
+  box-shadow: 0 15px 40px rgba(255, 107, 0, 0.08);
+  color: #0f172a;
 }
 
 .mesh-canvas {
@@ -24,7 +24,7 @@
   border-radius: inherit;
   filter: blur(65px);
   -webkit-filter: blur(65px);
-  opacity: 0.95;
+  opacity: 0.85;
 }
 
 /* Mesh Animated Color Blobs */
@@ -35,56 +35,58 @@
   animation: floatMeshBlob 18s ease-in-out infinite alternate;
 }
 
-/* Deep Forest Dark Green - Top Left Glow */
+/* Pure White - Top Left Glow */
 .blob-forest-dark {
   width: 65%;
   height: 140%;
   top: -25%;
   left: -20%;
-  background: radial-gradient(circle, #082823 0%, #0d3b34 60%, transparent 100%);
+  background: radial-gradient(circle, #ffffff 0%, #fffbf5 60%, transparent 100%);
   animation-duration: 20s;
 }
 
-/* Deep Teal / Cyan - Middle Upper Glow */
+/* Soft Amber Glow - Middle Upper Glow */
 .blob-teal-cyan {
   width: 55%;
   height: 110%;
   top: -35%;
   left: 25%;
-  background: radial-gradient(circle, #0d9488 0%, #06b6d4 55%, transparent 100%);
+  background: radial-gradient(circle, #fff0e0 0%, #ffe0cc 55%, transparent 100%);
   animation-duration: 15s;
   animation-delay: -3s;
 }
 
-/* Vibrant Emerald Green - Primary Brand Glow Center */
+/* Vibrant Tech Orange - Primary Brand Glow Center */
 .blob-emerald-primary {
   width: 60%;
   height: 120%;
   bottom: -20%;
   left: 30%;
-  background: radial-gradient(circle, #10b981 0%, #059669 65%, transparent 100%);
+  background: radial-gradient(circle, #ff8a00 0%, #ff6b00 65%, transparent 100%);
+  opacity: 0.35;
   animation-duration: 22s;
   animation-delay: -7s;
 }
 
-/* Bright Mint Green - Top Right Glow */
+/* Warm Amber Orange - Top Right Glow */
 .blob-mint-bright {
   width: 55%;
   height: 120%;
   top: -20%;
   right: -15%;
-  background: radial-gradient(circle, #34d399 0%, #059669 60%, transparent 100%);
+  background: radial-gradient(circle, #ffa033 0%, #ff8a00 60%, transparent 100%);
+  opacity: 0.4;
   animation-duration: 24s;
   animation-delay: -10s;
 }
 
-/* Dark Forest Base Accent - Bottom Right */
+/* Warm Ivory Base Accent - Bottom Right */
 .blob-forest-accent {
   width: 50%;
   height: 90%;
   bottom: -30%;
   right: 10%;
-  background: radial-gradient(circle, #0d3b34 0%, #06221d 75%, transparent 100%);
+  background: radial-gradient(circle, #ffe6cc 0%, #ffffff 75%, transparent 100%);
   animation-duration: 19s;
   animation-delay: -5s;
 }
@@ -93,9 +95,9 @@
 .mesh-noise-overlay {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 0);
+  background-image: radial-gradient(rgba(255, 107, 0, 0.08) 1px, transparent 0);
   background-size: 28px 28px;
-  opacity: 0.35;
+  opacity: 0.5;
 }
 
 /* Content Container */

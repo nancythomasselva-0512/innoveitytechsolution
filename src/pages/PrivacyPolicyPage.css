@@ -1,13 +1,10 @@
-/* Privacy Policy Page Styles */
+/* Privacy Policy Page Styles (Pure White Theme) */
 .privacy-page-wrapper {
   min-height: 100vh;
   padding-top: 110px;
   padding-bottom: 80px;
-  background-color: #0b0f19;
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(13, 59, 52, 0.15) 0px, transparent 50%);
-  color: #e2e8f0;
+  background-color: var(--bg-color, #ffffff);
+  color: #0b192c;
   font-family: var(--font-family);
 }
 
@@ -32,9 +29,9 @@
   gap: 0.5rem;
   padding: 0.65rem 1.4rem;
   border-radius: 30px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: #94a3b8;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.12);
+  color: #0b192c;
   font-family: var(--font-heading);
   font-size: 0.9rem;
   font-weight: 600;
@@ -43,27 +40,25 @@
 }
 
 .tab-btn:hover {
-  color: #ffffff;
-  border-color: rgba(16, 185, 129, 0.4);
-  background: rgba(16, 185, 129, 0.08);
+  color: #ff6b00;
+  border-color: rgba(255, 107, 0, 0.4);
+  background: rgba(255, 107, 0, 0.05);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
   color: #ffffff;
   border-color: transparent;
-  box-shadow: 0 4px 18px rgba(16, 185, 129, 0.3);
+  box-shadow: 0 4px 18px rgba(255, 107, 0, 0.3);
 }
 
 /* Policy Card Main */
 .policy-card-main {
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 20px;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   padding: 3.5rem 3rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.06);
   margin-bottom: 2.5rem;
 }
 
@@ -76,7 +71,7 @@
   font-family: var(--font-heading);
   font-size: 2.75rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0b192c;
   letter-spacing: -0.02em;
   margin-bottom: 0.4rem;
 }
@@ -91,12 +86,12 @@
 .policy-intro {
   font-size: 1.05rem;
   line-height: 1.7;
-  color: #cbd5e1;
+  color: #475569;
   margin-bottom: 2.5rem;
 }
 
 .brand-highlight {
-  color: #ffffff;
+  color: #0b192c;
   font-weight: 700;
 }
 
@@ -109,20 +104,20 @@
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 700;
-  color: #f8fafc;
+  color: #0b192c;
   margin-bottom: 0.75rem;
   letter-spacing: -0.01em;
 }
 
 .sec-num {
-  color: #10b981;
+  color: #ff6b00;
   margin-right: 0.2rem;
 }
 
 .section-desc {
   font-size: 0.98rem;
   line-height: 1.65;
-  color: #94a3b8;
+  color: #475569;
   margin-bottom: 0.75rem;
 }
 
@@ -137,14 +132,14 @@
   margin-bottom: 0.55rem;
   font-size: 0.98rem;
   line-height: 1.6;
-  color: #cbd5e1;
+  color: #475569;
 }
 
 .policy-bullets li::before {
   content: "•";
   position: absolute;
   left: 0.4rem;
-  color: #10b981;
+  color: #ff6b00;
   font-size: 1.2rem;
   line-height: 1;
   top: -1px;
@@ -153,14 +148,14 @@
 /* Policy Divider */
 .policy-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background: rgba(15, 23, 42, 0.08);
   margin: 2.5rem 0;
 }
 
 /* Contact Box */
 .policy-contact-box {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.12);
+  background: #f8fafc;
+  border: 1px dashed rgba(15, 23, 42, 0.15);
   border-radius: 12px;
   padding: 1.25rem 1.5rem;
   display: flex;
@@ -170,32 +165,32 @@
 
 .policy-contact-box p {
   font-size: 0.95rem;
-  color: #94a3b8;
+  color: #475569;
 }
 
 .contact-email {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: #10b981;
+  color: #ff6b00;
   font-weight: 700;
   font-size: 1.05rem;
   transition: color 0.2s ease;
 }
 
 .contact-email:hover {
-  color: #34d399;
+  color: #ea580c;
   text-decoration: underline;
 }
 
 /* Newsletter Card ("Stay Updated") */
 .newsletter-card-wrapper {
-  background: linear-gradient(135deg, rgba(20, 30, 48, 0.8) 0%, rgba(36, 59, 85, 0.6) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1px solid rgba(255, 107, 0, 0.25);
   border-radius: 20px;
   padding: 2.75rem 2.5rem;
   text-align: center;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 30px rgba(255, 107, 0, 0.08);
   margin-bottom: 2.5rem;
 }
 
@@ -203,13 +198,13 @@
   font-family: var(--font-heading);
   font-size: 2rem;
   font-weight: 800;
-  color: #ffffff;
+  color: #0b192c;
   margin-bottom: 0.5rem;
 }
 
 .newsletter-subtitle {
   font-size: 0.95rem;
-  color: #94a3b8;
+  color: #475569;
   max-width: 600px;
   margin: 0 auto 1.75rem auto;
   line-height: 1.6;
@@ -230,8 +225,8 @@
 }
 
 .input-field-group:focus-within {
-  border-color: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
+  border-color: #ff6b00;
+  box-shadow: 0 0 12px rgba(255, 107, 0, 0.2);
 }
 
 .newsletter-input {
@@ -249,7 +244,7 @@
 }
 
 .newsletter-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
   color: #ffffff;
   border: none;
   border-radius: 8px;
@@ -265,15 +260,15 @@
 
 .newsletter-btn:hover {
   transform: translateY(-1px);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.4);
 }
 
 .subscribed-success {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  background: rgba(16, 185, 129, 0.15);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  background: rgba(255, 107, 0, 0.15);
+  border: 1px solid rgba(255, 107, 0, 0.3);
   color: #34d399;
   padding: 0.75rem 1.5rem;
   border-radius: 30px;
@@ -309,7 +304,7 @@
 
 .policy-footer-links button:hover,
 .policy-footer-links button.active-link {
-  color: #10b981;
+  color: #ff6b00;
   text-decoration: underline;
 }
 

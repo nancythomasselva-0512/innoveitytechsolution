@@ -316,7 +316,7 @@ const ServicesPage = () => {
           <h2 className="sp-section-title animate-on-scroll">Why Our Services</h2>
           <div className="sp-features-grid">
             {features.map((feature, idx) => {
-              // 2D Checkerboard pattern: cards 2, 4, 5, 7 (indices 1, 3, 4, 6) use brand dark green #0D3B34
+              // 2D Checkerboard pattern: cards 2, 4, 5, 7 (indices 1, 3, 4, 6) use brand dark green #121212
               const isDarkCard = [1, 3, 4, 6].includes(idx);
               return (
                 <div className={`feature-box ${isDarkCard ? 'dark-card' : ''}`} key={idx} style={{ '--stagger': idx }}>

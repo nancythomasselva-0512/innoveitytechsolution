@@ -336,7 +336,7 @@ export const CMSProvider = ({ children }) => {
   };
 
   const defaultHeaderFooterSettings = {
-    brandSubTitle: 'TECH SOLUTIONS',
+    brandSubTitle: 'SMART TECHNOLOGY. CREATIVE SOLUTIONS.',
     contactBtnText: 'CONTACT US',
     navLinks: [
       { id: 1, name: 'Home', to: 'home', isPage: false },

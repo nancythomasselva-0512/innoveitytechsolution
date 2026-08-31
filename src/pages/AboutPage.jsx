@@ -144,7 +144,7 @@ const AboutPage = () => {
         {/* Main Split-Screen Container */}
         <div className="about-split-screen">
           
-          {/* Left Column (~50% width): Dark Green Panel #0D3B34 */}
+          {/* Left Column (~50% width): Dark Green Panel #121212 */}
           <div className="about-left-column">
             
             {/* Content Sections Wrapper */}
@@ -317,13 +317,13 @@ const AboutPage = () => {
               <svg viewBox="0 0 1200 160" preserveAspectRatio="none" className="sd-wave-svg">
                 <defs>
                   <linearGradient id="waveLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#10b981" />
+                    <stop offset="0%" stopColor="#ff6b00" />
                     <stop offset="40%" stopColor="#34d399" />
                     <stop offset="70%" stopColor="#e8c477" />
                     <stop offset="100%" stopColor="#f59e0b" />
                   </linearGradient>
                   <linearGradient id="waveFillGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(16, 185, 129, 0.25)" />
+                    <stop offset="0%" stopColor="rgba(255, 107, 0, 0.25)" />
                     <stop offset="50%" stopColor="rgba(52, 211, 153, 0.2)" />
                     <stop offset="100%" stopColor="rgba(232, 196, 119, 0.25)" />
                   </linearGradient>

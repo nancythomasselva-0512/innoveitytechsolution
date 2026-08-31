@@ -87,7 +87,7 @@ const Services = () => {
               whileHover={{ 
                 y: -6,
                 boxShadow: "0 20px 40px rgba(0, 0, 0, 0.12)",
-                borderColor: "rgba(16, 185, 129, 0.4)",
+                borderColor: "rgba(255, 107, 0, 0.4)",
                 transition: { duration: 0.3 }
               }}
             >

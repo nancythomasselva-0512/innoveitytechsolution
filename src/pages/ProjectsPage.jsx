@@ -53,7 +53,7 @@ const ProjectsPage = () => {
   ];
 
   return (
-    <div className="projects-page" style={{ paddingTop: '80px', backgroundColor: '#082823' }}>
+    <div className="projects-page" style={{ paddingTop: '80px', backgroundColor: '#ffffff' }}>
       
       {/* ⭐ 3D Showcase Hero Section */}
       <ProjectsShowcase />
@@ -62,7 +62,7 @@ const ProjectsPage = () => {
       <section className="projects-section" style={{ backgroundColor: '#ffffff', color: '#111111' }}>
         <div className="container">
           <div className="projects-grid-header" style={{ textCenter: 'center', marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#0d3b34', marginBottom: '10px' }}>Featured Case Studies</h2>
+            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#121212', marginBottom: '10px' }}>Featured Case Studies</h2>
             <p style={{ color: '#555555', fontSize: '16px' }}>Detailed breakdown of system architecture, engineering challenges, and measurable results.</p>
           </div>
 

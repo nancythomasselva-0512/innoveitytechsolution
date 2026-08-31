@@ -20,14 +20,14 @@
   text-align: center;
   padding: 5rem 2rem;
   background: white;
-  border-bottom: 1px solid rgba(13, 59, 52, 0.1);
+  border-bottom: 1px solid rgba(18, 18, 18, 0.1);
 }
 
 .sp-hero h1 {
   font-family: var(--font-heading);
   font-size: 3.2rem;
   font-weight: 800;
-  color: #0d3b34;
+  color: #121212;
   margin-bottom: 1rem;
   letter-spacing: -0.5px;
 }
@@ -35,7 +35,7 @@
 .sp-subtitle {
   font-family: var(--font-heading);
   font-size: 1.4rem;
-  color: #10b981;
+  color: #ff6b00;
   font-weight: 700;
   margin-bottom: 2rem;
   letter-spacing: 0.2px;
@@ -56,7 +56,7 @@
   text-align: center;
   font-family: var(--font-heading);
   font-size: 2.8rem;
-  color: #0d3b34;
+  color: #121212;
   margin-bottom: 3.5rem;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -78,8 +78,8 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: #0d3b34;
-  border: 2px solid #10b981;
+  background: #121212;
+  border: 2px solid #ff6b00;
   color: #ffffff;
   font-size: 24px;
   display: flex;
@@ -88,14 +88,14 @@
   cursor: pointer;
   z-index: 20;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 10px 30px rgba(13, 59, 52, 0.35);
+  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.35);
 }
 
 .carousel-nav-btn:hover {
-  background: #10b981;
-  border-color: #10b981;
+  background: #ff6b00;
+  border-color: #ff6b00;
   color: #ffffff;
-  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 12px 35px rgba(255, 107, 0, 0.5);
   transform: translateY(-50%) scale(1.12);
 }
 
@@ -135,8 +135,8 @@
   background: #ffffff;
   padding: 2.2rem 1.8rem;
   border-radius: 24px;
-  border: 1.5px solid rgba(13, 59, 52, 0.14);
-  box-shadow: 0 10px 30px rgba(13, 59, 52, 0.05);
+  border: 1.5px solid rgba(18, 18, 18, 0.14);
+  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.05);
   transition: border-color 0.4s ease, box-shadow 0.4s ease, transform 0.4s ease;
   position: relative;
   overflow: hidden;
@@ -156,7 +156,7 @@
   width: 280px;
   height: 180px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.35) 0%, rgba(232, 196, 119, 0.22) 50%, rgba(0, 0, 0, 0) 80%);
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.35) 0%, rgba(232, 196, 119, 0.22) 50%, rgba(0, 0, 0, 0) 80%);
   filter: blur(25px);
   opacity: 0;
   transition: opacity 0.5s ease, transform 0.5s ease;
@@ -175,9 +175,9 @@
 }
 
 .sp-pill-tag {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #0d3b34;
+  background: rgba(255, 107, 0, 0.1);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+  color: #121212;
   font-family: var(--font-heading);
   font-size: 11px;
   font-weight: 700;
@@ -192,14 +192,14 @@
 
 .pill-dot {
   font-size: 10px;
-  color: #10b981;
+  color: #ff6b00;
 }
 
 .sp-icon-wrapper {
   width: 44px;
   height: 44px;
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(255, 107, 0, 0.12);
+  border: 1px solid rgba(255, 107, 0, 0.25);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -210,7 +210,7 @@
 
 .sp-icon {
   font-size: 1.35rem;
-  color: #10b981;
+  color: #ff6b00;
   transition: color 0.3s ease;
 }
 
@@ -218,7 +218,7 @@
 .sp-card-title {
   font-family: var(--font-heading);
   font-size: 1.5rem;
-  color: #0d3b34;
+  color: #121212;
   margin-bottom: 0.8rem;
   font-weight: 800;
   letter-spacing: -0.5px;
@@ -255,7 +255,7 @@
 }
 
 .sp-benefit-icon {
-  color: #10b981; /* Green Checkmark (NO BLUE) */
+  color: #ff6b00; /* Green Checkmark (NO BLUE) */
   font-size: 1.15rem;
   flex-shrink: 0;
   margin-top: 2px;
@@ -271,9 +271,9 @@
 
 .sp-card-learn-btn {
   width: 100%;
-  background: rgba(13, 59, 52, 0.05);
-  border: 1px solid rgba(13, 59, 52, 0.15);
-  color: #0d3b34;
+  background: rgba(18, 18, 18, 0.05);
+  border: 1px solid rgba(18, 18, 18, 0.15);
+  color: #121212;
   padding: 11px 18px;
   border-radius: 14px;
   font-family: var(--font-heading);
@@ -297,8 +297,8 @@
 .sp-card.sp-carousel-card:hover,
 .sp-card.sp-carousel-card.is-active-glowing {
   transform: translateY(-6px);
-  border-color: #10b981;
-  box-shadow: 0 20px 45px rgba(13, 59, 52, 0.18), 0 0 35px rgba(16, 185, 129, 0.3);
+  border-color: #ff6b00;
+  box-shadow: 0 20px 45px rgba(18, 18, 18, 0.18), 0 0 35px rgba(255, 107, 0, 0.3);
 }
 
 .sp-card.sp-carousel-card:hover .card-top-aura-glow,
@@ -310,9 +310,9 @@
 
 .sp-card.sp-carousel-card:hover .sp-icon-wrapper,
 .sp-card.sp-carousel-card.is-active-glowing .sp-icon-wrapper {
-  background: #0d3b34;
-  border-color: #0d3b34;
-  box-shadow: 0 4px 15px rgba(13, 59, 52, 0.3);
+  background: #121212;
+  border-color: #121212;
+  box-shadow: 0 4px 15px rgba(18, 18, 18, 0.3);
 }
 
 .sp-card.sp-carousel-card:hover .sp-icon,
@@ -322,17 +322,17 @@
 
 .sp-card.sp-carousel-card:hover .sp-pill-tag,
 .sp-card.sp-carousel-card.is-active-glowing .sp-pill-tag {
-  background: #0d3b34;
-  border-color: #0d3b34;
+  background: #121212;
+  border-color: #121212;
   color: #e8c477;
 }
 
 .sp-card.sp-carousel-card:hover .sp-card-learn-btn,
 .sp-card.sp-carousel-card.is-active-glowing .sp-card-learn-btn {
-  background: linear-gradient(135deg, #10b981 0%, #0d3b34 100%);
-  border-color: #10b981;
+  background: linear-gradient(135deg, #ff6b00 0%, #121212 100%);
+  border-color: #ff6b00;
   color: #ffffff;
-  box-shadow: 0 8px 22px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 22px rgba(255, 107, 0, 0.4);
 }
 
 .sp-card.sp-carousel-card:hover .sp-btn-arrow,
@@ -358,7 +358,7 @@
   content: '';
   position: absolute;
   width: 4px;
-  background: rgba(13, 59, 52, 0.1);
+  background: rgba(18, 18, 18, 0.1);
   top: 0;
   bottom: 0;
   left: 50%;
@@ -368,7 +368,7 @@
 .sp-timeline-line {
   position: absolute;
   width: 4px;
-  background: #10b981;
+  background: #ff6b00;
   top: 0;
   bottom: 0;
   left: 50%;
@@ -416,14 +416,14 @@
   height: 50px;
   right: -25px;
   background: white;
-  border: 4px solid #10b981;
+  border: 4px solid #ff6b00;
   border-radius: 50%;
   top: 2.5rem;
   z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #0d3b34;
+  color: #121212;
   font-size: 1.2rem;
   font-weight: 700;
   transform: scale(0);
@@ -443,13 +443,13 @@
   background: white;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(13, 59, 52, 0.04);
-  border: 1px solid rgba(13, 59, 52, 0.1);
+  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.04);
+  border: 1px solid rgba(18, 18, 18, 0.1);
 }
 
 .timeline-title {
   font-family: var(--font-heading);
-  color: #0d3b34;
+  color: #121212;
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
   font-weight: 800;
@@ -475,8 +475,8 @@
   background: #ffffff;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 5px 20px rgba(13, 59, 52, 0.05);
-  border: 1.5px solid rgba(13, 59, 52, 0.12);
+  box-shadow: 0 5px 20px rgba(18, 18, 18, 0.05);
+  border: 1.5px solid rgba(18, 18, 18, 0.12);
   position: relative;
   overflow: hidden;
   opacity: 0;
@@ -484,11 +484,11 @@
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* ⭐ Brand Dark Green (#0D3B34) Alternating Card Styles */
+/* ⭐ Brand Dark Green (#121212) Alternating Card Styles */
 .sp-features-grid .feature-box.dark-card {
-  background: #0d3b34 !important;
+  background: #121212 !important;
   border-color: rgba(232, 196, 119, 0.3) !important;
-  box-shadow: 0 10px 30px rgba(13, 59, 52, 0.25) !important;
+  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.25) !important;
 }
 
 .sp-features-grid .feature-box.dark-card .feature-title {
@@ -511,7 +511,7 @@
 
 .feature-box:hover {
   transform: translateY(-6px) !important;
-  box-shadow: 0 14px 35px rgba(13, 59, 52, 0.2) !important;
+  box-shadow: 0 14px 35px rgba(18, 18, 18, 0.2) !important;
 }
 
 .feature-box.dark-card:hover {
@@ -525,14 +525,14 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: #10b981;
+  background: #ff6b00;
   transition: background 0.3s ease;
 }
 
 .feature-title {
   font-family: var(--font-heading);
   font-size: 1.3rem;
-  color: #0d3b34;
+  color: #121212;
   margin-bottom: 0.8rem;
   font-weight: 800;
 }
@@ -545,7 +545,7 @@
 
 /* CTA Section */
 .sp-cta {
-  background: #0d3b34;
+  background: #121212;
   padding: 6rem 2rem;
   text-align: center;
   color: white;
@@ -553,7 +553,7 @@
   max-width: 1000px;
   margin: 0 auto;
   border: 1px solid rgba(232, 196, 119, 0.25);
-  box-shadow: 0 20px 50px rgba(8, 40, 35, 0.4);
+  box-shadow: 0 20px 50px rgba(10, 10, 10, 0.4);
 }
 
 .sp-cta.animate-on-scroll {
@@ -590,7 +590,7 @@
 }
 
 .btn-team-primary {
-  background: #10b981;
+  background: #ff6b00;
   color: #ffffff;
   padding: 12px 28px;
   border-radius: 30px;
@@ -601,9 +601,9 @@
 }
 
 .btn-team-primary:hover {
-  background: #059669;
+  background: #ea580c;
   transform: scale(1.05);
-  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 10px 25px rgba(255, 107, 0, 0.4);
 }
 
 .btn-team-outline {
@@ -620,7 +620,7 @@
 
 .btn-team-outline:hover {
   background: #e8c477;
-  color: #082823;
+  color: #0a0a0a;
   transform: scale(1.05);
   box-shadow: 0 10px 25px rgba(232, 196, 119, 0.3);
 }

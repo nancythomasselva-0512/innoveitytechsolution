@@ -1,40 +1,48 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap');
 
 :root {
-  --primary-color: #10b981; /* Emerald Green */
-  --primary-dark: #059669; 
-  --primary-rgb: 16, 185, 129;
+  --primary-color: #ff6b00; /* Vibrant Tech Orange */
+  --primary-dark: #ea580c; 
+  --primary-light: #ff8a00;
+  --primary-rgb: 255, 107, 0;
   
-  --secondary-color: #0d3b34; /* Deep Forest Dark Green */
-  --secondary-dark: #082823;
-  --secondary-rgb: 13, 59, 52;
+  --secondary-color: #082233; /* Logo Brand Dark Navy Blue */
+  --secondary-dark: #051824;
+  --secondary-rgb: 8, 34, 51;
   
-  --hero-dark: #082823;
-  --bg-color: #ffffff; /* Pure White */
-  --bg-color-light: #f4f8f6; /* Subtle Soft Mint White */
+  --bg-color: #ffffff; /* Pure Crisp White */
+  --bg-color-light: #f8fafc; /* Subtle Cool Slate White */
+  --bg-color-warm: #fffbf5; /* Subtle Warm White */
+  --bg-card: #ffffff;
   
-  --text-primary: #0a1f1c; /* Deep Charcoal / Black-Green */
-  --text-secondary: #2c3e3a; /* Dark Slate Green */
-  --text-muted: #5a6e69; /* Soft Muted Green-Gray */
+  --text-primary: #082233; /* Logo Brand Dark Navy Blue */
+  --text-secondary: #1a3548; /* Slate Navy */
+  --text-muted: #64748b; /* Medium Slate */
   
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-border: rgba(13, 59, 52, 0.12);
-  --glass-shadow: 0 8px 32px 0 rgba(13, 59, 52, 0.06);
+  --border-light: rgba(8, 34, 51, 0.08);
+  --border-orange: rgba(255, 107, 0, 0.25);
   
-  --font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-  --font-heading: 'Outfit', 'Plus Jakarta Sans', sans-serif;
+  --glass-bg: rgba(255, 255, 255, 0.92);
+  --glass-border: rgba(255, 107, 0, 0.2);
+  --glass-shadow: 0 10px 30px rgba(255, 107, 0, 0.08);
+  
+  --font-family: 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', sans-serif;
+  --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
 
 *::-webkit-scrollbar {
-  display: none;
+  display: none; /* Chrome, Safari and Opera */
   width: 0px;
   height: 0px;
   background: transparent;
@@ -42,10 +50,11 @@
 
 html {
   scroll-behavior: smooth;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body, button, input, select, textarea {
-  font-family: var(--font-family);
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 body {
@@ -53,11 +62,18 @@ body {
   color: var(--text-primary);
   line-height: 1.6;
   overflow-x: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-heading);
+  color: #082233;
   letter-spacing: -0.5px;
+}
+
+p {
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 a {
@@ -85,7 +101,13 @@ img {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #10b981 0%, #0d3b34 100%);
+  background: linear-gradient(135deg, #ff6b00 0%, #121212 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gradient-orange {
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -105,13 +127,13 @@ img {
 }
 
 .btn-primary {
-  background: var(--primary-color);
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
   color: #ffffff;
 }
 
 .btn-primary:hover {
-  background: var(--primary-dark);
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
   transform: translateY(-2px);
 }
 
@@ -151,20 +173,28 @@ img {
 
 .section-title {
   font-family: var(--font-heading);
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  font-weight: 800;
   letter-spacing: -1.2px;
+  line-height: 1.15;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2.5rem;
   color: var(--text-primary);
+}
+
+/* Signature Orange Gradient Accent for Titles (as requested) */
+.title-gradient-accent,
+.title-highlight,
+.gradient-glow-text,
+.gradient-text-orange {
+  background: linear-gradient(90deg, #ff6b00 0%, #b45309 60%, #3e1f0e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline;
 }
 
 @media (max-width: 768px) {
   .section-padding {
     padding: 3rem 1rem;
-  }
-  
-  .section-title {
-    font-size: 2rem;
   }
 }

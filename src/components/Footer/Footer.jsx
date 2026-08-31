@@ -89,7 +89,7 @@ const Footer = () => {
             {/* Column 1: Brand & Registration */}
             <div className="footer-col col-brand">
               <div className="footer-brand-logo-box">
-                <InnoveityBrandLogo size={40} showText={true} />
+                <InnoveityBrandLogo size={56} darkBg={false} />
               </div>
               <div className="brand-legal-info">
                 <p>{operatingCompany}</p>
@@ -104,8 +104,8 @@ const Footer = () => {
               <h4 className="footer-col-title">Address & Desk</h4>
               <ul className="footer-col-list address-list">
                 <li>{address}</li>
-                <li>Phone: <a href={`tel:${phone}`} style={{ color: '#10b981', textDecoration: 'none' }}>{phone}</a></li>
-                <li>Email: <a href={`mailto:${email}`} style={{ color: '#10b981', textDecoration: 'none' }}>{email}</a></li>
+                <li>Phone: <a href={`tel:${phone}`} style={{ color: '#ff8a00', textDecoration: 'none' }}>{phone}</a></li>
+                <li>Email: <a href={`mailto:${email}`} style={{ color: '#ff8a00', textDecoration: 'none' }}>{email}</a></li>
                 <li>Hours: {hours}</li>
               </ul>
             </div>

@@ -130,7 +130,7 @@ const TeamPage = () => {
       </section>
 
       {/* ⭐ Leadership & Executive Board Section (Founder & CEO) */}
-      <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
+      <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(255, 107, 0, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
         <div className="container">
           <div className="leadership-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
             <span className="leadership-badge-pill">{leadershipBadge}</span>

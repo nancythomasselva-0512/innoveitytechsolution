@@ -643,7 +643,7 @@ const AdminPage = () => {
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
-              <InnoveityBrandLogo size={28} showText={true} />
+              <InnoveityBrandLogo size={42} darkBg={true} />
               <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
                 <FiX />
               </button>
@@ -770,7 +770,7 @@ const AdminPage = () => {
 
             <button
               className="btn-live-preview"
-              style={{ background: 'linear-gradient(135deg, #10b981, #059669)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
               onClick={async () => {
                 if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
                   const ok = await seedCloudDatabase();
@@ -840,7 +840,7 @@ const AdminPage = () => {
                 <span className="donezo-arrow-circle">↗</span>
                 <span className="donezo-stat-title">Pending Inquiries</span>
                 <div className="donezo-stat-digit">{contactBlocks ? contactBlocks.length : 0}</div>
-                <div className="donezo-badge-tag" style={{ color: '#059669' }}>Active Channels</div>
+                <div className="donezo-badge-tag" style={{ color: '#ea580c' }}>Active Channels</div>
               </div>
             </div>
 
@@ -869,13 +869,13 @@ const AdminPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#0d3b34' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#121212' }}>
                     {analyticsTimeframe === 'weekly'
                       ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
                       : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
                     }
                   </span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', background: '#ecfdf5', padding: '2px 8px', borderRadius: '12px', border: '1px solid #a7f3d0' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ea580c', background: '#fff7ed', padding: '2px 8px', borderRadius: '12px', border: '1px solid #fdba74' }}>
                     ↑ {projects ? projects.length : 0} {analyticsTimeframe === 'weekly' ? 'Items (Weekly)' : 'Items (Monthly)'}
                   </span>
                 </div>
@@ -885,8 +885,8 @@ const AdminPage = () => {
                   <svg width="100%" height="100%" viewBox="0 0 400 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
                     <defs>
                       <linearGradient id="adminAnalyticsGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#10b981" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#10b981" stopOpacity="0.0" />
+                        <stop offset="0%" stopColor="#ff6b00" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#ff6b00" stopOpacity="0.0" />
                       </linearGradient>
                     </defs>
 
@@ -911,7 +911,7 @@ const AdminPage = () => {
                         : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40"
                       }
                       fill="none"
-                      stroke="#093c25"
+                      stroke="#121212"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />
@@ -919,18 +919,18 @@ const AdminPage = () => {
                     {/* DATA DOTS */}
                     {analyticsTimeframe === 'weekly' ? (
                       <>
-                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="210" cy="20" r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
+                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="210" cy="20" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
+                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
                       </>
                     ) : (
                       <>
-                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
-                        <circle cx="250" cy="15" r="6" fill="#10b981" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#093c25" strokeWidth="2.5" />
+                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="250" cy="15" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
+                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
                       </>
                     )}
                   </svg>
@@ -955,7 +955,7 @@ const AdminPage = () => {
                 </div>
 
                 <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#093c25', marginBottom: '4px' }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>
                     CMS Synchronization Active
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
@@ -968,17 +968,17 @@ const AdminPage = () => {
                   <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #e2e8f0' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
                       <span>Database Health</span>
-                      <span style={{ color: '#059669' }}>Optimal</span>
+                      <span style={{ color: '#ea580c' }}>Optimal</span>
                     </div>
                     <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: '100%', height: '100%', background: '#10b981' }}></div>
+                      <div style={{ width: '100%', height: '100%', background: '#ff6b00' }}></div>
                     </div>
                   </div>
                 </div>
 
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ width: '100%', justifyContent: 'center', background: '#093c25', color: '#ffffff', fontWeight: 800, padding: '10px' }}
+                  style={{ width: '100%', justifyContent: 'center', background: '#121212', color: '#ffffff', fontWeight: 800, padding: '10px' }}
                   onClick={() => setActiveTab('projects')}
                 >
                   ⚡ Manage Content
@@ -996,12 +996,12 @@ const AdminPage = () => {
                 <div style={{ marginBottom: '10px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
                     <span>Sprint Execution</span>
-                    <span style={{ color: '#059669' }}>
+                    <span style={{ color: '#ea580c' }}>
                       {projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 100}% Completed
                     </span>
                   </div>
                   <div style={{ display: 'flex', height: '6px', borderRadius: '4px', overflow: 'hidden', background: '#e2e8f0' }}>
-                    <div style={{ width: `${projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 70}%`, background: '#10b981' }}></div>
+                    <div style={{ width: `${projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 70}%`, background: '#ff6b00' }}></div>
                     <div style={{ width: '20%', background: '#3b82f6', marginLeft: '2px' }}></div>
                     <div style={{ width: '10%', background: '#d97706', marginLeft: '2px' }}></div>
                   </div>
@@ -1012,18 +1012,18 @@ const AdminPage = () => {
                     projects.slice(0, 3).map((p, idx) => (
                       <div key={p.id || idx} className="donezo-task-row">
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                          <div className="donezo-task-icon-box" style={{ background: idx === 0 ? '#ecfdf5' : idx === 1 ? '#eff6ff' : '#fef3c7', color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706' }}>
+                          <div className="donezo-task-icon-box" style={{ background: idx === 0 ? '#fff7ed' : idx === 1 ? '#eff6ff' : '#fef3c7', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}>
                             {idx === 0 ? '🌐' : idx === 1 ? '⚡' : '🚀'}
                           </div>
                           <div style={{ flex: 1 }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                               <div className="donezo-task-title">{p.title}</div>
-                              <span style={{ fontSize: '0.68rem', color: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706', fontWeight: 700 }}>
+                              <span style={{ fontSize: '0.68rem', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706', fontWeight: 700 }}>
                                 {p.image ? '100%' : '85%'}
                               </span>
                             </div>
                             <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '2px', marginTop: '4px', overflow: 'hidden' }}>
-                              <div style={{ width: p.image ? '100%' : '85%', height: '100%', background: idx === 0 ? '#10b981' : idx === 1 ? '#3b82f6' : '#d97706' }}></div>
+                              <div style={{ width: p.image ? '100%' : '85%', height: '100%', background: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}></div>
                             </div>
                           </div>
                         </div>
@@ -1053,7 +1053,7 @@ const AdminPage = () => {
                           {m.image ? (
                             <img src={m.image} alt={m.name} style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }} />
                           ) : (
-                            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#d1fae5', color: '#059669', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>
+                            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#fed7aa', color: '#ea580c', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>
                               {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
                             </div>
                           )}
@@ -1062,7 +1062,7 @@ const AdminPage = () => {
                             <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{m.role || 'Innoveity Engineer'}</div>
                           </div>
                         </div>
-                        <span className="action-pill-btn" style={{ background: idx === 0 ? '#ecfdf5' : '#fef3c7', color: idx === 0 ? '#059669' : '#d97706', fontSize: '0.7rem', padding: '2px 8px' }}>
+                        <span className="action-pill-btn" style={{ background: idx === 0 ? '#fff7ed' : '#fef3c7', color: idx === 0 ? '#ea580c' : '#d97706', fontSize: '0.7rem', padding: '2px 8px' }}>
                           {idx === 0 ? 'Completed' : idx === 1 ? 'In Progress' : 'Active'}
                         </span>
                       </div>
@@ -1088,8 +1088,8 @@ const AdminPage = () => {
                         <svg width="130" height="130" viewBox="0 0 140 140">
                           <defs>
                             <linearGradient id="adminRingGrad" x1="0" y1="0" x2="1" y2="1">
-                              <stop offset="0%" stopColor="#10b981" />
-                              <stop offset="100%" stopColor="#093c25" />
+                              <stop offset="0%" stopColor="#ff6b00" />
+                              <stop offset="100%" stopColor="#121212" />
                             </linearGradient>
                           </defs>
                           <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
@@ -1105,17 +1105,17 @@ const AdminPage = () => {
                           />
                         </svg>
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#0d3b34', lineHeight: 1 }}>{pct}%</div>
+                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#121212', lineHeight: 1 }}>{pct}%</div>
                           <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Live Completed</div>
                         </div>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.74rem', color: '#475569', fontWeight: 700, width: '100%', background: '#f8fafc', padding: '8px 12px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#093c25' }}></span> {doneP} Completed
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#121212' }}></span> {doneP} Completed
                         </span>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></span> {totalP - doneP} Active
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff6b00' }}></span> {totalP - doneP} Active
                         </span>
                       </div>
                     </>
@@ -1127,7 +1127,7 @@ const AdminPage = () => {
               <div className="donezo-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
                   <h4 className="donezo-card-title" style={{ margin: 0 }}>Quick Management</h4>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#059669', background: '#ecfdf5', padding: '3px 10px', borderRadius: '12px', border: '1px solid #a7f3d0', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c', background: '#fff7ed', padding: '3px 10px', borderRadius: '12px', border: '1px solid #fdba74', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     ⚡ System Ready
                   </span>
                 </div>
@@ -1137,7 +1137,7 @@ const AdminPage = () => {
                     onClick={() => setActiveTab('projects')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#d1fae5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiFolder />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
@@ -1154,7 +1154,7 @@ const AdminPage = () => {
                     onClick={() => setActiveTab('team')}
                     style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiUsers />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
@@ -1202,9 +1202,9 @@ const AdminPage = () => {
                   </button>
                 </div>
 
-                <div style={{ marginTop: '12px', background: '#ecfdf5', padding: '8px 12px', borderRadius: '10px', border: '1px solid #a7f3d0', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
+                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
                   <span>Live Site Status</span>
-                  <a href="/" target="_blank" rel="noreferrer" style={{ color: '#059669', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <a href="/" target="_blank" rel="noreferrer" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     Preview <FiExternalLink />
                   </a>
                 </div>
@@ -1220,8 +1220,8 @@ const AdminPage = () => {
             {/* ⭐ SECTION 1: 3D ROTATOR SHOWCASE CONTENT EDITOR */}
             <div className="chart-header-row" style={{ marginBottom: '16px' }}>
               <div>
-                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#0d3b34', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FiLayers style={{ color: '#10b981' }} /> Projects 3D Showcase (Rotator Section)
+                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#121212', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiLayers style={{ color: '#ff6b00' }} /> Projects 3D Showcase (Rotator Section)
                 </h3>
                 <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
                   Manage the 3D rotating arc cards carousel shown on Homepage & Projects Hero.
@@ -1717,10 +1717,10 @@ const AdminPage = () => {
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
                     {leadershipList.map((m, idx) => (
                       <div key={m.id} style={{
-                        background: '#ecfdf5',
+                        background: '#fff7ed',
                         padding: '20px',
                         borderRadius: '20px',
-                        border: '2px solid #10b981',
+                        border: '2px solid #ff6b00',
                         textAlign: 'center',
                         position: 'relative'
                       }}>
@@ -1728,7 +1728,7 @@ const AdminPage = () => {
                           position: 'absolute',
                           top: '12px',
                           right: '12px',
-                          background: '#059669',
+                          background: '#ea580c',
                           color: 'white',
                           fontSize: '0.68rem',
                           fontWeight: 800,
@@ -1739,7 +1739,7 @@ const AdminPage = () => {
                           ★ Leadership
                         </span>
 
-                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #059669', marginBottom: '10px', marginTop: '10px' }} />
+                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ea580c', marginBottom: '10px', marginTop: '10px' }} />
                         <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
                         <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#047857', fontWeight: 700 }}>{m.role}</p>
 
@@ -1791,9 +1791,9 @@ const AdminPage = () => {
                           Member
                         </span>
 
-                        <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #10b981', marginBottom: '10px', marginTop: '10px' }} />
+                        <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ff6b00', marginBottom: '10px', marginTop: '10px' }} />
                         <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#10b981', fontWeight: 700 }}>{m.role}</p>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700 }}>{m.role}</p>
 
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
@@ -1887,7 +1887,7 @@ const AdminPage = () => {
 
             {/* ADD CUSTOM CONTACT CHANNEL BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
               <form onSubmit={handleAddContactBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Channel Title / Desk</label>
@@ -1951,7 +1951,7 @@ const AdminPage = () => {
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ background: '#093c25', color: '#ffffff', border: 'none', fontWeight: 800 }}
+                  style={{ background: '#121212', color: '#ffffff', border: 'none', fontWeight: 800 }}
                   onClick={() => setShowAddAdminForm(!showAddAdminForm)}
                 >
                   <FiPlus /> {showAddAdminForm ? 'Close Form' : '+ Add Admin Account'}
@@ -1964,7 +1964,7 @@ const AdminPage = () => {
 
             {showAddAdminForm && (
               <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1rem', fontWeight: 800 }}>Create New Administrator Account</h4>
+                <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1rem', fontWeight: 800 }}>Create New Administrator Account</h4>
                 <form onSubmit={handleAddAdminSubmit} className="dash-form-grid">
                   <div className="dash-field-group">
                     <label className="dash-label">Full Name</label>
@@ -2015,7 +2015,7 @@ const AdminPage = () => {
                   </div>
 
                   <div className="dash-field-group full-width" style={{ display: 'flex', gap: '8px' }}>
-                    <button type="submit" className="action-pill-btn primary-pill" style={{ background: '#10b981', border: 'none' }}>
+                    <button type="submit" className="action-pill-btn primary-pill" style={{ background: '#ff6b00', border: 'none' }}>
                       <FiCheck /> Save Account
                     </button>
                     <button type="button" className="action-pill-btn" onClick={() => setShowAddAdminForm(false)}>
@@ -2044,7 +2044,7 @@ const AdminPage = () => {
                     <td>{u.email}</td>
                     <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{u.password || 'admin123'}</code></td>
                     <td><span className="category-badge-pill">{u.role}</span></td>
-                    <td><span className="action-pill-btn" style={{ background: '#ecfdf5', color: '#059669', borderColor: '#a7f3d0' }}>{u.status}</span></td>
+                    <td><span className="action-pill-btn" style={{ background: '#fff7ed', color: '#ea580c', borderColor: '#fdba74' }}>{u.status}</span></td>
                     <td style={{ color: '#64748b', fontSize: '0.85rem' }}>{u.lastLogin}</td>
                   </tr>
                 ))}
@@ -2065,7 +2065,7 @@ const AdminPage = () => {
 
             {/* 1. HEADER BRANDING & CTA BUTTON */}
             <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Header Logo & Button Configuration
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2103,7 +2103,7 @@ const AdminPage = () => {
 
             {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Navigation Bar Menu Links Manager
               </h4>
 
@@ -2159,10 +2159,10 @@ const AdminPage = () => {
                   <div key={link.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '12px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
                           <FiArrowUp size={16} />
                         </button>
-                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#10b981', padding: 0 }}>
+                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
                           <FiArrowDown size={16} />
                         </button>
                       </div>
@@ -2191,7 +2191,7 @@ const AdminPage = () => {
 
             {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Company & Desk Contact Info
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2260,7 +2260,7 @@ const AdminPage = () => {
 
             {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Social Media Links ("Connect")
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2318,7 +2318,7 @@ const AdminPage = () => {
 
             {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#0d3b34', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiCheck /> Footer Call-to-Action Banner & Legal Bar
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">

@@ -35,12 +35,12 @@
 
 .info-title {
   font-family: var(--font-heading);
-  font-size: 2.2rem;
+  font-size: clamp(2.2rem, 3.8vw, 3rem);
   font-weight: 800;
-  color: #111827;
-  letter-spacing: -0.8px;
+  color: #082233;
+  letter-spacing: -1.2px;
   margin-bottom: 12px;
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .info-subtitle {
@@ -79,9 +79,9 @@
 }
 
 .info-item-row:hover .info-icon-outline {
-  border-color: #10b981;
-  color: #10b981;
-  background: #f0fdf4;
+  border-color: #ff6b00;
+  color: #ff6b00;
+  background: #fff7ed;
 }
 
 .info-text-val {
@@ -238,14 +238,14 @@
 }
 
 .btn-modern-send:hover {
-  background: #10b981;
+  background: #ff6b00;
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 8px 25px rgba(255, 107, 0, 0.35);
 }
 
 /* Success State Box */
 .form-success-box {
-  background: #f0fdf4;
+  background: #fff7ed;
   border: 1px solid #bbf7d0;
   border-radius: 18px;
   padding: 40px 24px;
@@ -258,7 +258,7 @@
 
 .success-icon {
   font-size: 3rem;
-  color: #10b981;
+  color: #ff6b00;
 }
 
 .form-success-box h3 {

@@ -159,16 +159,16 @@ const ServicesTransformation = () => {
             >
               <defs>
                 <radialGradient id="orbCoreGradient" cx="50%" cy="50%" r="50%">
-                  <stop offset="0%" stopColor="#e8c477" stopOpacity="0.9" />
-                  <stop offset="45%" stopColor="#10b981" stopOpacity="0.4" />
-                  <stop offset="85%" stopColor="#0d3b34" stopOpacity="0.1" />
-                  <stop offset="100%" stopColor="#0d3b34" stopOpacity="0" />
+                  <stop offset="0%" stopColor="#ff8a00" stopOpacity="0.9" />
+                  <stop offset="45%" stopColor="#ff6b00" stopOpacity="0.4" />
+                  <stop offset="85%" stopColor="#121212" stopOpacity="0.1" />
+                  <stop offset="100%" stopColor="#121212" stopOpacity="0" />
                 </radialGradient>
 
                 <linearGradient id="ringGoldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stopColor="#e8c477" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#34d399" stopOpacity="0.6" />
-                  <stop offset="100%" stopColor="#818cf8" stopOpacity="0.7" />
+                  <stop offset="0%" stopColor="#ffedd5" stopOpacity="0.8" />
+                  <stop offset="50%" stopColor="#ff8a00" stopOpacity="0.6" />
+                  <stop offset="100%" stopColor="#ea580c" stopOpacity="0.7" />
                 </linearGradient>
               </defs>
 
