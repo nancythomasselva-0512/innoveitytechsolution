@@ -45,9 +45,13 @@ const Testimonials = () => {
     <section id="testimonials" className="section-padding">
       <div className="container">
         <div className="reveal" ref={revealRef}>
-          <h3 className="section-subtitle">Testimonials</h3>
-          <h2 className="section-title">
-            What Our Clients <span className="gradient-text">Say</span>
+          <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '16px' }}>
+            <h2 className="section-main-title">
+              CLIENT <span className="title-gradient-accent">TESTIMONIALS</span>
+            </h2>
+          </div>
+          <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            What Our Clients <span className="title-gradient-accent">Say</span>
           </h2>
           
           <div className="testimonial-slider">

@@ -88,34 +88,46 @@ const ServicesTransformation = () => {
 
   return (
     <section className="transformation-section">
+      <div className="section-grid-pattern"></div>
       <div className="transformation-container">
         
-        {/* Top Control Badge Tag */}
-        <motion.div 
-          className="control-badge-wrapper"
-          initial={{ opacity: 0, y: -20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="control-badge">
-            <span className="badge-sparkle">✦</span> Our Core Services
-          </span>
-        </motion.div>
+        {/* Top Header Row: Left (OUR SERVICES + Dual Headline) | Right (Descriptive Narrative & Capabilities) */}
+        <div className="transformation-header-row">
+          {/* Left Column */}
+          <motion.div 
+            className="transformation-header-left"
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '12px' }}>
+              <h2 className="section-main-title">
+                OUR <span className="title-gradient-accent">SERVICES</span>
+              </h2>
+            </div>
+            
+            <h2 className="chaos-headline">Stop absorbing the chaos.</h2>
+            <h2 className="confidence-headline">
+              Run with <span className="gradient-glow-text">confidence.</span>
+            </h2>
+          </motion.div>
 
-        {/* Dual Headline */}
-        <motion.div 
-          className="transformation-header"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <h2 className="chaos-headline">Stop absorbing the chaos.</h2>
-          <h2 className="confidence-headline">
-            Run with <span className="gradient-glow-text">confidence.</span>
-          </h2>
-        </motion.div>
+          {/* Right Column */}
+          <motion.div 
+            className="transformation-header-right"
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+          >
+            <div className="transformation-pills-row">
+              <span className="trans-pill-tag">⚡ Agile Development</span>
+              <span className="trans-pill-tag">🛡️ Enterprise Security</span>
+              <span className="trans-pill-tag">☁️ Cloud Optimization</span>
+            </div>
+          </motion.div>
+        </div>
 
         {/* 3-Column Interactive Grid: Left Services (5) | Animated Orb | Right Services (5) */}
         <div className="transformation-grid-container">

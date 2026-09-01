@@ -61,10 +61,13 @@ const WhyUs = () => {
     <section id="why-us" className="section-padding">
       <div className="container">
         <div className="why-us-container reveal" ref={revealRef}>
-          <div className="why-us-content">
-            <h3 className="section-subtitle" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>Why Choose Us</h3>
-            <h2 className="section-title" style={{ textAlign: 'left' }}>
-              We Deliver <span className="gradient-text">Excellence</span>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '16px' }}>
+              <h2 className="section-main-title">
+                WHY CHOOSE <span className="title-gradient-accent">US</span>
+              </h2>
+            </div>
+            <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
+              We Deliver <span className="title-gradient-accent">Excellence</span>
             </h2>
             <p className="why-us-description">
               Choosing the right technology partner is critical to your success. At Innoveity Tech Solution, we go beyond just writing code. We act as your strategic partner, ensuring that our solutions align perfectly with your business goals.

@@ -44,15 +44,64 @@
   color: #ff6b00;
 }
 
-/* Headline Group */
-.transformation-header {
-  text-align: center;
-  margin-bottom: 55px;
+/* Header 2-Column Row (Left Title & Headline | Right Narrative & Highlights) */
+.transformation-header-row {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 48px;
+  align-items: flex-end;
+  margin-bottom: 50px;
+  width: 100%;
+}
+
+.transformation-header-left {
+  text-align: left;
+}
+
+.transformation-header-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding-bottom: 8px;
+}
+
+.transformation-pills-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.trans-pill-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(8, 34, 51, 0.04);
+  border: 1px solid rgba(8, 34, 51, 0.08);
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #082233;
+  transition: all 0.3s ease;
+}
+
+.trans-pill-tag:hover {
+  background: rgba(255, 107, 0, 0.08);
+  border-color: rgba(255, 107, 0, 0.3);
+  color: #ff6b00;
+}
+
+@media (max-width: 900px) {
+  .transformation-header-row {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
 }
 
 .chaos-headline {
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 800;
   color: #082233;
   letter-spacing: -1.2px;
@@ -62,7 +111,7 @@
 
 .confidence-headline {
   font-family: var(--font-heading);
-  font-size: clamp(2.2rem, 3.8vw, 3rem);
+  font-size: clamp(2rem, 3.4vw, 2.75rem);
   font-weight: 800;
   color: #082233;
   letter-spacing: -1.2px;

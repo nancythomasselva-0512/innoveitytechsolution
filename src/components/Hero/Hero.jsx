@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FiArrowUpRight } from 'react-icons/fi';
+import { motion } from 'framer-motion';
 import { useCMS } from '../../context/CMSContext';
 import './Hero.css';
 
@@ -55,39 +56,65 @@ const Hero = () => {
       </div>
 
       <div className="hero-content-wrapper container">
-        {/* Top Header Block: Full-width Title & Tagline */}
-        <div className="hero-top-header-block">
-          <h1 className="hero-display-title">
-            <img 
-              src="/innoveity-wordmark.png" 
-              alt="Innoveity" 
-              className="hero-logo-wordmark-img" 
-            />
-            <span className="title-white-text">
-              Tech <span className="title-gradient-accent">Solutions</span>
-            </span>
-          </h1>
+        {/* 2-Column Split Hero Body: Left Content | Right 3D Visual */}
+        <div className="hero-split-grid">
+          
+          {/* Left Column: Headline, Tagline, Description, CTA */}
+          <div className="hero-left-content">
+            <h1 className="hero-display-title">
+              <span className="brand-word-styled">
+                <span className="char-navy">INNOV</span>
+                <img 
+                  src="/innoveity-char-e.png" 
+                  alt="E" 
+                  className="brand-char-e-img" 
+                />
+                <span className="char-navy">IT</span>
+                <img 
+                  src="/innoveity-char-y.png" 
+                  alt="Y" 
+                  className="brand-char-y-img" 
+                />
+              </span>
+              <span className="title-white-text">
+                <span className="char-navy">TECH</span> <span className="title-gradient-accent">SOLUTIONS</span>
+              </span>
+            </h1>
 
-          <div className="hero-brand-tagline-row">
-            <span className="hero-tagline-bar"></span>
-            <span className="hero-tagline-text">SMART TECHNOLOGY. CREATIVE SOLUTIONS.</span>
-            <span className="hero-tagline-bar"></span>
+            <div className="hero-brand-tagline-row">
+              <span className="hero-tagline-bar"></span>
+              <span className="hero-tagline-text">SMART TECHNOLOGY. CREATIVE SOLUTIONS.</span>
+              <span className="hero-tagline-bar"></span>
+            </div>
+
+            {/* Description Text */}
+            <p className="hero-body-text">
+              {homeContent.description}
+            </p>
+
+            {/* Left-Aligned CTA Button */}
+            <div className="hero-action-group">
+              <button className="pill-btn-hero" onClick={handleGetStarted}>
+                <span>GET STARTED NOW</span>
+                <div className="hero-arrow-circle">
+                  <FiArrowUpRight size={17} />
+                </div>
+              </button>
+            </div>
           </div>
 
-          {/* Description Text */}
-          <p className="hero-body-text">
-            {homeContent.description}
-          </p>
-
-          {/* Left-Aligned CTA Button */}
-          <div className="hero-action-group">
-            <button className="pill-btn-hero" onClick={handleGetStarted}>
-              <span>GET STARTED NOW</span>
-              <div className="hero-arrow-circle">
-                <FiArrowUpRight size={17} />
-              </div>
-            </button>
+          {/* Right Column: 3D "IN" Emblem Artwork */}
+          <div className="hero-right-visual">
+            <div className="hero-3d-art-wrapper">
+              <div className="hero-3d-glow-backdrop"></div>
+              <img 
+                src="/hero-3d-in-emblem.png" 
+                alt="Innoveity Tech 3D Artwork" 
+                className="hero-3d-in-img"
+              />
+            </div>
           </div>
+
         </div>
 
         {/* Bottom Partner / Tech Brand Logos - Continuous Moving Marquee */}

@@ -88,34 +88,31 @@ const ProjectsShowcase = () => {
 
   return (
     <section className="projects-showcase-section">
+      <div className="section-grid-pattern"></div>
       <div className="projects-showcase-container">
         
-        {/* Header Section */}
-        <div className="showcase-header">
-          <div className="showcase-badge-pill">
-            <span className="bracket-left">[</span>
-            <span className="badge-text">{showcaseHeader.badge || 'OUR PROJECTS'}</span>
-            <span className="bracket-right">]</span>
+        {/* 2-Column Split Header Section: Left (OUR PROJECTS + Title) | Right (Description + CTA) */}
+        <div className="showcase-header-row">
+          {/* Left Column */}
+          <div className="showcase-header-left">
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '12px' }}>
+              <h2 className="section-main-title">
+                OUR <span className="title-gradient-accent">PROJECTS</span>
+              </h2>
+            </div>
+
+            <h2 className="showcase-main-title">
+              {showcaseHeader.titleLine1 || 'We Help Brands'} <br />
+              <span className="title-highlight">{showcaseHeader.titleHighlight || 'Win in the Digital Space'}</span>
+            </h2>
           </div>
 
-          <h2 className="showcase-main-title">
-            {showcaseHeader.titleLine1 || 'We Help Brands'} <br />
-            <span className="title-highlight">{showcaseHeader.titleHighlight || 'Win in the Digital Space'}</span>
-          </h2>
-
-          <p className="showcase-subtitle">
-            {showcaseHeader.subtitle}
-          </p>
-
-          <button 
-            className="showcase-cta-btn" 
-            onClick={() => navigate('/projects')}
-          >
-            <span>{showcaseHeader.ctaText || 'View Our Work'}</span>
-            <span className="cta-arrow-circle">
-              <FiArrowUpRight />
-            </span>
-          </button>
+          {/* Right Column */}
+          <div className="showcase-header-right">
+            <p className="showcase-subtitle">
+              {showcaseHeader.subtitle}
+            </p>
+          </div>
         </div>
 
         {/* ⭐ 5 CARDS SHOWCASE: 3 IN FRONT, 2 BEHIND */}

@@ -20,13 +20,17 @@ const AboutSummary = () => {
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
         >
-          {/* Floating background illustration top-left */}
-          <div className="floating-doodle doodle-top">
-            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#0d9488" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M17.5 19.5 12 14l-5.5 5.5" />
-              <path d="M12 2v12" />
-              <circle cx="12" cy="7" r="5" />
-            </svg>
+          <div className="about-left-tag-wrap">
+            <h2 className="about-left-main-title">
+              ABOUT <span className="title-gradient-accent">US</span>
+            </h2>
+            <h2 className="mosaic-main-heading">
+              {homeContent.aboutTitle.split('\n').map((line, i) => (
+                <span key={i} className={`mosaic-heading-line ${i === 1 ? 'title-gradient-accent' : ''}`}>
+                  {line}
+                </span>
+              ))}
+            </h2>
           </div>
 
           <div className="mosaic-grid">
@@ -101,15 +105,7 @@ const AboutSummary = () => {
             {homeContent.aboutKicker}
           </motion.span>
 
-          <h2 className="mosaic-main-heading">
-            {homeContent.aboutTitle.split('\n').map((line, i) => (
-              <span key={i} className={`mosaic-heading-line ${i === 1 ? 'title-gradient-accent' : ''}`}>
-                {line}
-              </span>
-            ))}
-          </h2>
-
-          <p className="mosaic-body-text">
+          <p className="mosaic-body-text" style={{ fontSize: '1.05rem', lineHeight: '1.75', marginTop: '12px' }}>
             {homeContent.aboutDesc}
           </p>
 

@@ -21,11 +21,15 @@ const Technologies = () => {
     <section id="technologies" className="section-padding">
       <div className="container">
         <div className="reveal" ref={revealRef}>
-          <h3 className="section-subtitle">Technologies</h3>
-          <h2 className="section-title">
-            Our Tech <span className="gradient-text">Stack</span>
+          <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '16px' }}>
+            <h2 className="section-main-title">
+              OUR <span className="title-gradient-accent">TECHNOLOGIES</span>
+            </h2>
+          </div>
+          <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '1rem' }}>
+            Our Tech <span className="title-gradient-accent">Stack</span>
           </h2>
-          <p className="section-subtitle" style={{ marginTop: '-3rem', marginBottom: '3rem' }}>
+          <p className="section-subtitle" style={{ textAlign: 'left', marginTop: '0', marginBottom: '3rem' }}>
             We use the latest technologies to build robust, scalable, and high-performance solutions.
           </p>
 

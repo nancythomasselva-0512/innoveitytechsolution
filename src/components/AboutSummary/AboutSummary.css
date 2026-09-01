@@ -20,32 +20,40 @@
 /* Left Column - Shaped Mosaic Images */
 .mosaic-left-col {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.floating-doodle {
-  position: absolute;
-  top: -25px;
-  left: -20px;
-  z-index: 2;
-  opacity: 0.8;
-  animation: floatDoodle 4s infinite ease-in-out;
+.about-left-tag-wrap {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
-@keyframes floatDoodle {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(5deg); }
+.about-left-main-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+  font-weight: 800;
+  font-style: italic;
+  line-height: 1.2;
+  color: #082233;
+  letter-spacing: -0.5px;
+  margin: 0 0 10px 0;
 }
 
 .mosaic-grid {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   align-items: center;
 }
 
 .mosaic-card {
   overflow: hidden;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-  border: 4px solid #ffffff;
+  box-shadow: 0 20px 45px rgba(8, 34, 51, 0.12);
+  border: 5px solid #ffffff;
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
@@ -56,30 +64,30 @@
   display: block;
 }
 
-/* Tall Arch Shape */
+/* Tall Arch Shape - Larger Size */
 .tall-arch {
-  width: 160px;
-  height: 290px;
-  border-radius: 999px 999px 24px 24px;
+  width: 215px;
+  height: 385px;
+  border-radius: 999px 999px 28px 28px;
 }
 
-/* Right Stack Capsule Shapes */
+/* Right Stack Capsule Shapes - Larger Size */
 .mosaic-right-stack {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
 }
 
 .top-capsule {
-  width: 150px;
-  height: 135px;
-  border-radius: 999px 999px 24px 999px;
+  width: 195px;
+  height: 180px;
+  border-radius: 999px 999px 28px 999px;
 }
 
 .bottom-capsule {
-  width: 150px;
-  height: 140px;
-  border-radius: 24px 999px 999px 999px;
+  width: 195px;
+  height: 185px;
+  border-radius: 28px 999px 999px 999px;
 }
 
 /* Floating Camper Badge */

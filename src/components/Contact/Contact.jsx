@@ -82,7 +82,9 @@ const Contact = () => {
           {/* Left Column: Contact Information */}
           <div className="contact-info-col">
             
-            <h2 className="info-title">Contact <span className="title-gradient-accent">information</span></h2>
+            <h2 className="section-main-title" style={{ marginBottom: '14px' }}>
+              CONTACT <span className="title-gradient-accent">US</span>
+            </h2>
             <p className="info-subtitle">
               We help you find direction, remove friction, and keep your business moving forward—strategically and confidently.
             </p>

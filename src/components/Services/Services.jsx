@@ -128,25 +128,6 @@ const Services = () => {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Bottom Center Explore More Button */}
-        <motion.div 
-          className="services-bottom-cta"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.5 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <motion.button 
-            className="pill-btn-explore-all" 
-            onClick={() => navigate('/services')}
-            whileHover={{ scale: 1.05, y: -2 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span>EXPLORE MORE</span>
-          </motion.button>
-        </motion.div>
-
       </div>
 
     </section>
