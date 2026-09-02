@@ -156,7 +156,7 @@
 
 .new-contact-form button {
   background: var(--primary-color);
-  color: #000;
+  color: #ffffff;
   border: none;
   padding: 12px 35px;
   font-size: 0.9rem;
@@ -185,8 +185,8 @@
   justify-content: center;
   width: 45px;
   height: 45px;
-  background: #1a1a1a;
-  color: var(--primary-color);
+  background: #082233;
+  color: #ffffff;
   border-radius: 5px;
   font-size: 1.2rem;
   transition: all 0.3s ease;
@@ -195,7 +195,7 @@
 
 .social-icons a:hover {
   background: var(--primary-color);
-  color: #000;
+  color: #ffffff;
   transform: translateY(-3px);
 }
 
@@ -204,12 +204,12 @@
   position: relative;
   width: 100%;
   height: 350px;
-  background: #111;
+  background: #082233;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-top: 1px solid #222;
+  border-top: 1px solid rgba(255, 107, 0, 0.2);
 }
 
 .map-dots-bg {

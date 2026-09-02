@@ -347,25 +347,19 @@ const MediaPage = () => {
       
       {/* Hero Section */}
       <section className="mp-hero animate-on-scroll">
-        <div
-          className="mp-hero-bg-overlay"
-          style={heroBgImage ? { backgroundImage: `url(${heroBgImage})` } : {}}
-        ></div>
+        <div className="section-grid-pattern"></div>
         <div className="container mp-hero-container">
           
-          <div className="mp-brand-pill">
-            <span className="mp-pill-dot"></span>
-            <span>{heroBadge}</span>
-            <span className="mp-pill-sub">• {heroSubBadge}</span>
+          <div className="section-left-title-wrapper" style={{ textAlign: 'center', marginBottom: '12px' }}>
+            <h2 className="section-main-title">
+              MEDIA <span className="title-gradient-accent">DIVISION</span>
+            </h2>
           </div>
 
-          <h1 className="mp-hero-title">
-            {heroTitle}
+          <h1 className="section-title" style={{ textAlign: 'center', marginBottom: '18px' }}>
+            Creative Stories. <br />
+            <span className="title-gradient-accent">Powerful Visuals. Digital Growth.</span>
           </h1>
-
-          <div className="mp-hero-tagline">
-            <span>{heroTagline1}</span> <span>{heroTagline2}</span> <span>{heroTagline3}</span>
-          </div>
 
           <motion.p
             className="mp-hero-reveal-text"
@@ -390,15 +384,7 @@ const MediaPage = () => {
             ))}
           </motion.p>
 
-          <div className="mp-hero-actions">
-            <a href="#services" className="btn-mp-primary">
-              <span>EXPLORE SERVICES</span>
-              <FiArrowRight />
-            </a>
-            <Link to="/contact" className="btn-mp-secondary">
-              <span>GET IN TOUCH</span>
-            </Link>
-          </div>
+
 
         </div>
       </section>
@@ -406,13 +392,16 @@ const MediaPage = () => {
       {/* Media Services Section */}
       <section id="services" className="mp-section mp-services-section">
         <div className="container">
-          
-          <div className="mp-section-header animate-on-scroll">
-            <span className="mp-section-kicker">WHAT WE OFFER</span>
-            <h2 className="mp-section-title">
-              OUR MEDIA <span className="mp-gradient-text">SERVICES</span>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                WHAT WE <span className="title-gradient-accent">OFFER</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              Our Media <span className="title-gradient-accent">Services</span>
             </h2>
-            <p className="mp-section-desc">
+            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
               Comprehensive creative and performance solutions tailored to amplify your brand's digital voice.
             </p>
           </div>
@@ -421,12 +410,10 @@ const MediaPage = () => {
             {servicesList.map((srv, idx) => (
               <div className="media-service-card" key={idx} style={{ '--card-idx': idx }}>
                 <div className="mp-card-top">
-                  <span className="mp-service-num">{srv.num}</span>
+                  <div className="mp-service-icon-box">
+                    {srv.icon}
+                  </div>
                   <span className="mp-service-tag">{srv.tag}</span>
-                </div>
-
-                <div className="mp-service-icon-box">
-                  {srv.icon}
                 </div>
 
                 <h3 className="mp-service-title">{srv.title}</h3>
@@ -451,12 +438,16 @@ const MediaPage = () => {
       <section className="mp-section mp-deck-section">
         <div className="mp-deck-full-container">
           
-          <div className="mp-section-header animate-on-scroll">
-            <span className="mp-section-kicker">EDITORIAL & CAMPAIGNS SHOWCASE</span>
-            <h2 className="mp-section-title">
-              CREATIVE STORIES <span className="mp-gradient-text">IN MOTION</span>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', maxWidth: '1280px', margin: '0 auto 2.5rem auto' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                EDITORIAL & <span className="title-gradient-accent">CAMPAIGNS</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              Creative Stories <span className="title-gradient-accent">In Motion</span>
             </h2>
-            <p className="mp-section-desc">
+            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
               Click or hover any 3D editorial card deck to explore brand stories, lifestyle reels, and commercial campaigns.
             </p>
           </div>
@@ -538,12 +529,16 @@ const MediaPage = () => {
       <section className="mp-section mp-workflow-section">
         <div className="container">
           
-          <div className="mp-section-header animate-on-scroll">
-            <span className="mp-section-kicker">SEAMLESS PROCESS</span>
-            <h2 className="mp-section-title">
-              FROM CONCEPT <span className="mp-gradient-text">TO CONTENT</span>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                SEAMLESS <span className="title-gradient-accent">PROCESS</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              From Concept <span className="title-gradient-accent">To Content</span>
             </h2>
-            <p className="mp-section-desc">
+            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
               We handle the complete content journey so your brand can focus on what it does best.
             </p>
           </div>
@@ -603,14 +598,15 @@ const MediaPage = () => {
           {/* LEFT SIDE HEADER & CONTROLS */}
           <div className="mp-cap-left-col">
             
-            <div className="mp-cap-kicker-badge">
-              <span className="kicker-dot"></span>
-              <span>OUR PRODUCTION CAPABILITIES</span>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                OUR <span className="title-gradient-accent">CAPABILITIES</span>
+              </h2>
             </div>
 
-            <h2 className="mp-cap-serif-title">
-              What Our Production<br />
-              <span className="mp-cap-serif-highlight">Capabilities</span> Deliver <span className="title-sparkle">✦</span>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              What Our Production <br />
+              <span className="title-gradient-accent">Capabilities Deliver</span>
             </h2>
 
             <p className="mp-cap-left-desc">
@@ -736,12 +732,16 @@ const MediaPage = () => {
       <section className="mp-section mp-why-section">
         <div className="container">
           
-          <div className="mp-section-header animate-on-scroll">
-            <span className="mp-section-kicker">OUR EDGE</span>
-            <h2 className="mp-section-title">
-              WHY INNOVEITY <span className="mp-gradient-text">MEDIA?</span>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                OUR <span className="title-gradient-accent">EDGE</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              Why Choose <span className="title-gradient-accent">Innoveity Media</span>
             </h2>
-            <p className="mp-section-desc">
+            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
               Strategic direction coupled with cinema-grade execution to make your content impactful.
             </p>
           </div>
@@ -765,23 +765,32 @@ const MediaPage = () => {
       <section className="mp-section mp-built-for-section">
         <div className="container">
           
-          <div className="mp-section-header animate-on-scroll">
-            <span className="mp-section-kicker">TAILORED SOLUTIONS</span>
-            <h2 className="mp-section-title">
-              BUILT FOR <span className="mp-gradient-text">YOUR AUDIENCE</span>
-            </h2>
-            <p className="mp-section-desc">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.5rem' }}>
+            <div>
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+                <h2 className="section-main-title">
+                  TAILORED <span className="title-gradient-accent">SOLUTIONS</span>
+                </h2>
+              </div>
+              <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: 0 }}>
+                Built For <span className="title-gradient-accent">Your Audience</span>
+              </h2>
+            </div>
+            <p className="mp-section-desc" style={{ maxWidth: '540px', margin: '0', textAlign: 'left', color: '#475569' }}>
               Whether you are launching a brand, promoting a product, covering an event or building your digital presence, our Media Division creates content designed for your audience.
             </p>
           </div>
 
-          <div className="mp-built-grid">
-            {audienceTypesList.map((aud, idx) => (
-              <div className="built-for-chip" key={idx}>
-                <span className="chip-bullet">•</span>
-                <span className="chip-label">{aud}</span>
-              </div>
-            ))}
+          {/* Infinite Marquee Single Line Moving Track */}
+          <div className="mp-built-marquee-wrapper">
+            <div className="mp-built-marquee-track">
+              {[...audienceTypesList, ...audienceTypesList, ...audienceTypesList, ...audienceTypesList].map((aud, idx) => (
+                <div className="built-for-chip" key={idx}>
+                  <span className="chip-bullet">•</span>
+                  <span className="chip-label">{aud}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
         </div>
@@ -792,29 +801,34 @@ const MediaPage = () => {
         <div className="container">
           <div className="mp-cta-card">
             
-            <div className="cta-brand-tag">
-              <span className="cta-glow-dot"></span>
-              <span>{ctaBrandTag}</span>
+            <div className="mp-cta-left">
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+                <h2 className="section-main-title">
+                  START YOUR <span className="title-gradient-accent">PROJECT</span>
+                </h2>
+              </div>
+
+              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '14px' }}>
+                Let's Tell Your <span className="title-gradient-accent">Brand Story</span>
+              </h2>
+
+              <p className="cta-subheading">
+                {ctaSub1}<br />
+                <strong>{ctaSub2}</strong>
+              </p>
             </div>
 
-            <h2 className="cta-heading">
-              {ctaHeading}
-            </h2>
+            <div className="mp-cta-right">
+              <div className="cta-badges">
+                <span>{ctaBadges}</span>
+              </div>
 
-            <p className="cta-subheading">
-              {ctaSub1}<br />
-              <strong>{ctaSub2}</strong>
-            </p>
-
-            <div className="cta-badges">
-              <span>{ctaBadges}</span>
-            </div>
-
-            <div className="cta-actions">
-              <Link to="/contact" className="btn-mp-cta-primary">
-                <span>{ctaBtnText}</span>
-                <FiArrowRight />
-              </Link>
+              <div className="cta-actions">
+                <Link to="/contact" className="btn-mp-cta-primary">
+                  <span>{ctaBtnText}</span>
+                  <FiArrowRight />
+                </Link>
+              </div>
             </div>
 
           </div>

@@ -123,7 +123,7 @@
 
 .camper-text strong {
   font-size: 13px;
-  color: #0f172a;
+  color: #082233;
   font-weight: 700;
 }
 
@@ -197,7 +197,7 @@
 .feature-text-group h4 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: #0f172a;
+  color: #082233;
   margin-bottom: 3px;
 }
 
@@ -209,7 +209,7 @@
 
 /* CTA Pill Button */
 .pill-btn-mosaic {
-  background: #0f172a;
+  background: #082233;
   color: #ffffff;
   border-radius: 9999px;
   padding: 14px 32px;
@@ -301,7 +301,7 @@
 
 .badge-stat-info strong {
   font-size: 14px;
-  color: #0f172a;
+  color: #082233;
 }
 
 .badge-stat-info span {

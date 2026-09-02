@@ -405,7 +405,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #121212;
+  color: #ff6b00;
   font-size: 1.2rem;
   font-weight: 700;
   transform: scale(0);
@@ -425,20 +425,20 @@
   background: white;
   padding: 2rem;
   border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(18, 18, 18, 0.04);
-  border: 1px solid rgba(18, 18, 18, 0.1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(8, 34, 51, 0.1);
 }
 
 .timeline-title {
   font-family: var(--font-heading);
-  color: #121212;
+  color: #082233;
   font-size: 1.4rem;
   margin-bottom: 0.5rem;
   font-weight: 800;
 }
 
 .timeline-desc {
-  color: #2c3e3a;
+  color: #475569;
   font-size: 1rem;
   line-height: 1.6;
 }

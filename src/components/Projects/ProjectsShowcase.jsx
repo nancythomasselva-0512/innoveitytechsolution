@@ -103,7 +103,7 @@ const ProjectsShowcase = () => {
 
             <h2 className="showcase-main-title">
               {showcaseHeader.titleLine1 || 'We Help Brands'} <br />
-              <span className="title-highlight">{showcaseHeader.titleHighlight || 'Win in the Digital Space'}</span>
+              <span className="title-highlight">{showcaseHeader.titleHighlight || 'Win In The Digital Space'}</span>
             </h2>
           </div>
 

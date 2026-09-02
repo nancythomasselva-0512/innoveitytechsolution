@@ -20,7 +20,7 @@ const Footer = () => {
     navigate('/services');
   };
 
-  const hideCtaBanner = location.pathname === '/projects' || location.pathname === '/services' || location.pathname === '/team' || location.pathname === '/contact' || location.pathname.startsWith('/privacy') || location.pathname.startsWith('/terms') || location.pathname.startsWith('/refund');
+  const hideCtaBanner = location.pathname === '/media' || location.pathname === '/projects' || location.pathname === '/services' || location.pathname === '/team' || location.pathname === '/contact' || location.pathname.startsWith('/privacy') || location.pathname.startsWith('/terms') || location.pathname.startsWith('/refund');
 
   const operatingCompany = headerFooterSettings?.operatingCompany || 'Operated by Innoveity Tech Solution Ltd.';
   const address = headerFooterSettings?.address || contact?.address || 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059';

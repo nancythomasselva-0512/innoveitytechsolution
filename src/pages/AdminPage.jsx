@@ -869,7 +869,7 @@ const AdminPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#121212' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#082233' }}>
                     {analyticsTimeframe === 'weekly'
                       ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
                       : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
@@ -911,7 +911,7 @@ const AdminPage = () => {
                         : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40"
                       }
                       fill="none"
-                      stroke="#121212"
+                      stroke="#082233"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />
@@ -919,18 +919,18 @@ const AdminPage = () => {
                     {/* DATA DOTS */}
                     {analyticsTimeframe === 'weekly' ? (
                       <>
-                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                         <circle cx="210" cy="20" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                       </>
                     ) : (
                       <>
-                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                         <circle cx="250" cy="15" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                       </>
                     )}
                   </svg>
@@ -955,7 +955,7 @@ const AdminPage = () => {
                 </div>
 
                 <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#082233', marginBottom: '4px' }}>
                     CMS Synchronization Active
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
@@ -978,7 +978,7 @@ const AdminPage = () => {
 
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ width: '100%', justifyContent: 'center', background: '#121212', color: '#ffffff', fontWeight: 800, padding: '10px' }}
+                  style={{ width: '100%', justifyContent: 'center', background: '#082233', color: '#ffffff', fontWeight: 800, padding: '10px' }}
                   onClick={() => setActiveTab('projects')}
                 >
                   ⚡ Manage Content
@@ -1089,7 +1089,7 @@ const AdminPage = () => {
                           <defs>
                             <linearGradient id="adminRingGrad" x1="0" y1="0" x2="1" y2="1">
                               <stop offset="0%" stopColor="#ff6b00" />
-                              <stop offset="100%" stopColor="#121212" />
+                              <stop offset="100%" stopColor="#082233" />
                             </linearGradient>
                           </defs>
                           <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
@@ -1105,14 +1105,14 @@ const AdminPage = () => {
                           />
                         </svg>
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#121212', lineHeight: 1 }}>{pct}%</div>
+                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#082233', lineHeight: 1 }}>{pct}%</div>
                           <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Live Completed</div>
                         </div>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.74rem', color: '#475569', fontWeight: 700, width: '100%', background: '#f8fafc', padding: '8px 12px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#121212' }}></span> {doneP} Completed
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#082233' }}></span> {doneP} Completed
                         </span>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff6b00' }}></span> {totalP - doneP} Active
@@ -1220,7 +1220,7 @@ const AdminPage = () => {
             {/* ⭐ SECTION 1: 3D ROTATOR SHOWCASE CONTENT EDITOR */}
             <div className="chart-header-row" style={{ marginBottom: '16px' }}>
               <div>
-                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#121212', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#082233', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <FiLayers style={{ color: '#ff6b00' }} /> Projects 3D Showcase (Rotator Section)
                 </h3>
                 <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
@@ -1887,7 +1887,7 @@ const AdminPage = () => {
 
             {/* ADD CUSTOM CONTACT CHANNEL BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
               <form onSubmit={handleAddContactBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Channel Title / Desk</label>
@@ -1951,7 +1951,7 @@ const AdminPage = () => {
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ background: '#121212', color: '#ffffff', border: 'none', fontWeight: 800 }}
+                  style={{ background: '#082233', color: '#ffffff', border: 'none', fontWeight: 800 }}
                   onClick={() => setShowAddAdminForm(!showAddAdminForm)}
                 >
                   <FiPlus /> {showAddAdminForm ? 'Close Form' : '+ Add Admin Account'}
@@ -1964,7 +1964,7 @@ const AdminPage = () => {
 
             {showAddAdminForm && (
               <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '20px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
-                <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1rem', fontWeight: 800 }}>Create New Administrator Account</h4>
+                <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>Create New Administrator Account</h4>
                 <form onSubmit={handleAddAdminSubmit} className="dash-form-grid">
                   <div className="dash-field-group">
                     <label className="dash-label">Full Name</label>
@@ -2065,7 +2065,7 @@ const AdminPage = () => {
 
             {/* 1. HEADER BRANDING & CTA BUTTON */}
             <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Header Logo & Button Configuration
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2073,7 +2073,7 @@ const AdminPage = () => {
                   <label className="dash-label">Logo Sub-Title / Tagline</label>
                   <input
                     type="text"
-                    placeholder="e.g. TECH SOLUTIONS"
+                    placeholder="e.g. TECH SOLUTION"
                     className="dash-input-styled"
                     value={editHeaderFooter.brandSubTitle || ''}
                     onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, brandSubTitle: e.target.value })}
@@ -2103,7 +2103,7 @@ const AdminPage = () => {
 
             {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Navigation Bar Menu Links Manager
               </h4>
 
@@ -2191,7 +2191,7 @@ const AdminPage = () => {
 
             {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Company & Desk Contact Info
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2260,7 +2260,7 @@ const AdminPage = () => {
 
             {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Social Media Links ("Connect")
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2318,7 +2318,7 @@ const AdminPage = () => {
 
             {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiCheck /> Footer Call-to-Action Banner & Legal Bar
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">

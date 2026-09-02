@@ -6,7 +6,7 @@ import './WhyUs.css';
 const stats = [
   { id: 1, icon: <FiAward />, count: 150, label: 'Projects Completed' },
   { id: 2, icon: <FiUsers />, count: 120, label: 'Happy Clients' },
-  { id: 3, icon: <FiClock />, count: 10, label: 'Years Experience' },
+  { id: 3, icon: <FiClock />, count: 5, label: 'Years Experience' },
   { id: 4, icon: <FiHeart />, count: 50, label: 'Awards Won' },
 ];
 

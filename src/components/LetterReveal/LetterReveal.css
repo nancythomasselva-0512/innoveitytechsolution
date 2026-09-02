@@ -11,8 +11,9 @@
 }
 
 .sp-intro-letter-reveal {
-  font-size: 1.2rem;
-  color: #121212;
-  font-weight: 600;
+  font-size: 1.15rem;
+  color: #082233;
+  font-weight: 500;
   line-height: 1.8;
+  opacity: 0.92;
 }

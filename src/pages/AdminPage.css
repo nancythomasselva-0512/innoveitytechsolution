@@ -1,7 +1,7 @@
 /* 
   Innoveity Tech Solution - Official Brand Emerald Green Admin & Super Admin Theme
   Typography: Times New Roman (Super Admin & Admin pages)
-  Palette: Emerald Green (#ff6b00), Forest Dark Green (#121212), Mint (#fed7aa), Pure White (#ffffff)
+  Palette: Emerald Green (#ff6b00), Forest Dark Green (#082233), Mint (#fed7aa), Pure White (#ffffff)
 */
 
 .admin-layout,
@@ -15,7 +15,7 @@
   width: 100vw;
   overflow: hidden;
   background: linear-gradient(135deg, #fff7ed 0%, #fff7ed 45%, #e6f4f1 100%);
-  color: #121212;
+  color: #082233;
   padding: 20px;
   gap: 20px;
   box-sizing: border-box;
@@ -96,7 +96,7 @@
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 0;
   letter-spacing: -0.5px;
 }
@@ -136,7 +136,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #ff6b00, #121212);
+  background: linear-gradient(135deg, #ff6b00, #082233);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -149,7 +149,7 @@
 }
 
 .dash-avatar-circle.super-admin {
-  background: linear-gradient(135deg, #ff6b00, #121212);
+  background: linear-gradient(135deg, #ff6b00, #082233);
 }
 
 .user-info h4 {
@@ -157,7 +157,7 @@
   font-family: var(--font-heading);
   font-size: 0.9rem;
   font-weight: 700;
-  color: #121212;
+  color: #082233;
 }
 
 .user-role-tag {
@@ -203,12 +203,12 @@
 }
 
 .nav-item-btn:hover {
-  color: #121212;
+  color: #082233;
   background: rgba(18, 18, 18, 0.08);
 }
 
 .nav-item-btn.active {
-  background: linear-gradient(135deg, #121212 0%, #0a0a0a 100%);
+  background: linear-gradient(135deg, #082233 0%, #0a0a0a 100%);
   color: #ffffff;
   font-weight: 800;
   border: 1px solid #ff6b00;
@@ -311,7 +311,7 @@
   font-family: var(--font-heading);
   font-size: 1.45rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 0;
 }
 
@@ -348,7 +348,7 @@
   border-radius: 50px;
   padding: 8px 16px 8px 38px;
   font-size: 0.88rem;
-  color: #121212;
+  color: #082233;
   font-family: var(--font-family);
   outline: none;
   transition: all 0.3s ease;
@@ -443,7 +443,7 @@
   font-family: var(--font-heading);
   font-size: 2.4rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   letter-spacing: -1px;
   margin-bottom: 14px;
 }
@@ -466,7 +466,7 @@
   border-radius: 50px;
   font-size: 0.85rem;
   font-weight: 700;
-  color: #121212;
+  color: #082233;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -493,9 +493,9 @@
 .action-pill-btn.primary-pill:hover,
 .action-pill-btn.primary-pill:focus,
 .action-pill-btn.primary-pill:active {
-  background: #121212 !important;
+  background: #082233 !important;
   color: #ffffff !important;
-  border-color: #121212 !important;
+  border-color: #082233 !important;
   box-shadow: 0 4px 14px rgba(9, 60, 37, 0.3) !important;
 }
 
@@ -511,7 +511,7 @@
   background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
   border-radius: 18px;
   padding: 16px;
-  color: #121212;
+  color: #082233;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -523,7 +523,7 @@
   background: linear-gradient(135deg, #e6f4f1 0%, #fed7aa 100%);
   border-radius: 18px;
   padding: 16px;
-  color: #121212;
+  color: #082233;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -532,7 +532,7 @@
 }
 
 .mini-card-dark-btn {
-  background: #121212;
+  background: #082233;
   border-radius: 18px;
   min-height: 100px;
   display: flex;
@@ -583,7 +583,7 @@
   font-family: var(--font-heading);
   font-size: 1.1rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
 }
 
 .chart-dropdown-pill {
@@ -685,7 +685,7 @@
 .activity-item-title {
   font-size: 0.85rem;
   font-weight: 700;
-  color: #121212;
+  color: #082233;
   margin: 0 0 2px;
 }
 
@@ -697,7 +697,7 @@
 .activity-value-badge {
   font-size: 0.85rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
 }
 
 /* =========================================
@@ -744,7 +744,7 @@
   font-family: var(--font-heading);
   font-size: 2.4rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   line-height: 1;
   margin-top: -26px;
 }
@@ -764,7 +764,7 @@
   border-radius: 50px;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #121212;
+  color: #082233;
   cursor: pointer;
   transition: all 0.25s ease;
 }
@@ -938,7 +938,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 1.2rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 0;
 }
 
@@ -1043,7 +1043,7 @@ select.dash-input-styled {
 .dash-cms-table td {
   padding: 14px 16px;
   font-size: 0.88rem;
-  color: #121212;
+  color: #082233;
   border-bottom: 1px solid #fff7ed;
   vertical-align: middle;
 }
@@ -1096,7 +1096,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 2.2rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
 }
 
 .pos-stat-pill {
@@ -1140,7 +1140,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 0;
 }
 
@@ -1203,7 +1203,7 @@ select.dash-input-styled {
 .category-name-text {
   font-weight: 700;
   font-size: 0.88rem;
-  color: #121212;
+  color: #082233;
   display: flex;
   justify-content: space-between;
 }
@@ -1243,7 +1243,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 1.6rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
 }
 
 .pos-donut-label {
@@ -1293,7 +1293,7 @@ select.dash-input-styled {
 .staff-name-title {
   font-weight: 700;
   font-size: 0.88rem;
-  color: #121212;
+  color: #082233;
 }
 
 .staff-role-sub {
@@ -1344,7 +1344,7 @@ select.dash-input-styled {
 }
 
 .donezo-featured-card {
-  background: linear-gradient(145deg, #121212 0%, #052618 100%);
+  background: linear-gradient(145deg, #082233 0%, #052618 100%);
   color: #ffffff;
   border: none;
   box-shadow: 0 8px 25px rgba(9, 60, 37, 0.25);
@@ -1384,7 +1384,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 2.4rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 12px 0 8px;
 }
 
@@ -1427,7 +1427,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 1rem;
   font-weight: 800;
-  color: #121212;
+  color: #082233;
   margin: 0 0 14px;
 }
 
@@ -1541,7 +1541,7 @@ select.dash-input-styled {
 /* Sidebar App Promo Banner */
 .donezo-sidebar-promo {
   margin-top: auto;
-  background: linear-gradient(145deg, #121212 0%, #042114 100%);
+  background: linear-gradient(145deg, #082233 0%, #042114 100%);
   border-radius: 18px;
   padding: 16px;
   color: #ffffff;
@@ -1582,7 +1582,7 @@ select.dash-input-styled {
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 800;
-  color: #121212 !important;
+  color: #082233 !important;
   margin: 0;
 }
 

@@ -107,9 +107,9 @@ const ServicesTransformation = () => {
               </h2>
             </div>
             
-            <h2 className="chaos-headline">Stop absorbing the chaos.</h2>
-            <h2 className="confidence-headline">
-              Run with <span className="gradient-glow-text">confidence.</span>
+            <h2 className="chaos-headline">
+              <span className="mosaic-heading-line">Stop Absorbing The Chaos.</span>
+              <span className="mosaic-heading-line title-gradient-accent">Run With Confidence.</span>
             </h2>
           </motion.div>
 

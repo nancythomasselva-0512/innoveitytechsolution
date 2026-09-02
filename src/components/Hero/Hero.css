@@ -25,11 +25,11 @@
 
 .hero-grid-pattern {
   position: absolute;
-  inset: -96px;
+  inset: -140px;
   background-image: 
     linear-gradient(to right, rgba(255, 107, 0, 0.085) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 107, 0, 0.085) 1px, transparent 1px);
-  background-size: 46px 46px;
+  background-size: 72px 72px;
   background-position: 0 0;
   animation: moveHeroGrid 22s linear infinite;
 }
@@ -39,7 +39,7 @@
     transform: translate(0, 0);
   }
   100% {
-    transform: translate(46px, 46px);
+    transform: translate(72px, 72px);
   }
 }
 

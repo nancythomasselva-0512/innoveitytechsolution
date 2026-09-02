@@ -59,11 +59,20 @@ const ProjectsPage = () => {
       <ProjectsShowcase />
 
       {/* Projects Grid Case Studies Section */}
-      <section className="projects-section" style={{ backgroundColor: '#ffffff', color: '#111111' }}>
+      <section className="projects-section" style={{ backgroundColor: 'var(--bg-color, #ffffff)', position: 'relative' }}>
         <div className="container">
-          <div className="projects-grid-header" style={{ textCenter: 'center', marginBottom: '40px' }}>
-            <h2 style={{ fontSize: '36px', fontWeight: '700', color: '#121212', marginBottom: '10px' }}>Featured Case Studies</h2>
-            <p style={{ color: '#555555', fontSize: '16px' }}>Detailed breakdown of system architecture, engineering challenges, and measurable results.</p>
+          <div className="projects-grid-header" style={{ textAlign: 'left', marginBottom: '40px' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                CASE <span className="title-gradient-accent">STUDIES</span>
+              </h2>
+            </div>
+            <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              Featured <span className="title-gradient-accent">Case Studies</span>
+            </h2>
+            <p className="projects-subtitle" style={{ textAlign: 'left', color: '#082233', fontSize: '1.02rem', maxWidth: '640px', margin: '0', lineHeight: '1.7', fontWeight: 500, opacity: 0.9 }}>
+              Detailed breakdown of system architecture, engineering challenges, and measurable results.
+            </p>
           </div>
 
           <div className="projects-accordion-container">
@@ -97,9 +106,18 @@ const ProjectsPage = () => {
       </section>
 
       {/* Development Process Timeline */}
-      <section className="sp-section" style={{ background: 'white' }}>
+      <section className="sp-section" style={{ background: 'var(--bg-color-light, #f8fafc)' }}>
         <div className="container">
-          <h2 className="sp-section-title animate-on-scroll" style={{ textAlign: 'center', marginBottom: '2rem' }}>Our Development Process</h2>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                WORKFLOW <span className="title-gradient-accent">STEPS</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left' }}>
+              Our Development <span className="title-gradient-accent">Process</span>
+            </h2>
+          </div>
           <div className="sp-timeline-wrapper animate-on-scroll">
             <div className="sp-timeline-line"></div>
             {processSteps.map((step, idx) => {

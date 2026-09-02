@@ -982,7 +982,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#121212' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#082233' }}>
                     {analyticsTimeframe === 'weekly'
                       ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
                       : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
@@ -1024,7 +1024,7 @@ const SuperAdminPage = () => {
                         : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40"
                       }
                       fill="none"
-                      stroke="#121212"
+                      stroke="#082233"
                       strokeWidth="3.5"
                       strokeLinecap="round"
                     />
@@ -1032,18 +1032,18 @@ const SuperAdminPage = () => {
                     {/* DATA DOTS */}
                     {analyticsTimeframe === 'weekly' ? (
                       <>
-                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                         <circle cx="210" cy="20" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                       </>
                     ) : (
                       <>
-                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
-                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
+                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                         <circle cx="250" cy="15" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#121212" strokeWidth="2.5" />
+                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
                       </>
                     )}
                   </svg>
@@ -1067,7 +1067,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#121212', marginBottom: '4px' }}>
+                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#082233', marginBottom: '4px' }}>
                     CMS Synchronization Active
                   </div>
                   <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
@@ -1090,7 +1090,7 @@ const SuperAdminPage = () => {
 
                 <button
                   className="action-pill-btn primary-pill"
-                  style={{ width: '100%', justifyContent: 'center', background: '#121212', color: '#ffffff', fontWeight: 800, padding: '10px' }}
+                  style={{ width: '100%', justifyContent: 'center', background: '#082233', color: '#ffffff', fontWeight: 800, padding: '10px' }}
                   onClick={() => setActiveTab('projects')}
                 >
                   ⚡ Manage Content
@@ -1199,7 +1199,7 @@ const SuperAdminPage = () => {
                           <defs>
                             <linearGradient id="superRingGrad" x1="0" y1="0" x2="1" y2="1">
                               <stop offset="0%" stopColor="#ff6b00" />
-                              <stop offset="100%" stopColor="#121212" />
+                              <stop offset="100%" stopColor="#082233" />
                             </linearGradient>
                           </defs>
                           <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
@@ -1215,14 +1215,14 @@ const SuperAdminPage = () => {
                           />
                         </svg>
                         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#121212', lineHeight: 1 }}>{pct}%</div>
+                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#082233', lineHeight: 1 }}>{pct}%</div>
                           <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Live Completed</div>
                         </div>
                       </div>
 
                       <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.74rem', color: '#475569', fontWeight: 700, width: '100%', background: '#f8fafc', padding: '8px 12px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#121212' }}></span> {doneP} Completed
+                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#082233' }}></span> {doneP} Completed
                         </span>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                           <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff6b00' }}></span> {totalP - doneP} Active
@@ -1330,7 +1330,7 @@ const SuperAdminPage = () => {
             {/* ⭐ SECTION 1: 3D ROTATOR SHOWCASE CONTENT EDITOR */}
             <div className="chart-header-row" style={{ marginBottom: '16px' }}>
               <div>
-                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#121212', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <h3 className="chart-title" style={{ fontSize: '1.25rem', color: '#082233', display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <FiLayers style={{ color: '#ff6b00' }} /> Projects 3D Showcase (Rotator Section)
                 </h3>
                 <p style={{ fontSize: '0.82rem', color: '#64748b', margin: 0 }}>
@@ -2103,7 +2103,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM CONTACT CHANNEL BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
               <form onSubmit={handleAddContactBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Channel Title / Desk</label>
@@ -2183,8 +2183,8 @@ const SuperAdminPage = () => {
                   style={{
                     padding: '8px 16px',
                     borderRadius: '30px',
-                    border: selectedSeoPage === page.id ? '1px solid #121212' : '1px solid #cbd5e1',
-                    background: selectedSeoPage === page.id ? '#121212' : '#ffffff',
+                    border: selectedSeoPage === page.id ? '1px solid #082233' : '1px solid #cbd5e1',
+                    background: selectedSeoPage === page.id ? '#082233' : '#ffffff',
                     color: selectedSeoPage === page.id ? '#ffffff' : '#334155',
                     fontSize: '0.82rem',
                     fontWeight: 700,
@@ -2247,7 +2247,7 @@ const SuperAdminPage = () => {
             <div className="dash-form-wrapper">
               <form onSubmit={handleSaveSeo} className="dash-form-grid">
                 <div className="dash-field-group full-width">
-                  <h4 style={{ margin: '0 0 10px', color: '#121212', fontSize: '1.1rem' }}>
+                  <h4 style={{ margin: '0 0 10px', color: '#082233', fontSize: '1.1rem' }}>
                     Page SEO Configuration: <span style={{ color: '#ff6b00', textTransform: 'uppercase' }}>{selectedSeoPage} Page</span>
                   </h4>
                 </div>
@@ -2347,7 +2347,7 @@ const SuperAdminPage = () => {
                 </div>
 
                 <div className="dash-field-group full-width" style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #cbd5e1' }}>
-                  <h4 style={{ margin: '0 0 10px', color: '#121212', fontSize: '1.05rem' }}>
+                  <h4 style={{ margin: '0 0 10px', color: '#082233', fontSize: '1.05rem' }}>
                     Global Technical SEO & Indexing
                   </h4>
                 </div>
@@ -2502,7 +2502,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM HOMEPAGE CONTENT BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Homepage Feature Block</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem' }}>Add Custom Homepage Feature Block</h4>
               <form onSubmit={handleAddHomeBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Feature Title</label>
@@ -2665,7 +2665,7 @@ const SuperAdminPage = () => {
 
             {/* ADD CUSTOM ABOUT US VALUE / MILESTONE BLOCK */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem' }}>Add Custom Value / Milestone Block</h4>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem' }}>Add Custom Value / Milestone Block</h4>
               <form onSubmit={handleAddAboutBlock} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Milestone Title</label>
@@ -2728,7 +2728,7 @@ const SuperAdminPage = () => {
 
             {/* 1. HEADER BRANDING & CTA BUTTON */}
             <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayout /> Header Logo & Button Configuration
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2736,7 +2736,7 @@ const SuperAdminPage = () => {
                   <label className="dash-label">Logo Sub-Title / Tagline</label>
                   <input
                     type="text"
-                    placeholder="e.g. TECH SOLUTIONS"
+                    placeholder="e.g. TECH SOLUTION"
                     className="dash-input-styled"
                     value={editHeaderFooter.brandSubTitle || ''}
                     onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, brandSubTitle: e.target.value })}
@@ -2766,7 +2766,7 @@ const SuperAdminPage = () => {
 
             {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiLayers /> Navigation Bar Menu Links Manager
               </h4>
 
@@ -2854,7 +2854,7 @@ const SuperAdminPage = () => {
 
             {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiPhone /> Footer Company & Desk Contact Info
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2923,7 +2923,7 @@ const SuperAdminPage = () => {
 
             {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiShare2 /> Footer Social Media Links ("Connect")
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -2981,7 +2981,7 @@ const SuperAdminPage = () => {
 
             {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
             <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <FiZap /> Footer Call-to-Action Banner & Legal Bar
               </h4>
               <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
@@ -3066,7 +3066,7 @@ const SuperAdminPage = () => {
 
                 {/* HERO SECTION CONFIGURATION */}
                 <div className="dash-field-group full-width">
-                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiFilm /> 1. Hero Section Content
                   </h4>
                 </div>
@@ -3204,7 +3204,7 @@ const SuperAdminPage = () => {
 
                 {/* 3D DECK CARDS IMAGE MANAGEMENT */}
                 <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiLayers /> 2. 3D Deck Showcase Images Management
                   </h4>
                 </div>
@@ -3303,7 +3303,7 @@ const SuperAdminPage = () => {
 
                 {/* PRODUCTION CAPABILITIES POSTER IMAGES MANAGEMENT */}
                 <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiVideo /> 3. Production Capabilities Poster Images Management
                   </h4>
                 </div>
@@ -3398,7 +3398,7 @@ const SuperAdminPage = () => {
 
                 {/* CALL TO ACTION CONFIGURATION */}
                 <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#121212', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
                     <FiZap /> 4. Call to Action (CTA) Section
                   </h4>
                 </div>

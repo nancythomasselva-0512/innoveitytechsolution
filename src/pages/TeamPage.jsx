@@ -42,7 +42,6 @@ const TeamPage = () => {
 
   const differentiators = [
     'Innovative and future-ready solutions',
-    'Clean and scalable architecture',
     'Responsive and accessible user experiences',
     'Security-focused development practices',
     'Transparent communication and project coordination',
@@ -81,12 +80,11 @@ const TeamPage = () => {
       <MeshGradientBackground className="team-hero-mesh-wrapper" variant="hero">
         <section className="team-hero">
           <div className="container relative-z">
-            <span className="team-hero-badge">INNOVEITY TECH SOLUTION</span>
             <h1 className="hero-animated-title">
               <span className="text-gradient-mesh">Building Innovative Digital Solutions</span><br />
               for Modern Businesses
             </h1>
-            <p className="hero-animated-subtitle">
+            <p className="hero-animated-subtitle" style={{ textAlign: 'center', margin: '0 auto' }}>
               Innoveity Tech Solution delivers innovative, scalable, and reliable technology solutions that help organizations streamline operations, enhance customer experiences, and accelerate digital transformation.
             </p>
           </div>
@@ -98,8 +96,14 @@ const TeamPage = () => {
       <section className="team-section relative-overflow">
         <div className="team-bg-shape"></div>
         <div className="container relative-z">
-          <h2 className="team-section-title">Our Team</h2>
-          <h3 className="team-section-subtitle">Collaborative Expertise, Unified Delivery</h3>
+          <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+            <h2 className="section-main-title">
+              OUR <span className="title-gradient-accent">TEAM</span>
+            </h2>
+          </div>
+          <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
+            Collaborative Expertise, <span className="title-gradient-accent">Unified Delivery</span>
+          </h2>
           
           <div className="team-content-grid">
             <div className="team-desc">
@@ -132,12 +136,16 @@ const TeamPage = () => {
       {/* ⭐ Leadership & Executive Board Section (Founder & CEO) */}
       <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(255, 107, 0, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
         <div className="container">
-          <div className="leadership-header" style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <span className="leadership-badge-pill">{leadershipBadge}</span>
-            <h2 className="team-section-title animate-on-scroll" style={{ textAlign: 'center', marginTop: '12px' }}>
-              {leadershipTitleLine1} <span className="gradient-text">{leadershipTitleHighlight}</span>
+          <div className="leadership-header" style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                EXECUTIVE <span className="title-gradient-accent">LEADERSHIP</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              {leadershipTitleLine1} <span className="title-gradient-accent">{leadershipTitleHighlight}</span>
             </h2>
-            <p className="why-intro animate-on-scroll" style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto' }}>
+            <p className="why-intro animate-on-scroll" style={{ textAlign: 'left', maxWidth: '650px', margin: '0' }}>
               {leadershipSubtitle}
             </p>
           </div>
@@ -162,12 +170,19 @@ const TeamPage = () => {
       {/* Meet Our Team / Experts Grid */}
       <section className="team-section" style={{ background: 'var(--bg-color)' }}>
         <div className="container">
-          <h2 className="team-section-title animate-on-scroll" style={{ textAlign: 'center' }}>
-            {teamTitle}
-          </h2>
-          <p className="why-intro animate-on-scroll" style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            {teamSubtitle}
-          </p>
+          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                OUR <span className="title-gradient-accent">EXPERTS</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+              Developers & <span className="title-gradient-accent">Creative Minds</span>
+            </h2>
+            <p className="why-intro animate-on-scroll" style={{ textAlign: 'left', maxWidth: '650px', margin: '0' }}>
+              {teamSubtitle}
+            </p>
+          </div>
           
           <div className="team-members-grid animate-on-scroll">
             {(generalMembers.length > 0 ? generalMembers : teamMembers).map((member) => (
@@ -188,10 +203,24 @@ const TeamPage = () => {
       {/* Why Choose Us */}
       <section className="team-section" style={{ background: 'white' }}>
         <div className="container why-container">
-          <h2 className="team-section-title">Why Choose Innoveity Tech Solution</h2>
-          <p className="why-intro">
-            Organizations choose Innoveity Tech Solution for its commitment to innovation, engineering excellence, and collaborative delivery.
-          </p>
+          <div className="why-header-split">
+            <div className="why-header-left">
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+                <h2 className="section-main-title">
+                  WHY <span className="title-gradient-accent">US</span>
+                </h2>
+              </div>
+              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: 0 }}>
+                Why Choose <span className="title-gradient-accent">Innoveity Tech</span><br />
+                <span className="title-gradient-accent">Solution</span>
+              </h2>
+            </div>
+            <div className="why-header-right">
+              <p className="why-intro">
+                Organizations choose Innoveity Tech Solution for its commitment to innovation, engineering excellence, and collaborative delivery.
+              </p>
+            </div>
+          </div>
           
           <div className="why-grid">
             {differentiators.map((diff, index) => (
@@ -212,7 +241,7 @@ const TeamPage = () => {
             <div className="cta-glow-circle-2"></div>
             
             <div className="relative-z">
-              <h2>Let’s Build Something Meaningful</h2>
+              <h2>Let’s Build Something <span className="title-gradient-accent">Meaningful</span></h2>
               <p>
                 Whether planning a new digital product, modernizing an existing system, or exploring AI and cloud technologies, Innoveity Tech Solution is ready to collaborate and deliver solutions aligned with business goals.
               </p>

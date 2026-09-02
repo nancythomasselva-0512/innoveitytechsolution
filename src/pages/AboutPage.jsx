@@ -153,32 +153,51 @@ const AboutPage = () => {
               {/* SECTION 1 — Hero */}
               <section className="about-hero-clean-section scroll-reveal">
                 <div className="hero-stack-container">
-                  <h1 className="display-hero-gold">About us</h1>
+                  <h1 className="display-hero-gold">
+                    About <span className="title-gradient-accent">Us</span>
+                  </h1>
                   <h2 className="sub-heading-white">Founded in 2019</h2>
                   <p className="body-muted-paragraph">
                     Innoveity Tech Solution looks to create long-lasting relationships with all the organizations we serve. We are proud that our very first client is still a client today.
                   </p>
                 </div>
+                <div className="thin-divider-line" style={{ marginTop: '35px' }}></div>
               </section>
 
-              {/* SECTION 2 — Statement (⭐ Innoveity Kinetic Word Skew Animation) */}
+              {/* SECTION 2 — Statement */}
               <section className="statement-section scroll-reveal">
-                <KineticWordSkewText className="display-statement-gold" text={aboutContent.mainStatement} />
+                <h2 className="display-statement-navy">
+                  Smart Technology. <span className="title-gradient-accent">Creative Engineering.</span> Scalable Digital Solutions.
+                </h2>
                 <div className="thin-divider-line"></div>
               </section>
 
-              {/* SECTION 3 — Philosophy / Approach */}
-              <section className="philosophy-section scroll-reveal">
-                <h2 className="philosophy-white-title">Philosophy</h2>
-                <p className="body-muted-paragraph philosophy-text">
-                  Innoveity Tech Solution realizes the key to both our success and customer happiness is consistency. Providing a consistent service ultimately rests with the talented engineers and specialists who build your digital products each day performing the actual engineering tasks. Our employees get all the training, proper equipment, support needed to perform their duties in the most proficient manner possible. It also means treating those employees with respect and appreciation.
-                </p>
+              {/* SECTION 3 — Impact Metrics Grid */}
+              <section className="philosophy-section scroll-reveal" style={{ marginTop: '1rem' }}>
+                <div className="impact-grid" style={{ maxWidth: '100%' }}>
+                  <div className="impact-card">
+                    <span className="impact-number">5+</span>
+                    <span className="impact-label">Years Experience</span>
+                  </div>
+                  <div className="impact-card">
+                    <span className="impact-number">{aboutContent.stat2Number || '500+'}</span>
+                    <span className="impact-label">{aboutContent.stat2Label || 'Projects Delivered'}</span>
+                  </div>
+                  <div className="impact-card">
+                    <span className="impact-number">{aboutContent.stat3Number || '50+'}</span>
+                    <span className="impact-label">{aboutContent.stat3Label || 'Tech Experts'}</span>
+                  </div>
+                  <div className="impact-card">
+                    <span className="impact-number">{aboutContent.stat4Number || '99%'}</span>
+                    <span className="impact-label">{aboutContent.stat4Label || 'Client Success'}</span>
+                  </div>
+                </div>
               </section>
 
             </div>
           </div>
 
-          {/* Right Column (~50% width): Building Image + Impact Cards on the RIGHT side */}
+          {/* Right Column (~50% width): Building Image on the RIGHT side */}
           <div className="about-right-column">
             
             {/* Building Image at top of right column */}
@@ -198,28 +217,6 @@ const AboutPage = () => {
               </div>
             </div>
 
-            {/* ⭐ Impact Cards Grid below building image */}
-            <div className="always-visible-impact-wrapper">
-              <div className="impact-grid">
-                <div className="impact-card">
-                  <span className="impact-number">{aboutContent.stat1Number}</span>
-                  <span className="impact-label">{aboutContent.stat1Label}</span>
-                </div>
-                <div className="impact-card">
-                  <span className="impact-number">{aboutContent.stat2Number}</span>
-                  <span className="impact-label">{aboutContent.stat2Label}</span>
-                </div>
-                <div className="impact-card">
-                  <span className="impact-number">{aboutContent.stat3Number}</span>
-                  <span className="impact-label">{aboutContent.stat3Label}</span>
-                </div>
-                <div className="impact-card">
-                  <span className="impact-number">{aboutContent.stat4Number}</span>
-                  <span className="impact-label">{aboutContent.stat4Label}</span>
-                </div>
-              </div>
-            </div>
-
           </div>
 
           {/* ⭐ FULL-WIDTH MARQUEE SECTION SPANNING ACROSS BOTH COLUMNS */}
@@ -231,21 +228,30 @@ const AboutPage = () => {
 
         {/* ⭐ SECTION — STRUCTURED DELIVERY STEP-BY-STEP STAGGERED PIPELINE */}
         <section className="structured-delivery-section scroll-reveal">
+          <div className="section-grid-pattern"></div>
           <div className="structured-delivery-container">
             
-            {/* Badge Pill */}
-            <div className="sd-badge-wrapper">
-              <span className="sd-badge">
-                <span className="sd-badge-sparkle">✦</span> Structured Delivery
-              </span>
-            </div>
+            {/* 2-Column Split Header matching Projects Theme */}
+            <div className="sd-header-row">
+              <div className="sd-header-left">
+                <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '12px' }}>
+                  <h2 className="section-main-title">
+                    STRUCTURED <span className="title-gradient-accent">DELIVERY</span>
+                  </h2>
+                </div>
 
-            {/* Title & Subtitle */}
-            <h2 className="sd-main-title">One integrated, end-to-end system.</h2>
-            <h3 className="sd-gradient-title">Compounding operational value.</h3>
-            <p className="sd-description">
-              Innoveity Tech Solution teams capture, align, validate and deliver exactly what keeps your digital programs on track.
-            </p>
+                <h2 className="sd-main-title">
+                  One Integrated, End-to-End System. <br />
+                  <span className="title-gradient-accent">Compounding Operational Value.</span>
+                </h2>
+              </div>
+
+              <div className="sd-header-right">
+                <p className="sd-description">
+                  Innoveity Tech Solution teams capture, align, validate and deliver exactly what keeps your digital programs on track.
+                </p>
+              </div>
+            </div>
 
             {/* ⭐ 4-Step Staggered Staircase Pipeline Architecture */}
             <div className="sd-pipeline-grid">
@@ -288,7 +294,7 @@ const AboutPage = () => {
                 </div>
                 <div className="sd-pillar-line"></div>
                 <ul className="sd-step-list">
-                  <li className="highlight-item">reliability</li>
+                  <li>reliability</li>
                   <li>testing</li>
                   <li>compliance</li>
                   <li>sign-offs</li>
@@ -312,36 +318,7 @@ const AboutPage = () => {
 
             </div>
 
-            {/* ⭐ EXACT INTERSECTING GEOMETRIC WAVE MESH GRAPHIC (Matching Screenshots 1 & 2) */}
-            <div className="sd-wave-graphic">
-              <svg viewBox="0 0 1200 160" preserveAspectRatio="none" className="sd-wave-svg">
-                <defs>
-                  <linearGradient id="waveLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#ff6b00" />
-                    <stop offset="40%" stopColor="#34d399" />
-                    <stop offset="70%" stopColor="#e8c477" />
-                    <stop offset="100%" stopColor="#f59e0b" />
-                  </linearGradient>
-                  <linearGradient id="waveFillGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(255, 107, 0, 0.25)" />
-                    <stop offset="50%" stopColor="rgba(52, 211, 153, 0.2)" />
-                    <stop offset="100%" stopColor="rgba(232, 196, 119, 0.25)" />
-                  </linearGradient>
-                </defs>
 
-                {/* Translucent Base Wave Glow */}
-                <path d="M0,80 Q200,40 400,70 T800,50 T1200,80 L1200,160 L0,160 Z" fill="url(#waveFillGrad)" opacity="0.4" />
-
-                {/* Intersecting Low Dip Line */}
-                <path d="M0,90 C150,110 350,60 600,100 C850,140 1050,70 1200,90" fill="none" stroke="url(#waveLineGrad)" strokeWidth="2.5" opacity="0.9" />
-
-                {/* High Geometric Peak Line (Matches Screenshot 1 Peak!) */}
-                <path d="M0,75 C200,50 400,90 620,25 C820,80 1020,40 1200,70" fill="none" stroke="url(#waveLineGrad)" strokeWidth="3" />
-
-                {/* Top Gold Accent Line Filament */}
-                <path d="M0,60 C250,85 480,35 680,65 C880,95 1080,45 1200,55" fill="none" stroke="#e8c477" strokeWidth="1.5" opacity="0.75" />
-              </svg>
-            </div>
 
           </div>
         </section>

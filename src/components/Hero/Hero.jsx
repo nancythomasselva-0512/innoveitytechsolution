@@ -77,7 +77,7 @@ const Hero = () => {
                 />
               </span>
               <span className="title-white-text">
-                <span className="char-navy">TECH</span> <span className="title-gradient-accent">SOLUTIONS</span>
+                <span className="char-navy">TECH</span> <span className="title-gradient-accent">SOLUTION</span>
               </span>
             </h1>
 

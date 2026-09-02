@@ -196,29 +196,38 @@ const ServicesPage = () => {
 
   return (
     <div className="services-page">
-      
-      {/* Hero Section */}
-      <section className="sp-hero animate-on-scroll">
-        <div className="container">
-          <h1>Our Services</h1>
-          <p className="sp-subtitle">Technology Solutions Designed to Accelerate Business Growth</p>
-          
-          {/* ⭐ Smooth Letter-by-Letter Reveal Animation */}
-          <LetterReveal 
-            className="sp-intro-letter-reveal"
-            text="Innoveity Tech Solution delivers practical, scalable, and future-ready technology services tailored to overcome complex business challenges. From bespoke software engineering to advanced cloud and AI implementations, we provide end-to-end technical expertise to modernize your operations and drive sustainable growth."
-          />
+          {/* Unified Hero & Carousel Section with Continuous Moving Grid */}
+      <section className="sp-hero-carousel-combined animate-on-scroll">
+        <div className="section-grid-pattern"></div>
+        
+        {/* Header Content */}
+        <div className="container" style={{ position: 'relative', zIndex: 2, marginBottom: '2.5rem' }}>
+          <div className="sp-hero-header-row">
+            <div className="sp-hero-header-left">
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '12px' }}>
+                <h2 className="section-main-title">
+                  OUR <span className="title-gradient-accent">SERVICES</span>
+                </h2>
+              </div>
+              
+              <h1 className="sp-hero-main-title">
+                Technology Solutions Designed to <br />
+                <span className="title-gradient-accent">Accelerate Business Growth</span>
+              </h1>
+            </div>
+
+            <div className="sp-hero-header-right">
+              {/* ⭐ Smooth Letter-by-Letter Reveal Animation */}
+              <LetterReveal 
+                className="sp-intro-letter-reveal"
+                text="Innoveity Tech Solution delivers practical, scalable, and future-ready technology services tailored to overcome complex business challenges. From bespoke software engineering to advanced cloud and AI implementations, we provide end-to-end technical expertise to modernize your operations and drive sustainable growth."
+              />
+            </div>
+          </div>
         </div>
-      </section>
 
-      {/* ⭐ CONTINUOUS AUTO-LOOPING + WORKING LEFT/RIGHT ARROWS CAROUSEL */}
-      <section className="sp-section sp-carousel-section">
-        <div className="container" style={{ maxWidth: '100%', padding: 0 }}>
-          
-          <h2 className="sp-section-title animate-on-scroll">
-            Relied on by enterprise teams <span className="gradient-glow-text">from groundbreak to go-live.</span>
-          </h2>
-
+        {/* ⭐ CONTINUOUS AUTO-LOOPING + WORKING LEFT/RIGHT ARROWS CAROUSEL */}
+        <div className="container" style={{ maxWidth: '100%', padding: 0, position: 'relative', zIndex: 2 }}>
           {/* ⭐ CAROUSEL CONTAINER */}
           <div 
             className="sp-marquee-overflow-container"
@@ -227,7 +236,6 @@ const ServicesPage = () => {
             onTouchStart={() => setIsPaused(true)}
             onTouchEnd={() => setIsPaused(false)}
           >
-            
             {/* ⭐ WORKING LEFT NAV ARROW */}
             <button 
               className="carousel-nav-btn nav-left" 
@@ -311,9 +319,18 @@ const ServicesPage = () => {
 
 
       {/* Why Our Services Features */}
-      <section className="sp-section">
+      <section className="sp-section" style={{ paddingTop: '1.5rem', paddingBottom: '4rem' }}>
         <div className="container">
-          <h2 className="sp-section-title animate-on-scroll">Why Our Services</h2>
+          <div style={{ textAlign: 'left', marginBottom: '2.2rem' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+              <h2 className="section-main-title">
+                WHY CHOOSE <span className="title-gradient-accent">US</span>
+              </h2>
+            </div>
+            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left' }}>
+              Why Our <span className="title-gradient-accent">Services</span>
+            </h2>
+          </div>
           <div className="sp-features-grid">
             {features.map((feature, idx) => {
               // 2D Checkerboard pattern: cards 2, 4, 5, 7 (indices 1, 3, 4, 6) use brand dark green #121212
@@ -336,7 +353,9 @@ const ServicesPage = () => {
       <section className="sp-section" style={{ paddingTop: '2rem' }}>
         <div className="container">
           <div className="sp-cta">
-            <h2>Let's Build Your Next Digital Solution</h2>
+            <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '1.2rem' }}>
+              Let's Build Your Next <span className="title-gradient-accent">Digital Solution</span>
+            </h2>
             <p>
               Ready to transform your ideas into reality? Partner with our expert engineering team to discuss your project requirements and discover the perfect technology solutions tailored precisely to your business objectives.
             </p>

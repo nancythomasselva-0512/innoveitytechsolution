@@ -184,9 +184,9 @@ export const CMSProvider = ({ children }) => {
   };
 
   const defaultAboutContent = {
-    mainStatement: "We provide all the technology leadership, custom engineering, and supervision necessary to deliver your digital products to complete satisfaction",
+    mainStatement: "Smart Technology. Creative Engineering. Scalable Solutions.",
     badges: "Cloud Architecture, Custom Software, AI & Automation, Enterprise Security, Web & Mobile",
-    stat1Number: "10+",
+    stat1Number: "5+",
     stat1Label: "Years Experience",
     stat2Number: "500+",
     stat2Label: "Projects Delivered",
