@@ -60,9 +60,11 @@
 
 .transformation-header-right {
   display: flex;
+  flex-direction: row;
   justify-content: flex-end;
-  align-items: flex-end;
-  padding-bottom: 8px;
+  align-items: center;
+  gap: 28px;
+  padding-bottom: 6px;
 }
 
 .transformation-pills-row {
@@ -109,21 +111,57 @@
   margin: 0 0 4px 0;
 }
 
-.confidence-headline {
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 3.4vw, 2.75rem);
-  font-weight: 800;
-  color: #082233;
-  letter-spacing: -1.2px;
-  line-height: 1.15;
-  margin: 0;
+.transformation-title-bar {
+  width: 52px;
+  height: 3.5px;
+  background: linear-gradient(90deg, #ff6b00, #ff8a00);
+  border-radius: 4px;
+  margin: 14px 0 16px 0;
 }
 
-.gradient-glow-text {
-  background: linear-gradient(135deg, #ff8a00 0%, #ff6b00 50%, #ea580c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
+.transformation-lead-text {
+  font-size: 1.05rem;
+  color: #1e293b;
+  margin: 0 0 6px 0;
+  line-height: 1.6;
+}
+
+.transformation-sublead-text {
+  font-size: 0.98rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Right Pillar Badge Box */
+.services-pillar-badge-box {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-left: 2.5px solid #cbd5e1;
+  padding-left: 20px;
+}
+
+.services-pillar-words {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pillar-orange-dash {
+  width: 38px;
+  height: 3px;
+  background: #ff6b00;
+  border-radius: 2px;
+  margin-bottom: 4px;
+}
+
+.services-pillar-words span {
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #082233;
 }
 
 /* 3-Column Grid Layout */

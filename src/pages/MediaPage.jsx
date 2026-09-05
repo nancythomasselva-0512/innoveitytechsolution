@@ -22,7 +22,10 @@ import {
   FiActivity,
   FiChevronLeft,
   FiChevronRight,
-  FiX
+  FiX,
+  FiVolume2,
+  FiFileText,
+  FiImage
 } from 'react-icons/fi';
 import LetterReveal from '../components/LetterReveal/LetterReveal';
 import { useCMS } from '../context/CMSContext';
@@ -53,9 +56,24 @@ const MediaPage = () => {
   const [activeDeckIndex, setActiveDeckIndex] = useState(2);
   const [isDeckPaused, setIsDeckPaused] = useState(false);
   const [isCapPaused, setIsCapPaused] = useState(false);
+  const [activeCardId, setActiveCardId] = useState(null);
   const capabilitiesTrackRef = useRef(null);
 
-  // 3D Curved Deck Cards (Seamlessly Overlapping - Zero Gaps)
+  useEffect(() => {
+    if (window.location.hash) {
+      const hashId = window.location.hash.replace('#', '');
+      const cleanId = hashId.replace('media-card-', '');
+      setActiveCardId(cleanId);
+      setTimeout(() => {
+        const el = document.getElementById(hashId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }, 350);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, []);
   const deckCards = [
     {
       id: 'mmac-arch',
@@ -214,6 +232,95 @@ const MediaPage = () => {
     }
   ];
 
+  const mediaCapabilitiesCards = [
+    {
+      id: 'branding',
+      num: '01',
+      icon: <FiStar />,
+      title: 'Branding',
+      desc: 'Brand architecture, visual identity, typography, brand guidelines and strategic market positioning.'
+    },
+    {
+      id: 'smm',
+      num: '02',
+      icon: <FiShare2 />,
+      title: 'Social Media Management (SMM)',
+      desc: 'Strategic management of your social media presence with consistent, engaging and brand-focused content.'
+    },
+    {
+      id: 'seo',
+      num: '03',
+      icon: <FiSearch />,
+      title: 'SEO',
+      desc: "Search engine optimization customized according to your industry, target audience and business objectives."
+    },
+    {
+      id: 'performance',
+      num: '04',
+      icon: <FiTrendingUp />,
+      title: 'Performance Marketing',
+      desc: 'Targeted digital advertising and data-driven campaigns designed to deliver measurable ROI and conversions.'
+    },
+    {
+      id: 'visual-creatives',
+      num: '05',
+      icon: <FiLayout />,
+      title: 'Visual Creatives',
+      desc: 'Premium graphic design, campaign creatives, digital banners, pitch decks and visual storytelling assets.'
+    },
+    {
+      id: 'video-production',
+      num: '06',
+      icon: <FiVideo />,
+      title: 'Video Production',
+      desc: 'Cinema-grade video production for brand films, commercials, corporate videos and product launches.'
+    },
+    {
+      id: 'reels-shorts',
+      num: '07',
+      icon: <FiFilm />,
+      title: 'Reels & Short-Form Videos',
+      desc: 'High-retention short-form videos and viral reels engineered for maximum audience attention and reach.'
+    },
+    {
+      id: 'content-creation',
+      num: '08',
+      icon: <FiPenTool />,
+      title: 'Content Creation',
+      desc: 'High-impact copy, storytelling, creative scripting and multi-channel editorial content development.'
+    },
+    {
+      id: 'digital-marketing',
+      num: '09',
+      icon: <FiZap />,
+      title: 'Digital Marketing',
+      desc: 'Comprehensive full-funnel digital marketing strategies connecting your brand with high-intent customers.'
+    }
+  ];
+
+  const storytellingItems = [
+    {
+      icon: <FiFileText />,
+      title: 'Content Creation',
+      desc: 'Creative content developed around your brand, audience and business objectives—from everyday communication to campaign-led storytelling.'
+    },
+    {
+      icon: <FiShare2 />,
+      title: 'Social Media Management',
+      desc: 'Build a consistent digital presence through strategic social media management and engaging, brand-focused content.'
+    },
+    {
+      icon: <FiPlayCircle />,
+      title: 'Reels & Short-Form Videos',
+      desc: 'Capture attention in seconds with high-quality short-form videos created for engagement, reach and digital consumption.'
+    },
+    {
+      icon: <FiImage />,
+      title: 'Creative Design',
+      desc: 'From campaign creatives to promotional assets, we develop premium visual communication for digital platforms, announcements and brand campaigns.'
+    }
+  ];
+
   // 5 Production Capabilities with embedded animated video previews (matching reference UI style)
   // 5 Production Capabilities with embedded animated video previews (matching reference UI style)
   const productionCapabilities = [
@@ -311,11 +418,11 @@ const MediaPage = () => {
 
   const heroBadge = mediaCMS.hero?.badge || 'INNOVEITY MEDIA';
   const heroSubBadge = mediaCMS.hero?.subBadge || 'Creative. Strategic. Data-Driven.';
-  const heroTitle = mediaCMS.hero?.title || 'MEDIA DIVISION';
+  const heroTitle = (mediaCMS.hero?.title === 'MEDIA DIVISION' ? 'MEDIA CAPABILITIES' : mediaCMS.hero?.title) || 'MEDIA CAPABILITIES';
   const heroTagline1 = mediaCMS.hero?.tagline1 || 'Creative Stories.';
   const heroTagline2 = mediaCMS.hero?.tagline2 || 'Powerful Visuals.';
   const heroTagline3 = mediaCMS.hero?.tagline3 || 'Digital Growth.';
-  const heroDesc = mediaCMS.hero?.description || 'Our Media Division brings together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.';
+  const heroDesc = mediaCMS.hero?.description?.replace(/Media Division/g, 'Media Capabilities') || 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.';
   const heroBgImage = mediaCMS.hero?.bgImage || '/media_hero_bg.png';
 
   const deckCardsList = mediaCMS.deckCards && mediaCMS.deckCards.length > 0
@@ -353,7 +460,7 @@ const MediaPage = () => {
           
           <div className="section-left-title-wrapper" style={{ textAlign: 'center', marginBottom: '12px' }}>
             <h2 className="section-main-title">
-              MEDIA <span className="title-gradient-accent">DIVISION</span>
+              MEDIA <span className="title-gradient-accent">CAPABILITIES</span>
             </h2>
           </div>
 
@@ -390,44 +497,230 @@ const MediaPage = () => {
         </div>
       </section>
 
-      {/* Media Services Section */}
-      <section id="services" className="mp-section mp-services-section">
-        <div className="container">
-          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                WHAT WE <span className="title-gradient-accent">OFFER</span>
+      {/* ========================================================
+          PAGE 12: MEDIA SERVICES SHOWCASE (Creative Media That Builds Your Brand)
+          ======================================================== */}
+      <section id="services" className="mp-showcase-section media-services-showcase animate-on-scroll">
+        <div className="section-grid-pattern"></div>
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          
+          <div className="mp-showcase-grid">
+            {/* Left Column Content */}
+            <div className="mp-showcase-left">
+              
+              {/* Standard Theme Section Header */}
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
+                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
+                  MEDIA <span className="title-gradient-accent">SERVICES</span>
+                </h2>
+              </div>
+
+              {/* Main Headline */}
+              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
+                Creative Media <br />
+                <span className="title-gradient-accent">That Builds Your Brand.</span>
               </h2>
-            </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              Our Media <span className="title-gradient-accent">Services</span>
-            </h2>
-            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              Comprehensive creative and performance solutions tailored to amplify your brand's digital voice.
-            </p>
-          </div>
 
-          <div className="mp-services-grid">
-            {servicesList.map((srv, idx) => (
-              <div className="media-service-card" key={idx} style={{ '--card-idx': idx }}>
-                <div className="mp-card-top">
-                  <div className="mp-service-icon-box">
-                    {srv.icon}
+              {/* Narrative Copy */}
+              <div className="mp-showcase-narrative">
+                <p className="narrative-lead">
+                  In a digital-first world, your brand needs more than visibility. <br />
+                  It needs <span className="highlight-dark">consistent communication</span>, <span className="highlight-orange">compelling content and meaningful engagement.</span>
+                </p>
+                <p className="narrative-body">
+                  At Innoveity Tech Solutions, our media services bring together creative thinking, visual storytelling and digital marketing to help brands communicate with greater impact.
+                </p>
+              </div>
+
+              {/* Subsection Title */}
+              <div className="mp-subsection-header">
+                <h3 className="mp-subsection-title">Our Media Capabilities</h3>
+                <div className="orange-accent-bar"></div>
+              </div>
+
+              {/* 9 Capabilities Grid */}
+              <div className="mp-flyer-caps-grid">
+                {mediaCapabilitiesCards.map((cap, idx) => (
+                  <div 
+                    className={`mp-flyer-cap-card ${activeCardId === cap.id ? 'is-active-glowing' : ''}`} 
+                    key={idx}
+                    id={`media-card-${cap.id}`}
+                    onClick={() => setActiveCardId(cap.id)}
+                  >
+                    <div className="card-top-aura-glow"></div>
+                    <div className="mp-cap-num-icon-row">
+                      <div className="mp-cap-icon-box">
+                        {cap.icon}
+                      </div>
+                      <span className="mp-cap-num">{cap.num}</span>
+                    </div>
+                    <h4 className="mp-cap-card-title">{cap.title}</h4>
+                    <p className="mp-cap-card-desc">{cap.desc}</p>
                   </div>
-                  <span className="mp-service-tag">{srv.tag}</span>
+                ))}
+              </div>
+
+              {/* Bottom Quote Callout */}
+              <div className="mp-callout-card">
+                <div className="callout-icon-wrapper">
+                  <FiVolume2 className="callout-icon" />
                 </div>
-
-                <h3 className="mp-service-title">{srv.title}</h3>
-                <p className="mp-service-desc">{srv.desc}</p>
-
-                <div className="mp-card-footer">
-                  <Link to="/contact" className="mp-service-link">
-                    <span>Discuss Project</span>
-                    <FiArrowRight />
-                  </Link>
+                <div className="callout-text-content">
+                  <h4 className="callout-lead-title">
+                    Create. Communicate. <span className="title-gradient-accent">Connect.</span>
+                  </h4>
                 </div>
               </div>
-            ))}
+
+            </div>
+
+            {/* Right Column Visual Banner & Pillar */}
+            <div className="mp-showcase-right">
+              
+              {/* 4 Pillar Words Box */}
+              <div className="mp-pillar-header-box">
+                <div className="pillar-vertical-dash"></div>
+                <div className="mp-pillar-words">
+                  <span>IDEAS</span>
+                  <span>STORIES</span>
+                  <span>BRANDS</span>
+                  <span>PEOPLE</span>
+                </div>
+              </div>
+
+              {/* Camera Production Showcase Visual Card */}
+              <div className="mp-visual-frame-card">
+                <div className="visual-ambient-glow"></div>
+                
+                {/* Diagonal Geometric Accent Bars */}
+                <div className="geo-accent-bar top-right-bar"></div>
+                <div className="geo-accent-bar bottom-left-bar"></div>
+
+                <div className="mp-img-inner-frame">
+                  <img 
+                    src="/media_camera_showcase.jpg" 
+                    alt="Creative Media Cinema Camera Production" 
+                    className="mp-showcase-img"
+                  />
+                  <div className="mp-img-overlay-gradient"></div>
+                </div>
+
+                <div className="mp-visual-floating-badge">
+                  <span className="badge-text-top">CINEMA GRADE</span>
+                  <div className="badge-dash"></div>
+                  <span className="badge-text-sub">VISUAL PRODUCTION</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================
+          PAGE 13: CONTENT & VISUAL STORYTELLING (Turn Ideas Into Content)
+          ======================================================== */}
+      <section className="mp-showcase-section storytelling-showcase animate-on-scroll">
+        <div className="section-grid-pattern"></div>
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          
+          <div className="mp-showcase-grid">
+            {/* Left Column Content */}
+            <div className="mp-showcase-left">
+              
+              {/* Standard Theme Section Header */}
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
+                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
+                  CONTENT & <span className="title-gradient-accent">VISUAL STORYTELLING</span>
+                </h2>
+              </div>
+
+              {/* Main Headline */}
+              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
+                Turn Ideas Into Content <br />
+                <span className="title-gradient-accent">People Remember.</span>
+              </h2>
+
+              {/* Narrative Copy */}
+              <div className="mp-showcase-narrative">
+                <p className="narrative-lead">
+                  Strong communication begins with content that feels relevant, authentic and visually engaging.
+                </p>
+                <p className="narrative-body">
+                  We create content and visual experiences designed around your <span className="highlight-orange">brand identity, audience and communication goals.</span>
+                </p>
+              </div>
+
+              {/* 4 Detailed Storytelling Capability Rows/Cards */}
+              <div className="mp-storytelling-list">
+                {storytellingItems.map((item, idx) => (
+                  <div className="mp-storytelling-row" key={idx}>
+                    <div className="mp-story-icon-box">
+                      {item.icon}
+                    </div>
+                    <div className="mp-story-content">
+                      <h4 className="mp-story-title">{item.title}</h4>
+                      <p className="mp-story-desc">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom Quote Callout */}
+              <div className="mp-callout-card storytelling-callout-card">
+                <div className="callout-icon-wrapper">
+                  <FiTarget className="callout-icon" />
+                </div>
+                <div className="callout-text-content">
+                  <h4 className="callout-lead-title" style={{ margin: 0 }}>
+                    Your brand has a story. <br className="mobile-hide" />
+                    <span className="title-gradient-accent">We make it worth watching.</span>
+                  </h4>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Column Visual Banner & Pillar */}
+            <div className="mp-showcase-right">
+              
+              {/* 4 Pillar Words Box */}
+              <div className="mp-pillar-header-box">
+                <div className="pillar-vertical-dash"></div>
+                <div className="mp-pillar-words">
+                  <span>CONTENT</span>
+                  <span>CREATIVITY</span>
+                  <span>ENGAGEMENT</span>
+                  <span>GROWTH</span>
+                </div>
+              </div>
+
+              {/* Editing Studio Visual Card */}
+              <div className="mp-visual-frame-card">
+                <div className="visual-ambient-glow"></div>
+                
+                {/* Diagonal Geometric Accent Bars */}
+                <div className="geo-accent-bar top-right-bar"></div>
+                <div className="geo-accent-bar bottom-left-bar"></div>
+
+                <div className="mp-img-inner-frame">
+                  <img 
+                    src="/media_storytelling_showcase.jpg" 
+                    alt="Video Editing & Color Suite" 
+                    className="mp-showcase-img"
+                  />
+                  <div className="mp-img-overlay-gradient"></div>
+                </div>
+
+                <div className="mp-visual-floating-badge">
+                  <span className="badge-text-top">ENGAGING STORIES</span>
+                  <div className="badge-dash"></div>
+                  <span className="badge-text-sub">BUILT FOR IMPACT</span>
+                </div>
+              </div>
+
+            </div>
           </div>
 
         </div>
@@ -778,7 +1071,7 @@ const MediaPage = () => {
               </h2>
             </div>
             <p className="mp-section-desc" style={{ maxWidth: '540px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              Whether you are launching a brand, promoting a product, covering an event or building your digital presence, our Media Division creates content designed for your audience.
+              Whether you are launching a brand, promoting a product, covering an event or building your digital presence, our Media Capabilities create content designed for your audience.
             </p>
           </div>
 

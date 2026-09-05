@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FiExternalLink, FiGithub, FiCheckCircle, FiArrowUpRight } from 'react-icons/fi';
+import { FiExternalLink, FiGithub, FiCheckCircle, FiArrowUpRight, FiSettings } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useCMS } from '../context/CMSContext';
 import ProjectsShowcase from '../components/Projects/ProjectsShowcase';
@@ -44,13 +44,51 @@ const ProjectsPage = () => {
   }, []);
 
   const processSteps = [
-    { title: 'Requirement Analysis', desc: 'We conduct deep-dive sessions to understand your business objectives, target audience, and technical constraints to formulate a clear project vision.' },
-    { title: 'Solution Planning', desc: 'Our architects design the system architecture, select the optimal technology stack, and create a comprehensive project roadmap with clear milestones.' },
-    { title: 'UI/UX Design', desc: 'We craft intuitive user journeys, wireframes, and high-fidelity prototypes ensuring the interface aligns perfectly with your brand and user expectations.' },
-    { title: 'Development', desc: 'Our engineering team builds your solution using agile methodologies, ensuring clean, documented, and highly maintainable code.' },
-    { title: 'Quality Assurance', desc: 'Rigorous automated and manual testing is performed across devices and environments to guarantee performance, security, and reliability.' },
-    { title: 'Deployment', desc: 'We manage a seamless transition to the production environment, configuring cloud infrastructure and monitoring tools for optimal uptime.' },
-    { title: 'Continuous Support', desc: 'Post-launch, we provide ongoing maintenance, performance monitoring, and iterative feature updates to support your long-term growth.' }
+    {
+      num: '01',
+      title: 'Ideation',
+      desc: 'Understand the challenge, opportunity and desired outcome.'
+    },
+    {
+      num: '02',
+      title: 'Strategy',
+      desc: 'Define the technology roadmap and solution architecture.'
+    },
+    {
+      num: '03',
+      title: 'UI/UX',
+      desc: 'Create intuitive experiences designed around real users.'
+    },
+    {
+      num: '04',
+      title: 'Architecture',
+      desc: 'Build a secure, scalable and future-ready technology foundation.'
+    },
+    {
+      num: '05',
+      title: 'Development',
+      desc: 'Engineer the platform, application or digital ecosystem.'
+    },
+    {
+      num: '06',
+      title: 'AI Integration',
+      desc: 'Introduce intelligence, automation and data-driven capabilities where they create value.'
+    },
+    {
+      num: '07',
+      title: 'Testing',
+      desc: 'Validate performance, usability, security and reliability.'
+    },
+    {
+      num: '08',
+      title: 'Deployment',
+      desc: 'Launch with the infrastructure required for real-world usage.'
+    },
+    {
+      num: '09',
+      title: 'Support & Scaling',
+      desc: 'Continuously improve, optimise and scale as requirements evolve.'
+    }
   ];
 
   return (
@@ -107,18 +145,22 @@ const ProjectsPage = () => {
       </section>
 
       {/* Development Process Timeline */}
-      <section className="sp-section" style={{ background: 'var(--bg-color-light, #f8fafc)' }}>
+      <section className="sp-section" style={{ background: 'var(--bg-color-light, #f8fafc)', padding: '5rem 0' }}>
         <div className="container">
           <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                WORKFLOW <span className="title-gradient-accent">STEPS</span>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
+              <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
+                HOW WE <span className="title-gradient-accent">WORK</span>
               </h2>
             </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left' }}>
-              Our Development <span className="title-gradient-accent">Process</span>
+            <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
+              From Idea <span className="title-gradient-accent">to Impact.</span>
             </h2>
+            <p style={{ maxWidth: '680px', margin: '0', textAlign: 'left', color: '#475569', fontSize: '1.05rem', lineHeight: 1.65 }}>
+              Great technology is built through a disciplined process. We take every solution from <span style={{ color: '#ff6b00', fontWeight: 700 }}>concept to deployment—and beyond.</span>
+            </p>
           </div>
+          
           <div className="sp-timeline-wrapper animate-on-scroll">
             <div className="sp-timeline-line"></div>
             {processSteps.map((step, idx) => {
@@ -134,6 +176,22 @@ const ProjectsPage = () => {
               );
             })}
           </div>
+
+          {/* Bottom Callout Box */}
+          <div className="sp-callout-card" style={{ maxWidth: '900px', margin: '3.5rem auto 0 auto', background: '#FFF4EA', border: '1.5px solid rgba(255, 107, 0, 0.35)', borderRadius: '20px', padding: '1.6rem 2rem', display: 'flex', alignItems: 'center', gap: '20px', boxShadow: '0 10px 30px rgba(255, 107, 0, 0.08)' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: '#ffffff', border: '1.5px solid #ff6b00', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.4rem', flexShrink: 0 }}>
+              <FiSettings />
+            </div>
+            <div>
+              <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.15rem', fontWeight: 800, color: '#082233', margin: '0 0 6px 0' }}>
+                Think it. Build it. <span style={{ color: '#ff6b00' }}>Scale it.</span>
+              </h4>
+              <p style={{ margin: 0, fontSize: '0.92rem', color: '#475569', lineHeight: 1.6 }}>
+                This end-to-end workflow follows the company's stated "Ideation → Strategy → UI/UX → Architecture → Development → AI Integration → Testing → Deployment → Support & Scaling" model.
+              </p>
+            </div>
+          </div>
+
         </div>
       </section>
 

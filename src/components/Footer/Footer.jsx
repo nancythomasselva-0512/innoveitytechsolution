@@ -93,7 +93,10 @@ const Footer = () => {
               </div>
               <div className="brand-legal-info">
                 <p>{operatingCompany}</p>
-                <p>{address}</p>
+                <p>
+                  MCC MRF Innovation Park, East Tambaram,<br />
+                  Chennai - 600059
+                </p>
                 <p><a href={`tel:${phone}`} style={{ color: 'inherit', textDecoration: 'none' }}>{phone}</a></p>
                 <p><a href={`mailto:${email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{email}</a></p>
               </div>
@@ -103,7 +106,10 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Address & Desk</h4>
               <ul className="footer-col-list address-list">
-                <li>{address}</li>
+                <li>
+                  MCC MRF Innovation Park, East Tambaram,<br />
+                  Chennai - 600059
+                </li>
                 <li>Phone: <a href={`tel:${phone}`} style={{ color: '#ff8a00', textDecoration: 'none' }}>{phone}</a></li>
                 <li>Email: <a href={`mailto:${email}`} style={{ color: '#ff8a00', textDecoration: 'none' }}>{email}</a></li>
                 <li>Hours: {hours}</li>
@@ -114,7 +120,7 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Solutions</h4>
               <ul className="footer-col-list">
-                <li><a href="/media">Media Division</a></li>
+                <li><a href="/media">Media Capabilities</a></li>
                 <li><a href="/services">Web Development</a></li>
                 <li><a href="/services">Mobile Engineering</a></li>
                 <li><a href="/services">Enterprise Software</a></li>

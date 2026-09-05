@@ -145,9 +145,9 @@ export const CMSProvider = ({ children }) => {
     titleLine1: 'Innoveity Tech',
     titleLine2: 'Solution',
     description: 'Empowering businesses with innovative software development, AI-powered solutions, cloud technologies, mobile applications, web development, and digital transformation services that help organizations achieve sustainable growth.',
-    aboutKicker: "Let's Innovate Together",
-    aboutTitle: 'Who We Are &\nOur Vision With You',
-    aboutDesc: 'Innoveity Tech Solution is a forward-thinking technology partner dedicated to empowering businesses with innovative, secure, and scalable digital solutions. From custom software development to comprehensive digital transformations, we combine deep technical expertise with a customer-first approach to turn complex challenges into competitive advantages.',
+    aboutKicker: "WHO WE ARE",
+    aboutTitle: 'Technology Built Around\nPossibility.',
+    aboutDesc: 'At Innoveity Tech Solutions, we design and build intelligent digital solutions for businesses, institutions, startups and government organisations.',
     aboutFeature1Title: 'Custom Software',
     aboutFeature1Desc: 'Tailored enterprise applications designed to scale seamlessly.',
     aboutFeature2Title: 'Digital Transformation',
@@ -309,11 +309,11 @@ export const CMSProvider = ({ children }) => {
     hero: {
       badge: 'INNOVEITY MEDIA',
       subBadge: 'Creative. Strategic. Data-Driven.',
-      title: 'MEDIA DIVISION',
+      title: 'MEDIA CAPABILITIES',
       tagline1: 'Creative Stories.',
       tagline2: 'Powerful Visuals.',
       tagline3: 'Digital Growth.',
-      description: 'Our Media Division brings together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.',
+      description: 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.',
       bgImage: '/media_hero_bg.png'
     },
     deckCards: [
@@ -368,7 +368,7 @@ export const CMSProvider = ({ children }) => {
       { id: 2, name: 'About Us', to: '/about', isPage: true },
       { id: 3, name: 'Projects', to: '/projects', isPage: true },
       { id: 4, name: 'Services', to: '/services', isPage: true },
-      { id: 5, name: 'Media Division', to: '/media', isPage: true },
+      { id: 5, name: 'Media Capabilities', to: '/media', isPage: true },
       { id: 6, name: 'Our Team', to: '/team', isPage: true }
     ],
     operatingCompany: 'Operated by Innoveity Tech Solution Ltd.',
@@ -521,102 +521,12 @@ export const CMSProvider = ({ children }) => {
   ];
 
   const defaultCustomPageSections = {
-    home: [
-      {
-        id: 'sec-home-why-choose',
-        type: 'features_grid',
-        theme: 'dark',
-        badge: 'ENGINEERING ADVANTAGE',
-        title: 'Why Global Brands Build With Innoveity',
-        subtitle: 'We blend deep technical capability with enterprise-grade security and modern aesthetics.',
-        items: [
-          { title: 'Sub-Second Latency Architecture', desc: 'Optimized cloud pipelines, microservices, and client rendering delivering blisteringly fast user experiences.', tag: 'Performance' },
-          { title: 'Bank-Grade Enterprise Security', desc: 'End-to-end encryption, strict compliance audits, and role-governed data workflows built into the core.', tag: 'Security' },
-          { title: 'AI-Native Workflow Integration', desc: 'Autonomous LLM agents, vector embeddings, and predictive intelligence woven seamlessly into software.', tag: 'Intelligence' },
-          { title: 'Dedicated Post-Launch Engineering', desc: 'Continuous 24/7 SLA monitoring, zero-downtime updates, and proactive scalability improvements.', tag: 'Reliability' }
-        ],
-        ctaText: 'Explore Engineering Capabilities',
-        ctaUrl: '/services',
-        active: true
-      }
-    ],
-    about: [
-      {
-        id: 'sec-about-values',
-        type: 'stats_grid',
-        theme: 'sunset',
-        badge: 'OUR IMPACT & VALUES',
-        title: 'Engineering With Purpose & Scale',
-        subtitle: 'Our key milestones that demonstrate our relentless focus on delivering client success.',
-        items: [
-          { number: '99.98%', label: 'System Uptime SLA', desc: 'Across all deployed enterprise cloud microservices' },
-          { number: '2.4x', label: 'Client Growth Speed', desc: 'Average user engagement acceleration post-launch' },
-          { number: '15+', label: 'Global Tech Stacks', desc: 'Mastery across React, Python AI, Node, AWS & Go' },
-          { number: '100%', label: 'Delivery Integrity', desc: 'Every milestone completed on schedule and within scope' }
-        ],
-        active: true
-      }
-    ],
-    services: [
-      {
-        id: 'sec-services-faq',
-        type: 'faq_accordion',
-        theme: 'light',
-        badge: 'FREQUENTLY ASKED QUESTIONS',
-        title: 'Everything You Need To Know',
-        subtitle: 'Answers to common questions about our engineering engagements, timelines, and deliverables.',
-        items: [
-          { question: 'What is your typical project kickoff timeline?', answer: 'We typically initiate the architecture & discovery phase within 3-5 business days from contract signing, delivering full sprint planning within the first week.' },
-          { question: 'Do you provide post-deployment maintenance and SLAs?', answer: 'Yes, all projects come with dedicated 24/7 technical monitoring, bug warranty periods, and optional continuous feature iteration retainers.' },
-          { question: 'Can you integrate AI and custom LLMs into our existing software?', answer: 'Absolutely. We specialize in retrofitting legacy software with local/cloud LLMs, vector database indexing, and automated AI workflow pipelines.' }
-        ],
-        active: true
-      }
-    ],
-    projects: [
-      {
-        id: 'sec-projects-cta',
-        type: 'banner_cta',
-        theme: 'dark',
-        badge: 'HAVE A CUSTOM VISION?',
-        title: 'Let’s Engineer Your Next Breakthrough Product',
-        subtitle: 'From initial prototype architecture to full cloud deployment, our dedicated team is ready to build your product.',
-        ctaText: 'Schedule Architecture Consultation',
-        ctaUrl: '/contact',
-        secondaryCtaText: 'Explore All Services',
-        secondaryCtaUrl: '/services',
-        active: true
-      }
-    ],
-    team: [
-      {
-        id: 'sec-team-culture',
-        type: 'features_grid',
-        theme: 'light',
-        badge: 'OUR CULTURE & PERKS',
-        title: 'What It Means To Build at Innoveity',
-        subtitle: 'We foster deep technical ownership, continuous learning, and high-impact engineering.',
-        items: [
-          { title: 'Cutting-Edge AI Tech Stack', desc: 'Work directly on state-of-the-art Generative AI, distributed systems, and real-time interactive interfaces.', tag: 'Innovation' },
-          { title: 'Flexible & Hybrid Workflows', desc: 'Autonomous schedules that empower you to do your highest quality creative and engineering work.', tag: 'Flexibility' },
-          { title: 'Accelerated Career Progression', desc: 'Direct mentorship from senior architects and fast-track promotions based on technical impact.', tag: 'Growth' }
-        ],
-        active: true
-      }
-    ],
-    media: [
-      {
-        id: 'sec-media-cta',
-        type: 'banner_cta',
-        theme: 'sunset',
-        badge: 'INNOVEITY MEDIA PRODUCTION',
-        title: 'Ready To Elevate Your Brand’s Visual Story?',
-        subtitle: 'High-end cinema cameras, commercial aerial drones, dynamic editing, and viral social media campaigns tailored for your business.',
-        ctaText: 'Start Your Media Campaign',
-        ctaUrl: '/contact',
-        active: true
-      }
-    ],
+    home: [],
+    about: [],
+    services: [],
+    projects: [],
+    team: [],
+    media: [],
     contact: [
       {
         id: 'sec-contact-guarantee',
@@ -685,13 +595,31 @@ export const CMSProvider = ({ children }) => {
   const [contact, setContact] = useState(() => loadLocalState('contact', defaultContact));
   const [homeContent, setHomeContent] = useState(() => loadLocalState('home_content', defaultHomeContent));
   const [aboutContent, setAboutContent] = useState(() => loadLocalState('about_content', defaultAboutContent));
-  const [mediaContent, setMediaContent] = useState(() => loadLocalState('media_content', defaultMediaContent));
+  const [mediaContent, setMediaContent] = useState(() => {
+    const loaded = loadLocalState('media_content', defaultMediaContent);
+    if (loaded?.hero) {
+      if (loaded.hero.title === 'MEDIA DIVISION') loaded.hero.title = 'MEDIA CAPABILITIES';
+      if (loaded.hero.description) {
+        loaded.hero.description = loaded.hero.description.replace(/Media Division/g, 'Media Capabilities');
+      }
+    }
+    return loaded;
+  });
   const [showcaseHeader, setShowcaseHeader] = useState(() => loadLocalState('showcase_header', defaultShowcaseHeader));
   const [showcaseProjects, setShowcaseProjects] = useState(() => loadLocalState('showcase_projects', defaultShowcaseProjects));
   const [seoSettings, setSeoSettings] = useState(() => loadLocalState('seo_settings', defaultSeoSettings));
   const [pageSeoSettings, setPageSeoSettings] = useState(() => loadLocalState('page_seo_settings', defaultPageSeoSettings));
   const [customFields, setCustomFields] = useState(() => loadLocalState('custom_fields', defaultCustomFields));
-  const [headerFooterSettings, setHeaderFooterSettings] = useState(() => loadLocalState('header_footer', defaultHeaderFooterSettings));
+  const [headerFooterSettings, setHeaderFooterSettings] = useState(() => {
+    const loaded = loadLocalState('header_footer', defaultHeaderFooterSettings);
+    if (loaded?.navLinks && Array.isArray(loaded.navLinks)) {
+      loaded.navLinks = loaded.navLinks.map(l => ({
+        ...l,
+        name: l.name === 'Media Division' ? 'Media Capabilities' : l.name
+      }));
+    }
+    return loaded;
+  });
   const [adminUsers, setAdminUsers] = useState(() => loadLocalState('admin_users', defaultAdminAccounts));
   const [testimonials, setTestimonials] = useState(() => loadLocalState('testimonials', defaultTestimonials));
   const [mediaGallery, setMediaGallery] = useState(() => loadLocalState('media_gallery', defaultMediaGallery));
@@ -699,7 +627,18 @@ export const CMSProvider = ({ children }) => {
   const [blogPosts, setBlogPosts] = useState(() => loadLocalState('blog_posts', defaultBlogPosts));
   const [servicesList, setServicesList] = useState(() => loadLocalState('services_list', defaultServicesList));
   const [hiringAlertEnabled, setHiringAlertEnabled] = useState(() => loadLocalState('hiring_alert_enabled', true));
-  const [customPageSections, setCustomPageSections] = useState(() => loadLocalState('custom_page_sections', defaultCustomPageSections));
+  const [customPageSections, setCustomPageSections] = useState(() => {
+    const loaded = loadLocalState('custom_page_sections', defaultCustomPageSections);
+    if (loaded) {
+      const removedIds = ['sec-home-why-choose', 'sec-about-values', 'sec-projects-cta', 'sec-team-culture', 'sec-media-cta', 'sec-services-faq'];
+      Object.keys(loaded).forEach(pageKey => {
+        if (Array.isArray(loaded[pageKey])) {
+          loaded[pageKey] = loaded[pageKey].filter(s => !removedIds.includes(s.id));
+        }
+      });
+    }
+    return loaded;
+  });
   const [contactInquiries, setContactInquiries] = useState(() => {
     const loaded = loadLocalState('contact_inquiries', null);
     if (!loaded || !Array.isArray(loaded) || loaded.length === 0) {

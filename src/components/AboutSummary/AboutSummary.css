@@ -162,9 +162,95 @@
   color: #475569;
   font-size: 0.98rem;
   line-height: 1.75;
-  margin-bottom: 28px;
-  text-align: justify;
-  text-justify: inter-word;
+  margin-bottom: 14px;
+}
+
+.mosaic-p-lead {
+  font-size: 1.05rem;
+  color: #1e293b;
+  font-weight: 500;
+  line-height: 1.65;
+  margin: 0 0 8px 0;
+}
+
+.mosaic-p-accent {
+  font-size: 1.05rem;
+  color: #082233;
+  font-weight: 700;
+  line-height: 1.65;
+  margin: 0 0 16px 0;
+}
+
+.mosaic-p-accent strong {
+  color: #ff6b00;
+}
+
+.mosaic-p-body {
+  font-size: 0.96rem;
+  color: #475569;
+  line-height: 1.75;
+  margin: 0 0 14px 0;
+}
+
+/* Orange Accent Bar */
+.mosaic-title-bar {
+  width: 52px;
+  height: 3.5px;
+  background: linear-gradient(90deg, #ff6b00, #ff8a00);
+  border-radius: 4px;
+  margin: 12px 0 20px 0;
+}
+
+/* Highlighted Callout Box */
+.mosaic-impact-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: linear-gradient(135deg, #f0f7ff 0%, #f8fafc 100%);
+  border: 1.5px solid #dbeafe;
+  border-radius: 18px;
+  padding: 18px 24px;
+  margin: 24px 0 28px 0;
+  box-shadow: 0 8px 25px rgba(8, 34, 51, 0.04);
+}
+
+.impact-target-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1.5px solid #ffedd5;
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.12);
+  flex-shrink: 0;
+}
+
+.impact-vertical-divider {
+  width: 2px;
+  height: 48px;
+  background: #cbd5e1;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.impact-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.impact-step-item {
+  font-size: 1.05rem;
+  line-height: 1.35;
+  font-weight: 700;
+  color: #082233;
+}
+
+.impact-step-item strong {
+  color: #ff6b00;
+  font-weight: 800;
 }
 
 /* Feature Bullets */

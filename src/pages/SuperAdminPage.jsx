@@ -247,7 +247,7 @@ const SuperAdminPage = () => {
     e.preventDefault();
     if (updateMediaContent) {
       updateMediaContent(editMedia);
-      triggerNotification('Media Division content saved & synced live across all devices!');
+      triggerNotification('Media Capabilities content saved & synced live across all devices!');
     }
   };
 
@@ -657,7 +657,7 @@ const SuperAdminPage = () => {
                   <option value="services">⚙️ Services (/services)</option>
                   <option value="projects">📂 Projects (/projects)</option>
                   <option value="team">👥 Team & Leadership (/team)</option>
-                  <option value="media">🎬 Media Division (/media)</option>
+                  <option value="media">🎬 Media Capabilities (/media)</option>
                   <option value="contact">📞 Contact Us (/contact)</option>
                 </select>
               </div>
@@ -1285,7 +1285,7 @@ const SuperAdminPage = () => {
           >
             <span className="nav-icon"><FiMail /></span>
             <span className="nav-label">Inquiries & Jobs</span>
-            <span className="nav-badge" style={{ background: inquiries.some(i => i.status === 'New') ? '#ea580c' : '#64748b' }}>
+            <span className="nav-badge">
               {inquiries.length}
             </span>
           </button>
@@ -1337,7 +1337,7 @@ const SuperAdminPage = () => {
             onClick={() => setActiveTab('media')}
           >
             <span className="nav-icon"><FiFilm /></span>
-            <span className="nav-label">Media Division Page</span>
+            <span className="nav-label">Media Capabilities Page</span>
           </button>
 
           <button
@@ -1390,16 +1390,16 @@ const SuperAdminPage = () => {
           <div className="dash-header-title">
             <h1>
               {/* TOP HEADER */}
-              {activeTab === 'overview' && 'Super Admin Master Dashboard'}
+              {activeTab === 'overview' && 'System Analytics & Data Flow Overview'}
               {activeTab === 'inquiries' && 'Inquiries & Job Applications Inbox'}
-              {activeTab === 'projects' && 'Manage Projects'}
-              {activeTab === 'team' && 'Team Roster Management'}
-              {activeTab === 'home' && 'Homepage Content'}
-              {activeTab === 'about' && 'About Us Section'}
+              {activeTab === 'projects' && 'Projects Page Management'}
+              {activeTab === 'team' && 'Team Page Management'}
+              {activeTab === 'home' && 'Home Page Management'}
+              {activeTab === 'about' && 'About Us Page Management'}
               {activeTab === 'contact' && 'Contact & Communication Settings'}
               {activeTab === 'seo' && 'Search Engine Optimization (SEO) & Social Meta'}
               {activeTab === 'header_footer' && 'Header, Footer & Navigation Management'}
-              {activeTab === 'media' && 'Media Division Page Management'}
+              {activeTab === 'media' && 'Media Capabilities Page Management'}
               {activeTab === 'sections' && 'Dynamic Custom Page Sections Builder'}
               {activeTab === 'users' && 'Manage Administrator Accounts'}
               {activeTab === 'database' && 'System Database & Backups'}
@@ -3347,7 +3347,7 @@ const SuperAdminPage = () => {
                   <label className="dash-label">Link Display Name</label>
                   <input
                     type="text"
-                    placeholder="e.g. Media Division"
+                    placeholder="e.g. Media Capabilities"
                     className="dash-input-styled"
                     value={newNavLink.name}
                     onChange={(e) => setNewNavLink({ ...newNavLink, name: e.target.value })}
@@ -3622,11 +3622,11 @@ const SuperAdminPage = () => {
           </div>
         )}
 
-        {/* TAB: MEDIA DIVISION PAGE MANAGEMENT */}
+        {/* TAB: MEDIA CAPABILITIES PAGE MANAGEMENT */}
         {activeTab === 'media' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
             <div className="chart-header-row">
-              <h3 className="chart-title">Media Division Page Live CMS Management</h3>
+              <h3 className="chart-title">Media Capabilities Page Live CMS Management</h3>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
@@ -4026,7 +4026,7 @@ const SuperAdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content', marginTop: '12px' }}>
-                    <FiCheck /> Save All Media Division Content (Live Sync)
+                    <FiCheck /> Save All Media Capabilities Content (Live Sync)
                   </button>
                 </div>
 
@@ -4487,7 +4487,7 @@ const SuperAdminPage = () => {
                 { id: 'services', label: '⚙️ Services' },
                 { id: 'projects', label: '📂 Projects' },
                 { id: 'team', label: '👥 Team' },
-                { id: 'media', label: '🎬 Media Division' },
+                { id: 'media', label: '🎬 Media Capabilities' },
                 { id: 'contact', label: '📞 Contact' }
               ].map((p) => {
                 const count = p.id === 'all' 
@@ -4564,7 +4564,7 @@ const SuperAdminPage = () => {
                       services: 'Services (/services)',
                       projects: 'Projects (/projects)',
                       team: 'Team (/team)',
-                      media: 'Media Division (/media)',
+                      media: 'Media Capabilities (/media)',
                       contact: 'Contact (/contact)'
                     };
 

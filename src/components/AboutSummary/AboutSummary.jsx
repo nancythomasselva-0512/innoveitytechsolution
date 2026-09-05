@@ -22,15 +22,13 @@ const AboutSummary = () => {
         >
           <div className="about-left-tag-wrap">
             <h2 className="about-left-main-title">
-              ABOUT <span className="title-gradient-accent">US</span>
+              WHO WE <span className="title-gradient-accent">ARE</span>
             </h2>
             <h2 className="mosaic-main-heading">
-              {(homeContent?.aboutTitle || '').split('\n').map((line, i) => (
-                <span key={i} className={`mosaic-heading-line ${i === 1 ? 'title-gradient-accent' : ''}`}>
-                  {line}
-                </span>
-              ))}
+              Technology Built Around <br />
+              <span className="title-gradient-accent">Possibility.</span>
             </h2>
+            <div className="mosaic-title-bar"></div>
           </div>
 
           <div className="mosaic-grid">
@@ -95,54 +93,54 @@ const AboutSummary = () => {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.7, ease: 'easeOut' }}
         >
-          <motion.span 
-            className="script-kicker"
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-          >
-            {homeContent.aboutKicker}
-          </motion.span>
-
-          <p className="mosaic-body-text" style={{ fontSize: '1.05rem', lineHeight: '1.75', marginTop: '12px' }}>
-            {homeContent.aboutDesc}
+          <p className="mosaic-p-lead">
+            Technology should do more than digitise an existing process.
           </p>
 
-          {/* Feature Bullets */}
-          <div className="mosaic-features-list">
-            <motion.div 
-              className="mosaic-feature-item"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className="feature-circle-icon">
-                <FiCode size={22} />
-              </div>
-              <div className="feature-text-group">
-                <h4>{homeContent.aboutFeature1Title}</h4>
-                <p>{homeContent.aboutFeature1Desc}</p>
-              </div>
-            </motion.div>
+          <p className="mosaic-p-accent">
+            It should make the process <strong>smarter, faster and more impactful.</strong>
+          </p>
 
-            <motion.div 
-              className="mosaic-feature-item"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.45 }}
-            >
-              <div className="feature-circle-icon">
-                <FiCpu size={22} />
+          <p className="mosaic-p-body">
+            At <strong style={{ color: '#082233' }}>Innoveity Tech Solutions</strong>, we design and build intelligent digital solutions for businesses, institutions, startups and government organisations.
+          </p>
+
+          <p className="mosaic-p-body">
+            From an idea on paper to a technology platform serving thousands of users, we bring together strategy, design, engineering, AI and automation to create solutions built for the real world.
+          </p>
+
+          <p className="mosaic-p-body" style={{ marginBottom: '18px' }}>
+            Whether it is an AI-powered platform, an enterprise application, a smart mobility ecosystem or a scalable SaaS product, our approach remains the same:
+          </p>
+
+          {/* Impact Callout Card */}
+          <motion.div 
+            className="mosaic-impact-card"
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
+            <div className="impact-target-icon-wrap">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b00" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+            </div>
+            <div className="impact-vertical-divider"></div>
+            <div className="impact-steps-list">
+              <div className="impact-step-item">
+                <strong>Understand</strong> the challenge.
               </div>
-              <div className="feature-text-group">
-                <h4>{homeContent.aboutFeature2Title}</h4>
-                <p>{homeContent.aboutFeature2Desc}</p>
+              <div className="impact-step-item">
+                <strong>Build</strong> the right technology.
               </div>
-            </motion.div>
-          </div>
+              <div className="impact-step-item">
+                <strong>Create</strong> measurable impact.
+              </div>
+            </div>
+          </motion.div>
 
           {/* CTA Pill Button */}
           <motion.div 

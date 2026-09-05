@@ -1,89 +1,93 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
-  FiCode, FiMonitor, FiSmartphone, FiLayout, FiTrendingUp,
-  FiCloud, FiCpu, FiDatabase, FiLayers, FiSettings,
+  FiCpu, FiCode, FiBookOpen, FiShield, FiTruck, 
+  FiPackage, FiSmartphone, FiWifi, FiZap,
   FiArrowDownRight
 } from 'react-icons/fi';
 import './ServicesTransformation.css';
 
 const leftServices = [
   {
-    id: 'custom-software',
-    title: 'Custom Software Development',
-    subtitle: 'Bespoke engineering & automated workflows',
+    id: 'ai-intelligent-solutions',
+    number: '01',
+    title: 'AI & Intelligent Solutions',
+    subtitle: 'AI-powered platforms, voice AI, analytics & AI agents',
+    icon: <FiCpu />
+  },
+  {
+    id: 'enterprise-software',
+    number: '02',
+    title: 'Enterprise Software',
+    subtitle: 'ERP, CRM, MIS, HR platforms & custom systems',
     icon: <FiCode />
   },
   {
-    id: 'web-dev',
-    title: 'Web Application Development',
-    subtitle: 'High-performance web apps & modern stacks',
-    icon: <FiMonitor />
+    id: 'education-technology',
+    number: '03',
+    title: 'Education Technology',
+    subtitle: 'Student LMS, assessment & institutional portals',
+    icon: <FiBookOpen />
   },
   {
-    id: 'mobile-dev',
-    title: 'Mobile Application Engineering',
-    subtitle: 'Native iOS & Android mobile experiences',
-    icon: <FiSmartphone />
+    id: 'digital-governance',
+    number: '04',
+    title: 'Digital Governance',
+    subtitle: 'Citizen engagement, governance & admin dashboards',
+    icon: <FiShield />
   },
   {
-    id: 'ui-ux',
-    title: 'UI/UX Design Systems',
-    subtitle: 'Intuitive interfaces & user-centered design',
-    icon: <FiLayout />
-  },
-  {
-    id: 'devops',
-    title: 'DevOps & CI/CD Automation',
-    subtitle: 'Automated pipelines & IaC cloud deployments',
-    icon: <FiTrendingUp />
+    id: 'smart-mobility',
+    number: '05',
+    title: 'Smart Mobility',
+    subtitle: 'Contactless ticketing, QR ticketing & mobility apps',
+    icon: <FiTruck />
   }
 ];
 
 const rightServices = [
   {
-    id: 'cloud-solutions',
-    title: 'Cloud Solutions & Infrastructure',
-    subtitle: 'Scalable cloud hosting & 99.9% uptime',
-    icon: <FiCloud />
+    id: 'logistics-tracking',
+    number: '06',
+    title: 'Logistics & Tracking',
+    subtitle: 'Parcel tracking, QR/barcode & field operations',
+    icon: <FiPackage />
   },
   {
-    id: 'ai-ml',
-    title: 'AI & Machine Learning',
-    subtitle: 'Intelligent automation & predictive models',
-    icon: <FiCpu />
+    id: 'web-mobile',
+    number: '07',
+    title: 'Web & Mobile',
+    subtitle: 'Business websites, SaaS, Android, iOS & PWAs',
+    icon: <FiSmartphone />
   },
   {
-    id: 'enterprise',
-    title: 'Enterprise Solutions',
-    subtitle: 'High-volume platforms & enterprise security',
-    icon: <FiDatabase />
+    id: 'iot-smart-technology',
+    number: '08',
+    title: 'IoT & Smart Technology',
+    subtitle: 'Connected devices, sensors & smart infrastructure',
+    icon: <FiWifi />
   },
   {
-    id: 'api-integration',
-    title: 'API & System Integration',
-    subtitle: 'Seamless third-party connectivity',
-    icon: <FiLayers />
-  },
-  {
-    id: 'maintenance',
-    title: 'Maintenance & 24/7 Support',
-    subtitle: 'Proactive monitoring & performance SLAs',
-    icon: <FiSettings />
+    id: 'startup-innovation',
+    number: '09',
+    title: 'Startup & Innovation',
+    subtitle: 'MVPs, product development & technology strategy',
+    icon: <FiZap />
   }
 ];
 
 const ServicesTransformation = () => {
+  const navigate = useNavigate();
 
-  const scrollToService = (targetId) => {
-    const targetElement = document.getElementById(`service-card-${targetId}`);
-    if (targetElement) {
-      targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      targetElement.classList.add('card-highlight-glow');
-      setTimeout(() => {
-        targetElement.classList.remove('card-highlight-glow');
-      }, 2500);
-    }
+  const handleCardClick = (targetId) => {
+    navigate(`/services#service-card-${targetId}`);
+    setTimeout(() => {
+      const targetElement = document.getElementById(`service-card-${targetId}`);
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 200);
   };
 
   return (
@@ -91,9 +95,9 @@ const ServicesTransformation = () => {
       <div className="section-grid-pattern"></div>
       <div className="transformation-container">
         
-        {/* Top Header Row: Left (OUR SERVICES + Dual Headline) | Right (Descriptive Narrative & Capabilities) */}
+        {/* Top Header Row Matching Flyer */}
         <div className="transformation-header-row">
-          {/* Left Column */}
+          {/* Left Column: Title only */}
           <motion.div 
             className="transformation-header-left"
             initial={{ opacity: 0, x: -30 }}
@@ -101,19 +105,19 @@ const ServicesTransformation = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '12px' }}>
+            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
               <h2 className="section-main-title">
                 OUR <span className="title-gradient-accent">SERVICES</span>
               </h2>
             </div>
             
             <h2 className="chaos-headline">
-              <span className="mosaic-heading-line">Stop Absorbing The Chaos.</span>
-              <span className="mosaic-heading-line title-gradient-accent">Run With Confidence.</span>
+              <span className="mosaic-heading-line">One Technology Partner.</span>
+              <span className="mosaic-heading-line title-gradient-accent">Multiple Possibilities.</span>
             </h2>
           </motion.div>
 
-          {/* Right Column */}
+          {/* Right Column: Subtitle Narrative then Pillar on the far right */}
           <motion.div 
             className="transformation-header-right"
             initial={{ opacity: 0, x: 30 }}
@@ -121,15 +125,71 @@ const ServicesTransformation = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.15 }}
           >
-            <div className="transformation-pills-row">
-              <span className="trans-pill-tag">⚡ Agile Development</span>
-              <span className="trans-pill-tag">🛡️ Enterprise Security</span>
-              <span className="trans-pill-tag">☁️ Cloud Optimization</span>
+            <motion.div 
+              className="transformation-right-text-block"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.025 } },
+                hidden: {}
+              }}
+            >
+              <p className="transformation-lead-text">
+                {"Modern organisations don't need disconnected technology. They need ".split(' ').map((word, i) => (
+                  <motion.span
+                    key={`w1-${i}`}
+                    variants={{
+                      hidden: { opacity: 0, y: 10, filter: 'blur(4px)' },
+                      visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.35, ease: 'easeOut' } }
+                    }}
+                    style={{ display: 'inline-block', marginRight: '0.28em' }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+                {"connected solutions that work together.".split(' ').map((word, i) => (
+                  <motion.span
+                    key={`w2-${i}`}
+                    variants={{
+                      hidden: { opacity: 0, y: 10, filter: 'blur(4px)' },
+                      visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.35, ease: 'easeOut' } }
+                    }}
+                    style={{ display: 'inline-block', marginRight: '0.28em', color: '#ff6b00', fontWeight: 800 }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </p>
+
+              <p className="transformation-sublead-text">
+                {"Our expertise spans the complete digital technology landscape.".split(' ').map((word, i) => (
+                  <motion.span
+                    key={`w3-${i}`}
+                    variants={{
+                      hidden: { opacity: 0, y: 8, filter: 'blur(4px)' },
+                      visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.35, ease: 'easeOut' } }
+                    }}
+                    style={{ display: 'inline-block', marginRight: '0.28em' }}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </p>
+            </motion.div>
+
+            <div className="services-pillar-badge-box">
+              <div className="services-pillar-words">
+                <div className="pillar-orange-dash"></div>
+                <span>INNOVATION</span>
+                <span>INTEGRATION</span>
+                <span>IMPACT</span>
+              </div>
             </div>
           </motion.div>
         </div>
 
-        {/* 3-Column Interactive Grid: Left Services (5) | Animated Orb | Right Services (5) */}
+        {/* 3-Column Interactive Grid: Left Services | Animated Orb | Right Services */}
         <div className="transformation-grid-container">
           
           {/* Left Column Service Cards (5 items) */}
@@ -138,7 +198,7 @@ const ServicesTransformation = () => {
               <motion.div 
                 key={service.id}
                 className="trans-card service-topic-card"
-                onClick={() => scrollToService(service.id)}
+                onClick={() => handleCardClick(service.id)}
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -150,7 +210,7 @@ const ServicesTransformation = () => {
                   {service.icon}
                 </div>
                 <div className="trans-card-content">
-                  <h4 className="trans-card-title">{service.title}</h4>
+                  <h4 className="trans-card-title">{service.number} • {service.title}</h4>
                   <p className="trans-card-text">{service.subtitle}</p>
                 </div>
                 <FiArrowDownRight className="card-jump-arrow" />
@@ -214,13 +274,13 @@ const ServicesTransformation = () => {
             </svg>
           </div>
 
-          {/* Right Column Service Cards (5 items) */}
+          {/* Right Column Service Cards (4 items) */}
           <div className="transformation-column">
             {rightServices.map((service, idx) => (
               <motion.div 
                 key={service.id}
                 className="trans-card service-topic-card"
-                onClick={() => scrollToService(service.id)}
+                onClick={() => handleCardClick(service.id)}
                 initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -232,7 +292,7 @@ const ServicesTransformation = () => {
                   {service.icon}
                 </div>
                 <div className="trans-card-content">
-                  <h4 className="trans-card-title">{service.title}</h4>
+                  <h4 className="trans-card-title">{service.number} • {service.title}</h4>
                   <p className="trans-card-text">{service.subtitle}</p>
                 </div>
                 <FiArrowDownRight className="card-jump-arrow" />

@@ -18,31 +18,6 @@ const AdminPage = () => {
   const [notification, setNotification] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Analytics Toggle State ('weekly' | 'monthly')
-  const [analyticsTimeframe, setAnalyticsTimeframe] = useState('weekly');
-
-  // Live Stopwatch Timer state
-  const [timerSeconds, setTimerSeconds] = useState(5048); // Starts at 01:24:08
-  const [timerRunning, setTimerRunning] = useState(true);
-
-  useEffect(() => {
-    let interval = null;
-    if (timerRunning) {
-      interval = setInterval(() => {
-        setTimerSeconds(prev => prev + 1);
-      }, 1000);
-    } else {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [timerRunning]);
-
-  const formatTimer = (totalSec) => {
-    const hrs = Math.floor(totalSec / 3600);
-    const mins = Math.floor((totalSec % 3600) / 60);
-    const secs = totalSec % 60;
-    return `${hrs.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const {
     projects, addProject, updateProject, deleteProject,
@@ -660,7 +635,7 @@ const AdminPage = () => {
             <span className="nav-icon"><FiMail /></span>
             <span className="nav-label">Inquiries & Applications</span>
             {inquiries.length > 0 && (
-              <span className="nav-badge" style={{ background: inquiries.some(i => i.status === 'New') ? '#ea580c' : '#64748b' }}>
+              <span className="nav-badge">
                 {inquiries.length}
               </span>
             )}
@@ -712,24 +687,6 @@ const AdminPage = () => {
             <span className="nav-label">Careers Board</span>
             <span className="nav-badge">{jobs.length}</span>
           </button>
-
-          <button
-            className={`nav-item-btn ${activeTab === 'blog' ? 'active' : ''}`}
-            onClick={() => setActiveTab('blog')}
-          >
-            <span className="nav-icon"><FiBookOpen /></span>
-            <span className="nav-label">Tech Blog & Articles</span>
-            <span className="nav-badge">{articles.length}</span>
-          </button>
-
-          <button
-            className={`nav-item-btn ${activeTab === 'services' ? 'active' : ''}`}
-            onClick={() => setActiveTab('services')}
-          >
-            <span className="nav-icon"><FiBox /></span>
-            <span className="nav-label">Services & Offerings</span>
-            <span className="nav-badge">{services.length}</span>
-          </button>
         </nav>
 
         {/* Sidebar Footer Link */}
@@ -757,7 +714,7 @@ const AdminPage = () => {
               {activeTab === 'projects' && 'Projects Portfolio Operations'}
               {activeTab === 'team' && 'Team Roster Directory'}
               {activeTab === 'testimonials' && 'Client Testimonials & Ratings'}
-              {activeTab === 'media_gallery' && 'Media Division & Video Showcase'}
+              {activeTab === 'media_gallery' && 'Media Capabilities & Video Showcase'}
               {activeTab === 'careers' && 'Careers & Job Openings Management'}
               {activeTab === 'blog' && 'Tech Blog & Engineering Articles'}
               {activeTab === 'services' && 'Services & Solution Packages'}
@@ -815,31 +772,23 @@ const AdminPage = () => {
           <div className="donezo-container">
             {/* ROW 1: 4 STAT CARDS ACROSS (100% REAL DYNAMIC CMS DATA) */}
             <div className="donezo-top-stats-grid">
-              {/* CARD 1: FEATURED DARK FOREST GREEN */}
-              <div className="donezo-stat-card donezo-featured-card">
+              {/* CARD 1: TOTAL PROJECTS */}
+              <div className="donezo-stat-card donezo-featured-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('projects')}>
                 <span className="donezo-arrow-circle">↗</span>
                 <span className="donezo-stat-title">Total Projects</span>
                 <div className="donezo-stat-digit">{projects ? projects.length : 0}</div>
-                <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects ? projects.length : 0} Live ] Synced with CMS</div>
+                <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects ? projects.length : 0} Live ] In Portfolio</div>
               </div>
 
-              {/* CARD 2: ENDED PROJECTS */}
-              <div className="donezo-stat-card">
+              {/* CARD 2: TEAM MEMBERS */}
+              <div className="donezo-stat-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('team')}>
                 <span className="donezo-arrow-circle">↗</span>
-                <span className="donezo-stat-title">Ended Projects</span>
-                <div className="donezo-stat-digit">{projects ? projects.filter(p => p.image || p.category === 'Web Development').length : 0}</div>
-                <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 100}% ] Portfolio Ready</div>
+                <span className="donezo-stat-title">Team Roster</span>
+                <div className="donezo-stat-digit">{team ? team.length : 0}</div>
+                <div className="donezo-badge-tag"><FiCheckCircle /> [ {team ? team.length : 0} Active ] Engineers & Leads</div>
               </div>
 
-              {/* CARD 3: RUNNING PROJECTS */}
-              <div className="donezo-stat-card">
-                <span className="donezo-arrow-circle">↗</span>
-                <span className="donezo-stat-title">Running Projects</span>
-                <div className="donezo-stat-digit">{projects ? projects.filter(p => !p.image).length : 0}</div>
-                <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects ? projects.filter(p => !p.image).length : 0} Active ] In Progress</div>
-              </div>
-
-              {/* CARD 4: PENDING INQUIRIES */}
+              {/* CARD 3: CUSTOMER INQUIRIES */}
               <div className="donezo-stat-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('contact')}>
                 <span className="donezo-arrow-circle">↗</span>
                 <span className="donezo-stat-title">Customer Inquiries</span>
@@ -848,436 +797,334 @@ const AdminPage = () => {
                   <FiMail /> [ {inquiries.filter(i => i.status === 'New').length} New ] Direct Messages
                 </div>
               </div>
+
+              {/* CARD 4: TESTIMONIALS */}
+              <div className="donezo-stat-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('testimonials')}>
+                <span className="donezo-arrow-circle">↗</span>
+                <span className="donezo-stat-title">Client Reviews</span>
+                <div className="donezo-stat-digit">{reviews ? reviews.length : 0}</div>
+                <div className="donezo-badge-tag" style={{ color: '#10b981' }}>
+                  <FiCheckCircle /> [ {reviews ? reviews.length : 0} Verified ] Endorsements
+                </div>
+              </div>
             </div>
 
-            {/* ROW 2: MIDDLE 3-COLUMN GRID */}
-            <div className="donezo-middle-grid">
-              {/* CARD 1: PROJECT ANALYTICS LINE GRAPH CHART (INTERACTIVE WEEKLY/MONTHLY) */}
-              <div className="donezo-card">
-                <div className="pos-card-header" style={{ marginBottom: '4px' }}>
-                  <h4 className="donezo-card-title" style={{ margin: 0 }}>Project Analytics</h4>
-                  <div className="pos-toggle-pills">
-                    <button
-                      className={`pos-toggle-btn ${analyticsTimeframe === 'weekly' ? 'active' : ''}`}
-                      style={{ fontSize: '0.72rem', padding: '2px 8px', cursor: 'pointer' }}
-                      onClick={() => setAnalyticsTimeframe('weekly')}
-                    >
-                      Weekly
-                    </button>
-                    <button
-                      className={`pos-toggle-btn ${analyticsTimeframe === 'monthly' ? 'active' : ''}`}
-                      style={{ fontSize: '0.72rem', padding: '2px 8px', cursor: 'pointer' }}
-                      onClick={() => setAnalyticsTimeframe('monthly')}
-                    >
-                      Monthly
-                    </button>
+            {/* MAIN REAL CMS WORKSPACE GRID */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', marginTop: '20px', alignItems: 'start' }}>
+              {/* RECENT INCOMING CUSTOMER INQUIRIES */}
+              <div className="donezo-card" style={{ padding: '24px', justifyContent: 'flex-start', gap: '16px' }}>
+                <div className="pos-card-header" style={{ marginBottom: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h4 className="donezo-card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiMail style={{ color: '#ff6b00' }} /> Recent Customer Inquiries
+                    </h4>
+                    <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#64748b' }}>
+                      Latest direct messages from contact forms & clients
+                    </p>
                   </div>
+                  <button className="pos-toggle-btn active" style={{ fontSize: '0.74rem', padding: '4px 12px' }} onClick={() => setActiveTab('contact')}>
+                    View All ({inquiries.length})
+                  </button>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.6rem', fontWeight: 800, color: '#082233' }}>
-                    {analyticsTimeframe === 'weekly'
-                      ? `${projects && projects.length > 0 ? Math.round((projects.length / (projects.length + 1)) * 100) : 100}%`
-                      : `${projects && projects.length > 0 ? Math.min(98, Math.round((projects.length / (projects.length + 2)) * 100 + 12)) : 95}%`
-                    }
-                  </span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#ea580c', background: '#fff7ed', padding: '2px 8px', borderRadius: '12px', border: '1px solid #fdba74' }}>
-                    ↑ {projects ? projects.length : 0} {analyticsTimeframe === 'weekly' ? 'Items (Weekly)' : 'Items (Monthly)'}
-                  </span>
-                </div>
-
-                {/* SVG AREA/LINE GRAPH WITH DYNAMIC CURVES */}
-                <div style={{ position: 'relative', width: '100%', height: '110px', marginTop: '4px' }}>
-                  <svg width="100%" height="100%" viewBox="0 0 400 120" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-                    <defs>
-                      <linearGradient id="adminAnalyticsGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#ff6b00" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#ff6b00" stopOpacity="0.0" />
-                      </linearGradient>
-                    </defs>
-
-                    {/* DASHED GRIDLINES */}
-                    <line x1="0" y1="30" x2="400" y2="30" stroke="#f1f5f9" strokeDasharray="4 4" strokeWidth="1" />
-                    <line x1="0" y1="60" x2="400" y2="60" stroke="#f1f5f9" strokeDasharray="4 4" strokeWidth="1" />
-                    <line x1="0" y1="90" x2="400" y2="90" stroke="#f1f5f9" strokeDasharray="4 4" strokeWidth="1" />
-
-                    {/* FILLED AREA BELOW LINE */}
-                    <path
-                      d={analyticsTimeframe === 'weekly'
-                        ? "M 10 90 Q 60 70, 110 40 T 210 20 T 310 65 T 390 35 L 390 110 L 10 110 Z"
-                        : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40 L 390 110 L 10 110 Z"
-                      }
-                      fill="url(#adminAnalyticsGrad)"
-                    />
-
-                    {/* GLOWING CURVED TREND LINE */}
-                    <path
-                      d={analyticsTimeframe === 'weekly'
-                        ? "M 10 90 Q 60 70, 110 40 T 210 20 T 310 65 T 390 35"
-                        : "M 10 75 Q 70 25, 130 55 T 250 15 T 390 40"
-                      }
-                      fill="none"
-                      stroke="#082233"
-                      strokeWidth="3.5"
-                      strokeLinecap="round"
-                    />
-
-                    {/* DATA DOTS */}
-                    {analyticsTimeframe === 'weekly' ? (
-                      <>
-                        <circle cx="10" cy="90" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                        <circle cx="110" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                        <circle cx="210" cy="20" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="310" cy="65" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                        <circle cx="390" cy="35" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                      </>
-                    ) : (
-                      <>
-                        <circle cx="10" cy="75" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                        <circle cx="130" cy="55" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                        <circle cx="250" cy="15" r="6" fill="#ff6b00" stroke="#ffffff" strokeWidth="2.5" />
-                        <circle cx="390" cy="40" r="4" fill="#ffffff" stroke="#082233" strokeWidth="2.5" />
-                      </>
-                    )}
-                  </svg>
-                </div>
-
-                {/* X-AXIS LABELS DYNAMICALLY SWITCHED */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 700, marginTop: '8px', padding: '0 4px' }}>
-                  {analyticsTimeframe === 'weekly' ? (
-                    ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map(day => <span key={day}>{day}</span>)
-                  ) : (
-                    ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov'].map(m => <span key={m}>{m}</span>)
-                  )}
-                </div>
-              </div>
-
-              {/* CARD 2: REMINDERS MEETING CARD WITH MINI SCHEDULE SPARKLINE CHART */}
-              {/* CARD 2: SYSTEM STATUS & LIVE CMS OVERVIEW */}
-              <div className="donezo-card" style={{ justifyContent: 'space-between' }}>
-                <div className="pos-card-header" style={{ marginBottom: '4px' }}>
-                  <h4 className="donezo-card-title" style={{ margin: 0 }}>System Notifications</h4>
-                  <span className="pos-stat-pill" style={{ fontSize: '0.7rem' }}>Live</span>
-                </div>
-
-                <div>
-                  <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontWeight: 800, color: '#082233', marginBottom: '4px' }}>
-                    CMS Synchronization Active
-                  </div>
-                  <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>
-                    All site content is synced with live local database.
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '4px' }}>
-                    Status: 100% Operational
-                  </div>
-
-                  <div style={{ marginTop: '12px', paddingTop: '8px', borderTop: '1px dashed #e2e8f0' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
-                      <span>Database Health</span>
-                      <span style={{ color: '#ea580c' }}>Optimal</span>
-                    </div>
-                    <div style={{ height: '6px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div style={{ width: '100%', height: '100%', background: '#ff6b00' }}></div>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  className="action-pill-btn primary-pill"
-                  style={{ width: '100%', justifyContent: 'center', background: '#082233', color: '#ffffff', fontWeight: 800, padding: '10px' }}
-                  onClick={() => setActiveTab('projects')}
-                >
-                  ⚡ Manage Content
-                </button>
-              </div>
-
-              {/* CARD 3: INNOVEITY PROJECT TASKS DERIVED DYNAMICALLY FROM REAL CMS PROJECTS */}
-              <div className="donezo-card">
-                <div className="pos-card-header" style={{ marginBottom: '6px' }}>
-                  <h4 className="donezo-card-title" style={{ margin: 0 }}>Project Tasks</h4>
-                  <button className="pos-toggle-btn active" style={{ fontSize: '0.72rem', padding: '2px 8px' }} onClick={() => setActiveTab('projects')}>+ New</button>
-                </div>
-
-                {/* SEGMENTED TASK PROGRESS BAR CHART */}
-                <div style={{ marginBottom: '10px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', fontWeight: 700, marginBottom: '4px' }}>
-                    <span>Sprint Execution</span>
-                    <span style={{ color: '#ea580c' }}>
-                      {projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 100}% Completed
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', height: '6px', borderRadius: '4px', overflow: 'hidden', background: '#e2e8f0' }}>
-                    <div style={{ width: `${projects && projects.length > 0 ? Math.round((projects.filter(p => p.image).length / projects.length) * 100) : 70}%`, background: '#ff6b00' }}></div>
-                    <div style={{ width: '20%', background: '#3b82f6', marginLeft: '2px' }}></div>
-                    <div style={{ width: '10%', background: '#d97706', marginLeft: '2px' }}></div>
-                  </div>
-                </div>
-
-                <div>
-                  {projects && projects.length > 0 ? (
-                    projects.slice(0, 3).map((p, idx) => (
-                      <div key={p.id || idx} className="donezo-task-row">
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', width: '100%' }}>
-                          <div className="donezo-task-icon-box" style={{ background: idx === 0 ? '#fff7ed' : idx === 1 ? '#eff6ff' : '#fef3c7', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}>
-                            {idx === 0 ? '🌐' : idx === 1 ? '⚡' : '🚀'}
+                {inquiries && inquiries.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {inquiries.slice(0, 5).map((inq, idx) => (
+                      <div
+                        key={inq.id || idx}
+                        style={{
+                          background: inq.status === 'New' ? '#fff7ed' : '#f8fafc',
+                          borderRadius: '12px',
+                          padding: '12px 14px',
+                          border: inq.status === 'New' ? '1px solid #fdba74' : '1px solid #e2e8f0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '12px'
+                        }}
+                      >
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '2px' }}>
+                            <strong style={{ fontSize: '0.88rem', color: '#082233' }}>{inq.name}</strong>
+                            <span
+                              style={{
+                                fontSize: '0.68rem',
+                                padding: '2px 6px',
+                                borderRadius: '6px',
+                                fontWeight: 700,
+                                background: inq.status === 'New' ? '#ff6b00' : '#e2e8f0',
+                                color: inq.status === 'New' ? '#ffffff' : '#475569'
+                              }}
+                            >
+                              {inq.status || 'New'}
+                            </span>
                           </div>
-                          <div style={{ flex: 1 }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                              <div className="donezo-task-title">{p.title}</div>
-                              <span style={{ fontSize: '0.68rem', color: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706', fontWeight: 700 }}>
-                                {p.image ? '100%' : '85%'}
-                              </span>
-                            </div>
-                            <div style={{ height: '4px', background: '#f1f5f9', borderRadius: '2px', marginTop: '4px', overflow: 'hidden' }}>
-                              <div style={{ width: p.image ? '100%' : '85%', height: '100%', background: idx === 0 ? '#ff6b00' : idx === 1 ? '#3b82f6' : '#d97706' }}></div>
-                            </div>
+                          <div style={{ fontSize: '0.78rem', color: '#475569', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {inq.subject || inq.message || inq.email}
+                          </div>
+                          <div style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '2px' }}>
+                            {inq.email} • {inq.date || 'Recent'}
                           </div>
                         </div>
+
+                        <button
+                          className="action-pill-btn primary-pill"
+                          style={{ fontSize: '0.72rem', padding: '6px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}
+                          onClick={() => {
+                            setReplyModalInq(inq);
+                            setQuickReplyBody('');
+                          }}
+                        >
+                          <FiMail /> Reply
+                        </button>
                       </div>
-                    ))
-                  ) : (
-                    <div style={{ fontSize: '0.82rem', color: '#64748b', textAlign: 'center', padding: '10px' }}>No projects</div>
-                  )}
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '30px 10px', color: '#64748b', fontSize: '0.85rem' }}>
+                    No customer inquiries received yet.
+                  </div>
+                )}
+              </div>
+
+              {/* RECENT PORTFOLIO PROJECTS */}
+              <div className="donezo-card" style={{ padding: '24px', justifyContent: 'flex-start', gap: '16px' }}>
+                <div className="pos-card-header" style={{ marginBottom: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h4 className="donezo-card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiFolder style={{ color: '#ff6b00' }} /> Live Portfolio Projects
+                    </h4>
+                    <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#64748b' }}>
+                      Published client solutions and engineering builds
+                    </p>
+                  </div>
+                  <button className="pos-toggle-btn active" style={{ fontSize: '0.74rem', padding: '4px 12px' }} onClick={() => setActiveTab('projects')}>
+                    + Add Project
+                  </button>
                 </div>
+
+                {projects && projects.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {projects.slice(0, 5).map((p, idx) => (
+                      <div
+                        key={p.id || idx}
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '12px',
+                          padding: '10px 14px',
+                          border: '1px solid #e2e8f0',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: '12px'
+                        }}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
+                          {p.image ? (
+                            <img
+                              src={p.image}
+                              alt={p.title}
+                              style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'cover', flexShrink: 0 }}
+                              onError={(e) => { e.target.style.display = 'none'; }}
+                            />
+                          ) : (
+                            <div style={{ width: '40px', height: '40px', borderRadius: '8px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.1rem', flexShrink: 0 }}>
+                              <FiFolder />
+                            </div>
+                          )}
+                          <div style={{ minWidth: 0 }}>
+                            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {p.title}
+                            </div>
+                            <span className="category-badge-pill" style={{ marginTop: '2px', display: 'inline-block', fontSize: '0.68rem', padding: '1px 6px' }}>
+                              {p.category || 'Engineering'}
+                            </span>
+                          </div>
+                        </div>
+
+                        <button
+                          className="pos-toggle-btn"
+                          style={{ fontSize: '0.72rem', padding: '4px 10px', flexShrink: 0 }}
+                          onClick={() => setActiveTab('projects')}
+                        >
+                          Manage
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '30px 10px', color: '#64748b', fontSize: '0.85rem' }}>
+                    No projects available in portfolio.
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* ROW 3: BOTTOM 3-COLUMN GRID */}
-            <div className="donezo-bottom-grid">
-              {/* CARD 1: TEAM COLLABORATION */}
-              <div className="donezo-card">
-                <div className="pos-card-header" style={{ marginBottom: '8px' }}>
-                  <h4 className="donezo-card-title" style={{ margin: 0 }}>Team Collaboration</h4>
-                  <button className="chart-dropdown-pill" onClick={() => setActiveTab('team')}>+ Add Member</button>
+            {/* BOTTOM SECTION: TEAM ROSTER & QUICK ACCESS */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px', alignItems: 'start' }}>
+              {/* ACTIVE TEAM ROSTER */}
+              <div className="donezo-card" style={{ padding: '24px' }}>
+                <div className="pos-card-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <h4 className="donezo-card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <FiUsers style={{ color: '#ff6b00' }} /> Active Team Members
+                    </h4>
+                    <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#64748b' }}>
+                      Engineers & leadership staff shown on site
+                    </p>
+                  </div>
+                  <button className="pos-toggle-btn active" style={{ fontSize: '0.74rem', padding: '4px 12px' }} onClick={() => setActiveTab('team')}>
+                    + Add Member
+                  </button>
                 </div>
 
-                <div
-                  className="team-collab-scroll-list"
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    maxHeight: '250px',
-                    overflowY: 'auto',
-                    paddingRight: '6px'
-                  }}
-                >
-                  {team && team.length > 0 ? (
-                    team.map((m, idx) => (
-                      <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderBottom: idx < team.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                {team && team.length > 0 ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                    {team.slice(0, 4).map((m, idx) => (
+                      <div
+                        key={m.id || idx}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: '8px 12px',
+                          background: '#f8fafc',
+                          borderRadius: '12px',
+                          border: '1px solid #f1f5f9'
+                        }}
+                      >
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           {m.image ? (
                             <img
                               src={m.image}
                               alt={m.name}
-                              style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }}
-                              onError={(e) => {
-                                e.target.onerror = null;
-                                e.target.style.display = 'none';
-                                e.target.nextSibling && (e.target.nextSibling.style.display = 'flex');
-                              }}
+                              style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }}
+                              onError={(e) => { e.target.style.display = 'none'; }}
                             />
-                          ) : null}
-                          <div
-                            style={{
-                              width: '34px',
-                              height: '34px',
-                              borderRadius: '50%',
-                              background: '#fed7aa',
-                              color: '#ea580c',
-                              fontWeight: 800,
-                              display: m.image ? 'none' : 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              fontSize: '0.8rem',
-                              flexShrink: 0
-                            }}
-                          >
-                            {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
-                          </div>
+                          ) : (
+                            <div
+                              style={{
+                                width: '36px',
+                                height: '36px',
+                                borderRadius: '50%',
+                                background: '#fed7aa',
+                                color: '#ea580c',
+                                fontWeight: 800,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                fontSize: '0.8rem'
+                              }}
+                            >
+                              {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
+                            </div>
+                          )}
                           <div>
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#082233' }}>{m.name}</div>
-                            <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{m.role || 'Innoveity Engineer'}</div>
+                            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#082233' }}>{m.name}</div>
+                            <div style={{ fontSize: '0.74rem', color: '#64748b' }}>{m.role || 'Engineer'}</div>
                           </div>
                         </div>
-                        <span className="action-pill-btn" style={{ background: idx === 0 ? '#fff7ed' : '#fef3c7', color: idx === 0 ? '#ea580c' : '#d97706', fontSize: '0.7rem', padding: '2px 8px' }}>
-                          {idx === 0 ? 'Completed' : idx === 1 ? 'In Progress' : 'Active'}
+
+                        <span style={{ fontSize: '0.72rem', color: '#10b981', fontWeight: 700, background: '#ecfdf5', padding: '2px 8px', borderRadius: '6px' }}>
+                          Active
                         </span>
                       </div>
-                    ))
-                  ) : (
-                    <div style={{ fontSize: '0.82rem', color: '#64748b', textAlign: 'center', padding: '10px' }}>No team members</div>
-                  )}
-                </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '30px 10px', color: '#64748b', fontSize: '0.85rem' }}>
+                    No team members listed.
+                  </div>
+                )}
               </div>
 
-              {/* CARD 2: PROJECT PROGRESS */}
-              <div className="donezo-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <h4 className="donezo-card-title" style={{ margin: 0 }}>Project Progress</h4>
+              {/* QUICK CMS NAVIGATION HUB */}
+              <div className="donezo-card" style={{ padding: '24px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                <div>
+                  <div className="pos-card-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h4 className="donezo-card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiSettings style={{ color: '#ff6b00' }} /> Quick CMS Hub
+                      </h4>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.78rem', color: '#64748b' }}>
+                        Direct access to manage all active website content
+                      </p>
+                    </div>
+                  </div>
 
-                {(() => {
-                  const totalP = projects ? projects.length : 0;
-                  const doneP = projects ? projects.filter(p => p.image).length : 0;
-                  const pct = totalP > 0 ? Math.round((doneP / totalP) * 100) : 100;
-                  const dashOffset = 339.29 - (339.29 * (pct / 100));
-                  return (
-                    <>
-                      <div style={{ position: 'relative', width: '130px', height: '130px', margin: '16px auto' }}>
-                        <svg width="130" height="130" viewBox="0 0 140 140">
-                          <defs>
-                            <linearGradient id="adminRingGrad" x1="0" y1="0" x2="1" y2="1">
-                              <stop offset="0%" stopColor="#ff6b00" />
-                              <stop offset="100%" stopColor="#082233" />
-                            </linearGradient>
-                          </defs>
-                          <circle cx="70" cy="70" r="54" fill="none" stroke="#f1f5f9" strokeWidth="10" />
-                          <circle
-                            cx="70" cy="70" r="54"
-                            fill="none"
-                            stroke="url(#adminRingGrad)"
-                            strokeWidth="10"
-                            strokeDasharray="339.29"
-                            strokeDashoffset={dashOffset}
-                            strokeLinecap="round"
-                            transform="rotate(-90 70 70)"
-                          />
-                        </svg>
-                        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                          <div style={{ fontFamily: 'var(--font-heading)', fontSize: '1.75rem', fontWeight: 800, color: '#082233', lineHeight: 1 }}>{pct}%</div>
-                          <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 700, marginTop: '4px' }}>Live Completed</div>
-                        </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                    <button
+                      onClick={() => setActiveTab('projects')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiFolder />
                       </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Projects</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{projects.length} Items</div>
+                    </button>
 
-                      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', fontSize: '0.74rem', color: '#475569', fontWeight: 700, width: '100%', background: '#f8fafc', padding: '8px 12px', borderRadius: '12px', border: '1px solid #f1f5f9' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#082233' }}></span> {doneP} Completed
-                        </span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#ff6b00' }}></span> {totalP - doneP} Active
-                        </span>
+                    <button
+                      onClick={() => setActiveTab('team')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiUsers />
                       </div>
-                    </>
-                  );
-                })()}
-              </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Team</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{team.length} Members</div>
+                    </button>
 
-              {/* CARD 3: CMS QUICK CONTROL CENTER */}
-              <div className="donezo-card" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
-                  <h4 className="donezo-card-title" style={{ margin: 0 }}>Quick Management</h4>
-                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c', background: '#fff7ed', padding: '3px 10px', borderRadius: '12px', border: '1px solid #fdba74', whiteSpace: 'nowrap', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    ⚡ System Ready
-                  </span>
+                    <button
+                      onClick={() => setActiveTab('contact')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiPhone />
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Inquiries</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{inquiries.length} Inbox</div>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('testimonials')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#fef3c7', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiStar />
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Reviews</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{reviews.length} Verified</div>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('media_gallery')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#f5f3ff', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiVideo />
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Media</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{mediaItems.length} Videos</div>
+                    </button>
+
+                    <button
+                      onClick={() => setActiveTab('careers')}
+                      style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '12px 10px', textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '6px' }}
+                    >
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.9rem' }}>
+                        <FiBriefcase />
+                      </div>
+                      <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#082233' }}>Careers</div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>{jobs.length} Openings</div>
+                    </button>
+                  </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
-                  <button
-                    onClick={() => setActiveTab('projects')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiFolder />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Projects
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {projects.length} Items
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('team')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiUsers />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Team Roster
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {team.length} Members
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('contact')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiPhone />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Inquiries
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {inquiries.length} Inbox
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('testimonials')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fef3c7', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiStar />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Reviews
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {reviews.length} Verified
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('media_gallery')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f5f3ff', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiVideo />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Media Reel
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {mediaItems.length} Videos
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('careers')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiBriefcase />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Careers
-                      </div>
-                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
-                        {jobs.length} Openings
-                      </div>
-                    </div>
-                  </button>
-                </div>
-
-                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#ea580c', fontWeight: 700 }}>
-                  <span>Live Site Status</span>
+                <div style={{ marginTop: '16px', background: '#fff7ed', padding: '10px 14px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.78rem', color: '#ea580c', fontWeight: 700 }}>
+                  <span>Live Website Status: Active</span>
                   <a href="/" target="_blank" rel="noreferrer" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                    Preview <FiExternalLink />
+                    Open Live Site <FiExternalLink />
                   </a>
                 </div>
               </div>
@@ -2232,16 +2079,16 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* TAB 7: MEDIA DIVISION & VIDEO GALLERY */}
+        {/* TAB 7: MEDIA CAPABILITIES & VIDEO GALLERY */}
         {activeTab === 'media_gallery' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
             <div className="chart-header-row" style={{ alignItems: 'center' }}>
               <div>
                 <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <FiVideo style={{ color: '#ff6b00' }} /> Media Division & Video Showcase
+                  <FiVideo style={{ color: '#ff6b00' }} /> Media Capabilities & Video Showcase
                 </h3>
                 <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
-                  Manage video commercial showcases, showreels, and media division assets for the website.
+                  Manage video commercial showcases, showreels, and media capabilities assets for the website.
                 </p>
               </div>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>

@@ -60,11 +60,15 @@ const Navbar = () => {
     { name: 'About Us', to: '/about', isPage: true },
     { name: 'Projects', to: '/projects', isPage: true },
     { name: 'Services', to: '/services', isPage: true },
-    { name: 'Media Division', to: '/media', isPage: true },
+    { name: 'Media Capabilities', to: '/media', isPage: true },
     { name: 'Our Team', to: '/team', isPage: true },
   ];
 
-  const navLinks = headerFooterSettings?.navLinks || defaultNavLinks;
+  const rawNavLinks = headerFooterSettings?.navLinks || defaultNavLinks;
+  const navLinks = rawNavLinks.map(link => ({
+    ...link,
+    name: link.name === 'Media Division' ? 'Media Capabilities' : link.name
+  }));
   const contactBtnText = headerFooterSettings?.contactBtnText || 'CONTACT US';
 
   const handleNavClick = (link) => {
@@ -99,11 +103,11 @@ const Navbar = () => {
         <div className="navbar-brand">
           {isHome ? (
             <ScrollLink to="home" smooth={true} duration={500} className="brand-link">
-              <InnoveityBrandLogo size={42} darkBg={false} />
+              <InnoveityBrandLogo size={50} darkBg={false} />
             </ScrollLink>
           ) : (
             <RouterLink to="/" className="brand-link">
-              <InnoveityBrandLogo size={42} darkBg={false} />
+              <InnoveityBrandLogo size={50} darkBg={false} />
             </RouterLink>
           )}
         </div>

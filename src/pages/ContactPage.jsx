@@ -222,7 +222,10 @@ ${formData.message}
               <div className="info-icon-outline">
                 <FiMapPin />
               </div>
-              <span className="info-text-val">{contact.address ? contact.address.replace('\n', ', ').replace(',,', ',') : 'MCC MRF Innovation Park, East Tambaram, Chennai - 600059'}</span>
+              <span className="info-text-val">
+                MCC MRF Innovation Park, East Tambaram,<br />
+                Chennai - 600059
+              </span>
             </div>
 
             {/* Business Hours */}
