@@ -6,6 +6,7 @@ import {
   FiCheckCircle, FiArrowRight, FiChevronLeft, FiChevronRight
 } from 'react-icons/fi';
 import LetterReveal from '../components/LetterReveal/LetterReveal';
+import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './ServicesPage.css';
 
 const useScrollObserver = () => {
@@ -348,6 +349,9 @@ const ServicesPage = () => {
           </div>
         </div>
       </section>
+
+      {/* DYNAMIC CUSTOM SECTIONS */}
+      <DynamicPageSections page="services" />
 
       {/* Call To Action */}
       <section className="sp-section" style={{ paddingTop: '2rem' }}>

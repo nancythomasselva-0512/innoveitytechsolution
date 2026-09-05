@@ -25,7 +25,7 @@ const AboutSummary = () => {
               ABOUT <span className="title-gradient-accent">US</span>
             </h2>
             <h2 className="mosaic-main-heading">
-              {homeContent.aboutTitle.split('\n').map((line, i) => (
+              {(homeContent?.aboutTitle || '').split('\n').map((line, i) => (
                 <span key={i} className={`mosaic-heading-line ${i === 1 ? 'title-gradient-accent' : ''}`}>
                   {line}
                 </span>

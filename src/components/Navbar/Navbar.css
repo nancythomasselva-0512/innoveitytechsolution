@@ -4,7 +4,7 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  padding: 0.85rem 0;
+  padding: 0.65rem 0;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.94);
   backdrop-filter: blur(20px);
@@ -14,7 +14,7 @@
 }
 
 .navbar-header.header-scrolled {
-  padding: 0.65rem 0;
+  padding: 0.5rem 0;
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
@@ -59,10 +59,10 @@
 .navbar-nav-links-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   list-style: none;
   margin: 0;
-  padding: 5px 8px;
+  padding: 4px 6px;
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -77,10 +77,10 @@
 }
 
 .nav-link-pill-btn {
-  color: #0b192c;
+  color: #082233;
   font-weight: 600;
-  font-size: 0.92rem;
-  padding: 8px 20px;
+  font-size: 0.84rem;
+  padding: 6px 15px;
   border-radius: 9999px;
   cursor: pointer;
   text-decoration: none;
@@ -96,7 +96,7 @@
 
 /* Active Pill - Vibrant Tech Orange Badge */
 .nav-link-pill-btn.nav-link-pill-active {
-  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #ff914d 0%, #ff6b00 100%);
   color: #ffffff !important;
   font-weight: 700;
   box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
@@ -110,13 +110,13 @@
 }
 
 .pill-btn-login {
-  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  background: linear-gradient(135deg, #ff914d 0%, #ff6b00 100%);
   color: #ffffff;
   border-radius: 9999px;
-  padding: 10px 24px;
+  padding: 8px 20px;
   font-weight: 700;
-  font-size: 0.88rem;
-  letter-spacing: 0.5px;
+  font-size: 0.82rem;
+  letter-spacing: 0.4px;
   border: none;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -124,7 +124,7 @@
 }
 
 .pill-btn-login:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  background: linear-gradient(135deg, #ff9e61 0%, #ea580c 100%);
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(255, 107, 0, 0.5);
 }
@@ -132,7 +132,7 @@
 /* Mobile Toggle */
 .mobile-toggle {
   display: none;
-  color: #0b192c;
+  color: #082233;
   cursor: pointer;
 }
 

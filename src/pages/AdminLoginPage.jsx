@@ -38,18 +38,14 @@ const AdminLoginPage = () => {
       setLoading(false);
 
       if (result.success) {
-        setSuccessMsg(`Welcome back, ${result.user.name}! Redirecting to dashboard...`);
-        setTimeout(() => {
-          if (result.user.role === 'Super Admin') {
-            navigate('/super-admin');
-          } else {
-            navigate('/admin');
-          }
-        }, 1200);
+        setSuccessMsg(`Welcome back, ${result.user.name}! Access granted.`);
+        if (result.user.role === 'Super Admin') {
+          navigate('/super-admin', { replace: true });
+        }
       } else {
         setErrorMsg(result.message);
       }
-    }, 600);
+    }, 250);
   };
 
   const handleQuickLogin = (demoEmail, demoPass, demoRole) => {
@@ -63,18 +59,14 @@ const AdminLoginPage = () => {
       const result = loginAdmin(demoEmail, demoPass, demoRole);
       setLoading(false);
       if (result.success) {
-        setSuccessMsg(`Authorized as ${result.user.name}! Accessing portal...`);
-        setTimeout(() => {
-          if (result.user.role === 'Super Admin') {
-            navigate('/super-admin');
-          } else {
-            navigate('/admin');
-          }
-        }, 1000);
+        setSuccessMsg(`Authorized as ${result.user.name}!`);
+        if (result.user.role === 'Super Admin') {
+          navigate('/super-admin', { replace: true });
+        }
       } else {
         setErrorMsg(result.message);
       }
-    }, 500);
+    }, 250);
   };
 
   return (
@@ -87,9 +79,9 @@ const AdminLoginPage = () => {
         {/* Header Branding */}
         <div className="login-brand-header">
           <Link to="/" className="login-brand-logo-link">
-            <InnoveityBrandLogo size={52} darkBg={true} />
+            <InnoveityBrandLogo size={52} darkBg={false} />
           </Link>
-          <h2 className="login-title">Portal Authorization</h2>
+          <h2 className="login-title">Innoveity Admin Access</h2>
           <p className="login-subtitle">Sign in to access your administrative control system</p>
         </div>
 
@@ -131,10 +123,18 @@ const AdminLoginPage = () => {
               <FiMail className="login-input-icon" />
               <input 
                 type="email" 
-                placeholder="innoveitytech@gmail.com"
+                placeholder="innoveitytech@gmail.com or innoveityadmin@gmail.com"
                 className="login-input"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  setEmail(val);
+                  if (val.toLowerCase().includes('admin') && !val.toLowerCase().includes('super')) {
+                    setRoleMode('Admin');
+                  } else if (val.toLowerCase().includes('tech') || val.toLowerCase().includes('super')) {
+                    setRoleMode('Super Admin');
+                  }
+                }}
                 required
               />
             </div>

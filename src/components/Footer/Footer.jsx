@@ -128,12 +128,12 @@ const Footer = () => {
             <div className="footer-col">
               <h4 className="footer-col-title">Company</h4>
               <ul className="footer-col-list">
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/team">Our Team</a></li>
-                <li><a href="/projects">Portfolio & Projects</a></li>
-                <li><a href="/privacy-policy">Privacy Policy</a></li>
-                <li><a href="/team">Careers</a></li>
-                <li><a href="/contact">Verification</a></li>
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/team">Our Team</Link></li>
+                <li><Link to="/projects">Portfolio & Projects</Link></li>
+                <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link to="/team#careers">Careers</Link></li>
+                <li><Link to="/contact">Verification</Link></li>
               </ul>
             </div>
 

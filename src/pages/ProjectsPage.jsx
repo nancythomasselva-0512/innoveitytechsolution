@@ -4,6 +4,7 @@ import { FiExternalLink, FiGithub, FiCheckCircle, FiArrowUpRight } from 'react-i
 import { motion } from 'framer-motion';
 import { useCMS } from '../context/CMSContext';
 import ProjectsShowcase from '../components/Projects/ProjectsShowcase';
+import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './ProjectsPage.css';
 
 const useScrollObserver = () => {
@@ -135,6 +136,9 @@ const ProjectsPage = () => {
           </div>
         </div>
       </section>
+
+      {/* DYNAMIC CUSTOM SECTIONS */}
+      <DynamicPageSections page="projects" />
 
       {/* CTA Section */}
       <section className="projects-cta-section">

@@ -1,16 +1,18 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FiArrowUpRight } from 'react-icons/fi';
+import { useNavigate, Link } from 'react-router-dom';
+import { FiArrowUpRight, FiBriefcase, FiArrowRight } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useCMS } from '../../context/CMSContext';
 import './Hero.css';
 
 const Hero = () => {
   const navigate = useNavigate();
-  const { homeContent } = useCMS();
+  const { homeContent, careers = [], hiringAlertEnabled } = useCMS();
   const heroRef = useRef(null);
   const [mousePos, setMousePos] = useState({ x: 50, y: 35 });
   const [isHovered, setIsHovered] = useState(false);
+
+  const activeJobs = (careers || []).filter(c => c.status === 'Active');
 
   const partnerLogos = [
     { name: 'MICROSOFT', subtitle: 'ENTERPRISE PARTNER' },
@@ -61,6 +63,31 @@ const Hero = () => {
           
           {/* Left Column: Headline, Tagline, Description, CTA */}
           <div className="hero-left-content">
+            
+            {/* Dynamic Hiring Notification Pill */}
+            {hiringAlertEnabled && activeJobs.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: -12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="hero-hiring-alert-wrapper"
+              >
+                <Link to="/team#careers" className="hero-hiring-badge-pill">
+                  <span className="hiring-live-pulse-container">
+                    <span className="hiring-live-pulse"></span>
+                    <span className="hiring-live-dot"></span>
+                  </span>
+                  <span className="hiring-tag-badge">WE'RE HIRING</span>
+                  <span className="hiring-headline-text">
+                    {activeJobs.length} Open Position{activeJobs.length > 1 ? 's' : ''}: <strong>{activeJobs[0].title}</strong>
+                  </span>
+                  <span className="hiring-arrow-icon">
+                    <FiArrowRight size={14} />
+                  </span>
+                </Link>
+              </motion.div>
+            )}
+
             <h1 className="hero-display-title">
               <span className="brand-word-styled">
                 <span className="char-navy">INNOV</span>

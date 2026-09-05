@@ -37,7 +37,7 @@ const CustomFieldsManager = ({ pageKey, title }) => {
           style={{ background: '#121212', color: '#ffffff', border: 'none', fontWeight: 800 }}
           onClick={() => setShowAddForm(!showAddForm)}
         >
-          <FiPlus /> {showAddForm ? 'Close Form' : '+ Add Custom Field'}
+          <FiPlus /> {showAddForm ? 'Close Form' : 'Add Custom Field'}
         </button>
       </div>
 

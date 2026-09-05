@@ -18,21 +18,24 @@ import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import TermsPage from './pages/TermsPage';
 import RefundPolicyPage from './pages/RefundPolicyPage';
 import MediaPage from './pages/MediaPage';
+import ErrorBoundary from './components/UI/ErrorBoundary';
 import { useCMS } from './context/CMSContext';
 import './App.css';
 
 const AdminRouteDispatcher = () => {
   const { currentUser } = useCMS();
 
-  if (!currentUser) {
-    return <AdminLoginPage />;
-  }
-
-  if (currentUser.role === 'Super Admin') {
-    return <SuperAdminPage />;
-  }
-
-  return <AdminPage />;
+  return (
+    <ErrorBoundary>
+      {!currentUser ? (
+        <AdminLoginPage />
+      ) : currentUser.role === 'Super Admin' ? (
+        <SuperAdminPage />
+      ) : (
+        <AdminPage />
+      )}
+    </ErrorBoundary>
+  );
 };
 
 const ProtectedSuperAdminRoute = ({ children }) => {

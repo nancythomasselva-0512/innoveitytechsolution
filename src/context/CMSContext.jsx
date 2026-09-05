@@ -280,6 +280,31 @@ export const CMSProvider = ({ children }) => {
     seo: [{ id: 1, label: 'Schema Markup Type', value: 'Organization / LocalBusiness' }]
   };
 
+  const defaultContactInquiries = [
+    {
+      id: 201,
+      name: 'Priya Sharma',
+      email: 'priya.sharma@techcorp.in',
+      phone: '+91 98401 23456',
+      company: 'TechCorp Solutions',
+      subject: 'Custom Web Platform & Mobile App Development',
+      message: 'Hi Innoveity Team,\n\nWe are looking to develop a custom enterprise SaaS platform with mobile apps. We would like to schedule a consultation to discuss project architecture, deliverables, and estimated timelines.\n\nBest regards,\nPriya Sharma',
+      date: 'Today',
+      status: 'New'
+    },
+    {
+      id: 202,
+      name: 'Kavitha R',
+      email: 'kavitha.dev@gmail.com',
+      phone: '+91 97890 54321',
+      company: '📄 Resume: Kavitha_FullStack_Resume.pdf',
+      subject: '[Job Application] Senior Full Stack AI Developer',
+      message: '📌 NEW JOB CANDIDATE APPLICATION\n----------------------------------------\n💼 Position Applied: Senior Full Stack AI Developer (Engineering)\n👤 Applicant Name: Kavitha R\n📧 Email Address: kavitha.dev@gmail.com\n📞 Phone Number: +91 97890 54321\n🎯 Years of Experience: 3+ Years\n🌐 Portfolio / LinkedIn: https://github.com/kavitha-dev\n📄 Resume / CV Attached: Kavitha_FullStack_Resume.pdf (1.2 MB)\n\n📝 Cover Letter & Candidate Pitch:\nPassionate full stack developer with 3+ years experience building React, Node.js, and GenAI microservices.\n----------------------------------------',
+      date: 'Today',
+      status: 'New'
+    }
+  ];
+
   const defaultMediaContent = {
     hero: {
       badge: 'INNOVEITY MEDIA',
@@ -383,6 +408,233 @@ export const CMSProvider = ({ children }) => {
     }
   ];
 
+  const defaultInquiries = [];
+
+  const defaultTestimonials = [
+    {
+      id: 1,
+      name: 'Sarah Jenkins',
+      role: 'Chief Technology Officer',
+      company: 'Aura Health Platforms',
+      rating: 5,
+      content: 'Innoveity Tech Solution delivered our AI-driven telemedicine platform ahead of schedule with flawless architecture and high scalability.',
+      avatar: '/Sarah.jpeg'
+    },
+    {
+      id: 2,
+      name: 'David Sterling',
+      role: 'VP of Product Engineering',
+      company: 'Nexis Cloud Global',
+      rating: 5,
+      content: 'Their team designed a stellar modern web application that transformed our enterprise user engagement metrics by over 240%.',
+      avatar: '/David.jpeg'
+    }
+  ];
+
+  const defaultMediaGallery = [
+    {
+      id: 1,
+      title: 'Next-Gen 3D Interactive Brand Commercial',
+      category: 'Brand Commercial',
+      videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      thumbnail: '/media_showcase_1.jpg',
+      description: 'High-impact 3D visual effects and kinetic typography production for global tech launch.'
+    },
+    {
+      id: 2,
+      title: 'Enterprise AI Cloud Telemetry Reel',
+      category: 'Tech Showcase',
+      videoUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      thumbnail: '/media_showcase_2.jpg',
+      description: 'Live interactive dashboard demonstration showing real-time distributed telemetry.'
+    }
+  ];
+
+  const defaultCareers = [
+    {
+      id: 1,
+      title: 'Senior Full Stack AI Developer',
+      department: 'Engineering',
+      location: 'Remote / Chennai',
+      type: 'Full-Time',
+      experience: '3+ Years',
+      status: 'Active',
+      description: 'Lead development of next-generation generative AI web platforms and micro-services architectures.'
+    },
+    {
+      id: 2,
+      title: 'UI/UX Visual Experience Designer',
+      department: 'Creative & Design',
+      location: 'Chennai Hybrid',
+      type: 'Full-Time',
+      experience: '2+ Years',
+      status: 'Active',
+      description: 'Craft immersive 3D interactive user interfaces, motion design systems, and brand visual identities.'
+    }
+  ];
+
+  const defaultBlogPosts = [
+    {
+      id: 1,
+      title: 'Architecting High-Throughput Multi-Tenant AI Applications in 2026',
+      category: 'AI & Cloud',
+      author: 'Nancy Thomas',
+      readTime: '6 min read',
+      date: 'Sep 02, 2026',
+      excerpt: 'A deep-dive into distributed vector search, serverless orchestration, and ultra-low latency real-time pipelines.',
+      coverImage: '/tech_blog_1.png'
+    },
+    {
+      id: 2,
+      title: 'The Art of Smooth 60FPS Micro-Animations in Modern Web Interfaces',
+      category: 'Web Engineering',
+      author: 'Arifbillah',
+      readTime: '4 min read',
+      date: 'Aug 28, 2026',
+      excerpt: 'How hardware-accelerated shaders and Framer Motion create cinematic user journeys without compromising performance.',
+      coverImage: '/tech_blog_2.png'
+    }
+  ];
+
+  const defaultServicesList = [
+    {
+      id: 1,
+      title: 'Enterprise AI & Machine Learning',
+      category: 'AI & Cloud Architecture',
+      tagline: 'Custom deep-learning pipelines, LLM fine-tuning, and automated predictive intelligence.',
+      deliverables: ['Custom Neural Models', 'RAG Vector Indexing', 'Scalable Inference APIs']
+    },
+    {
+      id: 2,
+      title: 'Full-Stack Web & SaaS Engineering',
+      category: 'Product Engineering',
+      tagline: 'High-performance React/Next.js platforms with real-time sync and modern UI/UX.',
+      deliverables: ['Custom Web Applications', 'Multi-Tenant Architecture', 'Ultra-Fast Performance']
+    },
+    {
+      id: 3,
+      title: '3D Interactive Experience & Motion Design',
+      category: 'Creative Technology',
+      tagline: 'Captivating 3D spatial web design, WebGL animations, and cinematic brand identity.',
+      deliverables: ['WebGL Shaders', 'Dynamic 3D Rotators', 'Fluid Micro-Interactions']
+    }
+  ];
+
+  const defaultCustomPageSections = {
+    home: [
+      {
+        id: 'sec-home-why-choose',
+        type: 'features_grid',
+        theme: 'dark',
+        badge: 'ENGINEERING ADVANTAGE',
+        title: 'Why Global Brands Build With Innoveity',
+        subtitle: 'We blend deep technical capability with enterprise-grade security and modern aesthetics.',
+        items: [
+          { title: 'Sub-Second Latency Architecture', desc: 'Optimized cloud pipelines, microservices, and client rendering delivering blisteringly fast user experiences.', tag: 'Performance' },
+          { title: 'Bank-Grade Enterprise Security', desc: 'End-to-end encryption, strict compliance audits, and role-governed data workflows built into the core.', tag: 'Security' },
+          { title: 'AI-Native Workflow Integration', desc: 'Autonomous LLM agents, vector embeddings, and predictive intelligence woven seamlessly into software.', tag: 'Intelligence' },
+          { title: 'Dedicated Post-Launch Engineering', desc: 'Continuous 24/7 SLA monitoring, zero-downtime updates, and proactive scalability improvements.', tag: 'Reliability' }
+        ],
+        ctaText: 'Explore Engineering Capabilities',
+        ctaUrl: '/services',
+        active: true
+      }
+    ],
+    about: [
+      {
+        id: 'sec-about-values',
+        type: 'stats_grid',
+        theme: 'sunset',
+        badge: 'OUR IMPACT & VALUES',
+        title: 'Engineering With Purpose & Scale',
+        subtitle: 'Our key milestones that demonstrate our relentless focus on delivering client success.',
+        items: [
+          { number: '99.98%', label: 'System Uptime SLA', desc: 'Across all deployed enterprise cloud microservices' },
+          { number: '2.4x', label: 'Client Growth Speed', desc: 'Average user engagement acceleration post-launch' },
+          { number: '15+', label: 'Global Tech Stacks', desc: 'Mastery across React, Python AI, Node, AWS & Go' },
+          { number: '100%', label: 'Delivery Integrity', desc: 'Every milestone completed on schedule and within scope' }
+        ],
+        active: true
+      }
+    ],
+    services: [
+      {
+        id: 'sec-services-faq',
+        type: 'faq_accordion',
+        theme: 'light',
+        badge: 'FREQUENTLY ASKED QUESTIONS',
+        title: 'Everything You Need To Know',
+        subtitle: 'Answers to common questions about our engineering engagements, timelines, and deliverables.',
+        items: [
+          { question: 'What is your typical project kickoff timeline?', answer: 'We typically initiate the architecture & discovery phase within 3-5 business days from contract signing, delivering full sprint planning within the first week.' },
+          { question: 'Do you provide post-deployment maintenance and SLAs?', answer: 'Yes, all projects come with dedicated 24/7 technical monitoring, bug warranty periods, and optional continuous feature iteration retainers.' },
+          { question: 'Can you integrate AI and custom LLMs into our existing software?', answer: 'Absolutely. We specialize in retrofitting legacy software with local/cloud LLMs, vector database indexing, and automated AI workflow pipelines.' }
+        ],
+        active: true
+      }
+    ],
+    projects: [
+      {
+        id: 'sec-projects-cta',
+        type: 'banner_cta',
+        theme: 'dark',
+        badge: 'HAVE A CUSTOM VISION?',
+        title: 'Let’s Engineer Your Next Breakthrough Product',
+        subtitle: 'From initial prototype architecture to full cloud deployment, our dedicated team is ready to build your product.',
+        ctaText: 'Schedule Architecture Consultation',
+        ctaUrl: '/contact',
+        secondaryCtaText: 'Explore All Services',
+        secondaryCtaUrl: '/services',
+        active: true
+      }
+    ],
+    team: [
+      {
+        id: 'sec-team-culture',
+        type: 'features_grid',
+        theme: 'light',
+        badge: 'OUR CULTURE & PERKS',
+        title: 'What It Means To Build at Innoveity',
+        subtitle: 'We foster deep technical ownership, continuous learning, and high-impact engineering.',
+        items: [
+          { title: 'Cutting-Edge AI Tech Stack', desc: 'Work directly on state-of-the-art Generative AI, distributed systems, and real-time interactive interfaces.', tag: 'Innovation' },
+          { title: 'Flexible & Hybrid Workflows', desc: 'Autonomous schedules that empower you to do your highest quality creative and engineering work.', tag: 'Flexibility' },
+          { title: 'Accelerated Career Progression', desc: 'Direct mentorship from senior architects and fast-track promotions based on technical impact.', tag: 'Growth' }
+        ],
+        active: true
+      }
+    ],
+    media: [
+      {
+        id: 'sec-media-cta',
+        type: 'banner_cta',
+        theme: 'sunset',
+        badge: 'INNOVEITY MEDIA PRODUCTION',
+        title: 'Ready To Elevate Your Brand’s Visual Story?',
+        subtitle: 'High-end cinema cameras, commercial aerial drones, dynamic editing, and viral social media campaigns tailored for your business.',
+        ctaText: 'Start Your Media Campaign',
+        ctaUrl: '/contact',
+        active: true
+      }
+    ],
+    contact: [
+      {
+        id: 'sec-contact-guarantee',
+        type: 'features_grid',
+        theme: 'dark',
+        badge: 'OUR RESPONSE GUARANTEE',
+        title: 'Fast, Direct & Confidential Communication',
+        subtitle: 'We respect your time and confidentiality from the very first interaction.',
+        items: [
+          { title: '< 24 Hour Response', desc: 'Our engineering leadership reviews and responds to every inquiry within 1 business day.', tag: 'Promptness' },
+          { title: 'Strict NDA & IP Protection', desc: 'Your ideas, proprietary business models, and software architectures are 100% safeguarded.', tag: 'Confidentiality' },
+          { title: 'Free Architecture Scope', desc: 'Receive a high-level technical feasibility breakdown and timeline estimate at zero cost.', tag: 'Consultation' }
+        ],
+        active: true
+      }
+    ]
+  };
+
   // Helper security functions for transient session encryption
   const encryptData = (data) => {
     try {
@@ -441,6 +693,20 @@ export const CMSProvider = ({ children }) => {
   const [customFields, setCustomFields] = useState(() => loadLocalState('custom_fields', defaultCustomFields));
   const [headerFooterSettings, setHeaderFooterSettings] = useState(() => loadLocalState('header_footer', defaultHeaderFooterSettings));
   const [adminUsers, setAdminUsers] = useState(() => loadLocalState('admin_users', defaultAdminAccounts));
+  const [testimonials, setTestimonials] = useState(() => loadLocalState('testimonials', defaultTestimonials));
+  const [mediaGallery, setMediaGallery] = useState(() => loadLocalState('media_gallery', defaultMediaGallery));
+  const [careers, setCareers] = useState(() => loadLocalState('careers', defaultCareers));
+  const [blogPosts, setBlogPosts] = useState(() => loadLocalState('blog_posts', defaultBlogPosts));
+  const [servicesList, setServicesList] = useState(() => loadLocalState('services_list', defaultServicesList));
+  const [hiringAlertEnabled, setHiringAlertEnabled] = useState(() => loadLocalState('hiring_alert_enabled', true));
+  const [customPageSections, setCustomPageSections] = useState(() => loadLocalState('custom_page_sections', defaultCustomPageSections));
+  const [contactInquiries, setContactInquiries] = useState(() => {
+    const loaded = loadLocalState('contact_inquiries', null);
+    if (!loaded || !Array.isArray(loaded) || loaded.length === 0) {
+      return defaultContactInquiries;
+    }
+    return loaded;
+  });
 
   // Auto-persist all CMS state to LocalStorage
   useEffect(() => { saveLocalState('projects', projects); }, [projects]);
@@ -455,11 +721,26 @@ export const CMSProvider = ({ children }) => {
   useEffect(() => { saveLocalState('seo_settings', seoSettings); }, [seoSettings]);
   useEffect(() => { saveLocalState('page_seo_settings', pageSeoSettings); }, [pageSeoSettings]);
   useEffect(() => { saveLocalState('custom_fields', customFields); }, [customFields]);
+  useEffect(() => { saveLocalState('custom_page_sections', customPageSections); }, [customPageSections]);
   useEffect(() => { saveLocalState('header_footer', headerFooterSettings); }, [headerFooterSettings]);
   useEffect(() => { saveLocalState('admin_users', adminUsers); }, [adminUsers]);
+  useEffect(() => { saveLocalState('contact_inquiries', contactInquiries); }, [contactInquiries]);
+  useEffect(() => { saveLocalState('testimonials', testimonials); }, [testimonials]);
+  useEffect(() => { saveLocalState('media_gallery', mediaGallery); }, [mediaGallery]);
+  useEffect(() => { saveLocalState('careers', careers); }, [careers]);
+  useEffect(() => { saveLocalState('blog_posts', blogPosts); }, [blogPosts]);
+  useEffect(() => { saveLocalState('services_list', servicesList); }, [servicesList]);
+  useEffect(() => { saveLocalState('hiring_alert_enabled', hiringAlertEnabled); }, [hiringAlertEnabled]);
 
-  // Transient Admin Session (Starts null so /admin always prompts login)
-  const [currentUser, setCurrentUser] = useState(null);
+  // Transient Admin Session
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = sessionStorage.getItem('cms_session_sec_v1');
+      return saved ? decryptData(saved, null) : null;
+    } catch (e) {
+      return null;
+    }
+  });
 
   useEffect(() => {
     if (currentUser) sessionStorage.setItem('cms_session_sec_v1', encryptData(currentUser));
@@ -498,6 +779,7 @@ export const CMSProvider = ({ children }) => {
       if (s.seo_settings) setSeoSettings(s.seo_settings);
       if (s.page_seo_settings) setPageSeoSettings(s.page_seo_settings);
       if (s.custom_fields) setCustomFields(s.custom_fields);
+      if (s.custom_page_sections) setCustomPageSections(s.custom_page_sections);
       if (s.header_footer_settings) setHeaderFooterSettings(s.header_footer_settings);
 
       setDbStatus('connected');
@@ -547,6 +829,7 @@ export const CMSProvider = ({ children }) => {
       await saveCmsSettingToMySql('seo_settings', seoSettings);
       await saveCmsSettingToMySql('page_seo_settings', pageSeoSettings);
       await saveCmsSettingToMySql('custom_fields', customFields);
+      await saveCmsSettingToMySql('custom_page_sections', customPageSections);
       await saveCmsSettingToMySql('header_footer_settings', headerFooterSettings);
 
       setDbStatus('connected');
@@ -776,7 +1059,10 @@ export const CMSProvider = ({ children }) => {
 
   const loginAdmin = (email, password, requiredRole) => {
     const cleanEmail = (email || '').toLowerCase().trim();
-    const found = adminUsers.find(u => u.email.toLowerCase() === cleanEmail);
+    let found = adminUsers.find(u => u.email.toLowerCase() === cleanEmail);
+    if (!found) {
+      found = defaultAdminAccounts.find(u => u.email.toLowerCase() === cleanEmail);
+    }
 
     if (!found) {
       return { success: false, message: 'Account with this email does not exist.' };
@@ -787,16 +1073,282 @@ export const CMSProvider = ({ children }) => {
     if (found.status !== 'Active') {
       return { success: false, message: 'This account has been suspended. Contact Super Admin.' };
     }
-    if (requiredRole === 'Super Admin' && found.role !== 'Super Admin') {
-      return { success: false, message: 'Access denied: Super Admin privileges required.' };
-    }
 
     const updatedUser = { ...found, lastLogin: 'Just now' };
-    setAdminUsers(prev => prev.map(u => u.id === found.id ? updatedUser : u));
+    setAdminUsers(prev => {
+      if (prev.some(u => u.id === found.id)) {
+        return prev.map(u => u.id === found.id ? updatedUser : u);
+      }
+      return [...prev, updatedUser];
+    });
     setCurrentUser(updatedUser);
     upsertItemToMySql('cms_admin_users', updatedUser);
 
     return { success: true, user: updatedUser };
+  };
+
+  const addInquiry = async (inquiry) => {
+    const newInq = {
+      id: Date.now(),
+      name: inquiry.name,
+      email: inquiry.email,
+      phone: inquiry.phone || 'N/A',
+      company: inquiry.company || 'N/A',
+      subject: inquiry.subject || 'General Inquiry',
+      message: inquiry.message,
+      date: 'Just now',
+      status: 'New',
+      ...inquiry
+    };
+    setContactInquiries(prev => [newInq, ...prev]);
+    await upsertItemToMySql('cms_contact_inquiries', newInq);
+    return newInq;
+  };
+
+  const deleteInquiry = async (id) => {
+    setContactInquiries(prev => prev.filter(i => i.id !== id));
+    await deleteItemFromMySql('cms_contact_inquiries', id);
+  };
+
+  const markInquiryReplied = async (id) => {
+    let updatedInq = null;
+    setContactInquiries(prev => prev.map(i => {
+      if (i.id === id) {
+        updatedInq = { ...i, status: 'Replied' };
+        return updatedInq;
+      }
+      return i;
+    }));
+    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+  };
+
+  const updateInquiryStatus = async (id, status) => {
+    let updatedInq = null;
+    setContactInquiries(prev => prev.map(i => {
+      if (i.id === id) {
+        updatedInq = { ...i, status };
+        return updatedInq;
+      }
+      return i;
+    }));
+    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+  };
+
+  const updateInquiryNotes = async (id, notes) => {
+    let updatedInq = null;
+    setContactInquiries(prev => prev.map(i => {
+      if (i.id === id) {
+        updatedInq = { ...i, internalNotes: notes };
+        return updatedInq;
+      }
+      return i;
+    }));
+    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+  };
+
+  // 1. Testimonials Handlers
+  const addTestimonial = async (item) => {
+    const newTestimonial = {
+      id: Date.now(),
+      name: item.name,
+      role: item.role || 'Client',
+      company: item.company || '',
+      rating: Number(item.rating) || 5,
+      content: item.content,
+      avatar: item.avatar || '/Sarah.jpeg'
+    };
+    setTestimonials(prev => [newTestimonial, ...prev]);
+    await upsertItemToMySql('cms_testimonials', newTestimonial);
+    return newTestimonial;
+  };
+
+  const deleteTestimonial = async (id) => {
+    setTestimonials(prev => prev.filter(t => t.id !== id));
+    await deleteItemFromMySql('cms_testimonials', id);
+  };
+
+  // 2. Media Gallery Handlers
+  const addMediaItem = async (item) => {
+    const newMedia = {
+      id: Date.now(),
+      title: item.title,
+      category: item.category || 'Tech Showcase',
+      videoUrl: item.videoUrl || '',
+      thumbnail: item.thumbnail || '/media_showcase_1.jpg',
+      description: item.description || ''
+    };
+    setMediaGallery(prev => [newMedia, ...prev]);
+    await upsertItemToMySql('cms_media_gallery', newMedia);
+    return newMedia;
+  };
+
+  const deleteMediaItem = async (id) => {
+    setMediaGallery(prev => prev.filter(m => m.id !== id));
+    await deleteItemFromMySql('cms_media_gallery', id);
+  };
+
+  // 3. Careers Handlers
+  const addCareer = async (item) => {
+    const newJob = {
+      id: Date.now(),
+      title: item.title,
+      department: item.department || 'Engineering',
+      location: item.location || 'Remote / Chennai',
+      type: item.type || 'Full-Time',
+      experience: item.experience || '1+ Years',
+      status: 'Active',
+      description: item.description || ''
+    };
+    setCareers(prev => [newJob, ...prev]);
+    await upsertItemToMySql('cms_careers', newJob);
+    return newJob;
+  };
+
+  const deleteCareer = async (id) => {
+    setCareers(prev => prev.filter(c => c.id !== id));
+    await deleteItemFromMySql('cms_careers', id);
+  };
+
+  const toggleCareerStatus = async (id) => {
+    let updatedJob = null;
+    setCareers(prev => prev.map(c => {
+      if (c.id === id) {
+        updatedJob = { ...c, status: c.status === 'Active' ? 'Closed' : 'Active' };
+        return updatedJob;
+      }
+      return c;
+    }));
+    if (updatedJob) await upsertItemToMySql('cms_careers', updatedJob);
+  };
+
+  const toggleHiringAlert = async () => {
+    const nextVal = !hiringAlertEnabled;
+    setHiringAlertEnabled(nextVal);
+    await saveCmsSettingToMySql('hiring_alert_enabled', nextVal);
+    return nextVal;
+  };
+
+  // 4. Blog Posts Handlers
+  const addBlogPost = async (item) => {
+    const newPost = {
+      id: Date.now(),
+      title: item.title,
+      category: item.category || 'Engineering',
+      author: item.author || 'Innoveity Team',
+      readTime: item.readTime || '4 min read',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }),
+      excerpt: item.excerpt || '',
+      coverImage: item.coverImage || '/tech_blog_1.png'
+    };
+    setBlogPosts(prev => [newPost, ...prev]);
+    await upsertItemToMySql('cms_blog_posts', newPost);
+    return newPost;
+  };
+
+  const deleteBlogPost = async (id) => {
+    setBlogPosts(prev => prev.filter(b => b.id !== id));
+    await deleteItemFromMySql('cms_blog_posts', id);
+  };
+
+  // 5. Services Handlers
+  const addServiceItem = async (item) => {
+    const newService = {
+      id: Date.now(),
+      title: item.title,
+      category: item.category || 'Engineering',
+      tagline: item.tagline || '',
+      deliverables: Array.isArray(item.deliverables) 
+        ? item.deliverables 
+        : typeof item.deliverables === 'string'
+          ? item.deliverables.split(',').map(d => d.trim()).filter(Boolean)
+          : []
+    };
+    setServicesList(prev => [newService, ...prev]);
+    await upsertItemToMySql('cms_services_list', newService);
+    return newService;
+  };
+
+  const deleteServiceItem = async (id) => {
+    setServicesList(prev => prev.filter(s => s.id !== id));
+    await deleteItemFromMySql('cms_services_list', id);
+  };
+
+  // 6. Dynamic Custom Page Sections Handlers
+  const addCustomSection = async (pageKey, section) => {
+    const newSec = {
+      id: `sec-${pageKey}-${Date.now()}`,
+      type: section.type || 'features_grid',
+      theme: section.theme || 'dark',
+      badge: section.badge || 'NEW SECTION',
+      title: section.title || 'Dynamic Section Title',
+      subtitle: section.subtitle || '',
+      items: Array.isArray(section.items) ? section.items : [],
+      ctaText: section.ctaText || '',
+      ctaUrl: section.ctaUrl || '',
+      secondaryCtaText: section.secondaryCtaText || '',
+      secondaryCtaUrl: section.secondaryCtaUrl || '',
+      mediaUrl: section.mediaUrl || '',
+      active: section.active !== undefined ? section.active : true,
+      ...section
+    };
+    const updated = {
+      ...customPageSections,
+      [pageKey]: [...(customPageSections[pageKey] || []), newSec]
+    };
+    setCustomPageSections(updated);
+    await saveCmsSettingToMySql('custom_page_sections', updated);
+    return newSec;
+  };
+
+  const updateCustomSection = async (pageKey, sectionId, updatedSection) => {
+    const pageList = customPageSections[pageKey] || [];
+    const updated = {
+      ...customPageSections,
+      [pageKey]: pageList.map(sec => sec.id === sectionId ? { ...sec, ...updatedSection, id: sectionId } : sec)
+    };
+    setCustomPageSections(updated);
+    await saveCmsSettingToMySql('custom_page_sections', updated);
+  };
+
+  const deleteCustomSection = async (pageKey, sectionId) => {
+    const pageList = customPageSections[pageKey] || [];
+    const updated = {
+      ...customPageSections,
+      [pageKey]: pageList.filter(sec => sec.id !== sectionId)
+    };
+    setCustomPageSections(updated);
+    await saveCmsSettingToMySql('custom_page_sections', updated);
+  };
+
+  const toggleCustomSectionStatus = async (pageKey, sectionId) => {
+    const pageList = customPageSections[pageKey] || [];
+    const updated = {
+      ...customPageSections,
+      [pageKey]: pageList.map(sec => sec.id === sectionId ? { ...sec, active: !sec.active } : sec)
+    };
+    setCustomPageSections(updated);
+    await saveCmsSettingToMySql('custom_page_sections', updated);
+  };
+
+  const moveCustomSection = async (pageKey, sectionId, direction) => {
+    const pageList = [...(customPageSections[pageKey] || [])];
+    const index = pageList.findIndex(sec => sec.id === sectionId);
+    if (index === -1) return;
+    if (direction === 'up' && index > 0) {
+      const temp = pageList[index - 1];
+      pageList[index - 1] = pageList[index];
+      pageList[index] = temp;
+    } else if (direction === 'down' && index < pageList.length - 1) {
+      const temp = pageList[index + 1];
+      pageList[index + 1] = pageList[index];
+      pageList[index] = temp;
+    }
+    const updated = {
+      ...customPageSections,
+      [pageKey]: pageList
+    };
+    setCustomPageSections(updated);
+    await saveCmsSettingToMySql('custom_page_sections', updated);
   };
 
   const logoutAdmin = () => {
@@ -817,7 +1369,15 @@ export const CMSProvider = ({ children }) => {
     setSeoSettings(defaultSeoSettings);
     setPageSeoSettings(defaultPageSeoSettings);
     setCustomFields({});
+    setCustomPageSections(defaultCustomPageSections);
     setHeaderFooterSettings(defaultHeaderFooterSettings);
+    setContactInquiries(defaultInquiries);
+    setTestimonials(defaultTestimonials);
+    setMediaGallery(defaultMediaGallery);
+    setCareers(defaultCareers);
+    setBlogPosts(defaultBlogPosts);
+    setServicesList(defaultServicesList);
+    setHiringAlertEnabled(true);
 
     return true;
   };
@@ -833,6 +1393,14 @@ export const CMSProvider = ({ children }) => {
       team, addTeamMember, updateTeamMember, deleteTeamMember, moveTeamMemberUp, moveTeamMemberDown,
       teamHeaderContent, updateTeamHeaderContent,
       contact, updateContact,
+      contactInquiries, addInquiry, deleteInquiry, markInquiryReplied, updateInquiryStatus, updateInquiryNotes,
+      testimonials, addTestimonial, deleteTestimonial,
+      mediaGallery, addMediaItem, deleteMediaItem,
+      careers, addCareer, deleteCareer, toggleCareerStatus,
+      hiringAlertEnabled, setHiringAlertEnabled, toggleHiringAlert,
+      blogPosts, addBlogPost, deleteBlogPost,
+      servicesList, addServiceItem, deleteServiceItem,
+      customPageSections, addCustomSection, updateCustomSection, deleteCustomSection, toggleCustomSectionStatus, moveCustomSection,
       homeContent, updateHomeContent,
       aboutContent, updateAboutContent,
       mediaContent, updateMediaContent,

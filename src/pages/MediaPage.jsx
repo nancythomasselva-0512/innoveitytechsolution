@@ -26,6 +26,7 @@ import {
 } from 'react-icons/fi';
 import LetterReveal from '../components/LetterReveal/LetterReveal';
 import { useCMS } from '../context/CMSContext';
+import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './MediaPage.css';
 
 const useScrollObserver = () => {
@@ -796,7 +797,10 @@ const MediaPage = () => {
         </div>
       </section>
 
-      {/* Final Call to Action Section */}
+      {/* DYNAMIC CUSTOM SECTIONS */}
+      <DynamicPageSections page="media" />
+
+      {/* 7. Bottom Contact / Project CTA Banner */}
       <section className="mp-section mp-cta-section">
         <div className="container">
           <div className="mp-cta-card">

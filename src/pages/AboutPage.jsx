@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useCMS } from '../context/CMSContext';
+import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './AboutPage.css';
 
 // Hook: tracks scroll speed and converts it into a velocity skew angle
@@ -323,6 +324,9 @@ const AboutPage = () => {
           </div>
         </section>
 
+        {/* DYNAMIC CUSTOM SECTIONS */}
+        <DynamicPageSections page="about" />
+
         {/* SECTION 4 — Footer (Full-width Black #0A0A0A) */}
         <footer className="black-footer-section scroll-reveal">
           <div className="footer-inner-container">
@@ -363,8 +367,8 @@ const AboutPage = () => {
               <div className="footer-col">
                 <h4 className="gold-label">Company</h4>
                 <ul className="footer-links">
-                  <li><Link to="/about">Our Team</Link></li>
-                  <li><Link to="/services">Careers</Link></li>
+                  <li><Link to="/team">Our Team</Link></li>
+                  <li><Link to="/team#careers">Careers</Link></li>
                   <li><Link to="/privacy-policy">Privacy Policy</Link></li>
                   <li><Link to="/terms-of-service">Terms of Service</Link></li>
                 </ul>

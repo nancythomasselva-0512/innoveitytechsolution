@@ -3,42 +3,47 @@ import useScrollReveal from '../../hooks/useScrollReveal';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { FaQuoteLeft } from 'react-icons/fa';
 import { ScrollRevealQuote } from '../ScrollRevealQuote/ScrollRevealQuote';
+import { useCMS } from '../../context/CMSContext';
 import './Testimonials.css';
 
-const testimonialsData = [
+const fallbackTestimonials = [
   {
     id: 1,
-    name: 'Robert Fox',
-    role: 'CEO, InnovateX',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
-    text: 'Innoveity Tech Solution transformed our business with their cutting-edge web application. Their team is highly professional, skilled, and delivered beyond our expectations.'
+    name: 'Sarah Jenkins',
+    role: 'Chief Technology Officer',
+    company: 'Aura Health Platforms',
+    image: '/Sarah.jpeg',
+    avatar: '/Sarah.jpeg',
+    content: 'Innoveity Tech Solution delivered our AI-driven telemedicine platform ahead of schedule with flawless architecture and high scalability.',
+    text: 'Innoveity Tech Solution delivered our AI-driven telemedicine platform ahead of schedule with flawless architecture and high scalability.'
   },
   {
     id: 2,
-    name: 'Eleanor Pena',
-    role: 'CTO, TechGrowth',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
-    text: 'The AI solution they built for us reduced our operational costs by 30%. Their expertise in modern technologies and problem-solving approach is truly commendable.'
-  },
-  {
-    id: 3,
-    name: 'Albert Flores',
-    role: 'Founder, CloudSync',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
-    text: 'A fantastic team to work with! They handled our cloud migration seamlessly with zero downtime. Highly recommended for any complex technical challenges.'
+    name: 'David Sterling',
+    role: 'VP of Product Engineering',
+    company: 'Nexis Cloud Global',
+    image: '/David.jpeg',
+    avatar: '/David.jpeg',
+    content: 'Their team designed a stellar modern web application that transformed our enterprise user engagement metrics by over 240%.',
+    text: 'Their team designed a stellar modern web application that transformed our enterprise user engagement metrics by over 240%.'
   }
 ];
 
 const Testimonials = () => {
   const revealRef = useScrollReveal();
+  const { testimonials } = useCMS();
   const [current, setCurrent] = useState(0);
 
+  const list = (testimonials && testimonials.length > 0) ? testimonials : fallbackTestimonials;
+  const activeIndex = current >= list.length ? 0 : current;
+  const activeItem = list[activeIndex];
+
   const nextSlide = () => {
-    setCurrent(current === testimonialsData.length - 1 ? 0 : current + 1);
+    setCurrent(activeIndex === list.length - 1 ? 0 : activeIndex + 1);
   };
 
   const prevSlide = () => {
-    setCurrent(current === 0 ? testimonialsData.length - 1 : current - 1);
+    setCurrent(activeIndex === 0 ? list.length - 1 : activeIndex - 1);
   };
 
   return (
@@ -64,21 +69,25 @@ const Testimonials = () => {
               
               {/* ⭐ Scroll-Linked Word Reveal Quote */}
               <ScrollRevealQuote 
-                key={testimonialsData[current].id}
-                text={testimonialsData[current].text} 
-                darkTheme={true}
+                key={activeItem.id || activeIndex}
+                text={activeItem.content || activeItem.text || ''} 
+                darkTheme={false}
                 className="testimonial-text-reveal"
               />
 
               <div className="testimonial-author">
                 <img 
-                  src={testimonialsData[current].image} 
-                  alt={testimonialsData[current].name} 
+                  src={activeItem.avatar || activeItem.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80'} 
+                  alt={activeItem.name} 
                   className="author-image"
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80';
+                  }}
                 />
                 <div className="author-info">
-                  <h4 className="author-name">{testimonialsData[current].name}</h4>
-                  <p className="author-role">{testimonialsData[current].role}</p>
+                  <h4 className="author-name">{activeItem.name}</h4>
+                  <p className="author-role">{activeItem.role} {activeItem.company ? `• ${activeItem.company}` : ''}</p>
                 </div>
               </div>
             </div>
@@ -89,10 +98,10 @@ const Testimonials = () => {
           </div>
           
           <div className="slider-dots">
-            {testimonialsData.map((_, index) => (
+            {list.map((_, index) => (
               <span 
                 key={index} 
-                className={`dot ${index === current ? 'active' : ''}`}
+                className={`dot ${index === activeIndex ? 'active' : ''}`}
                 onClick={() => setCurrent(index)}
               ></span>
             ))}

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import {
   FiHome, FiFolder, FiUsers, FiFileText, FiPhone, FiInfo, FiDatabase,
   FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
-  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown, FiLayout
+  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown, FiLayout, FiRefreshCw, FiMail,
+  FiStar, FiBriefcase, FiBookOpen, FiBox, FiAward, FiTag
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
@@ -46,84 +47,51 @@ const AdminPage = () => {
   const {
     projects, addProject, updateProject, deleteProject,
     showcaseProjects, addShowcaseProject, updateShowcaseProject, deleteShowcaseProject,
-    showcaseHeader, updateShowcaseHeader,
     team, addTeamMember, updateTeamMember, deleteTeamMember, moveTeamMemberUp, moveTeamMemberDown,
-    teamHeaderContent, updateTeamHeaderContent,
-    contact, updateContact,
-    homeContent, updateHomeContent,
-    mediaContent, updateMediaContent,
-    headerFooterSettings, updateHeaderFooterSettings,
+    contact,
+    contactInquiries, deleteInquiry, markInquiryReplied, updateInquiryStatus, updateInquiryNotes,
+    testimonials, addTestimonial, deleteTestimonial,
+    mediaGallery, addMediaItem, deleteMediaItem,
+    careers, addCareer, deleteCareer, toggleCareerStatus,
+    hiringAlertEnabled, toggleHiringAlert,
+    blogPosts, addBlogPost, deleteBlogPost,
+    servicesList, addServiceItem, deleteServiceItem,
     adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache,
     seedCloudDatabase, dbStatus
   } = useCMS();
 
   const users = adminUsers || [];
+  const inquiries = contactInquiries || [];
+  const reviews = testimonials || [];
+  const mediaItems = mediaGallery || [];
+  const jobs = careers || [];
+  const articles = blogPosts || [];
+  const services = servicesList || [];
+
+  const [inquirySearch, setInquirySearch] = useState('');
+  const [inquiryFilter, setInquiryFilter] = useState('all'); // 'all' | 'New' | 'Replied'
+  const [replyModalInq, setReplyModalInq] = useState(null);
+  const [quickReplyBody, setQuickReplyBody] = useState('');
+
+  const handleSendEmailReply = (inq, customMsg) => {
+    if (markInquiryReplied) {
+      markInquiryReplied(inq.id);
+    }
+    const subject = encodeURIComponent(`Re: ${inq.subject || 'Inquiry - Innoveity Tech Solution'}`);
+    const body = encodeURIComponent(
+      customMsg 
+        ? `Dear ${inq.name},\n\n${customMsg}\n\nBest regards,\nInnoveity Tech Solution Engineering Team\nhttps://innoveitytech.com`
+        : `Dear ${inq.name},\n\nThank you for reaching out to Innoveity Tech Solution regarding "${inq.subject}".\n\nWe have reviewed your request and would be delighted to assist you.\n\nBest regards,\nInnoveity Tech Solution\nhttps://innoveitytech.com`
+    );
+    window.location.href = `mailto:${inq.email}?subject=${subject}&body=${body}`;
+    triggerNotification(`Opened email draft to ${inq.email}!`);
+    setReplyModalInq(null);
+    setQuickReplyBody('');
+  };
 
   const handleLogout = () => {
     logoutAdmin();
     navigate('/admin/login');
-  };
-
-  const [editHeaderFooter, setEditHeaderFooter] = useState(headerFooterSettings || {});
-  const [newNavLink, setNewNavLink] = useState({ name: '', to: '', isPage: true });
-
-  useEffect(() => {
-    if (headerFooterSettings) setEditHeaderFooter(headerFooterSettings);
-  }, [headerFooterSettings]);
-
-  const handleSaveHeaderFooter = (e) => {
-    e.preventDefault();
-    if (updateHeaderFooterSettings) {
-      updateHeaderFooterSettings(editHeaderFooter);
-      triggerNotification('Header & Footer configuration saved successfully!');
-    }
-  };
-
-  const handleAddNavLink = (e) => {
-    e.preventDefault();
-    if (!newNavLink.name || !newNavLink.to) return;
-    const currentLinks = editHeaderFooter.navLinks || [];
-    const updatedLinks = [...currentLinks, { id: Date.now(), ...newNavLink }];
-    const updatedObj = { ...editHeaderFooter, navLinks: updatedLinks };
-    setEditHeaderFooter(updatedObj);
-    if (updateHeaderFooterSettings) {
-      updateHeaderFooterSettings(updatedObj);
-      triggerNotification(`Added navigation link "${newNavLink.name}"`);
-    }
-    setNewNavLink({ name: '', to: '', isPage: true });
-  };
-
-  const handleDeleteNavLink = (index) => {
-    const currentLinks = [...(editHeaderFooter.navLinks || [])];
-    currentLinks.splice(index, 1);
-    const updatedObj = { ...editHeaderFooter, navLinks: currentLinks };
-    setEditHeaderFooter(updatedObj);
-    if (updateHeaderFooterSettings) {
-      updateHeaderFooterSettings(updatedObj);
-      triggerNotification('Removed navigation item');
-    }
-  };
-
-  const moveNavLinkUp = (index) => {
-    if (index <= 0) return;
-    const links = [...(editHeaderFooter.navLinks || [])];
-    const temp = links[index - 1];
-    links[index - 1] = links[index];
-    links[index] = temp;
-    const updatedObj = { ...editHeaderFooter, navLinks: links };
-    setEditHeaderFooter(updatedObj);
-    if (updateHeaderFooterSettings) updateHeaderFooterSettings(updatedObj);
-  };
-
-  const moveNavLinkDown = (index) => {
-    const links = [...(editHeaderFooter.navLinks || [])];
-    if (index >= links.length - 1) return;
-    const temp = links[index + 1];
-    links[index + 1] = links[index];
-    links[index] = temp;
-    const updatedObj = { ...editHeaderFooter, navLinks: links };
-    setEditHeaderFooter(updatedObj);
-    if (updateHeaderFooterSettings) updateHeaderFooterSettings(updatedObj);
   };
 
   // Add User Form State
@@ -141,12 +109,23 @@ const AdminPage = () => {
 
   // CMS Form States
   const [newProject, setNewProject] = useState({ title: '', category: 'Web Development', description: '', image: '' });
-  const [editShowcaseHeader, setEditShowcaseHeader] = useState(showcaseHeader || {});
   const [newShowcaseCard, setNewShowcaseCard] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
   const [newTeam, setNewTeam] = useState({ name: '', role: '', category: 'Team Member', image: '' });
-  const [editTeamHeader, setEditTeamHeader] = useState(teamHeaderContent || {});
-  const [editContact, setEditContact] = useState(contact || {});
-  const [editHome, setEditHome] = useState(homeContent || {});
+
+  // 1. Testimonial Form State
+  const [newTestimonial, setNewTestimonial] = useState({ name: '', role: '', company: '', rating: 5, content: '', avatar: '' });
+
+  // 2. Media Gallery Form State
+  const [newMedia, setNewMedia] = useState({ title: '', category: 'Brand Commercial', videoUrl: '', thumbnail: '', description: '' });
+
+  // 3. Careers Form State
+  const [newCareer, setNewCareer] = useState({ title: '', department: 'Engineering', location: 'Remote / Chennai', type: 'Full-Time', experience: '2+ Years', description: '' });
+
+  // 4. Blog Form State
+  const [newBlog, setNewBlog] = useState({ title: '', category: 'AI & Cloud', author: 'Nancy Thomas', readTime: '5 min read', excerpt: '', coverImage: '' });
+
+  // 5. Services Form State
+  const [newService, setNewService] = useState({ title: '', category: 'AI & Cloud Architecture', tagline: '', deliverables: '' });
 
   // Edit Modal States
   const [editingProjectId, setEditingProjectId] = useState(null);
@@ -157,27 +136,6 @@ const AdminPage = () => {
 
   const [editingTeamId, setEditingTeamId] = useState(null);
   const [editTeamData, setEditTeamData] = useState({ name: '', role: '', category: 'Team Member', image: '' });
-
-  useEffect(() => {
-    if (showcaseHeader) setEditShowcaseHeader(showcaseHeader);
-    if (teamHeaderContent) setEditTeamHeader(teamHeaderContent);
-  }, [showcaseHeader, teamHeaderContent]);
-
-  const handleSaveTeamHeaderSubmit = (e) => {
-    e.preventDefault();
-    if (updateTeamHeaderContent) {
-      updateTeamHeaderContent(editTeamHeader);
-      triggerNotification('Team Section Headings & Subtitles updated!');
-    }
-  };
-
-  const handleSaveShowcaseHeaderSubmit = (e) => {
-    e.preventDefault();
-    if (updateShowcaseHeader) {
-      updateShowcaseHeader(editShowcaseHeader);
-      triggerNotification('3D Showcase Section Header updated successfully!');
-    }
-  };
 
   const handleAddShowcaseSubmit = (e) => {
     e.preventDefault();
@@ -213,11 +171,6 @@ const AdminPage = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    setEditContact(contact || {});
-    setEditHome(homeContent || {});
-  }, [contact, homeContent]);
 
   const triggerNotification = (msg) => {
     setNotification(msg);
@@ -319,85 +272,109 @@ const AdminPage = () => {
     });
   };
 
-  const handleSaveEditTeam = (e) => {
+  const handleAddTestimonialSubmit = (e) => {
     e.preventDefault();
-    updateTeamMember(editingTeamId, editTeamData);
-    setEditingTeamId(null);
-    triggerNotification('Team member updated successfully!');
+    if (!newTestimonial.name || !newTestimonial.content) return;
+    addTestimonial(newTestimonial);
+    setNewTestimonial({ name: '', role: '', company: '', rating: 5, content: '', avatar: '' });
+    triggerNotification('Added client testimonial review!');
   };
 
-  // Dynamic Content Blocks & Media state for Homepage, About Us & Contact
-  const [homeBlocks, setHomeBlocks] = useState([
-    { id: 1, title: 'AI Automation & Cloud Solutions', subtitle: 'Delivering next-gen web architecture and scalable cloud apps.' },
-    { id: 2, title: 'Interactive UI/UX & Dynamic Rotator', subtitle: 'Crafting pixel-perfect web design and fluid micro-animations.' }
-  ]);
-  const [newHomeBlock, setNewHomeBlock] = useState({ title: '', subtitle: '' });
-
-  const [aboutBlocks, setAboutBlocks] = useState([
-    { id: 1, title: 'Engineering Excellence', description: 'Building resilient software products built for modern scale.' },
-    { id: 2, title: 'Agile Delivery', description: 'End-to-end strategy, rapid execution, and continuous optimization.' }
-  ]);
-  const [newAboutBlock, setNewAboutBlock] = useState({ title: '', description: '' });
-
-  const [contactBlocks, setContactBlocks] = useState([
-    { id: 1, title: 'Direct Technical Desk', value: 'tech@innoveitytech.com' },
-    { id: 2, title: 'Headquarters Location', value: 'Chennai, Tamil Nadu, India' }
-  ]);
-  const [newContactBlock, setNewContactBlock] = useState({ title: '', value: '' });
-
-  const handleAddHomeBlock = (e) => {
+  const handleAddMediaSubmit = (e) => {
     e.preventDefault();
-    if (!newHomeBlock.title) return;
-    setHomeBlocks([...homeBlocks, { id: Date.now(), ...newHomeBlock }]);
-    setNewHomeBlock({ title: '', subtitle: '' });
-    triggerNotification('Added new Homepage content block!');
+    if (!newMedia.title) return;
+    addMediaItem(newMedia);
+    setNewMedia({ title: '', category: 'Brand Commercial', videoUrl: '', thumbnail: '', description: '' });
+    triggerNotification('Added media video showcase item!');
   };
 
-  const handleDeleteHomeBlock = (id) => {
-    setHomeBlocks(homeBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed Homepage content block');
-  };
-
-  const handleAddAboutBlock = (e) => {
+  const handleAddCareerSubmit = (e) => {
     e.preventDefault();
-    if (!newAboutBlock.title) return;
-    setAboutBlocks([...aboutBlocks, { id: Date.now(), ...newAboutBlock }]);
-    setNewAboutBlock({ title: '', description: '' });
-    triggerNotification('Added new About Us content block!');
+    if (!newCareer.title) return;
+    addCareer(newCareer);
+    setNewCareer({ title: '', department: 'Engineering', location: 'Remote / Chennai', type: 'Full-Time', experience: '2+ Years', description: '' });
+    triggerNotification('Posted new career opening!');
   };
 
-  const handleDeleteAboutBlock = (id) => {
-    setAboutBlocks(aboutBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed About Us content block');
-  };
-
-  const handleAddContactBlock = (e) => {
+  const handleAddBlogSubmit = (e) => {
     e.preventDefault();
-    if (!newContactBlock.title) return;
-    setContactBlocks([...contactBlocks, { id: Date.now(), ...newContactBlock }]);
-    setNewContactBlock({ title: '', value: '' });
-    triggerNotification('Added new Contact channel block!');
+    if (!newBlog.title || !newBlog.excerpt) return;
+    addBlogPost(newBlog);
+    setNewBlog({ title: '', category: 'AI & Cloud', author: 'Nancy Thomas', readTime: '5 min read', excerpt: '', coverImage: '' });
+    triggerNotification('Published new tech blog article!');
   };
 
-  const handleDeleteContactBlock = (id) => {
-    setContactBlocks(contactBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed Contact channel block');
-  };
-
-  const handleSaveContact = (e) => {
+  const handleAddServiceSubmit = (e) => {
     e.preventDefault();
-    updateContact(editContact);
-    triggerNotification('Contact details updated!');
-  };
-
-  const handleSaveHome = (e) => {
-    e.preventDefault();
-    updateHomeContent(editHome);
-    triggerNotification('Homepage copy updated!');
+    if (!newService.title) return;
+    addServiceItem(newService);
+    setNewService({ title: '', category: 'AI & Cloud Architecture', tagline: '', deliverables: '' });
+    triggerNotification('Added new solution service package!');
   };
 
   return (
     <div className="admin-layout">
+
+      {/* QUICK EMAIL REPLY MODAL OVERLAY */}
+      {replyModalInq && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card">
+            <div className="dash-modal-header">
+              <h3 className="dash-modal-title">Reply to {replyModalInq.name}</h3>
+              <button className="dash-modal-close-btn" onClick={() => setReplyModalInq(null)}><FiX /></button>
+            </div>
+            <form onSubmit={(e) => { e.preventDefault(); handleSendEmailReply(replyModalInq, quickReplyBody); }} className="dash-form-grid">
+              <div className="dash-field-group">
+                <label className="dash-label">Recipient Email</label>
+                <input
+                  type="email"
+                  className="dash-input-styled"
+                  value={replyModalInq.email}
+                  disabled
+                />
+              </div>
+
+              <div className="dash-field-group">
+                <label className="dash-label">Inquiry Subject</label>
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  value={replyModalInq.subject || 'General Inquiry'}
+                  disabled
+                />
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Client's Received Message</label>
+                <div style={{ background: '#f8fafc', padding: '12px', borderRadius: '10px', border: '1px solid #e2e8f0', fontSize: '0.84rem', color: '#475569', maxHeight: '90px', overflowY: 'auto' }}>
+                  {replyModalInq.message}
+                </div>
+              </div>
+
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Your Email Reply Message</label>
+                <textarea
+                  className="dash-input-styled"
+                  style={{ height: '120px' }}
+                  placeholder="Type your response message here..."
+                  value={quickReplyBody}
+                  onChange={(e) => setQuickReplyBody(e.target.value)}
+                  required
+                ></textarea>
+              </div>
+
+              <div className="dash-modal-actions">
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setReplyModalInq(null)}>
+                  Cancel
+                </button>
+                <button type="submit" className="action-pill-btn primary-pill" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none' }}>
+                  <FiMail /> Send Email Draft
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* EDIT 3D SHOWCASE CARD MODAL OVERLAY */}
       {editingShowcaseId && (
@@ -643,7 +620,7 @@ const AdminPage = () => {
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
-              <InnoveityBrandLogo size={42} darkBg={true} />
+              <InnoveityBrandLogo size={42} darkBg={false} />
               <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
                 <FiX />
               </button>
@@ -655,20 +632,9 @@ const AdminPage = () => {
           )}
         </div>
 
-        {/* User Card */}
-        <div className="sidebar-user-card">
-          <div className="dash-avatar-circle">
-            {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : 'AD'}
-          </div>
-          <div className="user-info">
-            <h4>{currentUser?.name || 'Admin User'}</h4>
-            <span className="user-role-tag">{currentUser?.role || 'Admin Portal'}</span>
-          </div>
-        </div>
-
         {/* Vertical Navigation Items */}
         <nav className="sidebar-nav-menu">
-          <span className="nav-section-title">Admin Operations</span>
+          <span className="nav-section-title">Core Operations</span>
 
           <button
             className={`nav-item-btn ${activeTab === 'overview' ? 'active' : ''}`}
@@ -685,6 +651,19 @@ const AdminPage = () => {
             <span className="nav-icon"><FiDatabase /></span>
             <span className="nav-label">User Database</span>
             <span className="nav-badge">{users.length}</span>
+          </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'contact' ? 'active' : ''}`}
+            onClick={() => setActiveTab('contact')}
+          >
+            <span className="nav-icon"><FiMail /></span>
+            <span className="nav-label">Inquiries & Applications</span>
+            {inquiries.length > 0 && (
+              <span className="nav-badge" style={{ background: inquiries.some(i => i.status === 'New') ? '#ea580c' : '#64748b' }}>
+                {inquiries.length}
+              </span>
+            )}
           </button>
 
           <button
@@ -705,20 +684,51 @@ const AdminPage = () => {
             <span className="nav-badge">{team ? team.length : 0}</span>
           </button>
 
+          <span className="nav-section-title" style={{ marginTop: '12px' }}>Content & Business</span>
+
           <button
-            className={`nav-item-btn ${activeTab === 'contact' ? 'active' : ''}`}
-            onClick={() => setActiveTab('contact')}
+            className={`nav-item-btn ${activeTab === 'testimonials' ? 'active' : ''}`}
+            onClick={() => setActiveTab('testimonials')}
           >
-            <span className="nav-icon"><FiPhone /></span>
-            <span className="nav-label">Contact Inquiries</span>
+            <span className="nav-icon"><FiStar /></span>
+            <span className="nav-label">Client Reviews</span>
+            <span className="nav-badge">{reviews.length}</span>
           </button>
 
           <button
-            className={`nav-item-btn ${activeTab === 'header_footer' ? 'active' : ''}`}
-            onClick={() => setActiveTab('header_footer')}
+            className={`nav-item-btn ${activeTab === 'media_gallery' ? 'active' : ''}`}
+            onClick={() => setActiveTab('media_gallery')}
           >
-            <span className="nav-icon"><FiLayers /></span>
-            <span className="nav-label">Header & Footer</span>
+            <span className="nav-icon"><FiVideo /></span>
+            <span className="nav-label">Media & Videos</span>
+            <span className="nav-badge">{mediaItems.length}</span>
+          </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'careers' ? 'active' : ''}`}
+            onClick={() => setActiveTab('careers')}
+          >
+            <span className="nav-icon"><FiBriefcase /></span>
+            <span className="nav-label">Careers Board</span>
+            <span className="nav-badge">{jobs.length}</span>
+          </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'blog' ? 'active' : ''}`}
+            onClick={() => setActiveTab('blog')}
+          >
+            <span className="nav-icon"><FiBookOpen /></span>
+            <span className="nav-label">Tech Blog & Articles</span>
+            <span className="nav-badge">{articles.length}</span>
+          </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'services' ? 'active' : ''}`}
+            onClick={() => setActiveTab('services')}
+          >
+            <span className="nav-icon"><FiBox /></span>
+            <span className="nav-label">Services & Offerings</span>
+            <span className="nav-badge">{services.length}</span>
           </button>
         </nav>
 
@@ -743,10 +753,14 @@ const AdminPage = () => {
             <h1>
               {activeTab === 'overview' && 'Admin Portal Overview'}
               {activeTab === 'users' && 'User Access & Account Directory'}
+              {activeTab === 'contact' && 'Customer Inquiries & Lead Pipeline'}
               {activeTab === 'projects' && 'Projects Portfolio Operations'}
               {activeTab === 'team' && 'Team Roster Directory'}
-              {activeTab === 'contact' && 'Contact Form Inquiries & Settings'}
-              {activeTab === 'header_footer' && 'Header, Footer & Navigation Settings'}
+              {activeTab === 'testimonials' && 'Client Testimonials & Ratings'}
+              {activeTab === 'media_gallery' && 'Media Division & Video Showcase'}
+              {activeTab === 'careers' && 'Careers & Job Openings Management'}
+              {activeTab === 'blog' && 'Tech Blog & Engineering Articles'}
+              {activeTab === 'services' && 'Services & Solution Packages'}
             </h1>
             <p>Admin Workspace • Synchronized live with CMS.</p>
           </div>
@@ -758,19 +772,9 @@ const AdminPage = () => {
               </div>
             )}
 
-            <div className="dash-search-pill">
-              <FiSearch />
-              <input
-                type="text"
-                placeholder="Search..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
             <button
               className="btn-live-preview"
-              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
               onClick={async () => {
                 if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
                   const ok = await seedCloudDatabase();
@@ -784,7 +788,7 @@ const AdminPage = () => {
 
             <button
               className="btn-live-preview"
-              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 700 }}
               onClick={() => {
                 if (window.confirm('Are you sure you want to clear all system & CMS cache? This will reset all CMS cache storage.')) {
                   clearAllCmsCache();
@@ -800,8 +804,8 @@ const AdminPage = () => {
               <FiSettings />
             </Link>
 
-            <Link to="/" className="btn-live-preview" target="_blank" style={{ whiteSpace: 'nowrap' }}>
-              Live Preview <FiExternalLink />
+            <Link to="/" className="btn-live-preview" target="_blank" style={{ whiteSpace: 'nowrap', fontWeight: 700 }}>
+              Live Site <FiExternalLink />
             </Link>
           </div>
         </header>
@@ -835,12 +839,14 @@ const AdminPage = () => {
                 <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects ? projects.filter(p => !p.image).length : 0} Active ] In Progress</div>
               </div>
 
-              {/* CARD 4: PENDING PROJECTS */}
-              <div className="donezo-stat-card">
+              {/* CARD 4: PENDING INQUIRIES */}
+              <div className="donezo-stat-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('contact')}>
                 <span className="donezo-arrow-circle">↗</span>
-                <span className="donezo-stat-title">Pending Inquiries</span>
-                <div className="donezo-stat-digit">{contactBlocks ? contactBlocks.length : 0}</div>
-                <div className="donezo-badge-tag" style={{ color: '#ea580c' }}>Active Channels</div>
+                <span className="donezo-stat-title">Customer Inquiries</span>
+                <div className="donezo-stat-digit">{inquiries ? inquiries.length : 0}</div>
+                <div className="donezo-badge-tag" style={{ color: '#ea580c' }}>
+                  <FiMail /> [ {inquiries.filter(i => i.status === 'New').length} New ] Direct Messages
+                </div>
               </div>
             </div>
 
@@ -1045,20 +1051,52 @@ const AdminPage = () => {
                   <button className="chart-dropdown-pill" onClick={() => setActiveTab('team')}>+ Add Member</button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div
+                  className="team-collab-scroll-list"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    paddingRight: '6px'
+                  }}
+                >
                   {team && team.length > 0 ? (
-                    team.slice(0, 4).map((m, idx) => (
-                      <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderBottom: idx < 3 ? '1px solid #f1f5f9' : 'none' }}>
+                    team.map((m, idx) => (
+                      <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 0', borderBottom: idx < team.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                           {m.image ? (
-                            <img src={m.image} alt={m.name} style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }} />
-                          ) : (
-                            <div style={{ width: '34px', height: '34px', borderRadius: '50%', background: '#fed7aa', color: '#ea580c', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.8rem' }}>
-                              {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
-                            </div>
-                          )}
+                            <img
+                              src={m.image}
+                              alt={m.name}
+                              style={{ width: '34px', height: '34px', borderRadius: '50%', objectFit: 'cover' }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = 'none';
+                                e.target.nextSibling && (e.target.nextSibling.style.display = 'flex');
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            style={{
+                              width: '34px',
+                              height: '34px',
+                              borderRadius: '50%',
+                              background: '#fed7aa',
+                              color: '#ea580c',
+                              fontWeight: 800,
+                              display: m.image ? 'none' : 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '0.8rem',
+                              flexShrink: 0
+                            }}
+                          >
+                            {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
+                          </div>
                           <div>
-                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#0f172a' }}>{m.name}</div>
+                            <div style={{ fontWeight: 700, fontSize: '0.85rem', color: '#082233' }}>{m.name}</div>
                             <div style={{ fontSize: '0.72rem', color: '#94a3b8' }}>{m.role || 'Innoveity Engineer'}</div>
                           </div>
                         </div>
@@ -1132,77 +1170,111 @@ const AdminPage = () => {
                   </span>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
                   <button
                     onClick={() => setActiveTab('projects')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fed7aa', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiFolder />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Add Project
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Projects
                       </div>
-                      <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Portfolio items
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {projects.length} Items
                       </div>
                     </div>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('team')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fff7ed', color: '#ff6b00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiUsers />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Add Member
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Team Roster
                       </div>
-                      <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Roster directory
-                      </div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => setActiveTab('users')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
-                  >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
-                      <FiDatabase />
-                    </div>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        User Accounts
-                      </div>
-                      <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Access directory
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {team.length} Members
                       </div>
                     </div>
                   </button>
 
                   <button
                     onClick={() => setActiveTab('contact')}
-                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '10px 12px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
                   >
-                    <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: '#fff7ed', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', flexShrink: 0, fontWeight: 800 }}>
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#eff6ff', color: '#3b82f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
                       <FiPhone />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Contact Details
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Inquiries
                       </div>
-                      <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        Inquiries & desk
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {inquiries.length} Inbox
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab('testimonials')}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                  >
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#fef3c7', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
+                      <FiStar />
+                    </div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Reviews
+                      </div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {reviews.length} Verified
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab('media_gallery')}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                  >
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#f5f3ff', color: '#8b5cf6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
+                      <FiVideo />
+                    </div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Media Reel
+                      </div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {mediaItems.length} Videos
+                      </div>
+                    </div>
+                  </button>
+
+                  <button
+                    onClick={() => setActiveTab('careers')}
+                    style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '14px', padding: '10px', textAlign: 'left', cursor: 'pointer', transition: 'all 0.2s ease', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}
+                  >
+                    <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.95rem', flexShrink: 0, fontWeight: 800 }}>
+                      <FiBriefcase />
+                    </div>
+                    <div style={{ minWidth: 0, flex: 1 }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.78rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        Careers
+                      </div>
+                      <div style={{ fontSize: '0.68rem', color: '#64748b' }}>
+                        {jobs.length} Openings
                       </div>
                     </div>
                   </button>
                 </div>
 
-                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
+                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#ea580c', fontWeight: 700 }}>
                   <span>Live Site Status</span>
                   <a href="/" target="_blank" rel="noreferrer" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     Preview <FiExternalLink />
@@ -1232,76 +1304,9 @@ const AdminPage = () => {
               </button>
             </div>
 
-            {/* Showcase Header Form */}
-            <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
-              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Showcase Section Header Copy</h4>
-              <form onSubmit={handleSaveShowcaseHeaderSubmit} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">Badge Pill Text</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. OUR PROJECTS"
-                    value={editShowcaseHeader.badge || ''}
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, badge: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Title Line 1</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. We Help Brands"
-                    value={editShowcaseHeader.titleLine1 || ''}
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleLine1: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Title Highlight (Accent Text)</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. Win in the Digital Space"
-                    value={editShowcaseHeader.titleHighlight || ''}
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, titleHighlight: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">CTA Button Label</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. View Our Work"
-                    value={editShowcaseHeader.ctaText || ''}
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, ctaText: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Subtitle / Description</label>
-                  <textarea
-                    className="dash-input-styled"
-                    style={{ height: '70px' }}
-                    placeholder="Subtitle text..."
-                    value={editShowcaseHeader.subtitle || ''}
-                    onChange={(e) => setEditShowcaseHeader({ ...editShowcaseHeader, subtitle: e.target.value })}
-                  ></textarea>
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Update Showcase Header
-                  </button>
-                </div>
-              </form>
-            </div>
-
             {/* Add Showcase Card Form */}
             <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
-              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Add New 3D Showcase Card</h4>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#082233', fontWeight: 700 }}>Add New 3D Showcase Card</h4>
               <form onSubmit={handleAddShowcaseSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Category Tag / Badge</label>
@@ -1384,7 +1389,7 @@ const AdminPage = () => {
 
             {/* Showcase Cards Table */}
             <div className="chart-header-row" style={{ marginTop: '20px' }}>
-              <h4 style={{ margin: 0, fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
                 Active 3D Showcase Cards ({showcaseProjects ? showcaseProjects.length : 0})
               </h4>
             </div>
@@ -1412,10 +1417,10 @@ const AdminPage = () => {
                         <img src={card.image || '/tech_blog_1.png'} alt={card.title} style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }} />
                       </td>
                       <td>
-                        <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block' }}>{card.title}</strong>
+                        <strong style={{ fontSize: '0.92rem', color: '#082233', display: 'block' }}>{card.title}</strong>
                         <span className="category-badge-pill" style={{ marginTop: '4px' }}>{card.tag}</span>
                       </td>
-                      <td style={{ color: '#047857', fontWeight: 600, fontSize: '0.84rem' }}>{card.subtitle}</td>
+                      <td style={{ color: '#ea580c', fontWeight: 600, fontSize: '0.84rem' }}>{card.subtitle}</td>
                       <td>
                         <p style={{ color: '#475569', fontSize: '0.84rem', margin: '0 0 6px 0', lineHeight: '1.4' }}>{card.description}</p>
                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
@@ -1525,7 +1530,7 @@ const AdminPage = () => {
                     <td>
                       <img src={p.image || '/service_software.png'} alt={p.title} style={{ width: '46px', height: '46px', borderRadius: '12px', objectFit: 'cover' }} />
                     </td>
-                    <td><strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>{p.title}</strong></td>
+                    <td><strong style={{ fontSize: '0.95rem', color: '#082233' }}>{p.title}</strong></td>
                     <td><span className="category-badge-pill">{p.category}</span></td>
                     <td style={{ color: '#475569', fontSize: '0.86rem', lineHeight: '1.5' }}>{p.description}</td>
                     <td>
@@ -1545,103 +1550,27 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* TAB 3: TEAM ROSTER WORKSPACE */}
+        {/* TAB 3: TEAM ROSTER WORKSPACE (ADD & DELETE ONLY - NO UI EDITING) */}
         {activeTab === 'team' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-
-            {/* ⭐ SECTION 0: EDIT TEAM SECTION HEADINGS & SUBTITLES */}
-            <div className="chart-header-row">
-              <h3 className="chart-title">Edit Team Section Headings & Subtitles</h3>
+            <div className="chart-header-row" style={{ marginBottom: '16px' }}>
+              <div>
+                <h3 className="chart-title">Engineering & Creative Team Management</h3>
+                <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '2px 0 0' }}>
+                  Add new personnel to the company roster and manage active team member records.
+                </p>
+              </div>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
             </div>
 
-            <div className="dash-form-wrapper" style={{ marginBottom: '32px' }}>
-              <form onSubmit={handleSaveTeamHeaderSubmit} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">Leadership Badge Tag</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. EXECUTIVE LEADERSHIP"
-                    value={editTeamHeader.leadershipBadge || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipBadge: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Leadership Heading Title (Line 1)</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. Founder &"
-                    value={editTeamHeader.leadershipTitleLine1 || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipTitleLine1: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Leadership Heading Highlight</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. Executive Leadership"
-                    value={editTeamHeader.leadershipTitleHighlight || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipTitleHighlight: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Leadership Subtitle Sentence</label>
-                  <textarea
-                    className="dash-input-styled"
-                    style={{ height: '60px' }}
-                    placeholder="e.g. Guiding our technology vision, strategic growth, and engineering excellence."
-                    value={editTeamHeader.leadershipSubtitle || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, leadershipSubtitle: e.target.value })}
-                  ></textarea>
-                </div>
-
-                <div className="dash-field-group full-width" style={{ borderTop: '1px dashed #e2e8f0', paddingTop: '16px', marginTop: '8px' }}>
-                  <label className="dash-label">Team Members Section Title</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    placeholder="e.g. Our Engineering & Creative Experts"
-                    value={editTeamHeader.teamTitle || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, teamTitle: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Team Members Section Subtitle Sentence</label>
-                  <textarea
-                    className="dash-input-styled"
-                    style={{ height: '60px' }}
-                    placeholder="e.g. The brilliant minds behind our innovative solutions."
-                    value={editTeamHeader.teamSubtitle || ''}
-                    onChange={(e) => setEditTeamHeader({ ...editTeamHeader, teamSubtitle: e.target.value })}
-                  ></textarea>
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save Headings & Subtitles
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* ⭐ SECTION 1: ADD TEAM MEMBER */}
-            <div className="chart-header-row" style={{ borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
-              <h3 className="chart-title">Add Team Member</h3>
-            </div>
-
-            <div className="dash-form-wrapper">
+            {/* SECTION 1: ADD TEAM MEMBER FORM */}
+            <div className="dash-form-wrapper" style={{ marginBottom: '28px' }}>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#082233', fontWeight: 700 }}>Add New Team Member</h4>
               <form onSubmit={handleAddTeamSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
-                  <label className="dash-label">Member Name</label>
+                  <label className="dash-label">Member Full Name</label>
                   <input
                     type="text"
                     placeholder="e.g. Arifbillah"
@@ -1653,10 +1582,10 @@ const AdminPage = () => {
                 </div>
 
                 <div className="dash-field-group">
-                  <label className="dash-label">Role / Position</label>
+                  <label className="dash-label">Role / Position Title</label>
                   <input
                     type="text"
-                    placeholder="e.g. Founder & Managing Director"
+                    placeholder="e.g. Full Stack AI Developer"
                     className="dash-input-styled"
                     value={newTeam.role}
                     onChange={(e) => setNewTeam({ ...newTeam, role: e.target.value })}
@@ -1665,19 +1594,19 @@ const AdminPage = () => {
                 </div>
 
                 <div className="dash-field-group">
-                  <label className="dash-label">Category / Tier</label>
+                  <label className="dash-label">Position Tier</label>
                   <select
                     className="dash-input-styled"
                     value={newTeam.category}
                     onChange={(e) => setNewTeam({ ...newTeam, category: e.target.value })}
                   >
+                    <option value="Team Member">Team Member (Engineering / Creative)</option>
                     <option value="Leadership">Leadership (Founder & CEO)</option>
-                    <option value="Team Member">Team Member</option>
                   </select>
                 </div>
 
                 <div className="dash-field-group full-width">
-                  <label className="dash-label">Profile Picture</label>
+                  <label className="dash-label">Profile Photo (Optional)</label>
                   <input
                     type="file"
                     accept="image/*"
@@ -1691,13 +1620,13 @@ const AdminPage = () => {
 
                 <div className="dash-field-group full-width">
                   <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiPlus /> Add Member
+                    <FiPlus /> Add Member to Roster
                   </button>
                 </div>
               </form>
             </div>
 
-            {/* SECTION 1: LEADERSHIP ROSTER (FOUNDER & CEO) */}
+            {/* SECTION 2: ACTIVE TEAM ROSTERS */}
             {(() => {
               const leadershipList = (team || []).filter(m =>
                 m.category === 'Leadership' ||
@@ -1708,72 +1637,80 @@ const AdminPage = () => {
 
               return (
                 <>
-                  <div className="chart-header-row" style={{ marginTop: '36px' }}>
-                    <h3 className="chart-title" style={{ color: '#047857', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      ★ Executive Leadership Roster (Founder & CEO) ({leadershipList.length})
-                    </h3>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
-                    {leadershipList.map((m, idx) => (
-                      <div key={m.id} style={{
-                        background: '#fff7ed',
-                        padding: '20px',
-                        borderRadius: '20px',
-                        border: '2px solid #ff6b00',
-                        textAlign: 'center',
-                        position: 'relative'
-                      }}>
-                        <span style={{
-                          position: 'absolute',
-                          top: '12px',
-                          right: '12px',
-                          background: '#ea580c',
-                          color: 'white',
-                          fontSize: '0.68rem',
-                          fontWeight: 800,
-                          padding: '3px 8px',
-                          borderRadius: '12px',
-                          textTransform: 'uppercase'
-                        }}>
-                          ★ Leadership
-                        </span>
-
-                        <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ea580c', marginBottom: '10px', marginTop: '10px' }} />
-                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#047857', fontWeight: 700 }}>{m.role}</p>
-
-                        <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
-                          <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
-                            <FiArrowUp />
-                          </button>
-                          <button className="chart-dropdown-pill" title="Move Down" onClick={() => moveTeamMemberDown(m.id)} disabled={idx === leadershipList.length - 1} style={{ opacity: idx === leadershipList.length - 1 ? 0.4 : 1, cursor: idx === leadershipList.length - 1 ? 'not-allowed' : 'pointer' }}>
-                            <FiArrowDown />
-                          </button>
-                          <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
-                            <FiEdit2 /> Edit
-                          </button>
-                          <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
-                            <FiTrash2 /> Remove
-                          </button>
-                        </div>
+                  {leadershipList.length > 0 && (
+                    <>
+                      <div className="chart-header-row" style={{ marginTop: '24px' }}>
+                        <h3 className="chart-title" style={{ color: '#ea580c', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          ★ Executive Leadership ({leadershipList.length})
+                        </h3>
                       </div>
-                    ))}
-                  </div>
 
-                  {/* SECTION 2: TEAM MEMBERS & EXPERTS ROSTER */}
-                  <div className="chart-header-row" style={{ marginTop: '40px', borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
+                        {leadershipList.map((m, idx) => (
+                          <div key={m.id || idx} style={{
+                            background: '#fff7ed',
+                            padding: '20px',
+                            borderRadius: '20px',
+                            border: '2px solid #ff6b00',
+                            textAlign: 'center',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            position: 'relative'
+                          }}>
+                            <span style={{
+                              position: 'absolute',
+                              top: '12px',
+                              right: '12px',
+                              background: '#ea580c',
+                              color: 'white',
+                              fontSize: '0.68rem',
+                              fontWeight: 800,
+                              padding: '3px 8px',
+                              borderRadius: '12px',
+                              textTransform: 'uppercase'
+                            }}>
+                              ★ Leadership
+                            </span>
+
+                            <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ea580c', marginBottom: '10px', marginTop: '10px' }} />
+                            <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#082233', textAlign: 'center', width: '100%' }}>{m.name}</h4>
+                            <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ea580c', fontWeight: 700, textAlign: 'center', width: '100%' }}>{m.role}</p>
+
+                            <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                              <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
+                                <FiArrowUp />
+                              </button>
+                              <button className="chart-dropdown-pill" title="Move Down" onClick={() => moveTeamMemberDown(m.id)} disabled={idx === leadershipList.length - 1} style={{ opacity: idx === leadershipList.length - 1 ? 0.4 : 1, cursor: idx === leadershipList.length - 1 ? 'not-allowed' : 'pointer' }}>
+                                <FiArrowDown />
+                              </button>
+                              <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
+                                <FiTrash2 /> Remove
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
+                  <div className="chart-header-row" style={{ marginTop: '36px', borderTop: '2px dashed #e2e8f0', paddingTop: '24px' }}>
                     <h3 className="chart-title">Engineering & Creative Team Roster ({teamList.length})</h3>
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginTop: '16px' }}>
                     {teamList.map((m, idx) => (
-                      <div key={m.id} style={{
+                      <div key={m.id || idx} style={{
                         background: '#f8fafc',
                         padding: '20px',
                         borderRadius: '20px',
                         border: '1px solid #e2e8f0',
                         textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         position: 'relative'
                       }}>
                         <span style={{
@@ -1792,8 +1729,8 @@ const AdminPage = () => {
                         </span>
 
                         <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ff6b00', marginBottom: '10px', marginTop: '10px' }} />
-                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700 }}>{m.role}</p>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#082233', textAlign: 'center', width: '100%' }}>{m.name}</h4>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700, textAlign: 'center', width: '100%' }}>{m.role}</p>
 
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
@@ -1801,9 +1738,6 @@ const AdminPage = () => {
                           </button>
                           <button className="chart-dropdown-pill" title="Move Down" onClick={() => moveTeamMemberDown(m.id)} disabled={idx === teamList.length - 1} style={{ opacity: idx === teamList.length - 1 ? 0.4 : 1, cursor: idx === teamList.length - 1 ? 'not-allowed' : 'pointer' }}>
                             <FiArrowDown />
-                          </button>
-                          <button className="chart-dropdown-pill" onClick={() => handleStartEditTeam(m)}>
-                            <FiEdit2 /> Edit
                           </button>
                           <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={() => deleteTeamMember(m.id)}>
                             <FiTrash2 /> Remove
@@ -1818,123 +1752,221 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* TAB 4: CONTACT DETAILS WORKSPACE */}
+        {/* TAB 4: CLIENT INQUIRIES & COMMUNICATION INBOX (REPLY BY EMAIL ONLY) */}
         {activeTab === 'contact' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-            <div className="chart-header-row">
-              <h3 className="chart-title">Contact & Communication Settings</h3>
+            <div className="chart-header-row" style={{ marginBottom: '20px' }}>
+              <div>
+                <h3 className="chart-title">Customer Inquiries & Communication Inbox</h3>
+                <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '2px 0 0' }}>
+                  Review incoming website contact inquiries, read project details, and reply directly via email.
+                </p>
+              </div>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
             </div>
 
-            <div className="dash-form-wrapper">
-              <form onSubmit={handleSaveContact} className="dash-form-grid">
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Target Notification Email</label>
-                  <input
-                    type="email"
-                    className="dash-input-styled"
-                    value={editContact.email || ''}
-                    onChange={(e) => setEditContact({ ...editContact, email: e.target.value })}
-                    required
-                  />
-                </div>
+            {/* INQUIRIES STATS & FILTERS */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px', background: '#f8fafc', padding: '16px 20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('all')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  All Inquiries ({inquiries.length})
+                </button>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'New' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('New')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  ⚡ New ({inquiries.filter(i => i.status === 'New').length})
+                </button>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'Replied' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('Replied')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  ✓ Replied ({inquiries.filter(i => i.status === 'Replied').length})
+                </button>
+              </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Phone Number</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editContact.phone || ''}
-                    onChange={(e) => setEditContact({ ...editContact, phone: e.target.value })}
-                    required
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Office Address</label>
-                  <textarea
-                    className="dash-input-styled"
-                    value={editContact.address || ''}
-                    onChange={(e) => setEditContact({ ...editContact, address: e.target.value })}
-                    required
-                  ></textarea>
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Location Map / QR Asset Upload</label>
-                  <input
-                    type="file"
-                    accept="image/*,.pdf"
-                    className="dash-input-styled"
-                    onChange={(e) => handleImageUpload(e, setEditContact, editContact)}
-                  />
-                  {editContact.image && (
-                    <div style={{ marginTop: '10px' }}>
-                      <img src={editContact.image} alt="Contact Asset" style={{ width: '80px', height: '80px', borderRadius: '12px', objectFit: 'cover' }} />
-                    </div>
-                  )}
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save Contact Details
-                  </button>
-                </div>
-              </form>
+              <div style={{ position: 'relative', width: '280px' }}>
+                <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="Search sender, email, subject..."
+                  value={inquirySearch}
+                  onChange={(e) => setInquirySearch(e.target.value)}
+                  style={{ paddingLeft: '36px', height: '38px', fontSize: '0.82rem', margin: 0 }}
+                />
+              </div>
             </div>
 
-            {/* ADD CUSTOM CONTACT CHANNEL BLOCK */}
-            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem' }}>Add Custom Contact Channel</h4>
-              <form onSubmit={handleAddContactBlock} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">Channel Title / Desk</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. WhatsApp Support"
-                    className="dash-input-styled"
-                    value={newContactBlock.title}
-                    onChange={(e) => setNewContactBlock({ ...newContactBlock, title: e.target.value })}
-                  />
-                </div>
-                <div className="dash-field-group">
-                  <label className="dash-label">Contact Link / Detail</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. +91 9876543210"
-                    className="dash-input-styled"
-                    value={newContactBlock.value}
-                    onChange={(e) => setNewContactBlock({ ...newContactBlock, value: e.target.value })}
-                  />
-                </div>
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiPlus /> Add Contact Content Block
-                  </button>
-                </div>
-              </form>
+            {/* INQUIRIES LIST CARDS */}
+            {(() => {
+              const filtered = inquiries.filter(i => {
+                const matchesFilter = inquiryFilter === 'all' || i.status === inquiryFilter;
+                const query = inquirySearch.toLowerCase();
+                const matchesSearch = !query ||
+                  (i.name && i.name.toLowerCase().includes(query)) ||
+                  (i.email && i.email.toLowerCase().includes(query)) ||
+                  (i.subject && i.subject.toLowerCase().includes(query)) ||
+                  (i.company && i.company.toLowerCase().includes(query));
+                return matchesFilter && matchesSearch;
+              });
 
-              {contactBlocks.length > 0 && (
-                <div style={{ marginTop: '20px' }}>
-                  <h5 style={{ margin: '0 0 12px', color: '#475569' }}>Active Custom Channels ({contactBlocks.length})</h5>
-                  {contactBlocks.map((b) => (
-                    <div key={b.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', marginBottom: '8px', border: '1px solid #e2e8f0' }}>
-                      <div>
-                        <strong style={{ color: '#0f172a' }}>{b.title}</strong>
-                        <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{b.value}</div>
+              if (filtered.length === 0) {
+                return (
+                  <div className="dash-form-wrapper" style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b', background: '#f8fafc', borderRadius: '20px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#fff7ed', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>
+                      <FiMail />
+                    </div>
+                    <h4 style={{ margin: '0 0 6px', color: '#082233', fontSize: '1.1rem', fontWeight: 800 }}>No Customer Inquiries Yet</h4>
+                    <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b' }}>When visitors submit project requests via the website contact form, they will be listed here automatically.</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {filtered.map((inq) => (
+                    <div
+                      key={inq.id}
+                      style={{
+                        background: '#ffffff',
+                        borderRadius: '20px',
+                        padding: '24px',
+                        border: inq.status === 'New' ? '2px solid #fdba74' : '1px solid #e2e8f0',
+                        boxShadow: inq.status === 'New' ? '0 6px 20px rgba(255, 107, 0, 0.08)' : '0 2px 8px rgba(0,0,0,0.02)',
+                        transition: 'all 0.2s ease'
+                      }}
+                    >
+                      {/* INQUIRY HEADER */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '14px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                            <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#082233', fontWeight: 800 }}>{inq.name}</h4>
+                            <span style={{
+                              fontSize: '0.72rem',
+                              fontWeight: 800,
+                              padding: '2px 10px',
+                              borderRadius: '12px',
+                              background: inq.status === 'New' ? '#fff7ed' : '#f1f5f9',
+                              color: inq.status === 'New' ? '#ea580c' : '#082233',
+                              border: inq.status === 'New' ? '1px solid #fdba74' : '1px solid #cbd5e1'
+                            }}>
+                              {inq.status === 'New' ? '● NEW INQUIRY' : '✓ REPLIED'}
+                            </span>
+                          </div>
+                          {inq.company && inq.company !== 'N/A' && (
+                            <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '2px', fontWeight: 600 }}>
+                              🏢 {inq.company}
+                            </div>
+                          )}
+                        </div>
+
+                        <div style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                          <FiClock /> {inq.date || 'Recent'}
+                        </div>
                       </div>
-                      <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444' }} onClick={() => handleDeleteContactBlock(b.id)}>
-                        <FiTrash2 /> Remove
-                      </button>
+
+                      {/* INQUIRY CONTACT INFO CHIPS */}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+                        <div style={{ background: '#f8fafc', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: '#082233', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid #e2e8f0' }}>
+                          <FiMail style={{ color: '#ea580c' }} />
+                          <a href={`mailto:${inq.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{inq.email}</a>
+                        </div>
+                        {inq.phone && inq.phone !== 'N/A' && (
+                          <div style={{ background: '#f8fafc', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: '#082233', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid #e2e8f0' }}>
+                            <FiPhone style={{ color: '#ff6b00' }} />
+                            <span>{inq.phone}</span>
+                          </div>
+                        )}
+                        <div style={{ background: '#fff7ed', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: '#ea580c', fontWeight: 800, border: '1px solid #fdba74' }}>
+                          🏷️ {inq.subject || 'General Inquiry'}
+                        </div>
+                      </div>
+
+                      {/* INQUIRY MESSAGE TEXT */}
+                      <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1px solid #e2e8f0', marginBottom: '16px' }}>
+                        <div style={{ fontSize: '0.74rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, marginBottom: '6px' }}>
+                          Message Content
+                        </div>
+                        <p style={{ margin: 0, fontSize: '0.9rem', color: '#082233', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
+                          {inq.message}
+                        </p>
+                      </div>
+
+                      {/* ACTIONS ROW */}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button
+                            className="action-pill-btn primary-pill"
+                            style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                            onClick={() => handleSendEmailReply(inq)}
+                            title={`Send direct email reply to ${inq.email}`}
+                          >
+                            <FiMail /> Reply by Email
+                          </button>
+
+                          <button
+                            className="chart-dropdown-pill"
+                            onClick={() => {
+                              setReplyModalInq(inq);
+                              setQuickReplyBody(`Hi ${inq.name},\n\nThank you for reaching out regarding "${inq.subject}". We would be happy to schedule a call to discuss your project requirements in detail.\n\nWhen would be a convenient time for you this week?`);
+                            }}
+                            title="Compose customized message before sending"
+                          >
+                            <FiEdit2 /> Custom Reply
+                          </button>
+                        </div>
+
+                        <button
+                          className="promo-mint-btn"
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer' }}
+                          onClick={() => {
+                            if (window.confirm(`Delete inquiry from ${inq.name}?`)) {
+                              deleteInquiry(inq.id);
+                              triggerNotification('Inquiry record removed.');
+                            }
+                          }}
+                        >
+                          <FiTrash2 /> Remove
+                        </button>
+                      </div>
                     </div>
                   ))}
                 </div>
-              )}
-            </div>
+              );
+            })()}
 
-            <CustomFieldsManager pageKey="contact" title="Contact Details Custom Fields" />
+            {/* READ-ONLY LIVE CHANNELS REFERENCE */}
+            <div className="dash-form-wrapper" style={{ marginTop: '30px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '18px', padding: '20px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <h4 style={{ margin: 0, fontSize: '0.95rem', color: '#082233', fontWeight: 800 }}>Current Live Website Contact Details (Read-Only)</h4>
+                <span style={{ fontSize: '0.72rem', color: '#64748b', background: '#e2e8f0', padding: '2px 8px', borderRadius: '8px', fontWeight: 700 }}>
+                  Managed by Super Admin
+                </span>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '14px', fontSize: '0.82rem' }}>
+                <div style={{ background: '#ffffff', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>TARGET NOTIFICATION EMAIL</div>
+                  <div style={{ color: '#082233', fontWeight: 700, marginTop: '2px' }}>{contact.email || 'innoveitytech@gmail.com'}</div>
+                </div>
+                <div style={{ background: '#ffffff', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>HOTLINE PHONE NUMBER</div>
+                  <div style={{ color: '#082233', fontWeight: 700, marginTop: '2px' }}>{contact.phone || '+91 0908765432'}</div>
+                </div>
+                <div style={{ background: '#ffffff', padding: '12px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ color: '#94a3b8', fontSize: '0.72rem', fontWeight: 700 }}>OFFICE LOCATION</div>
+                  <div style={{ color: '#082233', fontWeight: 700, marginTop: '2px' }}>{contact.address || 'Chennai, Tamil Nadu, India'}</div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -1954,7 +1986,7 @@ const AdminPage = () => {
                   style={{ background: '#082233', color: '#ffffff', border: 'none', fontWeight: 800 }}
                   onClick={() => setShowAddAdminForm(!showAddAdminForm)}
                 >
-                  <FiPlus /> {showAddAdminForm ? 'Close Form' : '+ Add Admin Account'}
+                  <FiPlus /> {showAddAdminForm ? 'Close Form' : 'Add Admin Account'}
                 </button>
                 <button className="action-pill-btn" onClick={() => setActiveTab('overview')}>
                   Back to Overview
@@ -2053,338 +2085,830 @@ const AdminPage = () => {
           </div>
         )}
 
-        {/* TAB: HEADER & FOOTER SETTINGS */}
-        {activeTab === 'header_footer' && (
+        {/* TAB 6: CLIENT TESTIMONIALS & REVIEWS */}
+        {activeTab === 'testimonials' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-            <div className="chart-header-row">
-              <h3 className="chart-title">Header, Footer & Social Media Management</h3>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiStar style={{ color: '#ff6b00' }} /> Client Testimonials & Reviews
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Manage verified customer quotes, star ratings, and feedback displayed across the website.
+                </p>
+              </div>
               <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
                 Back to Overview
               </button>
             </div>
 
-            {/* 1. HEADER BRANDING & CTA BUTTON */}
-            <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiLayers /> Header Logo & Button Configuration
+            {/* Add Testimonial Form */}
+            <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>
+                + Add Client Review
               </h4>
-              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
+              <form onSubmit={handleAddTestimonialSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
-                  <label className="dash-label">Logo Sub-Title / Tagline</label>
+                  <label className="dash-label">Client Name</label>
                   <input
                     type="text"
-                    placeholder="e.g. TECH SOLUTION"
+                    placeholder="e.g. Sarah Jenkins"
                     className="dash-input-styled"
-                    value={editHeaderFooter.brandSubTitle || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, brandSubTitle: e.target.value })}
-                  />
-                  <small style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '4px' }}>Displays below the main Innoveity logo in top navbar.</small>
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Header Action Button Text</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. CONTACT US"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.contactBtnText || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, contactBtnText: e.target.value })}
-                  />
-                  <small style={{ color: '#64748b', fontSize: '0.75rem', marginTop: '4px' }}>Text for the top right call-to-action button in header.</small>
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save Header Branding
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* 2. HEADER NAVIGATION MENU ITEMS MANAGER */}
-            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiLayers /> Navigation Bar Menu Links Manager
-              </h4>
-
-              {/* Add New Link Form */}
-              <form onSubmit={handleAddNavLink} className="dash-form-grid" style={{ marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px dashed #cbd5e1' }}>
-                <div className="dash-field-group">
-                  <label className="dash-label">Link Display Name</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Media Division"
-                    className="dash-input-styled"
-                    value={newNavLink.name}
-                    onChange={(e) => setNewNavLink({ ...newNavLink, name: e.target.value })}
+                    value={newTestimonial.name}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, name: e.target.value })}
                     required
                   />
                 </div>
 
                 <div className="dash-field-group">
-                  <label className="dash-label">Target Route / Anchor ID</label>
+                  <label className="dash-label">Role / Designation</label>
                   <input
                     type="text"
-                    placeholder="e.g. /media or home"
+                    placeholder="e.g. Chief Technology Officer"
                     className="dash-input-styled"
-                    value={newNavLink.to}
-                    onChange={(e) => setNewNavLink({ ...newNavLink, to: e.target.value })}
+                    value={newTestimonial.role}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, role: e.target.value })}
                     required
                   />
                 </div>
 
                 <div className="dash-field-group">
-                  <label className="dash-label">Navigation Type</label>
+                  <label className="dash-label">Company / Organization</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Aura Health Platforms"
+                    className="dash-input-styled"
+                    value={newTestimonial.company}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, company: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Star Rating</label>
                   <select
                     className="dash-input-styled"
-                    value={newNavLink.isPage ? 'page' : 'scroll'}
-                    onChange={(e) => setNewNavLink({ ...newNavLink, isPage: e.target.value === 'page' })}
+                    value={newTestimonial.rating}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, rating: Number(e.target.value) })}
                   >
-                    <option value="page">Separate Page Route (e.g. /media, /about)</option>
-                    <option value="scroll">Smooth Scroll Anchor (e.g. #contact, home)</option>
+                    <option value={5}>⭐⭐⭐⭐⭐ 5 Stars (Exceptional)</option>
+                    <option value={4}>⭐⭐⭐⭐ 4 Stars (Great)</option>
+                    <option value={3}>⭐⭐⭐ 3 Stars (Good)</option>
                   </select>
                 </div>
 
                 <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiPlus /> Add Navigation Menu Item
-                  </button>
-                </div>
-              </form>
-
-              {/* Active Navigation Menu List */}
-              <h5 style={{ margin: '0 0 12px', color: '#334155' }}>Active Navigation Bar Menu Items ({(editHeaderFooter.navLinks || []).length})</h5>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                {(editHeaderFooter.navLinks || []).map((link, idx) => (
-                  <div key={link.id || idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                        <button type="button" onClick={() => moveNavLinkUp(idx)} disabled={idx === 0} style={{ border: 'none', background: 'none', cursor: idx === 0 ? 'not-allowed' : 'pointer', color: idx === 0 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
-                          <FiArrowUp size={16} />
-                        </button>
-                        <button type="button" onClick={() => moveNavLinkDown(idx)} disabled={idx === (editHeaderFooter.navLinks || []).length - 1} style={{ border: 'none', background: 'none', cursor: idx === (editHeaderFooter.navLinks || []).length - 1 ? 'not-allowed' : 'pointer', color: idx === (editHeaderFooter.navLinks || []).length - 1 ? '#cbd5e1' : '#ff6b00', padding: 0 }}>
-                          <FiArrowDown size={16} />
-                        </button>
-                      </div>
-                      <div>
-                        <strong style={{ color: '#0f172a', fontSize: '0.95rem' }}>{link.name}</strong>
-                        <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                          Target: <code style={{ background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>{link.to}</code> • {link.isPage ? 'Page Route' : 'Scroll Anchor'}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <button
-                        type="button"
-                        className="promo-mint-btn"
-                        style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
-                        onClick={() => handleDeleteNavLink(idx)}
-                      >
-                        <FiTrash2 /> Remove Link
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 3. FOOTER ADDRESS & DESK CONTACT DETAILS */}
-            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiPhone /> Footer Company & Desk Contact Info
-              </h4>
-              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">Operating Entity Line</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Operated by Innoveity Tech Solution Ltd."
-                    className="dash-input-styled"
-                    value={editHeaderFooter.operatingCompany || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, operatingCompany: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Physical Office Address</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. MCC MRF Innovation Park, East Tambaram, Chennai - 600059"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.address || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, address: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Direct Contact Phone</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. +91 7904327211"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.phone || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, phone: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Official Support Email</label>
-                  <input
-                    type="email"
-                    placeholder="e.g. aachinancy@gmail.com"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.email || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, email: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Working Operating Hours</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Mon - Fri, 9:00 AM - 6:00 PM"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.hours || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, hours: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save Footer Contact Info
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* 4. FOOTER SOCIAL LINKS ("CONNECT") */}
-            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiPhone /> Footer Social Media Links ("Connect")
-              </h4>
-              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">X.com (Twitter) Profile URL</label>
-                  <input
-                    type="text"
-                    placeholder="https://x.com/innoveitytech"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.twitterUrl || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, twitterUrl: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Instagram Profile URL</label>
-                  <input
-                    type="text"
-                    placeholder="https://instagram.com/innoveitytech"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.instagramUrl || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, instagramUrl: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Facebook Page URL</label>
-                  <input
-                    type="text"
-                    placeholder="https://facebook.com/innoveitytech"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.facebookUrl || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, facebookUrl: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">LinkedIn Company Page URL</label>
-                  <input
-                    type="text"
-                    placeholder="https://linkedin.com/company/innoveitytech"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.linkedinUrl || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, linkedinUrl: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save Social Links
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            {/* 5. FOOTER CTA BANNER CARD & COPYRIGHT */}
-            <div className="dash-form-wrapper" style={{ marginTop: '24px' }}>
-              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FiCheck /> Footer Call-to-Action Banner & Legal Bar
-              </h4>
-              <form onSubmit={handleSaveHeaderFooter} className="dash-form-grid">
-                <div className="dash-field-group">
-                  <label className="dash-label">CTA Kicker Pill Badge</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. SMART, SCALABLE"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.ctaBadge || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaBadge: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">CTA Card Main Headline</label>
+                  <label className="dash-label">Client Feedback Quote</label>
                   <textarea
-                    placeholder="e.g. Ready To Begin Building Digital Future Securely?"
+                    placeholder="Write client testimonial statement..."
+                    className="dash-input-styled"
+                    style={{ height: '80px' }}
+                    value={newTestimonial.content}
+                    onChange={(e) => setNewTestimonial({ ...newTestimonial, content: e.target.value })}
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Upload Client Avatar Photo</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="dash-input-styled"
+                    onChange={(e) => handleImageUpload(e, setNewTestimonial, newTestimonial)}
+                  />
+                  {newTestimonial.avatar && (
+                    <img src={newTestimonial.avatar} alt="Preview" style={{ marginTop: '10px', width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover' }} />
+                  )}
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Save Testimonial
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Testimonials List */}
+            <div className="chart-header-row" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                Active Client Reviews ({reviews.length})
+              </h4>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px', marginTop: '14px' }}>
+              {reviews.map((t) => (
+                <div key={t.id} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img src={t.avatar || '/Sarah.jpeg'} alt={t.name} style={{ width: '44px', height: '44px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #ff6b00' }} />
+                      <div>
+                        <strong style={{ color: '#082233', fontSize: '0.95rem', display: 'block' }}>{t.name}</strong>
+                        <span style={{ fontSize: '0.78rem', color: '#64748b' }}>{t.role} • {t.company}</span>
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '0.85rem' }}>{'⭐'.repeat(t.rating || 5)}</span>
+                  </div>
+                  <p style={{ color: '#334155', fontSize: '0.86rem', lineHeight: '1.5', margin: '0 0 16px', fontStyle: 'italic' }}>
+                    "{t.content}"
+                  </p>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <button
+                      className="promo-mint-btn"
+                      style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                      onClick={() => {
+                        if (window.confirm(`Delete review from ${t.name}?`)) {
+                          deleteTestimonial(t.id);
+                          triggerNotification('Testimonial removed.');
+                        }
+                      }}
+                    >
+                      <FiTrash2 /> Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 7: MEDIA DIVISION & VIDEO GALLERY */}
+        {activeTab === 'media_gallery' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiVideo style={{ color: '#ff6b00' }} /> Media Division & Video Showcase
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Manage video commercial showcases, showreels, and media division assets for the website.
+                </p>
+              </div>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* Add Media Form */}
+            <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>
+                + Add Video Showcase
+              </h4>
+              <form onSubmit={handleAddMediaSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Video Showcase Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 3D Kinetic Brand Commercial Reel"
+                    className="dash-input-styled"
+                    value={newMedia.title}
+                    onChange={(e) => setNewMedia({ ...newMedia, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Category Tag</label>
+                  <select
+                    className="dash-input-styled"
+                    value={newMedia.category}
+                    onChange={(e) => setNewMedia({ ...newMedia, category: e.target.value })}
+                  >
+                    <option value="Brand Commercial">Brand Commercial</option>
+                    <option value="3D Animation">3D Animation</option>
+                    <option value="Tech Showcase">Tech Showcase</option>
+                    <option value="Corporate Film">Corporate Film</option>
+                  </select>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Video URL (YouTube, Vimeo, or MP4)</label>
+                  <input
+                    type="url"
+                    placeholder="https://www.youtube.com/watch?v=..."
+                    className="dash-input-styled"
+                    value={newMedia.videoUrl}
+                    onChange={(e) => setNewMedia({ ...newMedia, videoUrl: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Description / Summary</label>
+                  <textarea
+                    placeholder="Brief description of the media asset..."
                     className="dash-input-styled"
                     style={{ height: '70px' }}
-                    value={editHeaderFooter.ctaTitle || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaTitle: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Primary CTA Button Text</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Get Started"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.ctaPrimaryBtnText || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaPrimaryBtnText: e.target.value })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Secondary CTA Button Text</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. See Technology Options"
-                    className="dash-input-styled"
-                    value={editHeaderFooter.ctaSecondaryBtnText || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, ctaSecondaryBtnText: e.target.value })}
-                  />
+                    value={newMedia.description}
+                    onChange={(e) => setNewMedia({ ...newMedia, description: e.target.value })}
+                  ></textarea>
                 </div>
 
                 <div className="dash-field-group full-width">
-                  <label className="dash-label">Footer Copyright Notice Text</label>
+                  <label className="dash-label">Upload Video Thumbnail Image</label>
                   <input
-                    type="text"
-                    placeholder="e.g. © 2026 Innoveity Tech Solution. All rights reserved."
+                    type="file"
+                    accept="image/*"
                     className="dash-input-styled"
-                    value={editHeaderFooter.copyrightText || ''}
-                    onChange={(e) => setEditHeaderFooter({ ...editHeaderFooter, copyrightText: e.target.value })}
+                    onChange={(e) => handleImageUpload(e, setNewMedia, newMedia)}
                   />
+                  {newMedia.thumbnail && (
+                    <img src={newMedia.thumbnail} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                  )}
                 </div>
 
                 <div className="dash-field-group full-width">
                   <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
-                    <FiCheck /> Save All Header & Footer Settings
+                    <FiPlus /> Add Video Item
                   </button>
                 </div>
               </form>
             </div>
 
+            {/* Media Items Table */}
+            <div className="chart-header-row" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                Active Media Showcase Items ({mediaItems.length})
+              </h4>
+            </div>
+
+            <table className="dash-cms-table" style={{ marginTop: '12px' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '80px' }}>Thumbnail</th>
+                  <th>Title & Category</th>
+                  <th>Description</th>
+                  <th>Video Link</th>
+                  <th style={{ width: '120px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {mediaItems.map((m) => (
+                  <tr key={m.id}>
+                    <td>
+                      <img src={m.thumbnail || '/media_showcase_1.jpg'} alt={m.title} style={{ width: '60px', height: '40px', borderRadius: '8px', objectFit: 'cover' }} />
+                    </td>
+                    <td>
+                      <strong style={{ color: '#082233', display: 'block', fontSize: '0.92rem' }}>{m.title}</strong>
+                      <span className="category-badge-pill" style={{ marginTop: '4px' }}>{m.category}</span>
+                    </td>
+                    <td style={{ color: '#475569', fontSize: '0.84rem' }}>{m.description}</td>
+                    <td>
+                      {m.videoUrl ? (
+                        <a href={m.videoUrl} target="_blank" rel="noreferrer" style={{ color: '#ff6b00', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px', textDecoration: 'none', fontWeight: 700 }}>
+                          <FiExternalLink /> Watch Video
+                        </a>
+                      ) : (
+                        <span style={{ color: '#94a3b8', fontSize: '0.8rem' }}>No URL</span>
+                      )}
+                    </td>
+                    <td>
+                      <button
+                        className="promo-mint-btn"
+                        style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                        onClick={() => {
+                          if (window.confirm(`Delete media item "${m.title}"?`)) {
+                            deleteMediaItem(m.id);
+                            triggerNotification('Media item removed.');
+                          }
+                        }}
+                      >
+                        <FiTrash2 /> Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* TAB 8: CAREERS & JOB OPENINGS */}
+        {activeTab === 'careers' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiBriefcase style={{ color: '#ff6b00' }} /> Careers & Job Openings Management
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Post open technical & design positions, manage hiring statuses, and candidate criteria.
+                </p>
+              </div>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* MASTER TOGGLE FOR LIVE WEBSITE HIRING NOTIFICATION BANNER */}
+            <div style={{
+              background: hiringAlertEnabled ? '#fff7ed' : '#f8fafc',
+              border: hiringAlertEnabled ? '2px solid #ff6b00' : '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '20px 24px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '16px',
+              boxShadow: hiringAlertEnabled ? '0 6px 20px rgba(255, 107, 0, 0.12)' : 'none',
+              transition: 'all 0.3s ease',
+              marginTop: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  background: hiringAlertEnabled ? '#ff6b00' : '#e2e8f0',
+                  color: hiringAlertEnabled ? '#ffffff' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.4rem',
+                  flexShrink: 0
+                }}>
+                  <FiBriefcase />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <h4 style={{ margin: 0, fontSize: '1.05rem', color: '#082233', fontWeight: 800 }}>
+                      Live Website Hiring Alert Banner
+                    </h4>
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      padding: '2px 10px',
+                      borderRadius: '12px',
+                      background: hiringAlertEnabled ? '#ea580c' : '#94a3b8',
+                      color: '#ffffff',
+                      textTransform: 'uppercase'
+                    }}>
+                      {hiringAlertEnabled ? '🟢 Visible on Home Page' : '⚪ Hidden'}
+                    </span>
+                  </div>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.84rem', color: '#64748b' }}>
+                    {hiringAlertEnabled
+                      ? 'Hiring alert pill is currently LIVE on the Home Page, notifying visitors of open career positions.'
+                      : 'Hiring alert pill is hidden from the Home Page. Enable it anytime when you are actively recruiting.'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  if (toggleHiringAlert) {
+                    const active = await toggleHiringAlert();
+                    triggerNotification(active ? '🟢 Hiring Alert enabled on Home Page!' : '⚪ Hiring Alert hidden from Home Page.');
+                  }
+                }}
+                style={{
+                  background: hiringAlertEnabled ? 'linear-gradient(135deg, #ff6b00, #ea580c)' : '#082233',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '30px',
+                  padding: '10px 22px',
+                  fontWeight: 800,
+                  fontSize: '0.85rem',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {hiringAlertEnabled ? 'Turn OFF Home Alert' : 'Turn ON Home Alert'}
+              </button>
+            </div>
+
+            {/* Post Job Form */}
+            <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>
+                + Post New Job Opening
+              </h4>
+              <form onSubmit={handleAddCareerSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Job Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Senior Full Stack AI Engineer"
+                    className="dash-input-styled"
+                    value={newCareer.title}
+                    onChange={(e) => setNewCareer({ ...newCareer, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Department</label>
+                  <select
+                    className="dash-input-styled"
+                    value={newCareer.department}
+                    onChange={(e) => setNewCareer({ ...newCareer, department: e.target.value })}
+                  >
+                    <option value="Engineering">Engineering</option>
+                    <option value="Creative & Design">Creative & Design</option>
+                    <option value="AI & Research">AI & Research</option>
+                    <option value="Product Strategy">Product Strategy</option>
+                  </select>
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Location</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Remote / Chennai"
+                    className="dash-input-styled"
+                    value={newCareer.location}
+                    onChange={(e) => setNewCareer({ ...newCareer, location: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Employment Type & Experience</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    <select
+                      className="dash-input-styled"
+                      value={newCareer.type}
+                      onChange={(e) => setNewCareer({ ...newCareer, type: e.target.value })}
+                    >
+                      <option value="Full-Time">Full-Time</option>
+                      <option value="Part-Time">Part-Time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                    </select>
+                    <input
+                      type="text"
+                      placeholder="e.g. 2+ Years"
+                      className="dash-input-styled"
+                      value={newCareer.experience}
+                      onChange={(e) => setNewCareer({ ...newCareer, experience: e.target.value })}
+                    />
+                  </div>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Job Description & Responsibilities</label>
+                  <textarea
+                    placeholder="Describe role expectations, requirements and deliverables..."
+                    className="dash-input-styled"
+                    style={{ height: '80px' }}
+                    value={newCareer.description}
+                    onChange={(e) => setNewCareer({ ...newCareer, description: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Post Job Opening
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Careers List */}
+            <div className="chart-header-row" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                Active Job Openings ({jobs.length})
+              </h4>
+            </div>
+
+            <table className="dash-cms-table" style={{ marginTop: '12px' }}>
+              <thead>
+                <tr>
+                  <th>Job Title & Dept</th>
+                  <th>Location</th>
+                  <th>Type & Experience</th>
+                  <th>Status</th>
+                  <th style={{ width: '180px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {jobs.map((j) => (
+                  <tr key={j.id}>
+                    <td>
+                      <strong style={{ color: '#082233', display: 'block', fontSize: '0.94rem' }}>{j.title}</strong>
+                      <span className="category-badge-pill" style={{ marginTop: '4px' }}>{j.department}</span>
+                    </td>
+                    <td style={{ color: '#475569', fontSize: '0.85rem' }}>{j.location}</td>
+                    <td style={{ color: '#475569', fontSize: '0.85rem' }}>{j.type} • {j.experience}</td>
+                    <td>
+                      <button
+                        onClick={() => toggleCareerStatus(j.id)}
+                        style={{
+                          border: 'none',
+                          cursor: 'pointer',
+                          borderRadius: '12px',
+                          padding: '4px 12px',
+                          fontSize: '0.78rem',
+                          fontWeight: 800,
+                          background: j.status === 'Active' ? '#fff7ed' : '#f1f5f9',
+                          color: j.status === 'Active' ? '#ea580c' : '#64748b',
+                          border: j.status === 'Active' ? '1px solid #fdba74' : '1px solid #cbd5e1'
+                        }}
+                      >
+                        {j.status === 'Active' ? '● HIRING ACTIVE' : '✕ CLOSED'}
+                      </button>
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '6px' }}>
+                        <button
+                          className="chart-dropdown-pill"
+                          onClick={() => toggleCareerStatus(j.id)}
+                        >
+                          Toggle Status
+                        </button>
+                        <button
+                          className="promo-mint-btn"
+                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                          onClick={() => {
+                            if (window.confirm(`Delete position "${j.title}"?`)) {
+                              deleteCareer(j.id);
+                              triggerNotification('Career opening removed.');
+                            }
+                          }}
+                        >
+                          <FiTrash2 />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* TAB 9: TECH BLOG & ARTICLES */}
+        {activeTab === 'blog' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiBookOpen style={{ color: '#ff6b00' }} /> Tech Blog & Engineering Articles
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Draft, publish, and manage engineering insights and company technology articles.
+                </p>
+              </div>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* Add Article Form */}
+            <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>
+                + Publish New Tech Article
+              </h4>
+              <form onSubmit={handleAddBlogSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Article Headline / Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Distributed Vector Search & Real-Time AI Pipelines"
+                    className="dash-input-styled"
+                    value={newBlog.title}
+                    onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Category</label>
+                  <select
+                    className="dash-input-styled"
+                    value={newBlog.category}
+                    onChange={(e) => setNewBlog({ ...newBlog, category: e.target.value })}
+                  >
+                    <option value="AI & Cloud">AI & Cloud</option>
+                    <option value="Web Engineering">Web Engineering</option>
+                    <option value="System Design">System Design</option>
+                    <option value="Product Strategy">Product Strategy</option>
+                  </select>
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Author Name</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Nancy Thomas"
+                    className="dash-input-styled"
+                    value={newBlog.author}
+                    onChange={(e) => setNewBlog({ ...newBlog, author: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Estimated Read Time</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 5 min read"
+                    className="dash-input-styled"
+                    value={newBlog.readTime}
+                    onChange={(e) => setNewBlog({ ...newBlog, readTime: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Article Summary / Excerpt</label>
+                  <textarea
+                    placeholder="Write article synopsis and key technical highlights..."
+                    className="dash-input-styled"
+                    style={{ height: '80px' }}
+                    value={newBlog.excerpt}
+                    onChange={(e) => setNewBlog({ ...newBlog, excerpt: e.target.value })}
+                    required
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Upload Cover Image</label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="dash-input-styled"
+                    onChange={(e) => handleImageUpload(e, setNewBlog, newBlog)}
+                  />
+                  {newBlog.coverImage && (
+                    <img src={newBlog.coverImage} alt="Preview" style={{ marginTop: '10px', height: '70px', borderRadius: '12px', objectFit: 'cover' }} />
+                  )}
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Publish Article
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Blog Articles Table */}
+            <div className="chart-header-row" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                Published Articles ({articles.length})
+              </h4>
+            </div>
+
+            <table className="dash-cms-table" style={{ marginTop: '12px' }}>
+              <thead>
+                <tr>
+                  <th style={{ width: '70px' }}>Cover</th>
+                  <th>Article Title & Category</th>
+                  <th>Author & Date</th>
+                  <th>Read Time</th>
+                  <th style={{ width: '120px' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {articles.map((b) => (
+                  <tr key={b.id}>
+                    <td>
+                      <img src={b.coverImage || '/tech_blog_1.png'} alt={b.title} style={{ width: '50px', height: '50px', borderRadius: '10px', objectFit: 'cover' }} />
+                    </td>
+                    <td>
+                      <strong style={{ color: '#082233', display: 'block', fontSize: '0.92rem' }}>{b.title}</strong>
+                      <span className="category-badge-pill" style={{ marginTop: '4px' }}>{b.category}</span>
+                    </td>
+                    <td style={{ color: '#475569', fontSize: '0.85rem' }}>{b.author} • {b.date}</td>
+                    <td style={{ color: '#ea580c', fontWeight: 600, fontSize: '0.82rem' }}>{b.readTime}</td>
+                    <td>
+                      <button
+                        className="promo-mint-btn"
+                        style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                        onClick={() => {
+                          if (window.confirm(`Delete article "${b.title}"?`)) {
+                            deleteBlogPost(b.id);
+                            triggerNotification('Article removed.');
+                          }
+                        }}
+                      >
+                        <FiTrash2 /> Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* TAB 10: SERVICES & OFFERINGS */}
+        {activeTab === 'services' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiBox style={{ color: '#ff6b00' }} /> Services & Solution Packages
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Manage technology services, capabilities, and deliverable highlights for prospective clients.
+                </p>
+              </div>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* Add Service Form */}
+            <div className="dash-form-wrapper" style={{ marginTop: '20px', background: '#f8fafc', padding: '24px', borderRadius: '16px', border: '1px solid #e2e8f0' }}>
+              <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1rem', fontWeight: 800 }}>
+                + Add Solution Service Package
+              </h4>
+              <form onSubmit={handleAddServiceSubmit} className="dash-form-grid">
+                <div className="dash-field-group">
+                  <label className="dash-label">Service Package Title</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Enterprise AI & Machine Learning"
+                    className="dash-input-styled"
+                    value={newService.title}
+                    onChange={(e) => setNewService({ ...newService, title: e.target.value })}
+                    required
+                  />
+                </div>
+
+                <div className="dash-field-group">
+                  <label className="dash-label">Category</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. AI & Cloud Architecture"
+                    className="dash-input-styled"
+                    value={newService.category}
+                    onChange={(e) => setNewService({ ...newService, category: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Value Proposition / Tagline</label>
+                  <textarea
+                    placeholder="Brief description of the service value to enterprise clients..."
+                    className="dash-input-styled"
+                    style={{ height: '70px' }}
+                    value={newService.tagline}
+                    onChange={(e) => setNewService({ ...newService, tagline: e.target.value })}
+                  ></textarea>
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Key Deliverables (Comma-Separated)</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Custom Neural Models, RAG Vector Indexing, Low Latency APIs"
+                    className="dash-input-styled"
+                    value={newService.deliverables}
+                    onChange={(e) => setNewService({ ...newService, deliverables: e.target.value })}
+                  />
+                </div>
+
+                <div className="dash-field-group full-width">
+                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
+                    <FiPlus /> Save Service Package
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            {/* Services Grid */}
+            <div className="chart-header-row" style={{ marginTop: '24px' }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                Active Service Packages ({services.length})
+              </h4>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '16px', marginTop: '14px' }}>
+              {services.map((s) => (
+                <div key={s.id} style={{ background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div>
+                    <span className="category-badge-pill" style={{ marginBottom: '8px', display: 'inline-block' }}>{s.category}</span>
+                    <h4 style={{ margin: '0 0 8px', color: '#082233', fontSize: '1.05rem', fontWeight: 800 }}>{s.title}</h4>
+                    <p style={{ color: '#475569', fontSize: '0.85rem', lineHeight: '1.5', margin: '0 0 14px' }}>{s.tagline}</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginBottom: '16px' }}>
+                      {(s.deliverables || []).map((del, idx) => (
+                        <span key={idx} style={{ background: '#fff7ed', color: '#ea580c', fontSize: '0.74rem', padding: '3px 8px', borderRadius: '8px', fontWeight: 700, border: '1px solid #fdba74' }}>
+                          ✓ {del}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', borderTop: '1px solid #f1f5f9', paddingTop: '12px' }}>
+                    <button
+                      className="promo-mint-btn"
+                      style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca' }}
+                      onClick={() => {
+                        if (window.confirm(`Delete service "${s.title}"?`)) {
+                          deleteServiceItem(s.id);
+                          triggerNotification('Service package removed.');
+                        }
+                      }}
+                    >
+                      <FiTrash2 /> Remove
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

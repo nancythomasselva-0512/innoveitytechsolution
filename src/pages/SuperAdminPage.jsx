@@ -5,7 +5,8 @@ import {
   FiLogOut, FiMenu, FiX, FiCheckCircle, FiAlertTriangle,
   FiDownloadCloud, FiRefreshCw, FiLock, FiCpu, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
   FiUserPlus, FiTrash2, FiZap, FiFolder, FiFileText, FiPhone, FiImage, FiUpload,
-  FiPlus, FiEdit2, FiCheck, FiLayers, FiInfo, FiGlobe, FiShare2, FiCode, FiArrowUp, FiArrowDown, FiLayout
+  FiPlus, FiEdit2, FiCheck, FiLayers, FiInfo, FiGlobe, FiShare2, FiCode, FiArrowUp, FiArrowDown, FiLayout,
+  FiMail, FiBriefcase
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
@@ -53,18 +54,167 @@ const SuperAdminPage = () => {
     team, addTeamMember, updateTeamMember, deleteTeamMember, moveTeamMemberUp, moveTeamMemberDown,
     teamHeaderContent, updateTeamHeaderContent,
     contact, updateContact,
+    contactInquiries, deleteInquiry, markInquiryReplied, updateInquiryStatus, updateInquiryNotes,
     homeContent, updateHomeContent,
     aboutContent, updateAboutContent,
     mediaContent, updateMediaContent,
     seoSettings, updateSeoSettings,
     headerFooterSettings, updateHeaderFooterSettings,
     pageSeoSettings, updatePageSeoSettings,
+    customFields, addCustomField, deleteCustomField,
+    customPageSections, addCustomSection, updateCustomSection, deleteCustomSection, toggleCustomSectionStatus, moveCustomSection,
     adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
     currentUser, logoutAdmin, clearAllCmsCache,
     dbStatus, seedCloudDatabase, fetchLatestFromMySql
   } = useCMS();
 
   const users = adminUsers || [];
+  const inquiries = contactInquiries || [];
+
+  // Dynamic Custom Page Sections Builder State
+  const [selectedSectionPage, setSelectedSectionPage] = useState('all');
+  const [showSectionModal, setShowSectionModal] = useState(false);
+  const [isEditingSection, setIsEditingSection] = useState(false);
+  const [editingSectionId, setEditingSectionId] = useState(null);
+  const [sectionTargetPage, setSectionTargetPage] = useState('home');
+  const [previewOpenSecId, setPreviewOpenSecId] = useState(null);
+  const [sectionForm, setSectionForm] = useState({
+    type: 'features_grid',
+    theme: 'dark',
+    badge: 'ENGINEERING EXCELLENCE',
+    title: '',
+    subtitle: '',
+    ctaText: '',
+    ctaUrl: '',
+    secondaryCtaText: '',
+    secondaryCtaUrl: '',
+    mediaUrl: '',
+    items: [],
+    active: true
+  });
+
+  const totalSectionsCount = customPageSections 
+    ? Object.values(customPageSections).reduce((acc, list) => acc + (Array.isArray(list) ? list.length : 0), 0)
+    : 0;
+
+  const handleOpenAddSection = (prefillPage = 'home') => {
+    setIsEditingSection(false);
+    setEditingSectionId(null);
+    setSectionTargetPage(prefillPage);
+    setSectionForm({
+      type: 'features_grid',
+      theme: 'dark',
+      badge: 'NEW SECTION',
+      title: '',
+      subtitle: '',
+      ctaText: '',
+      ctaUrl: '',
+      secondaryCtaText: '',
+      secondaryCtaUrl: '',
+      mediaUrl: '',
+      items: [
+        { title: 'Feature Item 1', desc: 'Detailed explanation of this capability or service.', tag: 'Core' },
+        { title: 'Feature Item 2', desc: 'Detailed explanation of this capability or service.', tag: 'Speed' },
+        { title: 'Feature Item 3', desc: 'Detailed explanation of this capability or service.', tag: 'Scale' }
+      ],
+      active: true
+    });
+    setShowSectionModal(true);
+  };
+
+  const handleOpenEditSection = (pageKey, sec) => {
+    setIsEditingSection(true);
+    setEditingSectionId(sec.id);
+    setSectionTargetPage(pageKey);
+    setSectionForm({
+      type: sec.type || 'features_grid',
+      theme: sec.theme || 'dark',
+      badge: sec.badge || '',
+      title: sec.title || '',
+      subtitle: sec.subtitle || '',
+      ctaText: sec.ctaText || '',
+      ctaUrl: sec.ctaUrl || '',
+      secondaryCtaText: sec.secondaryCtaText || '',
+      secondaryCtaUrl: sec.secondaryCtaUrl || '',
+      mediaUrl: sec.mediaUrl || '',
+      items: Array.isArray(sec.items) ? JSON.parse(JSON.stringify(sec.items)) : [],
+      active: sec.active !== undefined ? sec.active : true
+    });
+    setShowSectionModal(true);
+  };
+
+  const handleSaveSectionSubmit = (e) => {
+    e.preventDefault();
+    if (!sectionForm.title.trim() && !sectionForm.badge.trim()) {
+      alert('Please provide at least a section title or badge.');
+      return;
+    }
+
+    if (isEditingSection && editingSectionId) {
+      if (updateCustomSection) {
+        updateCustomSection(sectionTargetPage, editingSectionId, sectionForm);
+        triggerNotification(`Section updated successfully on ${sectionTargetPage.toUpperCase()} page!`);
+      }
+    } else {
+      if (addCustomSection) {
+        addCustomSection(sectionTargetPage, sectionForm);
+        triggerNotification(`New dynamic section added to ${sectionTargetPage.toUpperCase()} page!`);
+      }
+    }
+    setShowSectionModal(false);
+  };
+
+  const handleAddItemToForm = () => {
+    let newItem = {};
+    if (sectionForm.type === 'features_grid') {
+      newItem = { title: '', desc: '', tag: '' };
+    } else if (sectionForm.type === 'stats_grid') {
+      newItem = { number: '100+', label: 'Metric Label', desc: '' };
+    } else if (sectionForm.type === 'faq_accordion') {
+      newItem = { question: '', answer: '' };
+    } else {
+      newItem = { title: '', desc: '' };
+    }
+    setSectionForm(prev => ({
+      ...prev,
+      items: [...prev.items, newItem]
+    }));
+  };
+
+  const handleRemoveItemFromForm = (idx) => {
+    setSectionForm(prev => ({
+      ...prev,
+      items: prev.items.filter((_, i) => i !== idx)
+    }));
+  };
+
+  const handleItemFieldChange = (idx, field, val) => {
+    setSectionForm(prev => ({
+      ...prev,
+      items: prev.items.map((it, i) => i === idx ? { ...it, [field]: val } : it)
+    }));
+  };
+
+  const [inquirySearch, setInquirySearch] = useState('');
+  const [inquiryFilter, setInquiryFilter] = useState('all'); // 'all' | 'New' | 'Replied'
+  const [replyModalInq, setReplyModalInq] = useState(null);
+  const [quickReplyBody, setQuickReplyBody] = useState('');
+
+  const handleSendEmailReply = (inq, customMsg) => {
+    if (markInquiryReplied) {
+      markInquiryReplied(inq.id);
+    }
+    const subject = encodeURIComponent(`Re: ${inq.subject || 'Inquiry - Innoveity Tech Solution'}`);
+    const body = encodeURIComponent(
+      customMsg 
+        ? `Dear ${inq.name},\n\n${customMsg}\n\nBest regards,\nInnoveity Tech Solution Leadership Team\nhttps://innoveitytech.com`
+        : `Dear ${inq.name},\n\nThank you for reaching out to Innoveity Tech Solution regarding "${inq.subject}".\n\nWe have reviewed your application/inquiry and would love to connect with you.\n\nBest regards,\nInnoveity Tech Solution\nhttps://innoveitytech.com`
+    );
+    window.location.href = `mailto:${inq.email}?subject=${subject}&body=${body}`;
+    triggerNotification(`Opened email draft to ${inq.email}!`);
+    setReplyModalInq(null);
+    setQuickReplyBody('');
+  };
 
   const handleLogout = () => {
     logoutAdmin();
@@ -475,6 +625,376 @@ const SuperAdminPage = () => {
   return (
     <div className="admin-layout">
 
+      {/* CUSTOM SECTION ADD / EDIT MODAL OVERLAY */}
+      {showSectionModal && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card" style={{ maxWidth: '780px', maxHeight: '90vh', overflowY: 'auto' }}>
+            <div className="dash-modal-header">
+              <div>
+                <h3 className="dash-modal-title">
+                  {isEditingSection ? `Edit Section (${sectionTargetPage.toUpperCase()} Page)` : 'Create New Dynamic Section'}
+                </h3>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                  Design and attach a customized content section to any page on your website.
+                </span>
+              </div>
+              <button className="dash-modal-close-btn" onClick={() => setShowSectionModal(false)}><FiX /></button>
+            </div>
+
+            <form onSubmit={handleSaveSectionSubmit} className="dash-form-grid" style={{ marginTop: '16px' }}>
+              
+              {/* Target Page Selection (Disabled during edit) */}
+              <div className="dash-field-group">
+                <label className="dash-label">Target Page To Display On</label>
+                <select
+                  className="dash-input-styled"
+                  value={sectionTargetPage}
+                  onChange={(e) => setSectionTargetPage(e.target.value)}
+                  disabled={isEditingSection}
+                >
+                  <option value="home">🏠 Homepage (/)</option>
+                  <option value="about">ℹ️ About Us (/about)</option>
+                  <option value="services">⚙️ Services (/services)</option>
+                  <option value="projects">📂 Projects (/projects)</option>
+                  <option value="team">👥 Team & Leadership (/team)</option>
+                  <option value="media">🎬 Media Division (/media)</option>
+                  <option value="contact">📞 Contact Us (/contact)</option>
+                </select>
+              </div>
+
+              {/* Section Layout / Template */}
+              <div className="dash-field-group">
+                <label className="dash-label">Section Layout Template</label>
+                <select
+                  className="dash-input-styled"
+                  value={sectionForm.type}
+                  onChange={(e) => setSectionForm({ ...sectionForm, type: e.target.value })}
+                >
+                  <option value="features_grid">🔲 Features Cards Grid (Multi-column)</option>
+                  <option value="banner_cta">⚡ High-Impact CTA Banner</option>
+                  <option value="stats_grid">📊 Key Metrics & Stats Counter</option>
+                  <option value="faq_accordion">❓ Interactive FAQ Accordion</option>
+                  <option value="info_split">🖼️ Split Visual & Bullet Points</option>
+                </select>
+              </div>
+
+              {/* Section Theme Style */}
+              <div className="dash-field-group">
+                <label className="dash-label">Color Theme / Background</label>
+                <select
+                  className="dash-input-styled"
+                  value={sectionForm.theme}
+                  onChange={(e) => setSectionForm({ ...sectionForm, theme: e.target.value })}
+                >
+                  <option value="dark">🌑 Deep Midnight Carbon (Dark Theme)</option>
+                  <option value="light">⚪ Clean Minimalist White (Light Theme)</option>
+                  <option value="sunset">🌅 Sunset Luxury Violet Gradient</option>
+                </select>
+              </div>
+
+              {/* Top Kicker / Badge */}
+              <div className="dash-field-group">
+                <label className="dash-label">Kicker Badge Text (Optional)</label>
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="e.g. CORE STRENGTHS / SPECIAL FEATURE"
+                  value={sectionForm.badge}
+                  onChange={(e) => setSectionForm({ ...sectionForm, badge: e.target.value })}
+                />
+              </div>
+
+              {/* Main Section Title */}
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Section Heading / Title *</label>
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="e.g. Enterprise Security Architecture Built From Ground Up"
+                  value={sectionForm.title}
+                  onChange={(e) => setSectionForm({ ...sectionForm, title: e.target.value })}
+                  required
+                />
+              </div>
+
+              {/* Subtitle / Description */}
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Section Subtitle / Description</label>
+                <textarea
+                  className="dash-input-styled"
+                  style={{ height: '70px' }}
+                  placeholder="e.g. Explain the core value proposition of this section in 1-2 concise sentences."
+                  value={sectionForm.subtitle}
+                  onChange={(e) => setSectionForm({ ...sectionForm, subtitle: e.target.value })}
+                ></textarea>
+              </div>
+
+              {/* CTA Button Inputs */}
+              <div className="dash-field-group">
+                <label className="dash-label">Primary Button Text (Optional)</label>
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="e.g. Get Started Now"
+                  value={sectionForm.ctaText}
+                  onChange={(e) => setSectionForm({ ...sectionForm, ctaText: e.target.value })}
+                />
+              </div>
+
+              <div className="dash-field-group">
+                <label className="dash-label">Primary Button Link / URL</label>
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="e.g. /contact or /services"
+                  value={sectionForm.ctaUrl}
+                  onChange={(e) => setSectionForm({ ...sectionForm, ctaUrl: e.target.value })}
+                />
+              </div>
+
+              {sectionForm.type === 'banner_cta' && (
+                <>
+                  <div className="dash-field-group">
+                    <label className="dash-label">Secondary Button Text (Optional)</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      placeholder="e.g. View Case Studies"
+                      value={sectionForm.secondaryCtaText}
+                      onChange={(e) => setSectionForm({ ...sectionForm, secondaryCtaText: e.target.value })}
+                    />
+                  </div>
+
+                  <div className="dash-field-group">
+                    <label className="dash-label">Secondary Button Link / URL</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      placeholder="e.g. /projects"
+                      value={sectionForm.secondaryCtaUrl}
+                      onChange={(e) => setSectionForm({ ...sectionForm, secondaryCtaUrl: e.target.value })}
+                    />
+                  </div>
+                </>
+              )}
+
+              {sectionForm.type === 'info_split' && (
+                <div className="dash-field-group full-width">
+                  <label className="dash-label">Split Media Image URL / Path</label>
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. /tech_blog_featured.png"
+                    value={sectionForm.mediaUrl}
+                    onChange={(e) => setSectionForm({ ...sectionForm, mediaUrl: e.target.value })}
+                  />
+                </div>
+              )}
+
+              {/* DYNAMIC ITEMS BUILDER (CARDS, FAQS, STATS, BULLETS) */}
+              {sectionForm.type !== 'banner_cta' && (
+                <div className="dash-field-group full-width" style={{ marginTop: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                    <div>
+                      <h4 style={{ margin: '0 0 2px', fontSize: '0.98rem', fontWeight: 800, color: '#082233' }}>
+                        Section Content Items ({sectionForm.items.length})
+                      </h4>
+                      <span style={{ fontSize: '0.78rem', color: '#64748b' }}>
+                        {sectionForm.type === 'features_grid' && 'Add feature cards with tag, title, and description.'}
+                        {sectionForm.type === 'stats_grid' && 'Add key numbers, metric labels, and details.'}
+                        {sectionForm.type === 'faq_accordion' && 'Add question and answer pairs.'}
+                        {sectionForm.type === 'info_split' && 'Add bullet point highlights.'}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      className="action-pill-btn primary-pill"
+                      style={{ background: '#082233', color: '#fff', border: 'none', padding: '6px 14px', fontSize: '0.8rem' }}
+                      onClick={handleAddItemToForm}
+                    >
+                      <FiPlus /> Add Item
+                    </button>
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {sectionForm.items.map((item, idx) => (
+                      <div key={idx} style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                          <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ea580c' }}>Item #{idx + 1}</span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveItemFromForm(idx)}
+                            style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '3px 8px', fontSize: '0.72rem', cursor: 'pointer' }}
+                          >
+                            <FiTrash2 /> Remove
+                          </button>
+                        </div>
+
+                        {sectionForm.type === 'features_grid' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '8px', marginBottom: '8px' }}>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Tag / Category (e.g. Core)"
+                              value={item.tag || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'tag', e.target.value)}
+                            />
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Card Title"
+                              value={item.title || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'title', e.target.value)}
+                              required
+                            />
+                            <div style={{ gridColumn: 'span 2' }}>
+                              <textarea
+                                className="dash-input-styled"
+                                style={{ height: '55px' }}
+                                placeholder="Card description text..."
+                                value={item.desc || item.description || ''}
+                                onChange={(e) => handleItemFieldChange(idx, 'desc', e.target.value)}
+                              ></textarea>
+                            </div>
+                          </div>
+                        )}
+
+                        {sectionForm.type === 'stats_grid' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 2fr 2fr', gap: '8px' }}>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="e.g. 99.9%"
+                              value={item.number || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'number', e.target.value)}
+                              required
+                            />
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Metric Label"
+                              value={item.label || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'label', e.target.value)}
+                              required
+                            />
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Short description (optional)"
+                              value={item.desc || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'desc', e.target.value)}
+                            />
+                          </div>
+                        )}
+
+                        {sectionForm.type === 'faq_accordion' && (
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Frequently Asked Question"
+                              value={item.question || item.q || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'question', e.target.value)}
+                              required
+                            />
+                            <textarea
+                              className="dash-input-styled"
+                              style={{ height: '60px' }}
+                              placeholder="Comprehensive Answer text..."
+                              value={item.answer || item.a || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'answer', e.target.value)}
+                              required
+                            ></textarea>
+                          </div>
+                        )}
+
+                        {sectionForm.type === 'info_split' && (
+                          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 3fr', gap: '8px' }}>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Bullet Title (e.g. High Speed)"
+                              value={item.title || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'title', e.target.value)}
+                            />
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              placeholder="Bullet detail text"
+                              value={item.desc || item.text || ''}
+                              onChange={(e) => handleItemFieldChange(idx, 'desc', e.target.value)}
+                              required
+                            />
+                          </div>
+                        )}
+
+                      </div>
+                    ))}
+
+                    {sectionForm.items.length === 0 && (
+                      <div style={{ textAlign: 'center', padding: '14px', background: '#fff', borderRadius: '10px', border: '1px dashed #cbd5e1', fontSize: '0.82rem', color: '#64748b' }}>
+                        No items added yet. Click <strong>+ Add Item</strong> to add content blocks.
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className="dash-modal-actions full-width" style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setShowSectionModal(false)}>
+                  Cancel
+                </button>
+                <button type="submit" className="action-pill-btn primary-pill" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#fff', border: 'none', fontWeight: 800 }}>
+                  <FiCheck /> {isEditingSection ? 'Save Section Changes' : 'Publish Section to Website'}
+                </button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* CUSTOM EMAIL REPLY MODAL OVERLAY */}
+      {replyModalInq && (
+        <div className="dash-modal-backdrop">
+          <div className="dash-modal-card" style={{ maxWidth: '600px' }}>
+            <div className="dash-modal-header">
+              <div>
+                <h3 className="dash-modal-title">Reply to {replyModalInq.name}</h3>
+                <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Recipient: {replyModalInq.email}</span>
+              </div>
+              <button className="dash-modal-close-btn" onClick={() => setReplyModalInq(null)}><FiX /></button>
+            </div>
+            <div style={{ background: '#f8fafc', padding: '12px 16px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '16px', fontSize: '0.84rem' }}>
+              <strong style={{ color: '#082233', display: 'block', marginBottom: '4px' }}>Original Subject: {replyModalInq.subject || 'General Inquiry'}</strong>
+              <p style={{ margin: 0, color: '#475569', fontStyle: 'italic' }}>"{replyModalInq.message}"</p>
+            </div>
+            <form onSubmit={(e) => { e.preventDefault(); handleSendEmailReply(replyModalInq, quickReplyBody); }} className="dash-form-grid">
+              <div className="dash-field-group full-width">
+                <label className="dash-label">Your Custom Email Response</label>
+                <textarea
+                  className="dash-input-styled"
+                  style={{ height: '140px', fontSize: '0.88rem', lineHeight: '1.5' }}
+                  value={quickReplyBody}
+                  onChange={(e) => setQuickReplyBody(e.target.value)}
+                  placeholder="Type your response message here..."
+                  required
+                ></textarea>
+              </div>
+              <div className="dash-modal-actions">
+                <button type="button" className="action-pill-btn secondary-pill" onClick={() => setReplyModalInq(null)}>
+                  Cancel
+                </button>
+                <button type="submit" className="action-pill-btn primary-pill" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#fff', border: 'none' }}>
+                  <FiMail /> Send Response via Mail Client
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* EDIT 3D SHOWCASE CARD MODAL OVERLAY */}
       {editingShowcaseId && (
         <div className="dash-modal-backdrop">
@@ -718,7 +1238,7 @@ const SuperAdminPage = () => {
         <div className="sidebar-top-brand">
           {sidebarOpen ? (
             <>
-              <InnoveityBrandLogo size={42} darkBg={true} />
+              <InnoveityBrandLogo size={42} darkBg={false} />
               <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(false)} title="Collapse Menu">
                 <FiX />
               </button>
@@ -728,16 +1248,6 @@ const SuperAdminPage = () => {
               <FiMenu />
             </button>
           )}
-        </div>
-
-        <div className="sidebar-user-card">
-          <div className="dash-avatar-circle super-admin">
-            {currentUser?.name ? currentUser.name.substring(0, 2).toUpperCase() : 'SA'}
-          </div>
-          <div className="user-info">
-            <h4>{currentUser?.name || 'System Owner'}</h4>
-            <span className="user-role-tag" style={{ color: '#ff6b00' }}>{currentUser?.role || 'Super Admin'}</span>
-          </div>
         </div>
 
         <nav className="sidebar-nav-menu">
@@ -767,6 +1277,17 @@ const SuperAdminPage = () => {
             <span className="nav-icon"><FiUsers /></span>
             <span className="nav-label">Team Roster</span>
             <span className="nav-badge">{team ? team.length : 0}</span>
+          </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'inquiries' ? 'active' : ''}`}
+            onClick={() => setActiveTab('inquiries')}
+          >
+            <span className="nav-icon"><FiMail /></span>
+            <span className="nav-label">Inquiries & Jobs</span>
+            <span className="nav-badge" style={{ background: inquiries.some(i => i.status === 'New') ? '#ea580c' : '#64748b' }}>
+              {inquiries.length}
+            </span>
           </button>
 
           <span className="nav-section-title">Site Content</span>
@@ -819,6 +1340,17 @@ const SuperAdminPage = () => {
             <span className="nav-label">Media Division Page</span>
           </button>
 
+          <button
+            className={`nav-item-btn ${activeTab === 'sections' ? 'active' : ''}`}
+            onClick={() => setActiveTab('sections')}
+          >
+            <span className="nav-icon"><FiLayers /></span>
+            <span className="nav-label">Page Sections Builder</span>
+            <span className="nav-badge" style={{ background: '#ff6b00', color: '#fff' }}>
+              {totalSectionsCount}
+            </span>
+          </button>
+
           <span className="nav-section-title">System Admin</span>
 
           <button
@@ -859,6 +1391,7 @@ const SuperAdminPage = () => {
             <h1>
               {/* TOP HEADER */}
               {activeTab === 'overview' && 'Super Admin Master Dashboard'}
+              {activeTab === 'inquiries' && 'Inquiries & Job Applications Inbox'}
               {activeTab === 'projects' && 'Manage Projects'}
               {activeTab === 'team' && 'Team Roster Management'}
               {activeTab === 'home' && 'Homepage Content'}
@@ -867,6 +1400,7 @@ const SuperAdminPage = () => {
               {activeTab === 'seo' && 'Search Engine Optimization (SEO) & Social Meta'}
               {activeTab === 'header_footer' && 'Header, Footer & Navigation Management'}
               {activeTab === 'media' && 'Media Division Page Management'}
+              {activeTab === 'sections' && 'Dynamic Custom Page Sections Builder'}
               {activeTab === 'users' && 'Manage Administrator Accounts'}
               {activeTab === 'database' && 'System Database & Backups'}
             </h1>
@@ -875,19 +1409,14 @@ const SuperAdminPage = () => {
 
           <div className="dash-header-right">
             {notification && (
-              <div className="promo-mint-btn" style={{ background: '#fed7aa', color: '#047857' }}>
+              <div className="promo-mint-btn" style={{ background: '#fed7aa', color: '#ea580c' }}>
                 <FiCheckCircle /> {notification}
               </div>
             )}
 
-            <div className="dash-search-pill">
-              <FiSearch />
-              <input type="text" placeholder="Search system audit logs..." />
-            </div>
-
             <button
               className="btn-live-preview"
-              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '5px' }}
               onClick={async () => {
                 if (window.confirm('Push all current website content to live MySQL Database so all devices sync instantly?')) {
                   const ok = await seedCloudDatabase();
@@ -901,7 +1430,7 @@ const SuperAdminPage = () => {
 
             <button
               className="btn-live-preview"
-              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', whiteSpace: 'nowrap', fontWeight: 700 }}
               onClick={() => {
                 if (window.confirm('Are you sure you want to clear all system & CMS cache? This will reset all CMS cache storage.')) {
                   clearAllCmsCache();
@@ -913,7 +1442,7 @@ const SuperAdminPage = () => {
               <FiRefreshCw /> Clear Cache
             </button>
 
-            <Link to="/" className="btn-live-preview" target="_blank" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', whiteSpace: 'nowrap' }}>
+            <Link to="/" className="btn-live-preview" target="_blank" style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', whiteSpace: 'nowrap', fontWeight: 700 }}>
               Live Site <FiExternalLink />
             </Link>
           </div>
@@ -948,12 +1477,14 @@ const SuperAdminPage = () => {
                 <div className="donezo-badge-tag"><FiCheckCircle /> [ {projects ? projects.filter(p => !p.image).length : 0} Active ] In Progress</div>
               </div>
 
-              {/* CARD 4: PENDING PROJECTS */}
-              <div className="donezo-stat-card">
+              {/* CARD 4: PENDING INQUIRIES & APPLICATIONS */}
+              <div className="donezo-stat-card" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('inquiries')}>
                 <span className="donezo-arrow-circle">↗</span>
                 <span className="donezo-stat-title">Pending Inquiries</span>
-                <div className="donezo-stat-digit">{contactBlocks ? contactBlocks.length : 0}</div>
-                <div className="donezo-badge-tag" style={{ color: '#ea580c' }}>Active Channels</div>
+                <div className="donezo-stat-digit">{inquiries ? inquiries.length : 0}</div>
+                <div className="donezo-badge-tag" style={{ color: inquiries.some(i => i.status === 'New') ? '#ea580c' : '#10b981' }}>
+                  {inquiries.filter(i => i.status === 'New').length} New Submissions
+                </div>
               </div>
             </div>
 
@@ -1157,20 +1688,52 @@ const SuperAdminPage = () => {
                   <button className="chart-dropdown-pill" onClick={() => setActiveTab('team')}>+ Add Member</button>
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <div
+                  className="team-collab-scroll-list"
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px',
+                    maxHeight: '250px',
+                    overflowY: 'auto',
+                    paddingRight: '6px'
+                  }}
+                >
                   {team && team.length > 0 ? (
                     team.map((m, idx) => (
                       <div key={m.id || idx} style={{ display: 'flex', alignItems: 'center', padding: '8px 0', borderBottom: idx < team.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                           {m.image ? (
-                            <img src={m.image} alt={m.name} style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }} />
-                          ) : (
-                            <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fed7aa', color: '#ea580c', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.85rem' }}>
-                              {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
-                            </div>
-                          )}
+                            <img
+                              src={m.image}
+                              alt={m.name}
+                              style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover' }}
+                              onError={(e) => {
+                                e.target.onerror = null;
+                                e.target.style.display = 'none';
+                                e.target.nextSibling && (e.target.nextSibling.style.display = 'flex');
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            style={{
+                              width: '38px',
+                              height: '38px',
+                              borderRadius: '50%',
+                              background: '#fed7aa',
+                              color: '#ea580c',
+                              fontWeight: 800,
+                              display: m.image ? 'none' : 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontSize: '0.85rem',
+                              flexShrink: 0
+                            }}
+                          >
+                            {m.name ? m.name.substring(0, 2).toUpperCase() : 'TM'}
+                          </div>
                           <div>
-                            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#0f172a' }}>{m.name}</div>
+                            <div style={{ fontWeight: 700, fontSize: '0.88rem', color: '#082233' }}>{m.name}</div>
                             <div style={{ fontSize: '0.76rem', color: '#64748b' }}>{m.role || 'Full Stack Developer'}</div>
                           </div>
                         </div>
@@ -1251,7 +1814,7 @@ const SuperAdminPage = () => {
                       <FiFolder />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Add Project
                       </div>
                       <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1268,7 +1831,7 @@ const SuperAdminPage = () => {
                       <FiUsers />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Add Member
                       </div>
                       <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1285,7 +1848,7 @@ const SuperAdminPage = () => {
                       <FiDownloadCloud />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Save Backup
                       </div>
                       <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1302,7 +1865,7 @@ const SuperAdminPage = () => {
                       <FiFileText />
                     </div>
                     <div style={{ minWidth: 0, flex: 1 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.82rem', color: '#082233', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         Edit Homepage
                       </div>
                       <div style={{ fontSize: '0.7rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -1312,7 +1875,7 @@ const SuperAdminPage = () => {
                   </button>
                 </div>
 
-                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#047857', fontWeight: 700 }}>
+                <div style={{ marginTop: '12px', background: '#fff7ed', padding: '8px 12px', borderRadius: '10px', border: '1px solid #fdba74', display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#ea580c', fontWeight: 700 }}>
                   <span>Live Site Status</span>
                   <a href="/" target="_blank" rel="noreferrer" style={{ color: '#ea580c', textDecoration: 'none', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
                     Preview <FiExternalLink />
@@ -1344,7 +1907,7 @@ const SuperAdminPage = () => {
 
             {/* Showcase Header Form */}
             <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
-              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Showcase Section Header Copy</h4>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#082233', fontWeight: 700 }}>Showcase Section Header Copy</h4>
               <form onSubmit={handleSaveShowcaseHeaderSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Badge Pill Text</label>
@@ -1411,7 +1974,7 @@ const SuperAdminPage = () => {
 
             {/* Add Showcase Card Form */}
             <div className="dash-form-wrapper" style={{ marginBottom: '24px', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '20px' }}>
-              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>Add New 3D Showcase Card</h4>
+              <h4 style={{ margin: '0 0 16px 0', fontSize: '1rem', color: '#082233', fontWeight: 700 }}>Add New 3D Showcase Card</h4>
               <form onSubmit={handleAddShowcaseSubmit} className="dash-form-grid">
                 <div className="dash-field-group">
                   <label className="dash-label">Category Tag / Badge</label>
@@ -1474,7 +2037,7 @@ const SuperAdminPage = () => {
                 {/* SHOWCASE CARD IMAGE ASSET */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> Showcase Card Image Asset
                     </label>
                   </div>
@@ -1529,7 +2092,7 @@ const SuperAdminPage = () => {
 
             {/* Showcase Cards Table */}
             <div className="chart-header-row" style={{ marginTop: '20px' }}>
-              <h4 style={{ margin: 0, fontSize: '1rem', color: '#0f172a', fontWeight: 700 }}>
+              <h4 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
                 Active 3D Showcase Cards ({showcaseProjects ? showcaseProjects.length : 0})
               </h4>
             </div>
@@ -1557,10 +2120,10 @@ const SuperAdminPage = () => {
                         <img src={card.image || '/tech_blog_1.png'} alt={card.title} style={{ width: '48px', height: '48px', borderRadius: '12px', objectFit: 'cover' }} />
                       </td>
                       <td>
-                        <strong style={{ fontSize: '0.92rem', color: '#0f172a', display: 'block' }}>{card.title}</strong>
+                        <strong style={{ fontSize: '0.92rem', color: '#082233', display: 'block' }}>{card.title}</strong>
                         <span className="category-badge-pill" style={{ marginTop: '4px' }}>{card.tag}</span>
                       </td>
-                      <td style={{ color: '#047857', fontWeight: 600, fontSize: '0.84rem' }}>{card.subtitle}</td>
+                      <td style={{ color: '#ea580c', fontWeight: 600, fontSize: '0.84rem' }}>{card.subtitle}</td>
                       <td>
                         <p style={{ color: '#475569', fontSize: '0.84rem', margin: '0 0 6px 0', lineHeight: '1.4' }}>{card.description}</p>
                         <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
@@ -1632,7 +2195,7 @@ const SuperAdminPage = () => {
                 {/* PROJECT IMAGE ASSET */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#ffffff', padding: '14px', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> Case Study Project Image Asset
                     </label>
                   </div>
@@ -1705,7 +2268,7 @@ const SuperAdminPage = () => {
                     <td>
                       <img src={p.image || '/service_software.png'} alt={p.title} style={{ width: '46px', height: '46px', borderRadius: '12px', objectFit: 'cover' }} />
                     </td>
-                    <td><strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>{p.title}</strong></td>
+                    <td><strong style={{ fontSize: '0.95rem', color: '#082233' }}>{p.title}</strong></td>
                     <td><span className="category-badge-pill">{p.category}</span></td>
                     <td style={{ color: '#475569', fontSize: '0.86rem', lineHeight: '1.5' }}>{p.description}</td>
                     <td>
@@ -1889,7 +2452,7 @@ const SuperAdminPage = () => {
               return (
                 <>
                   <div className="chart-header-row" style={{ marginTop: '36px' }}>
-                    <h3 className="chart-title" style={{ color: '#047857', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <h3 className="chart-title" style={{ color: '#ea580c', display: 'flex', alignItems: 'center', gap: '8px' }}>
                       ★ Executive Leadership Roster (Founder & CEO) ({leadershipList.length})
                     </h3>
                   </div>
@@ -1902,6 +2465,10 @@ const SuperAdminPage = () => {
                         borderRadius: '20px',
                         border: '2px solid #ff6b00',
                         textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         position: 'relative'
                       }}>
                         <span style={{
@@ -1920,8 +2487,8 @@ const SuperAdminPage = () => {
                         </span>
 
                         <img src={m.image || '/Founder.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ea580c', marginBottom: '10px', marginTop: '10px' }} />
-                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#047857', fontWeight: 700 }}>{m.role}</p>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#082233', textAlign: 'center', width: '100%' }}>{m.name}</h4>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ea580c', fontWeight: 700, textAlign: 'center', width: '100%' }}>{m.role}</p>
 
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
@@ -1954,6 +2521,10 @@ const SuperAdminPage = () => {
                         borderRadius: '20px',
                         border: '1px solid #e2e8f0',
                         textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         position: 'relative'
                       }}>
                         <span style={{
@@ -1972,8 +2543,8 @@ const SuperAdminPage = () => {
                         </span>
 
                         <img src={m.image || '/Arifbillah.jpeg'} alt={m.name} style={{ width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '3px solid #ff6b00', marginBottom: '10px', marginTop: '10px' }} />
-                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#0f172a' }}>{m.name}</h4>
-                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700 }}>{m.role}</p>
+                        <h4 style={{ margin: '0 0 4px', fontSize: '1rem', color: '#082233', textAlign: 'center', width: '100%' }}>{m.name}</h4>
+                        <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#ff6b00', fontWeight: 700, textAlign: 'center', width: '100%' }}>{m.role}</p>
 
                         <div style={{ display: 'flex', gap: '6px', justifyContent: 'center', flexWrap: 'wrap' }}>
                           <button className="chart-dropdown-pill" title="Move Up" onClick={() => moveTeamMemberUp(m.id)} disabled={idx === 0} style={{ opacity: idx === 0 ? 0.4 : 1, cursor: idx === 0 ? 'not-allowed' : 'pointer' }}>
@@ -2045,7 +2616,7 @@ const SuperAdminPage = () => {
                 {/* LOCATION MAP / QR ASSET */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> Location Map / QR Code Media Asset
                     </label>
                     <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -2138,7 +2709,7 @@ const SuperAdminPage = () => {
                   {contactBlocks.map((b) => (
                     <div key={b.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', marginBottom: '8px', border: '1px solid #e2e8f0' }}>
                       <div>
-                        <strong style={{ color: '#0f172a' }}>{b.title}</strong>
+                        <strong style={{ color: '#082233' }}>{b.title}</strong>
                         <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{b.value}</div>
                       </div>
                       <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444' }} onClick={() => handleDeleteContactBlock(b.id)}>
@@ -2232,7 +2803,7 @@ const SuperAdminPage = () => {
                     <div style={{ fontSize: '0.68rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 700 }}>
                       INNOVEITYTECH.COM
                     </div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a', margin: '2px 0 4px' }}>
+                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#082233', margin: '2px 0 4px' }}>
                       {editPageSeo.title || editSeo.metaTitle}
                     </div>
                     <div style={{ fontSize: '0.76rem', color: '#64748b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -2298,7 +2869,7 @@ const SuperAdminPage = () => {
                 {/* PAGE OPEN GRAPH SOCIAL IMAGE */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> Page Open Graph (OG) Social Image
                     </label>
                     <span style={{ fontSize: '0.72rem', background: '#dbeafe', color: '#1d4ed8', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -2444,7 +3015,7 @@ const SuperAdminPage = () => {
                 {/* HERO GRAPHIC / MEDIA BANNER IMAGE ASSET */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> Hero Graphic / Media Banner Image Asset
                     </label>
                     <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -2537,7 +3108,7 @@ const SuperAdminPage = () => {
                   {homeBlocks.map((b) => (
                     <div key={b.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', marginBottom: '8px', border: '1px solid #e2e8f0' }}>
                       <div>
-                        <strong style={{ color: '#0f172a' }}>{b.title}</strong>
+                        <strong style={{ color: '#082233' }}>{b.title}</strong>
                         <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{b.subtitle}</div>
                       </div>
                       <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444' }} onClick={() => handleDeleteHomeBlock(b.id)}>
@@ -2607,7 +3178,7 @@ const SuperAdminPage = () => {
                 {/* ABOUT US PHOTO / MEDIA ASSET */}
                 <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <FiImage /> About Us Photo / Media Asset
                     </label>
                     <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -2700,7 +3271,7 @@ const SuperAdminPage = () => {
                   {aboutBlocks.map((b) => (
                     <div key={b.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', marginBottom: '8px', border: '1px solid #e2e8f0' }}>
                       <div>
-                        <strong style={{ color: '#0f172a' }}>{b.title}</strong>
+                        <strong style={{ color: '#082233' }}>{b.title}</strong>
                         <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{b.description}</div>
                       </div>
                       <button className="promo-mint-btn" style={{ background: '#fef2f2', color: '#ef4444' }} onClick={() => handleDeleteAboutBlock(b.id)}>
@@ -2830,7 +3401,7 @@ const SuperAdminPage = () => {
                         </button>
                       </div>
                       <div>
-                        <strong style={{ color: '#0f172a', fontSize: '0.95rem' }}>{link.name}</strong>
+                        <strong style={{ color: '#082233', fontSize: '0.95rem' }}>{link.name}</strong>
                         <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
                           Target: <code style={{ background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px' }}>{link.to}</code> • {link.isPage ? 'Page Route' : 'Scroll Anchor'}
                         </div>
@@ -3143,7 +3714,7 @@ const SuperAdminPage = () => {
 
                 {/* HERO BACKGROUND IMAGE MANAGEMENT */}
                 <div className="dash-field-group full-width" style={{ marginTop: '16px', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                  <label className="dash-label" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#0f172a', fontSize: '0.95rem' }}>
+                  <label className="dash-label" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#082233', fontSize: '0.95rem' }}>
                     <FiImage /> Hero Background Image Asset
                   </label>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
@@ -3185,7 +3756,7 @@ const SuperAdminPage = () => {
                           style={{ width: '110px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
                         />
                         <div style={{ flex: 1, overflow: 'hidden' }}>
-                          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a' }}>Hero Background Preview</div>
+                          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#082233' }}>Hero Background Preview</div>
                           <div style={{ fontSize: '0.74rem', color: '#64748b', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
                             {editMedia.hero.bgImage.startsWith('data:') ? 'Custom Uploaded Image (Base64)' : editMedia.hero.bgImage}
                           </div>
@@ -3234,7 +3805,7 @@ const SuperAdminPage = () => {
                   return (
                     <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233' }}>
                           Deck Card {idx + 1}: {cardMeta.title} ({cardMeta.subtitle})
                         </label>
                         <span style={{ fontSize: '0.72rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -3329,7 +3900,7 @@ const SuperAdminPage = () => {
                   return (
                     <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#0f172a' }}>
+                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233' }}>
                           Capability {idx + 1}: {capMeta.title}
                         </label>
                         <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
@@ -3605,7 +4176,7 @@ const SuperAdminPage = () => {
                   boxShadow: dbStatus === 'connected' ? '0 0 8px #ff6b00' : 'none'
                 }} />
                 <div>
-                  <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>
+                  <strong style={{ fontSize: '0.95rem', color: '#082233' }}>
                     {dbStatus === 'connected' && 'MySQL Database Connected (Live 3s Polling Active)'}
                     {dbStatus === 'connecting' && 'Connecting to MySQL Database...'}
                     {dbStatus === 'fallback' && 'Database Mode: Local Fallback (MySQL Credentials Pending)'}
@@ -3664,6 +4235,512 @@ const SuperAdminPage = () => {
                 <FiRefreshCw /> Clear Local Cache
               </button>
             </div>
+          </div>
+        )}
+
+        {/* TAB 9: CUSTOMER INQUIRIES & JOB APPLICATIONS */}
+        {activeTab === 'inquiries' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ marginBottom: '20px' }}>
+              <div>
+                <h3 className="chart-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiMail style={{ color: '#ff6b00' }} /> Customer Inquiries & Job Applications Inbox
+                </h3>
+                <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '2px 0 0' }}>
+                  Review incoming job applications and client inquiries, manage recruitment leads, and reply directly via email.
+                </p>
+              </div>
+              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                Back to Overview
+              </button>
+            </div>
+
+            {/* INQUIRIES STATS & FILTERS */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px', marginBottom: '20px', background: '#f8fafc', padding: '16px 20px', borderRadius: '18px', border: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'all' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('all')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  All ({inquiries.length})
+                </button>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'New' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('New')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  ⚡ New ({inquiries.filter(i => i.status === 'New').length})
+                </button>
+                <button
+                  className={`pos-toggle-btn ${inquiryFilter === 'Replied' ? 'active' : ''}`}
+                  onClick={() => setInquiryFilter('Replied')}
+                  style={{ padding: '6px 14px', fontSize: '0.8rem', cursor: 'pointer' }}
+                >
+                  ✓ Replied ({inquiries.filter(i => i.status === 'Replied').length})
+                </button>
+              </div>
+
+              <div style={{ position: 'relative', width: '300px' }}>
+                <FiSearch style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }} />
+                <input
+                  type="text"
+                  className="dash-input-styled"
+                  placeholder="Search applicant, email, role..."
+                  value={inquirySearch}
+                  onChange={(e) => setInquirySearch(e.target.value)}
+                  style={{ paddingLeft: '36px', height: '38px', fontSize: '0.82rem', margin: 0 }}
+                />
+              </div>
+            </div>
+
+            {/* INQUIRIES LIST CARDS */}
+            {(() => {
+              const filtered = inquiries.filter(i => {
+                const matchesFilter = inquiryFilter === 'all' || i.status === inquiryFilter;
+                const query = inquirySearch.toLowerCase();
+                const matchesSearch = !query ||
+                  (i.name && i.name.toLowerCase().includes(query)) ||
+                  (i.email && i.email.toLowerCase().includes(query)) ||
+                  (i.subject && i.subject.toLowerCase().includes(query)) ||
+                  (i.company && i.company.toLowerCase().includes(query)) ||
+                  (i.message && i.message.toLowerCase().includes(query));
+                return matchesFilter && matchesSearch;
+              });
+
+              if (filtered.length === 0) {
+                return (
+                  <div className="dash-form-wrapper" style={{ textAlign: 'center', padding: '50px 20px', color: '#64748b', background: '#f8fafc', borderRadius: '20px', border: '1px solid #e2e8f0' }}>
+                    <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: '#fff7ed', color: '#ea580c', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', fontSize: '1.6rem' }}>
+                      <FiMail />
+                    </div>
+                    <h4 style={{ margin: '0 0 6px', color: '#082233', fontSize: '1.1rem', fontWeight: 800 }}>No Applications or Inquiries Yet</h4>
+                    <p style={{ margin: 0, fontSize: '0.88rem', color: '#64748b' }}>When candidates apply for career positions or clients reach out via the contact form, submissions appear here instantly.</p>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {filtered.map((inq) => {
+                    const isJobApp = inq.subject && inq.subject.toLowerCase().includes('[job application]');
+                    return (
+                      <div
+                        key={inq.id}
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '20px',
+                          padding: '24px',
+                          border: inq.status === 'New' ? '2px solid #fdba74' : '1px solid #e2e8f0',
+                          boxShadow: inq.status === 'New' ? '0 6px 20px rgba(255, 107, 0, 0.08)' : '0 2px 8px rgba(0,0,0,0.02)',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {/* INQUIRY HEADER */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '10px', marginBottom: '14px', borderBottom: '1px solid #f1f5f9', paddingBottom: '12px' }}>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                              <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#082233', fontWeight: 800 }}>{inq.name}</h4>
+                              <span style={{
+                                fontSize: '0.72rem',
+                                fontWeight: 800,
+                                padding: '2px 10px',
+                                borderRadius: '12px',
+                                background: inq.status === 'New' ? '#fff7ed' : '#f1f5f9',
+                                color: inq.status === 'New' ? '#ea580c' : '#082233',
+                                border: inq.status === 'New' ? '1px solid #fdba74' : '1px solid #cbd5e1'
+                              }}>
+                                {inq.status === 'New' ? '● NEW SUBMISSION' : '✓ REPLIED'}
+                              </span>
+                              {isJobApp && (
+                                <span style={{
+                                  fontSize: '0.72rem',
+                                  fontWeight: 800,
+                                  padding: '2px 10px',
+                                  borderRadius: '12px',
+                                  background: '#eff6ff',
+                                  color: '#2563eb',
+                                  border: '1px solid #bfdbfe'
+                                }}>
+                                  💼 CANDIDATE APPLICATION
+                                </span>
+                              )}
+                            </div>
+                            {inq.company && inq.company !== 'N/A' && (
+                              <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '4px', fontWeight: 600 }}>
+                                🏢 {inq.company}
+                              </div>
+                            )}
+                          </div>
+
+                          <div style={{ fontSize: '0.78rem', color: '#94a3b8', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <FiClock /> {inq.date || 'Recent'}
+                          </div>
+                        </div>
+
+                        {/* INQUIRY CONTACT INFO CHIPS */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '16px' }}>
+                          <div style={{ background: '#f8fafc', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: '#082233', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid #e2e8f0' }}>
+                            <FiMail style={{ color: '#ea580c' }} />
+                            <a href={`mailto:${inq.email}`} style={{ color: 'inherit', textDecoration: 'none' }}>{inq.email}</a>
+                          </div>
+                          {inq.phone && inq.phone !== 'N/A' && (
+                            <div style={{ background: '#f8fafc', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: '#082233', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: '6px', border: '1px solid #e2e8f0' }}>
+                              <FiPhone style={{ color: '#ff6b00' }} />
+                              <span>{inq.phone}</span>
+                            </div>
+                          )}
+                          <div style={{ background: isJobApp ? '#eff6ff' : '#fff7ed', padding: '6px 12px', borderRadius: '10px', fontSize: '0.8rem', color: isJobApp ? '#2563eb' : '#ea580c', fontWeight: 800, border: isJobApp ? '1px solid #bfdbfe' : '1px solid #fdba74' }}>
+                            {isJobApp ? '💼' : '🏷️'} {inq.subject || 'General Inquiry'}
+                          </div>
+                        </div>
+
+                        {/* INQUIRY MESSAGE TEXT */}
+                        <div style={{ background: '#f8fafc', padding: '16px', borderRadius: '14px', border: '1px solid #e2e8f0', marginBottom: '16px' }}>
+                          <div style={{ fontSize: '0.74rem', color: '#94a3b8', textTransform: 'uppercase', fontWeight: 800, marginBottom: '6px' }}>
+                            {isJobApp ? 'Application & Candidate Details' : 'Message Content'}
+                          </div>
+                          <p style={{ margin: 0, fontSize: '0.9rem', color: '#082233', lineHeight: '1.6', whiteSpace: 'pre-line' }}>
+                            {inq.message}
+                          </p>
+                        </div>
+
+                        {/* ACTIONS ROW */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                              className="action-pill-btn primary-pill"
+                              style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', fontWeight: 800, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                              onClick={() => handleSendEmailReply(inq)}
+                              title={`Send direct email reply to ${inq.email}`}
+                            >
+                              <FiMail /> Reply by Email
+                            </button>
+
+                            <button
+                              className="chart-dropdown-pill"
+                              onClick={() => {
+                                setReplyModalInq(inq);
+                                setQuickReplyBody(isJobApp
+                                  ? `Dear ${inq.name},\n\nThank you for applying for the ${inq.subject.replace('[Job Application]', '').trim()} role at Innoveity Tech Solution.\n\nWe were impressed by your profile and would like to schedule a preliminary technical interview.\n\nPlease let us know your availability for a 30-minute Google Meet this week.\n\nBest regards,\nInnoveity Tech Recruitment Team`
+                                  : `Dear ${inq.name},\n\nThank you for reaching out regarding "${inq.subject}". We would be delighted to schedule a consultation to discuss your project requirements in detail.\n\nWhen would be a good time for a call?\n\nBest regards,\nInnoveity Tech Solution`
+                                );
+                              }}
+                              title="Compose customized message before sending"
+                            >
+                              <FiEdit2 /> Custom Reply
+                            </button>
+                          </div>
+
+                          <button
+                            className="promo-mint-btn"
+                            style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer' }}
+                            onClick={() => {
+                              if (window.confirm(`Delete submission from ${inq.name}?`)) {
+                                deleteInquiry(inq.id);
+                                triggerNotification('Submission removed.');
+                              }
+                            }}
+                          >
+                            <FiTrash2 /> Remove
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+          </div>
+        )}
+
+        {/* TAB: DYNAMIC CUSTOM PAGE SECTIONS BUILDER */}
+        {activeTab === 'sections' && (
+          <div className="dash-tab-content">
+            
+            {/* TOP ACTIONS BAR */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px', marginBottom: '24px', background: '#ffffff', padding: '20px 24px', borderRadius: '20px', border: '1px solid #e2e8f0', boxShadow: '0 4px 16px rgba(0,0,0,0.02)' }}>
+              <div>
+                <h3 style={{ margin: '0 0 4px', fontSize: '1.25rem', fontWeight: 800, color: '#082233', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiLayers style={{ color: '#ff6b00' }} /> Dynamic Page Sections Builder
+                </h3>
+                <p style={{ margin: 0, fontSize: '0.86rem', color: '#64748b' }}>
+                  Add custom feature grids, CTA banners, stats counters, FAQs, or media split sections to any page.
+                </p>
+              </div>
+
+              <button
+                className="action-pill-btn primary-pill"
+                style={{ background: 'linear-gradient(135deg, #ff6b00, #ea580c)', color: '#ffffff', border: 'none', fontWeight: 800, padding: '12px 22px', fontSize: '0.9rem', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                onClick={() => handleOpenAddSection(selectedSectionPage !== 'all' ? selectedSectionPage : 'home')}
+              >
+                <FiPlus size={18} /> + Add New Section
+              </button>
+            </div>
+
+            {/* PAGE FILTER PILLS */}
+            <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '12px', marginBottom: '20px' }}>
+              {[
+                { id: 'all', label: 'All Pages' },
+                { id: 'home', label: '🏠 Homepage' },
+                { id: 'about', label: 'ℹ️ About Us' },
+                { id: 'services', label: '⚙️ Services' },
+                { id: 'projects', label: '📂 Projects' },
+                { id: 'team', label: '👥 Team' },
+                { id: 'media', label: '🎬 Media Division' },
+                { id: 'contact', label: '📞 Contact' }
+              ].map((p) => {
+                const count = p.id === 'all' 
+                  ? totalSectionsCount 
+                  : (customPageSections && customPageSections[p.id] ? customPageSections[p.id].length : 0);
+                return (
+                  <button
+                    key={p.id}
+                    onClick={() => setSelectedSectionPage(p.id)}
+                    style={{
+                      padding: '8px 16px',
+                      borderRadius: '12px',
+                      fontSize: '0.84rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      border: selectedSectionPage === p.id ? '2px solid #ff6b00' : '1px solid #e2e8f0',
+                      background: selectedSectionPage === p.id ? '#fff7ed' : '#ffffff',
+                      color: selectedSectionPage === p.id ? '#ea580c' : '#475569',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      whiteSpace: 'nowrap',
+                      transition: 'all 0.2s ease'
+                    }}
+                  >
+                    <span>{p.label}</span>
+                    <span style={{ fontSize: '0.72rem', background: selectedSectionPage === p.id ? '#ffedd5' : '#f1f5f9', color: selectedSectionPage === p.id ? '#ea580c' : '#64748b', padding: '2px 6px', borderRadius: '8px', fontWeight: 800 }}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* SECTIONS LIST */}
+            {(() => {
+              const pagesToShow = selectedSectionPage === 'all'
+                ? ['home', 'about', 'services', 'projects', 'team', 'media', 'contact']
+                : [selectedSectionPage];
+
+              const allDisplaySections = [];
+              pagesToShow.forEach(pg => {
+                const list = (customPageSections && customPageSections[pg]) ? customPageSections[pg] : [];
+                list.forEach(sec => {
+                  allDisplaySections.push({ pageKey: pg, ...sec });
+                });
+              });
+
+              if (allDisplaySections.length === 0) {
+                return (
+                  <div style={{ textAlign: 'center', padding: '60px 20px', background: '#ffffff', borderRadius: '20px', border: '1px dashed #cbd5e1' }}>
+                    <FiLayers size={40} style={{ color: '#94a3b8', marginBottom: '12px' }} />
+                    <h4 style={{ margin: '0 0 6px', fontSize: '1.1rem', color: '#082233', fontWeight: 800 }}>No Sections Found for this View</h4>
+                    <p style={{ margin: '0 0 16px', fontSize: '0.88rem', color: '#64748b' }}>
+                      Click the button below to add your first custom section to this page.
+                    </p>
+                    <button
+                      className="action-pill-btn primary-pill"
+                      style={{ background: '#082233', color: '#fff', border: 'none', padding: '10px 20px' }}
+                      onClick={() => handleOpenAddSection(selectedSectionPage !== 'all' ? selectedSectionPage : 'home')}
+                    >
+                      <FiPlus /> Add Section
+                    </button>
+                  </div>
+                );
+              }
+
+              return (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {allDisplaySections.map((sec) => {
+                    const pageNames = {
+                      home: 'Homepage (/)',
+                      about: 'About Us (/about)',
+                      services: 'Services (/services)',
+                      projects: 'Projects (/projects)',
+                      team: 'Team (/team)',
+                      media: 'Media Division (/media)',
+                      contact: 'Contact (/contact)'
+                    };
+
+                    const typeLabels = {
+                      features_grid: '🔲 Features Grid',
+                      banner_cta: '⚡ CTA Banner',
+                      stats_grid: '📊 Stats Grid',
+                      faq_accordion: '❓ FAQ Accordion',
+                      info_split: '🖼️ Split Visual'
+                    };
+
+                    const isPreviewOpen = previewOpenSecId === sec.id;
+
+                    return (
+                      <div
+                        key={sec.id}
+                        style={{
+                          background: '#ffffff',
+                          borderRadius: '20px',
+                          padding: '24px',
+                          border: sec.active !== false ? '1px solid #e2e8f0' : '1px dashed #cbd5e1',
+                          opacity: sec.active !== false ? 1 : 0.65,
+                          boxShadow: '0 4px 16px rgba(0,0,0,0.02)',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        {/* SECTION CARD HEADER */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '14px' }}>
+                          <div>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+                              <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', background: '#082233', color: '#ffffff' }}>
+                                📄 {pageNames[sec.pageKey] || sec.pageKey}
+                              </span>
+                              <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', background: '#fff7ed', color: '#ea580c', border: '1px solid #fed7aa' }}>
+                                {typeLabels[sec.type] || sec.type}
+                              </span>
+                              <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', background: sec.theme === 'dark' ? '#0f172a' : (sec.theme === 'sunset' ? '#581c87' : '#f1f5f9'), color: sec.theme === 'light' ? '#0f172a' : '#ffffff' }}>
+                                🎨 {sec.theme || 'dark'} theme
+                              </span>
+                              <span style={{ fontSize: '0.72rem', fontWeight: 800, padding: '3px 10px', borderRadius: '10px', background: sec.active !== false ? '#ecfdf5' : '#fef2f2', color: sec.active !== false ? '#059669' : '#dc2626', border: sec.active !== false ? '1px solid #a7f3d0' : '1px solid #fecaca' }}>
+                                {sec.active !== false ? '● ACTIVE ON SITE' : '○ HIDDEN'}
+                              </span>
+                            </div>
+
+                            <h4 style={{ margin: '0 0 4px', fontSize: '1.15rem', color: '#082233', fontWeight: 800 }}>
+                              {sec.title || '(Untitled Section)'}
+                            </h4>
+                            {sec.subtitle && (
+                              <p style={{ margin: 0, fontSize: '0.86rem', color: '#64748b' }}>
+                                {sec.subtitle}
+                              </p>
+                            )}
+                          </div>
+
+                          {/* REORDER & STATUS CONTROLS */}
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                            <button
+                              type="button"
+                              className="pos-toggle-btn"
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer' }}
+                              onClick={() => moveCustomSection && moveCustomSection(sec.pageKey, sec.id, 'up')}
+                              title="Move Section Up"
+                            >
+                              <FiArrowUp /> Up
+                            </button>
+                            <button
+                              type="button"
+                              className="pos-toggle-btn"
+                              style={{ padding: '4px 8px', fontSize: '0.75rem', cursor: 'pointer' }}
+                              onClick={() => moveCustomSection && moveCustomSection(sec.pageKey, sec.id, 'down')}
+                              title="Move Section Down"
+                            >
+                              <FiArrowDown /> Down
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => toggleCustomSectionStatus && toggleCustomSectionStatus(sec.pageKey, sec.id)}
+                              style={{
+                                padding: '5px 12px',
+                                borderRadius: '10px',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                cursor: 'pointer',
+                                border: '1px solid #cbd5e1',
+                                background: sec.active !== false ? '#f8fafc' : '#ecfdf5',
+                                color: sec.active !== false ? '#475569' : '#059669'
+                              }}
+                            >
+                              {sec.active !== false ? 'Hide from Site' : 'Show on Site'}
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* SECTION META CHIPS */}
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', padding: '12px 16px', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '14px', fontSize: '0.8rem' }}>
+                          {sec.badge && (
+                            <span style={{ fontWeight: 700, color: '#082233' }}>
+                              🏷️ Badge: <strong style={{ color: '#ea580c' }}>{sec.badge}</strong>
+                            </span>
+                          )}
+                          {sec.items && (
+                            <span style={{ fontWeight: 700, color: '#082233' }}>
+                              📦 Items: <strong>{sec.items.length} Elements</strong>
+                            </span>
+                          )}
+                          {sec.ctaText && (
+                            <span style={{ fontWeight: 700, color: '#082233' }}>
+                              🔗 Button: <strong>{sec.ctaText}</strong> ({sec.ctaUrl || '/contact'})
+                            </span>
+                          )}
+                        </div>
+
+                        {/* EXPANDABLE LIVE PREVIEW */}
+                        {isPreviewOpen && (
+                          <div style={{ background: sec.theme === 'light' ? '#ffffff' : (sec.theme === 'sunset' ? 'linear-gradient(135deg, #0b1528, #2e1065)' : '#06111e'), color: sec.theme === 'light' ? '#0f172a' : '#ffffff', padding: '24px', borderRadius: '16px', border: '1px solid rgba(255, 107, 0, 0.3)', marginBottom: '16px' }}>
+                            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#ff6b00', textTransform: 'uppercase', marginBottom: '10px', letterSpacing: '0.8px' }}>
+                              🔍 Live Interactive Section Preview
+                            </div>
+                            {sec.badge && <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ff6b00', background: 'rgba(255,107,0,0.12)', padding: '2px 8px', borderRadius: '20px', display: 'inline-block', marginBottom: '6px' }}>{sec.badge}</div>}
+                            <h3 style={{ margin: '0 0 6px', fontSize: '1.3rem', fontWeight: 900, color: sec.theme === 'light' ? '#0f172a' : '#ffffff' }}>{sec.title}</h3>
+                            {sec.subtitle && <p style={{ margin: '0 0 16px', fontSize: '0.88rem', opacity: 0.85 }}>{sec.subtitle}</p>}
+                            
+                            {sec.items && sec.items.length > 0 && (
+                              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
+                                {sec.items.map((it, idx) => (
+                                  <div key={idx} style={{ background: sec.theme === 'light' ? '#f8fafc' : 'rgba(255,255,255,0.06)', padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                                    <strong style={{ display: 'block', fontSize: '0.88rem', color: '#ff6b00', marginBottom: '3px' }}>{it.title || it.number || it.question || `Item #${idx+1}`}</strong>
+                                    <span style={{ fontSize: '0.8rem', opacity: 0.85 }}>{it.desc || it.label || it.answer || ''}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* ACTION BUTTONS */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                              className="action-pill-btn primary-pill"
+                              style={{ background: '#082233', color: '#ffffff', border: 'none', padding: '8px 16px', fontSize: '0.82rem', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                              onClick={() => handleOpenEditSection(sec.pageKey, sec)}
+                            >
+                              <FiEdit2 /> Edit Content & Layout
+                            </button>
+
+                            <button
+                              className="chart-dropdown-pill"
+                              style={{ padding: '8px 14px', fontSize: '0.82rem' }}
+                              onClick={() => setPreviewOpenSecId(isPreviewOpen ? null : sec.id)}
+                            >
+                              {isPreviewOpen ? 'Hide Preview' : 'Preview Section'}
+                            </button>
+                          </div>
+
+                          <button
+                            className="promo-mint-btn"
+                            style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', cursor: 'pointer', padding: '6px 14px', fontSize: '0.8rem' }}
+                            onClick={() => {
+                              if (window.confirm(`Are you sure you want to permanently delete section "${sec.title || sec.id}" from ${sec.pageKey} page?`)) {
+                                deleteCustomSection(sec.pageKey, sec.id);
+                                triggerNotification('Section deleted successfully.');
+                              }
+                            }}
+                          >
+                            <FiTrash2 /> Delete Section
+                          </button>
+                        </div>
+
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+
           </div>
         )}
 

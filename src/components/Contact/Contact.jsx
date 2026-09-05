@@ -7,7 +7,7 @@ import { useCMS } from '../../context/CMSContext';
 import './Contact.css';
 
 const Contact = () => {
-  const { contact } = useCMS();
+  const { contact, addInquiry } = useCMS();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -31,7 +31,21 @@ const Contact = () => {
     if (formData.firstName && formData.email && formData.message) {
       setIsSubmitting(true);
       const targetEmail = (contact && contact.email) ? contact.email : "aachinancy@gmail.com";
+      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
+      // 1. Immediately save record to CMSContext (Syncs with MySQL and LocalStorage)
+      if (addInquiry) {
+        addInquiry({
+          name: fullName,
+          email: formData.email,
+          phone: formData.phone || 'N/A',
+          company: formData.company || 'N/A',
+          subject: formData.subject || 'General Inquiry',
+          message: formData.message
+        });
+      }
+
+      // 2. Dispatch Email Notification to Admin Inbox
       try {
         await fetch(`https://formsubmit.co/ajax/${targetEmail}`, {
           method: "POST",
@@ -40,8 +54,8 @@ const Contact = () => {
             'Accept': 'application/json'
           },
           body: JSON.stringify({
-            _subject: `📌 New Contact Inquiry from ${formData.firstName} ${formData.lastName}`,
-            name: `${formData.firstName} ${formData.lastName}`.trim(),
+            _subject: `📌 New Website Contact Inquiry from ${fullName}`,
+            name: fullName,
             email: formData.email,
             phone: formData.phone || 'N/A',
             company: formData.company || 'N/A',

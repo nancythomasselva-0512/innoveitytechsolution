@@ -6,6 +6,7 @@ import {
 } from 'react-icons/fi';
 import emailjs from '@emailjs/browser';
 import { useCMS } from '../context/CMSContext';
+import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './ContactPage.css';
 
 const ContactPage = () => {
@@ -13,7 +14,7 @@ const ContactPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  const { contact } = useCMS();
+  const { contact, addInquiry } = useCMS();
 
   // Dynamic rotating words for hero heading
   const rotatingWords = [
@@ -88,6 +89,17 @@ ${formData.message}
         to_email: targetEmail,
         to_name: 'Innoveity Admin'
       };
+
+      if (addInquiry) {
+        addInquiry({
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+          phone: formData.phone || 'N/A',
+          company: formData.company || 'N/A',
+          subject: formData.subject || 'General Inquiry',
+          message: formData.message
+        });
+      }
 
       try {
         emailjs.init(publicKey);
@@ -386,6 +398,9 @@ ${formData.message}
         </div>
 
       </div>
+
+      {/* DYNAMIC CUSTOM SECTIONS */}
+      <DynamicPageSections page="contact" />
 
     </div>
   );

@@ -14,7 +14,7 @@
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background: linear-gradient(135deg, #fff7ed 0%, #fff7ed 45%, #e6f4f1 100%);
+  background: linear-gradient(135deg, #fff7ed 0%, #fff7ed 45%, #ffedd5 100%);
   color: #082233;
   padding: 20px;
   gap: 20px;
@@ -125,7 +125,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  background: linear-gradient(135deg, #fff7ed 0%, #e6f4f1 100%);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
   padding: 12px 14px;
   border-radius: 18px;
   margin-bottom: 20px;
@@ -224,7 +224,7 @@
 }
 
 .nav-item-btn.active .nav-icon {
-  color: #34d399;
+  color: #ff914d;
 }
 
 .nav-badge {
@@ -304,27 +304,38 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 20px;
   flex-shrink: 0;
+}
+
+.dash-header-title {
+  flex-shrink: 0;
+  min-width: max-content;
 }
 
 .dash-header-title h1 {
   font-family: var(--font-heading);
-  font-size: 1.45rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: #082233;
   margin: 0;
+  white-space: nowrap;
+  line-height: 1.2;
 }
 
 .dash-header-title p {
   font-size: 0.85rem;
   color: #5a6e69;
   margin: 2px 0 0;
+  white-space: nowrap;
 }
 
 .dash-header-right {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: nowrap;
+  flex-shrink: 1;
 }
 
 .dash-search-pill {
@@ -384,17 +395,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #ff6b00, #ea580c);
+  gap: 6px;
+  background: linear-gradient(135deg, #ff914d, #ff6b00);
   color: #ffffff;
-  padding: 10px 22px;
+  padding: 7px 15px;
   border-radius: 50px;
   text-decoration: none;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 700;
   white-space: nowrap;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.25);
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.2);
   transition: all 0.3s ease;
 }
 
@@ -496,10 +507,10 @@
   background: #082233 !important;
   color: #ffffff !important;
   border-color: #082233 !important;
-  box-shadow: 0 4px 14px rgba(9, 60, 37, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(8, 34, 51, 0.25) !important;
 }
 
-/* Mini Cards Row (Pastel Mint & Sage Cards) */
+/* Mini Cards Row */
 .mini-cards-row {
   display: grid;
   grid-template-columns: 1fr 0.75fr 0.4fr;
@@ -520,7 +531,7 @@
 }
 
 .mini-card-mint {
-  background: linear-gradient(135deg, #e6f4f1 0%, #fed7aa 100%);
+  background: linear-gradient(135deg, #ffedd5 0%, #fed7aa 100%);
   border-radius: 18px;
   padding: 16px;
   color: #082233;
@@ -528,7 +539,7 @@
   flex-direction: column;
   justify-content: space-between;
   min-height: 100px;
-  box-shadow: 0 6px 16px rgba(18, 18, 18, 0.08);
+  box-shadow: 0 6px 16px rgba(255, 107, 0, 0.12);
 }
 
 .mini-card-dark-btn {
@@ -561,9 +572,9 @@
   color: #ea580c;
 }
 
-/* WIDGET 2: Soft Mint Bar Chart */
+/* WIDGET 2: Soft Warm Bar Chart */
 .card-bar-chart {
-  background: #e6f4f1;
+  background: #fff7ed;
   border-radius: 24px;
   padding: 22px;
   display: flex;
@@ -838,7 +849,7 @@
   border-radius: 12px !important;
   padding: 10px 14px !important;
   font-size: 0.88rem !important;
-  color: #0f172a !important;
+  color: #082233 !important;
   outline: none !important;
   transition: all 0.2s ease !important;
   width: 100% !important;
@@ -894,7 +905,7 @@ select.dash-input-styled {
   border: 1px solid #fed7aa !important;
   position: relative;
   box-sizing: border-box;
-  color: #0f172a !important;
+  color: #082233 !important;
   animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   margin: auto;
 }
@@ -958,7 +969,7 @@ select.dash-input-styled {
 
 .dash-modal-close-btn:hover {
   background: #e2e8f0;
-  color: #0f172a;
+  color: #082233;
 }
 
 /* MODAL ACTION BUTTONS & PILLS */
@@ -1023,7 +1034,7 @@ select.dash-input-styled {
 
 .action-pill-btn.secondary-pill:hover {
   background: #e2e8f0 !important;
-  color: #0f172a !important;
+  color: #082233 !important;
 }
 
 /* Category Badge Pill Fix */
@@ -1344,10 +1355,10 @@ select.dash-input-styled {
 }
 
 .donezo-featured-card {
-  background: linear-gradient(145deg, #082233 0%, #052618 100%);
+  background: linear-gradient(145deg, #0d344d 0%, #082233 100%);
   color: #ffffff;
   border: none;
-  box-shadow: 0 8px 25px rgba(9, 60, 37, 0.25);
+  box-shadow: 0 8px 25px rgba(8, 34, 51, 0.3);
 }
 
 .donezo-arrow-circle {
@@ -1355,7 +1366,7 @@ select.dash-input-styled {
   height: 34px;
   border-radius: 50%;
   background: #f1f5f9;
-  color: #0f172a;
+  color: #082233;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1402,7 +1413,7 @@ select.dash-input-styled {
 }
 
 .donezo-featured-card .donezo-badge-tag {
-  color: #6ee7b7;
+  color: #ff914d;
 }
 
 /* Middle Donezo Grid (3 Columns) */
@@ -1457,7 +1468,7 @@ select.dash-input-styled {
 .donezo-task-title {
   font-weight: 700;
   font-size: 0.85rem;
-  color: #0f172a;
+  color: #082233;
 }
 
 .donezo-task-date {
@@ -1474,7 +1485,7 @@ select.dash-input-styled {
 
 /* Dark Time Tracker Card */
 .donezo-tracker-card {
-  background: linear-gradient(145deg, #073822 0%, #032114 100%);
+  background: linear-gradient(145deg, #0d344d 0%, #082233 100%);
   color: #ffffff;
   border-radius: 20px;
   padding: 22px;
@@ -1483,7 +1494,7 @@ select.dash-input-styled {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 8px 25px rgba(7, 56, 34, 0.3);
+  box-shadow: 0 8px 25px rgba(8, 34, 51, 0.3);
 }
 
 .donezo-tracker-card::after {
@@ -1519,7 +1530,7 @@ select.dash-input-styled {
   border-radius: 50%;
   border: none;
   background: #ffffff;
-  color: #073822;
+  color: #082233;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -1541,11 +1552,11 @@ select.dash-input-styled {
 /* Sidebar App Promo Banner */
 .donezo-sidebar-promo {
   margin-top: auto;
-  background: linear-gradient(145deg, #082233 0%, #042114 100%);
+  background: linear-gradient(145deg, #0d344d 0%, #082233 100%);
   border-radius: 18px;
   padding: 16px;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(9, 60, 37, 0.2);
+  box-shadow: 0 6px 20px rgba(8, 34, 51, 0.25);
 }
 
 .donezo-sidebar-promo h5 {
@@ -1591,7 +1602,7 @@ select.dash-input-styled {
   height: 36px;
   border-radius: 50%;
   background: #f1f5f9;
-  color: #0f172a;
+  color: #082233;
   border: none;
   font-size: 1.2rem;
   display: flex;
@@ -1634,7 +1645,7 @@ select.dash-input-styled {
   border-radius: 12px;
   padding: 11px 14px;
   font-size: 0.88rem;
-  color: #0f172a;
+  color: #082233;
   outline: none;
   font-family: var(--font-family);
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -1693,4 +1704,23 @@ select.dash-input-styled {
   .dash-form-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.team-collab-scroll-list {
+  scrollbar-width: thin;
+  scrollbar-color: #fdba74 #fff7ed;
+}
+
+.team-collab-scroll-list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.team-collab-scroll-list::-webkit-scrollbar-track {
+  background: #fff7ed;
+  border-radius: 10px;
+}
+
+.team-collab-scroll-list::-webkit-scrollbar-thumb {
+  background: #fdba74;
+  border-radius: 10px;
 }

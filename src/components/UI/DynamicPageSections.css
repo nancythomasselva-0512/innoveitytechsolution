@@ -1,0 +1,484 @@
+/* Dynamic Custom Page Sections Styling */
+
+.dynamic-custom-sections-wrapper {
+  width: 100%;
+  position: relative;
+}
+
+.dynamic-section-block {
+  width: 100%;
+  position: relative;
+  padding: 90px 0;
+  overflow: hidden;
+}
+
+/* Theme variations */
+.dynamic-theme-dark {
+  background: #06111e;
+  color: #f8fafc;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.dynamic-theme-dark .dyn-sec-title {
+  color: #ffffff;
+}
+
+.dynamic-theme-dark .dyn-sec-subtitle {
+  color: #94a3b8;
+}
+
+.dynamic-theme-light {
+  background: #ffffff;
+  color: #0f172a;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dynamic-theme-light .dyn-sec-title {
+  color: #0f172a;
+}
+
+.dynamic-theme-light .dyn-sec-subtitle {
+  color: #475569;
+}
+
+.dynamic-theme-sunset {
+  background: linear-gradient(135deg, #0b1528 0%, #1e1b4b 50%, #2e1065 100%);
+  color: #f8fafc;
+  border-top: 1px solid rgba(255, 107, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+}
+
+.dynamic-theme-sunset .dyn-sec-title {
+  color: #ffffff;
+}
+
+.dynamic-theme-sunset .dyn-sec-subtitle {
+  color: #cbd5e1;
+}
+
+/* Section Header */
+.dyn-sec-header {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 50px auto;
+  position: relative;
+  z-index: 2;
+}
+
+.dyn-sec-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  margin-bottom: 16px;
+  background: rgba(255, 107, 0, 0.12);
+  color: #ff6b00;
+  border: 1px solid rgba(255, 107, 0, 0.25);
+  box-shadow: 0 0 20px rgba(255, 107, 0, 0.15);
+}
+
+.dyn-sec-title {
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0 0 16px 0;
+}
+
+.dyn-sec-subtitle {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* 1. Features Grid Layout */
+.dyn-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.dyn-feature-card {
+  padding: 32px 28px;
+  border-radius: 20px;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.dynamic-theme-dark .dyn-feature-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.dynamic-theme-dark .dyn-feature-card:hover {
+  border-color: rgba(255, 107, 0, 0.5);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 107, 0, 0.15);
+  transform: translateY(-5px);
+}
+
+.dynamic-theme-light .dyn-feature-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+.dynamic-theme-light .dyn-feature-card:hover {
+  border-color: #ff6b00;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+}
+
+.dynamic-theme-sunset .dyn-feature-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+}
+
+.dynamic-theme-sunset .dyn-feature-card:hover {
+  border-color: #ff9100;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 145, 0, 0.25);
+  transform: translateY(-5px);
+}
+
+.dyn-card-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  background: rgba(255, 107, 0, 0.15);
+  color: #ff6b00;
+}
+
+.dyn-card-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 12px 0;
+  line-height: 1.35;
+}
+
+.dyn-card-desc {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+  opacity: 0.85;
+}
+
+/* 2. CTA Banner Layout */
+.dyn-banner-cta {
+  border-radius: 28px;
+  padding: 60px 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+}
+
+.dynamic-theme-dark .dyn-banner-cta {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%);
+  border: 1px solid rgba(255, 107, 0, 0.3);
+}
+
+.dynamic-theme-light .dyn-banner-cta {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 107, 0, 0.3);
+}
+
+.dynamic-theme-light .dyn-banner-cta .dyn-sec-title,
+.dynamic-theme-light .dyn-banner-cta .dyn-sec-subtitle {
+  color: #ffffff;
+}
+
+.dynamic-theme-sunset .dyn-banner-cta {
+  background: linear-gradient(135deg, rgba(255, 107, 0, 0.2) 0%, rgba(234, 88, 12, 0.3) 100%);
+  border: 1px solid rgba(255, 145, 0, 0.4);
+  backdrop-filter: blur(20px);
+}
+
+.dyn-cta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.dyn-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 32px;
+  border-radius: 9999px;
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(255, 107, 0, 0.35);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.dyn-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(255, 107, 0, 0.5);
+  color: #ffffff;
+}
+
+.dyn-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  border-radius: 9999px;
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.dyn-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+/* 3. Stats Grid Layout */
+.dyn-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.dyn-stat-box {
+  padding: 36px 24px;
+  border-radius: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.dynamic-theme-dark .dyn-stat-box {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dynamic-theme-light .dyn-stat-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.dynamic-theme-sunset .dyn-stat-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.dyn-stat-number {
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1;
+  margin-bottom: 10px;
+  background: linear-gradient(135deg, #ff6b00 0%, #ff9100 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.dyn-stat-label {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.dyn-stat-desc {
+  font-size: 0.84rem;
+  opacity: 0.75;
+  margin: 0;
+  max-width: 200px;
+}
+
+/* 4. FAQ Accordion Layout */
+.dyn-faq-container {
+  max-width: 840px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.dyn-faq-item {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.dynamic-theme-dark .dyn-faq-item {
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dynamic-theme-dark .dyn-faq-item.open {
+  border-color: rgba(255, 107, 0, 0.4);
+}
+
+.dynamic-theme-light .dyn-faq-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.dynamic-theme-light .dyn-faq-item.open {
+  border-color: #ff6b00;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+}
+
+.dynamic-theme-sunset .dyn-faq-item {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.dyn-faq-question-btn {
+  width: 100%;
+  padding: 22px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: inherit;
+}
+
+.dyn-faq-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 107, 0, 0.12);
+  color: #ff6b00;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.dyn-faq-item.open .dyn-faq-icon {
+  transform: rotate(180deg);
+  background: #ff6b00;
+  color: #ffffff;
+}
+
+.dyn-faq-answer {
+  padding: 0 26px 24px 26px;
+  font-size: 0.96rem;
+  line-height: 1.7;
+  opacity: 0.9;
+}
+
+/* 5. Split Visual & Content Layout */
+.dyn-split-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  gap: 50px;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.dyn-split-visual {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.dyn-split-img {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  object-fit: cover;
+  display: block;
+}
+
+.dyn-split-bullets {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 24px 0 32px 0;
+}
+
+.dyn-split-bullet-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+.dyn-bullet-check {
+  color: #ff6b00;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* Responsive queries */
+@media (max-width: 991px) {
+  .dyn-split-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .dyn-banner-cta {
+    padding: 40px 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dynamic-section-block {
+    padding: 60px 0;
+  }
+
+  .dyn-sec-title {
+    font-size: 1.85rem;
+  }
+
+  .dyn-features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dyn-stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}

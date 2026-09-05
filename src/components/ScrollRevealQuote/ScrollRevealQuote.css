@@ -26,10 +26,10 @@
 
 /* Faded/Inactive state vs Active state for Light Themes (White / Cream BG) */
 .scroll-reveal-quote-text.theme-light .reveal-word {
-  color: rgba(120, 130, 140, 0.35);
+  color: #94a3b8;
 }
 
 .scroll-reveal-quote-text.theme-light .reveal-word.is-active {
   color: #082233;
-  font-weight: 700;
+  font-weight: 600;
 }

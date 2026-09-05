@@ -99,11 +99,11 @@ const Navbar = () => {
         <div className="navbar-brand">
           {isHome ? (
             <ScrollLink to="home" smooth={true} duration={500} className="brand-link">
-              <InnoveityBrandLogo size={46} darkBg={false} />
+              <InnoveityBrandLogo size={42} darkBg={false} />
             </ScrollLink>
           ) : (
             <RouterLink to="/" className="brand-link">
-              <InnoveityBrandLogo size={46} darkBg={false} />
+              <InnoveityBrandLogo size={42} darkBg={false} />
             </RouterLink>
           )}
         </div>
