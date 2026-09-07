@@ -517,61 +517,92 @@ const SuperAdminPage = () => {
   };
 
   // Dynamic Content Blocks & Media state for Homepage, About Us & Contact
-  const [homeBlocks, setHomeBlocks] = useState([
+  // Dynamic Content Blocks & Media state for Homepage, About Us & Contact
+  const [homeBlocks, setHomeBlocks] = useState(() => homeContent?.homeBlocks || [
     { id: 1, title: 'AI Automation & Cloud Solutions', subtitle: 'Delivering next-gen web architecture and scalable cloud apps.' },
     { id: 2, title: 'Interactive UI/UX & Dynamic Rotator', subtitle: 'Crafting pixel-perfect web design and fluid micro-animations.' }
   ]);
   const [newHomeBlock, setNewHomeBlock] = useState({ title: '', subtitle: '' });
 
-  const [aboutBlocks, setAboutBlocks] = useState([
+  const [aboutBlocks, setAboutBlocks] = useState(() => aboutContent?.aboutBlocks || [
     { id: 1, title: 'Engineering Excellence', description: 'Building resilient software products built for modern scale.' },
     { id: 2, title: 'Agile Delivery', description: 'End-to-end strategy, rapid execution, and continuous optimization.' }
   ]);
   const [newAboutBlock, setNewAboutBlock] = useState({ title: '', description: '' });
 
-  const [contactBlocks, setContactBlocks] = useState([
+  const [contactBlocks, setContactBlocks] = useState(() => contact?.contactBlocks || [
     { id: 1, title: 'Direct Technical Desk', value: 'tech@innoveitytech.com' },
     { id: 2, title: 'Headquarters Location', value: 'Chennai, Tamil Nadu, India' }
   ]);
   const [newContactBlock, setNewContactBlock] = useState({ title: '', value: '' });
 
+  useEffect(() => {
+    if (homeContent?.homeBlocks) setHomeBlocks(homeContent.homeBlocks);
+    if (aboutContent?.aboutBlocks) setAboutBlocks(aboutContent.aboutBlocks);
+    if (contact?.contactBlocks) setContactBlocks(contact.contactBlocks);
+  }, [homeContent?.homeBlocks, aboutContent?.aboutBlocks, contact?.contactBlocks]);
+
   const handleAddHomeBlock = (e) => {
     e.preventDefault();
     if (!newHomeBlock.title) return;
-    setHomeBlocks([...homeBlocks, { id: Date.now(), ...newHomeBlock }]);
+    const updatedBlocks = [...homeBlocks, { id: Date.now(), ...newHomeBlock }];
+    setHomeBlocks(updatedBlocks);
+    const updatedHome = { ...editHome, homeBlocks: updatedBlocks };
+    setEditHome(updatedHome);
+    if (updateHomeContent) updateHomeContent(updatedHome);
     setNewHomeBlock({ title: '', subtitle: '' });
-    triggerNotification('Added new Homepage content block!');
+    triggerNotification('Added new Homepage content block & synced live!');
   };
 
   const handleDeleteHomeBlock = (id) => {
-    setHomeBlocks(homeBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed Homepage content block');
+    const updatedBlocks = homeBlocks.filter(b => b.id !== id);
+    setHomeBlocks(updatedBlocks);
+    const updatedHome = { ...editHome, homeBlocks: updatedBlocks };
+    setEditHome(updatedHome);
+    if (updateHomeContent) updateHomeContent(updatedHome);
+    triggerNotification('Removed Homepage content block & synced live');
   };
 
   const handleAddAboutBlock = (e) => {
     e.preventDefault();
     if (!newAboutBlock.title) return;
-    setAboutBlocks([...aboutBlocks, { id: Date.now(), ...newAboutBlock }]);
+    const updatedBlocks = [...aboutBlocks, { id: Date.now(), ...newAboutBlock }];
+    setAboutBlocks(updatedBlocks);
+    const updatedAbout = { ...editAbout, aboutBlocks: updatedBlocks };
+    setEditAbout(updatedAbout);
+    if (updateAboutContent) updateAboutContent(updatedAbout);
     setNewAboutBlock({ title: '', description: '' });
-    triggerNotification('Added new About Us content block!');
+    triggerNotification('Added new About Us content block & synced live!');
   };
 
   const handleDeleteAboutBlock = (id) => {
-    setAboutBlocks(aboutBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed About Us content block');
+    const updatedBlocks = aboutBlocks.filter(b => b.id !== id);
+    setAboutBlocks(updatedBlocks);
+    const updatedAbout = { ...editAbout, aboutBlocks: updatedBlocks };
+    setEditAbout(updatedAbout);
+    if (updateAboutContent) updateAboutContent(updatedAbout);
+    triggerNotification('Removed About Us content block & synced live');
   };
 
   const handleAddContactBlock = (e) => {
     e.preventDefault();
     if (!newContactBlock.title) return;
-    setContactBlocks([...contactBlocks, { id: Date.now(), ...newContactBlock }]);
+    const updatedBlocks = [...contactBlocks, { id: Date.now(), ...newContactBlock }];
+    setContactBlocks(updatedBlocks);
+    const updatedContact = { ...editContact, contactBlocks: updatedBlocks };
+    setEditContact(updatedContact);
+    if (updateContact) updateContact(updatedContact);
     setNewContactBlock({ title: '', value: '' });
-    triggerNotification('Added new Contact channel block!');
+    triggerNotification('Added new Contact channel block & synced live!');
   };
 
   const handleDeleteContactBlock = (id) => {
-    setContactBlocks(contactBlocks.filter(b => b.id !== id));
-    triggerNotification('Removed Contact channel block');
+    const updatedBlocks = contactBlocks.filter(b => b.id !== id);
+    setContactBlocks(updatedBlocks);
+    const updatedContact = { ...editContact, contactBlocks: updatedBlocks };
+    setEditContact(updatedContact);
+    if (updateContact) updateContact(updatedContact);
+    triggerNotification('Removed Contact channel block & synced live');
   };
 
   const handleSaveContact = (e) => {

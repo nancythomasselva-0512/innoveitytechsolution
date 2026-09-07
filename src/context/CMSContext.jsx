@@ -193,7 +193,8 @@ export const CMSProvider = ({ children }) => {
     stat3Number: "50+",
     stat3Label: "Tech Experts",
     stat4Number: "99%",
-    stat4Label: "Client Success"
+    stat4Label: "Client Success",
+    buildingImage: "/technology_connects_possibilities.png"
   };
 
   const defaultSeoSettings = {
@@ -418,7 +419,7 @@ export const CMSProvider = ({ children }) => {
       company: 'Aura Health Platforms',
       rating: 5,
       content: 'Innoveity Tech Solution delivered our AI-driven telemedicine platform ahead of schedule with flawless architecture and high scalability.',
-      avatar: '/Sarah.jpeg'
+      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'
     },
     {
       id: 2,
@@ -427,7 +428,43 @@ export const CMSProvider = ({ children }) => {
       company: 'Nexis Cloud Global',
       rating: 5,
       content: 'Their team designed a stellar modern web application that transformed our enterprise user engagement metrics by over 240%.',
-      avatar: '/David.jpeg'
+      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 3,
+      name: 'Elena Rodriguez',
+      role: 'Head of Digital Innovation',
+      company: 'FinScale Capital',
+      rating: 5,
+      content: 'Working with Innoveity Tech was transformative. They engineered an automated financial intelligence engine that handles high-frequency workloads with zero downtime.',
+      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 4,
+      name: 'Marcus Vance',
+      role: 'Co-Founder & COO',
+      company: 'Orbit Logistics Tech',
+      rating: 5,
+      content: 'From scoping to deployment, Innoveity exceeded every benchmark. Their real-time telematics tracking and fleet platform streamlined our operations nationwide.',
+      avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 5,
+      name: 'Dr. Priya Sharma',
+      role: 'Director of Learning Technologies',
+      company: 'EduSphere Global',
+      rating: 5,
+      content: 'The e-learning platform built by Innoveity Tech has empowered over 50,000 students globally with seamless video classrooms and interactive assessment tools.',
+      avatar: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=150&auto=format&fit=crop&q=80'
+    },
+    {
+      id: 6,
+      name: 'Alex Rivers',
+      role: 'Head of Product Engineering',
+      company: 'CyberShield Matrix',
+      rating: 5,
+      content: 'Innoveity’s agile methodology, clean code architecture, and AI capabilities make them our top trusted development partner for critical systems.',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80'
     }
   ];
 
@@ -621,7 +658,13 @@ export const CMSProvider = ({ children }) => {
     return loaded;
   });
   const [adminUsers, setAdminUsers] = useState(() => loadLocalState('admin_users', defaultAdminAccounts));
-  const [testimonials, setTestimonials] = useState(() => loadLocalState('testimonials', defaultTestimonials));
+  const [testimonials, setTestimonials] = useState(() => {
+    const loaded = loadLocalState('testimonials', defaultTestimonials);
+    if (!loaded || !Array.isArray(loaded) || loaded.length < 3) {
+      return defaultTestimonials;
+    }
+    return loaded;
+  });
   const [mediaGallery, setMediaGallery] = useState(() => loadLocalState('media_gallery', defaultMediaGallery));
   const [careers, setCareers] = useState(() => loadLocalState('careers', defaultCareers));
   const [blogPosts, setBlogPosts] = useState(() => loadLocalState('blog_posts', defaultBlogPosts));
@@ -703,12 +746,74 @@ export const CMSProvider = ({ children }) => {
         return;
       }
 
-      if (data.projects && data.projects.length > 0) setProjects(data.projects);
-      if (data.showcaseProjects && data.showcaseProjects.length > 0) setShowcaseProjects(data.showcaseProjects);
-      if (data.team && data.team.length > 0) setTeam(data.team);
-      if (data.adminUsers && data.adminUsers.length > 0) setAdminUsers(data.adminUsers);
-
       const s = data.settings || {};
+
+      // 1. Collections - Prioritize list setting (which preserves exact display order) then database rows
+      if (s.projects_list && Array.isArray(s.projects_list) && s.projects_list.length > 0) {
+        setProjects(s.projects_list);
+      } else if (data.projects && data.projects.length > 0) {
+        setProjects(data.projects);
+      }
+
+      if (s.showcase_projects_list && Array.isArray(s.showcase_projects_list) && s.showcase_projects_list.length > 0) {
+        setShowcaseProjects(s.showcase_projects_list);
+      } else if (data.showcaseProjects && data.showcaseProjects.length > 0) {
+        setShowcaseProjects(data.showcaseProjects);
+      }
+
+      if (s.team_list && Array.isArray(s.team_list) && s.team_list.length > 0) {
+        setTeam(s.team_list);
+      } else if (data.team && data.team.length > 0) {
+        setTeam(data.team);
+      }
+
+      if (s.admin_users_list && Array.isArray(s.admin_users_list) && s.admin_users_list.length > 0) {
+        setAdminUsers(s.admin_users_list);
+      } else if (data.adminUsers && data.adminUsers.length > 0) {
+        setAdminUsers(data.adminUsers);
+      }
+
+      if (s.testimonials && Array.isArray(s.testimonials)) {
+        setTestimonials(s.testimonials);
+      } else if (data.testimonials && Array.isArray(data.testimonials)) {
+        setTestimonials(data.testimonials);
+      }
+
+      if (s.media_gallery && Array.isArray(s.media_gallery)) {
+        setMediaGallery(s.media_gallery);
+      } else if (data.mediaGallery && Array.isArray(data.mediaGallery)) {
+        setMediaGallery(data.mediaGallery);
+      }
+
+      if (s.careers && Array.isArray(s.careers)) {
+        setCareers(s.careers);
+      } else if (data.careers && Array.isArray(data.careers)) {
+        setCareers(data.careers);
+      }
+
+      if (s.blog_posts && Array.isArray(s.blog_posts)) {
+        setBlogPosts(s.blog_posts);
+      } else if (data.blogPosts && Array.isArray(data.blogPosts)) {
+        setBlogPosts(data.blogPosts);
+      }
+
+      if (s.services_list && Array.isArray(s.services_list)) {
+        setServicesList(s.services_list);
+      } else if (data.servicesList && Array.isArray(data.servicesList)) {
+        setServicesList(data.servicesList);
+      }
+
+      if (s.contact_inquiries && Array.isArray(s.contact_inquiries)) {
+        setContactInquiries(s.contact_inquiries);
+      } else if (data.contactInquiries && Array.isArray(data.contactInquiries)) {
+        setContactInquiries(data.contactInquiries);
+      }
+
+      if (s.hiring_alert_enabled !== undefined) {
+        setHiringAlertEnabled(Boolean(s.hiring_alert_enabled));
+      }
+
+      // 2. Settings Objects
       if (s.showcase_header) setShowcaseHeader(s.showcase_header);
       if (s.team_header) setTeamHeaderContent(s.team_header);
       if (s.contact) setContact(s.contact);
@@ -759,6 +864,19 @@ export const CMSProvider = ({ children }) => {
       for (const tm of team) await upsertItemToMySql('cms_team', tm);
       for (const au of adminUsers) await upsertItemToMySql('cms_admin_users', au);
 
+      await saveCmsSettingToMySql('projects_list', projects);
+      await saveCmsSettingToMySql('showcase_projects_list', showcaseProjects);
+      await saveCmsSettingToMySql('team_list', team);
+      await saveCmsSettingToMySql('admin_users_list', adminUsers);
+
+      await saveCmsSettingToMySql('testimonials', testimonials);
+      await saveCmsSettingToMySql('media_gallery', mediaGallery);
+      await saveCmsSettingToMySql('careers', careers);
+      await saveCmsSettingToMySql('blog_posts', blogPosts);
+      await saveCmsSettingToMySql('services_list', servicesList);
+      await saveCmsSettingToMySql('contact_inquiries', contactInquiries);
+      await saveCmsSettingToMySql('hiring_alert_enabled', hiringAlertEnabled);
+
       await saveCmsSettingToMySql('showcase_header', showcaseHeader);
       await saveCmsSettingToMySql('team_header', teamHeaderContent);
       await saveCmsSettingToMySql('contact', contact);
@@ -781,22 +899,34 @@ export const CMSProvider = ({ children }) => {
     }
   };
 
-  // CRUD Actions synced with MySQL Database
+  // CRUD Actions synced with MySQL Database (Dual-Channel Persistence)
   const addProject = async (project) => {
     const newProj = { ...project, id: Date.now() };
-    setProjects(prev => [...prev, newProj]);
-    await upsertItemToMySql('cms_projects', newProj);
+    const updated = [...projects, newProj];
+    setProjects(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_projects', newProj),
+      saveCmsSettingToMySql('projects_list', updated)
+    ]);
   };
 
   const updateProject = async (id, updatedProject) => {
-    const merged = { ...projects.find(p => p.id === id), ...updatedProject, id };
-    setProjects(prev => prev.map(p => p.id === id ? merged : p));
-    await upsertItemToMySql('cms_projects', merged);
+    const merged = { ...projects.find(p => String(p.id) === String(id)), ...updatedProject, id };
+    const updated = projects.map(p => String(p.id) === String(id) ? merged : p);
+    setProjects(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_projects', merged),
+      saveCmsSettingToMySql('projects_list', updated)
+    ]);
   };
 
   const deleteProject = async (id) => {
-    setProjects(prev => prev.filter(p => p.id !== id));
-    await deleteItemFromMySql('cms_projects', id);
+    const updated = projects.filter(p => String(p.id) !== String(id));
+    setProjects(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_projects', id),
+      saveCmsSettingToMySql('projects_list', updated)
+    ]);
   };
 
   const addShowcaseProject = async (project) => {
@@ -808,22 +938,34 @@ export const CMSProvider = ({ children }) => {
       id: project.id || `showcase-${Date.now()}`,
       tech: techArray
     };
-    setShowcaseProjects(prev => [...prev, newCard]);
-    await upsertItemToMySql('cms_showcase_projects', newCard);
+    const updated = [...showcaseProjects, newCard];
+    setShowcaseProjects(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_showcase_projects', newCard),
+      saveCmsSettingToMySql('showcase_projects_list', updated)
+    ]);
   };
 
   const updateShowcaseProject = async (id, updatedProject) => {
     const techArray = Array.isArray(updatedProject.tech)
       ? updatedProject.tech
       : (typeof updatedProject.tech === 'string' ? updatedProject.tech.split(',').map(t => t.trim()).filter(Boolean) : []);
-    const merged = { ...showcaseProjects.find(p => p.id === id), ...updatedProject, id, tech: techArray };
-    setShowcaseProjects(prev => prev.map(p => p.id === id ? merged : p));
-    await upsertItemToMySql('cms_showcase_projects', merged);
+    const merged = { ...showcaseProjects.find(p => String(p.id) === String(id)), ...updatedProject, id, tech: techArray };
+    const updated = showcaseProjects.map(p => String(p.id) === String(id) ? merged : p);
+    setShowcaseProjects(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_showcase_projects', merged),
+      saveCmsSettingToMySql('showcase_projects_list', updated)
+    ]);
   };
 
   const deleteShowcaseProject = async (id) => {
-    setShowcaseProjects(prev => prev.filter(p => p.id !== id));
-    await deleteItemFromMySql('cms_showcase_projects', id);
+    const updated = showcaseProjects.filter(p => String(p.id) !== String(id));
+    setShowcaseProjects(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_showcase_projects', id),
+      saveCmsSettingToMySql('showcase_projects_list', updated)
+    ]);
   };
 
   const updateShowcaseHeader = async (newHeader) => {
@@ -840,43 +982,65 @@ export const CMSProvider = ({ children }) => {
       category: member.category || (member.role?.toLowerCase().includes('founder') || member.role?.toLowerCase().includes('ceo') ? 'Leadership' : 'Team Member'),
       image: member.image || ''
     };
-    setTeam(prev => newMember.category === 'Leadership' ? [newMember, ...prev] : [...prev, newMember]);
-    await upsertItemToMySql('cms_team', newMember);
+    const updated = newMember.category === 'Leadership' ? [newMember, ...team] : [...team, newMember];
+    setTeam(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_team', newMember),
+      saveCmsSettingToMySql('team_list', updated)
+    ]);
   };
 
   const updateTeamMember = async (id, updatedMember) => {
-    const merged = { ...team.find(m => m.id === id), ...updatedMember, id };
-    setTeam(prev => prev.map(m => m.id === id ? merged : m));
-    await upsertItemToMySql('cms_team', merged);
+    const merged = { ...team.find(m => String(m.id) === String(id)), ...updatedMember, id };
+    const updated = team.map(m => String(m.id) === String(id) ? merged : m);
+    setTeam(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_team', merged),
+      saveCmsSettingToMySql('team_list', updated)
+    ]);
   };
 
   const deleteTeamMember = async (id) => {
-    setTeam(prev => prev.filter(m => m.id !== id));
-    await deleteItemFromMySql('cms_team', id);
+    const updated = team.filter(m => String(m.id) !== String(id));
+    setTeam(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_team', id),
+      saveCmsSettingToMySql('team_list', updated)
+    ]);
   };
 
-  const moveTeamMemberUp = (id) => {
+  const moveTeamMemberUp = async (id) => {
+    let updated = null;
     setTeam(prev => {
-      const index = prev.findIndex(m => m.id === id);
+      const index = prev.findIndex(m => String(m.id) === String(id));
       if (index <= 0) return prev;
       const copy = [...prev];
       const temp = copy[index - 1];
       copy[index - 1] = copy[index];
       copy[index] = temp;
+      updated = copy;
       return copy;
     });
+    if (updated) {
+      await saveCmsSettingToMySql('team_list', updated);
+    }
   };
 
-  const moveTeamMemberDown = (id) => {
+  const moveTeamMemberDown = async (id) => {
+    let updated = null;
     setTeam(prev => {
-      const index = prev.findIndex(m => m.id === id);
+      const index = prev.findIndex(m => String(m.id) === String(id));
       if (index === -1 || index >= prev.length - 1) return prev;
       const copy = [...prev];
       const temp = copy[index + 1];
       copy[index + 1] = copy[index];
       copy[index] = temp;
+      updated = copy;
       return copy;
     });
+    if (updated) {
+      await saveCmsSettingToMySql('team_list', updated);
+    }
   };
 
   const updateTeamHeaderContent = async (newHeader) => {
@@ -895,8 +1059,10 @@ export const CMSProvider = ({ children }) => {
       hours: updatedContact.hours || headerFooterSettings.hours,
     };
     setHeaderFooterSettings(updatedHF);
-    await saveCmsSettingToMySql('contact', updatedContact);
-    await saveCmsSettingToMySql('header_footer_settings', updatedHF);
+    await Promise.allSettled([
+      saveCmsSettingToMySql('contact', updatedContact),
+      saveCmsSettingToMySql('header_footer_settings', updatedHF)
+    ]);
   };
 
   const updateHomeContent = async (newContent) => {
@@ -933,8 +1099,10 @@ export const CMSProvider = ({ children }) => {
     };
     setContact(updatedContact);
 
-    await saveCmsSettingToMySql('header_footer_settings', updatedHF);
-    await saveCmsSettingToMySql('contact', updatedContact);
+    await Promise.allSettled([
+      saveCmsSettingToMySql('header_footer_settings', updatedHF),
+      saveCmsSettingToMySql('contact', updatedContact)
+    ]);
   };
 
   const updatePageSeoSettings = async (pageKey, newPageSeo) => {
@@ -958,7 +1126,7 @@ export const CMSProvider = ({ children }) => {
   const deleteCustomField = async (pageKey, id) => {
     const updated = {
       ...customFields,
-      [pageKey]: (customFields[pageKey] || []).filter(f => f.id !== id)
+      [pageKey]: (customFields[pageKey] || []).filter(f => String(f.id) !== String(id))
     };
     setCustomFields(updated);
     await saveCmsSettingToMySql('custom_fields', updated);
@@ -974,26 +1142,40 @@ export const CMSProvider = ({ children }) => {
       status: 'Active',
       lastLogin: 'Never'
     };
-    setAdminUsers(prev => [...prev, newUser]);
-    await upsertItemToMySql('cms_admin_users', newUser);
+    const updated = [...adminUsers, newUser];
+    setAdminUsers(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_admin_users', newUser),
+      saveCmsSettingToMySql('admin_users_list', updated)
+    ]);
     return newUser;
   };
 
   const deleteAdminUser = async (id) => {
-    setAdminUsers(prev => prev.filter(u => u.id !== id));
-    await deleteItemFromMySql('cms_admin_users', id);
+    const updated = adminUsers.filter(u => String(u.id) !== String(id));
+    setAdminUsers(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_admin_users', id),
+      saveCmsSettingToMySql('admin_users_list', updated)
+    ]);
   };
 
   const toggleUserStatus = async (id) => {
     let updatedUser = null;
-    setAdminUsers(prev => prev.map(u => {
-      if (u.id === id) {
+    const updated = adminUsers.map(u => {
+      if (String(u.id) === String(id)) {
         updatedUser = { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' };
         return updatedUser;
       }
       return u;
-    }));
-    if (updatedUser) await upsertItemToMySql('cms_admin_users', updatedUser);
+    });
+    setAdminUsers(updated);
+    if (updatedUser) {
+      await Promise.allSettled([
+        upsertItemToMySql('cms_admin_users', updatedUser),
+        saveCmsSettingToMySql('admin_users_list', updated)
+      ]);
+    }
   };
 
   const loginAdmin = (email, password, requiredRole) => {
@@ -1014,14 +1196,15 @@ export const CMSProvider = ({ children }) => {
     }
 
     const updatedUser = { ...found, lastLogin: 'Just now' };
-    setAdminUsers(prev => {
-      if (prev.some(u => u.id === found.id)) {
-        return prev.map(u => u.id === found.id ? updatedUser : u);
-      }
-      return [...prev, updatedUser];
-    });
+    const updated = adminUsers.some(u => String(u.id) === String(found.id))
+      ? adminUsers.map(u => String(u.id) === String(found.id) ? updatedUser : u)
+      : [...adminUsers, updatedUser];
+    setAdminUsers(updated);
     setCurrentUser(updatedUser);
-    upsertItemToMySql('cms_admin_users', updatedUser);
+    Promise.allSettled([
+      upsertItemToMySql('cms_admin_users', updatedUser),
+      saveCmsSettingToMySql('admin_users_list', updated)
+    ]);
 
     return { success: true, user: updatedUser };
   };
@@ -1039,50 +1222,76 @@ export const CMSProvider = ({ children }) => {
       status: 'New',
       ...inquiry
     };
-    setContactInquiries(prev => [newInq, ...prev]);
-    await upsertItemToMySql('cms_contact_inquiries', newInq);
+    const updated = [newInq, ...contactInquiries];
+    setContactInquiries(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_contact_inquiries', newInq),
+      saveCmsSettingToMySql('contact_inquiries', updated)
+    ]);
     return newInq;
   };
 
   const deleteInquiry = async (id) => {
-    setContactInquiries(prev => prev.filter(i => i.id !== id));
-    await deleteItemFromMySql('cms_contact_inquiries', id);
+    const updated = contactInquiries.filter(i => String(i.id) !== String(id));
+    setContactInquiries(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_contact_inquiries', id),
+      saveCmsSettingToMySql('contact_inquiries', updated)
+    ]);
   };
 
   const markInquiryReplied = async (id) => {
     let updatedInq = null;
-    setContactInquiries(prev => prev.map(i => {
-      if (i.id === id) {
+    const updated = contactInquiries.map(i => {
+      if (String(i.id) === String(id)) {
         updatedInq = { ...i, status: 'Replied' };
         return updatedInq;
       }
       return i;
-    }));
-    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+    });
+    setContactInquiries(updated);
+    if (updatedInq) {
+      await Promise.allSettled([
+        upsertItemToMySql('cms_contact_inquiries', updatedInq),
+        saveCmsSettingToMySql('contact_inquiries', updated)
+      ]);
+    }
   };
 
   const updateInquiryStatus = async (id, status) => {
     let updatedInq = null;
-    setContactInquiries(prev => prev.map(i => {
-      if (i.id === id) {
+    const updated = contactInquiries.map(i => {
+      if (String(i.id) === String(id)) {
         updatedInq = { ...i, status };
         return updatedInq;
       }
       return i;
-    }));
-    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+    });
+    setContactInquiries(updated);
+    if (updatedInq) {
+      await Promise.allSettled([
+        upsertItemToMySql('cms_contact_inquiries', updatedInq),
+        saveCmsSettingToMySql('contact_inquiries', updated)
+      ]);
+    }
   };
 
   const updateInquiryNotes = async (id, notes) => {
     let updatedInq = null;
-    setContactInquiries(prev => prev.map(i => {
-      if (i.id === id) {
+    const updated = contactInquiries.map(i => {
+      if (String(i.id) === String(id)) {
         updatedInq = { ...i, internalNotes: notes };
         return updatedInq;
       }
       return i;
-    }));
-    if (updatedInq) await upsertItemToMySql('cms_contact_inquiries', updatedInq);
+    });
+    setContactInquiries(updated);
+    if (updatedInq) {
+      await Promise.allSettled([
+        upsertItemToMySql('cms_contact_inquiries', updatedInq),
+        saveCmsSettingToMySql('contact_inquiries', updated)
+      ]);
+    }
   };
 
   // 1. Testimonials Handlers
@@ -1096,14 +1305,22 @@ export const CMSProvider = ({ children }) => {
       content: item.content,
       avatar: item.avatar || '/Sarah.jpeg'
     };
-    setTestimonials(prev => [newTestimonial, ...prev]);
-    await upsertItemToMySql('cms_testimonials', newTestimonial);
+    const updated = [newTestimonial, ...testimonials];
+    setTestimonials(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_testimonials', newTestimonial),
+      saveCmsSettingToMySql('testimonials', updated)
+    ]);
     return newTestimonial;
   };
 
   const deleteTestimonial = async (id) => {
-    setTestimonials(prev => prev.filter(t => t.id !== id));
-    await deleteItemFromMySql('cms_testimonials', id);
+    const updated = testimonials.filter(t => String(t.id) !== String(id));
+    setTestimonials(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_testimonials', id),
+      saveCmsSettingToMySql('testimonials', updated)
+    ]);
   };
 
   // 2. Media Gallery Handlers
@@ -1116,14 +1333,22 @@ export const CMSProvider = ({ children }) => {
       thumbnail: item.thumbnail || '/media_showcase_1.jpg',
       description: item.description || ''
     };
-    setMediaGallery(prev => [newMedia, ...prev]);
-    await upsertItemToMySql('cms_media_gallery', newMedia);
+    const updated = [newMedia, ...mediaGallery];
+    setMediaGallery(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_media_gallery', newMedia),
+      saveCmsSettingToMySql('media_gallery', updated)
+    ]);
     return newMedia;
   };
 
   const deleteMediaItem = async (id) => {
-    setMediaGallery(prev => prev.filter(m => m.id !== id));
-    await deleteItemFromMySql('cms_media_gallery', id);
+    const updated = mediaGallery.filter(m => String(m.id) !== String(id));
+    setMediaGallery(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_media_gallery', id),
+      saveCmsSettingToMySql('media_gallery', updated)
+    ]);
   };
 
   // 3. Careers Handlers
@@ -1138,26 +1363,40 @@ export const CMSProvider = ({ children }) => {
       status: 'Active',
       description: item.description || ''
     };
-    setCareers(prev => [newJob, ...prev]);
-    await upsertItemToMySql('cms_careers', newJob);
+    const updated = [newJob, ...careers];
+    setCareers(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_careers', newJob),
+      saveCmsSettingToMySql('careers', updated)
+    ]);
     return newJob;
   };
 
   const deleteCareer = async (id) => {
-    setCareers(prev => prev.filter(c => c.id !== id));
-    await deleteItemFromMySql('cms_careers', id);
+    const updated = careers.filter(c => String(c.id) !== String(id));
+    setCareers(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_careers', id),
+      saveCmsSettingToMySql('careers', updated)
+    ]);
   };
 
   const toggleCareerStatus = async (id) => {
     let updatedJob = null;
-    setCareers(prev => prev.map(c => {
-      if (c.id === id) {
+    const updated = careers.map(c => {
+      if (String(c.id) === String(id)) {
         updatedJob = { ...c, status: c.status === 'Active' ? 'Closed' : 'Active' };
         return updatedJob;
       }
       return c;
-    }));
-    if (updatedJob) await upsertItemToMySql('cms_careers', updatedJob);
+    });
+    setCareers(updated);
+    if (updatedJob) {
+      await Promise.allSettled([
+        upsertItemToMySql('cms_careers', updatedJob),
+        saveCmsSettingToMySql('careers', updated)
+      ]);
+    }
   };
 
   const toggleHiringAlert = async () => {
@@ -1179,14 +1418,22 @@ export const CMSProvider = ({ children }) => {
       excerpt: item.excerpt || '',
       coverImage: item.coverImage || '/tech_blog_1.png'
     };
-    setBlogPosts(prev => [newPost, ...prev]);
-    await upsertItemToMySql('cms_blog_posts', newPost);
+    const updated = [newPost, ...blogPosts];
+    setBlogPosts(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_blog_posts', newPost),
+      saveCmsSettingToMySql('blog_posts', updated)
+    ]);
     return newPost;
   };
 
   const deleteBlogPost = async (id) => {
-    setBlogPosts(prev => prev.filter(b => b.id !== id));
-    await deleteItemFromMySql('cms_blog_posts', id);
+    const updated = blogPosts.filter(b => String(b.id) !== String(id));
+    setBlogPosts(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_blog_posts', id),
+      saveCmsSettingToMySql('blog_posts', updated)
+    ]);
   };
 
   // 5. Services Handlers
@@ -1202,14 +1449,22 @@ export const CMSProvider = ({ children }) => {
           ? item.deliverables.split(',').map(d => d.trim()).filter(Boolean)
           : []
     };
-    setServicesList(prev => [newService, ...prev]);
-    await upsertItemToMySql('cms_services_list', newService);
+    const updated = [newService, ...servicesList];
+    setServicesList(updated);
+    await Promise.allSettled([
+      upsertItemToMySql('cms_services_list', newService),
+      saveCmsSettingToMySql('services_list', updated)
+    ]);
     return newService;
   };
 
   const deleteServiceItem = async (id) => {
-    setServicesList(prev => prev.filter(s => s.id !== id));
-    await deleteItemFromMySql('cms_services_list', id);
+    const updated = servicesList.filter(s => String(s.id) !== String(id));
+    setServicesList(updated);
+    await Promise.allSettled([
+      deleteItemFromMySql('cms_services_list', id),
+      saveCmsSettingToMySql('services_list', updated)
+    ]);
   };
 
   // 6. Dynamic Custom Page Sections Handlers
@@ -1310,7 +1565,7 @@ export const CMSProvider = ({ children }) => {
     setCustomFields({});
     setCustomPageSections(defaultCustomPageSections);
     setHeaderFooterSettings(defaultHeaderFooterSettings);
-    setContactInquiries(defaultInquiries);
+    setContactInquiries(defaultContactInquiries);
     setTestimonials(defaultTestimonials);
     setMediaGallery(defaultMediaGallery);
     setCareers(defaultCareers);

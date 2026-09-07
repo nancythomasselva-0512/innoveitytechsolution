@@ -198,24 +198,16 @@ const AboutPage = () => {
             </div>
           </div>
 
-          {/* Right Column (~50% width): Building Image on the RIGHT side */}
+          {/* Right Column (~50% width): Technology Feature Image on the RIGHT side */}
           <div className="about-right-column">
             
-            {/* Building Image at top of right column */}
+            {/* Feature Image at top of right column */}
             <div className="sticky-building-container">
               <img 
-                src="/hero-bg.png" 
-                alt="Innoveity Tech Building Facade" 
+                src={aboutContent.buildingImage || "/technology_connects_possibilities.png"} 
+                alt="Innoveity Tech - Technology Connects Possibilities" 
                 className="sticky-building-img" 
               />
-              <div className="teal-tint-overlay"></div>
-              
-              {/* Overlay Suspension Ropes */}
-              <div className="suspension-ropes-overlay">
-                <div className="rope rope-orange"></div>
-                <div className="rope rope-red"></div>
-                <div className="rope rope-black"></div>
-              </div>
             </div>
 
           </div>
