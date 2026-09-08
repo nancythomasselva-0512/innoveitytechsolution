@@ -425,29 +425,88 @@
 }
 
 @media screen and (max-width: 768px) {
-  .hero-display-title {
-    font-size: 2.2rem;
-    line-height: 1.2;
-    white-space: normal;
+  .hero-content-wrapper {
+    padding: 95px 1rem 20px 1rem;
+    min-height: auto;
   }
 
-  .hero-content-wrapper {
-    padding-top: 110px;
+  .hero-display-title {
+    font-size: clamp(1.85rem, 6.5vw, 2.4rem);
+    line-height: 1.18;
+    white-space: normal;
+    flex-wrap: wrap;
+    gap: 0.25ch;
+  }
+
+  .brand-word-styled {
+    flex-wrap: nowrap;
+  }
+
+  .hero-body-text {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    padding: 0 0.5rem;
   }
 
   .pill-btn-hero {
-    padding: 6px 6px 6px 22px;
-    font-size: 0.85rem;
+    padding: 5px 6px 5px 20px;
+    font-size: 0.82rem;
   }
 
   .hero-arrow-circle {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
   }
 
-  .partners-flex-row {
-    justify-content: center;
-    gap: 1.5rem;
+  .hero-3d-in-img {
+    max-height: 280px;
+  }
+
+  .partners-marquee-track {
+    gap: 2.2rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hero-content-wrapper {
+    padding: 85px 0.75rem 15px 0.75rem;
+  }
+
+  .hero-display-title {
+    font-size: clamp(1.5rem, 6.8vw, 1.95rem);
+    letter-spacing: -0.6px;
+  }
+
+  .hero-tagline-text {
+    font-size: 0.65rem;
+    letter-spacing: 1.2px;
+  }
+
+  .hero-body-text {
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin-top: 0.75rem;
+    padding: 0;
+  }
+
+  .hero-action-group {
+    margin-top: 1.2rem;
+  }
+
+  .hero-3d-in-img {
+    max-height: 230px;
+  }
+
+  .partners-marquee-track {
+    gap: 1.8rem;
+  }
+
+  .partner-brand-name {
+    font-size: 0.8rem;
+  }
+
+  .partner-brand-sub {
+    font-size: 0.42rem;
   }
 }
 

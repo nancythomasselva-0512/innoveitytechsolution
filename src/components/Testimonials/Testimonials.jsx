@@ -72,7 +72,15 @@ const Testimonials = () => {
   const revealRef = useScrollReveal();
   const { testimonials } = useCMS();
   const [current, setCurrent] = useState(0);
-  const [cardsPerPage, setCardsPerPage] = useState(3);
+
+  const getInitialCardsPerPage = () => {
+    if (typeof window === 'undefined') return 3;
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 1080) return 2;
+    return 3;
+  };
+
+  const [cardsPerPage, setCardsPerPage] = useState(getInitialCardsPerPage);
   const touchStartX = useRef(0);
   const touchEndX = useRef(0);
 
@@ -96,6 +104,10 @@ const Testimonials = () => {
   }, []);
 
   const maxIndex = Math.max(0, list.length - cardsPerPage);
+
+  useEffect(() => {
+    setCurrent(prev => Math.min(prev, maxIndex));
+  }, [cardsPerPage, maxIndex]);
 
   const nextSlide = () => {
     setCurrent(prev => (prev >= maxIndex ? 0 : prev + 1));
@@ -165,7 +177,11 @@ const Testimonials = () => {
                   <div 
                     key={item.id || idx} 
                     className="testimonial-card-slide"
-                    style={{ flex: `0 0 ${100 / cardsPerPage}%` }}
+                    style={{ 
+                      flex: `0 0 ${100 / cardsPerPage}%`,
+                      width: `${100 / cardsPerPage}%`,
+                      maxWidth: `${100 / cardsPerPage}%`
+                    }}
                   >
                     <div className="testimonial-card-inner glass-panel">
                       <div className="testimonial-card-header">

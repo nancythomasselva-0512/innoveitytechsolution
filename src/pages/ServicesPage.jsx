@@ -6,8 +6,10 @@ import {
   FiPackage, FiSmartphone, FiWifi, FiZap,
   FiCheckCircle, FiArrowRight, FiChevronLeft, FiChevronRight,
   FiMic, FiGlobe, FiTrendingUp, FiUsers, FiUser, FiAward,
-  FiMessageCircle, FiSettings, FiMessageSquare, FiDatabase,
-  FiLayers, FiBarChart2
+  FiMessageSquare, FiDatabase,
+  FiLayers, FiBarChart2,
+  FiBriefcase, FiCheckSquare, FiMonitor, FiGrid, FiNavigation, FiMapPin,
+  FiLock
 } from 'react-icons/fi';
 import DynamicPageSections from '../components/UI/DynamicPageSections';
 import './ServicesPage.css';
@@ -244,40 +246,38 @@ const ServicesPage = () => {
   };
 
   const aiCapabilities = [
-    { icon: <FiMic />, title: 'AI Voice-to-Text & Speech Recognition' },
-    { icon: <FiGlobe />, title: 'Tamil & Multilingual AI Solutions' },
+    { icon: <FiMic />, title: 'Smart Voice Interfaces' },
+    { icon: <FiGlobe />, title: 'Regional Language AI' },
     { icon: <FiTrendingUp />, title: 'AI Analytics & Intelligent Automation' },
     { icon: <FiUsers />, title: 'AI-powered Employee Well-being Platforms' },
     { icon: <FiAward />, title: 'AI-based Education Platforms' },
-    { icon: <FiCpu />, title: 'AI Agents & AI-native Applications' },
-    { icon: <FiMessageCircle />, title: 'Natural Language Processing' },
-    { icon: <FiSettings />, title: 'Intelligent workflow automation' }
+    { icon: <FiCpu />, title: 'AI Agents & AI-native Applications' }
   ];
 
   const enterpriseSolutions = [
     {
       icon: <FiDatabase />,
-      title: 'ERP & MIS',
+      title: 'AI ERP',
       desc: 'Bring operations, information and decision-making onto one connected platform.'
     },
     {
       icon: <FiUsers />,
-      title: 'CRM',
+      title: 'AI Based CRM',
       desc: 'Manage leads, customers, communication and business workflows more effectively.'
     },
     {
       icon: <FiUser />,
-      title: 'HR & Employee Management',
+      title: 'AI HR & Employee Management',
       desc: 'Simplify employee processes, information and organisational workflows.'
     },
     {
       icon: <FiAward />,
-      title: 'Student Information Systems',
+      title: 'Student Management Systems',
       desc: 'Connect student data, administration and institutional operations.'
     },
     {
       icon: <FiBookOpen />,
-      title: 'Learning Management Systems',
+      title: 'AI Learning Management Systems',
       desc: 'Create structured digital learning environments for modern institutions.'
     },
     {
@@ -285,6 +285,29 @@ const ServicesPage = () => {
       title: 'Workflow Automation',
       desc: 'Reduce manual processes and create faster, more transparent operations.'
     }
+  ];
+
+  const edtechSolutions = [
+    { icon: <FiAward />, title: 'Student Super Platforms' },
+    { icon: <FiBriefcase />, title: 'Placement & Internship Platforms' },
+    { icon: <FiCheckSquare />, title: 'Online Assessment & Examination Systems' },
+    { icon: <FiMonitor />, title: 'LMS & Digital Learning Platforms' },
+    { icon: <FiUsers />, title: 'Student Management Systems' },
+    { icon: <FiGlobe />, title: 'College & University Portals' },
+    { icon: <FiLock />, title: 'Digital Secure Vault' },
+    { icon: <FiLayers />, title: 'All Type of EdTech Solutions' }
+  ];
+
+  const digitalGovernanceItems = [
+    { icon: <FiUsers />, title: 'Citizen Engagement' },
+    { icon: <FiShield />, title: 'Digital Governance' },
+    { icon: <FiBarChart2 />, title: 'Data & Dashboards' }
+  ];
+
+  const smartMobilityItems = [
+    { icon: <FiSmartphone />, title: 'Contactless Ticketing' },
+    { icon: <FiGrid />, title: 'QR & Barcode Ticketing' },
+    { icon: <FiNavigation />, title: 'Smart Mobility Applications' }
   ];
 
   return (
@@ -506,7 +529,7 @@ const ServicesPage = () => {
                 <div className="orange-accent-bar"></div>
               </div>
 
-              {/* 8 AI Capabilities Grid */}
+              {/* AI Capabilities Grid */}
               <div className="ai-capabilities-grid">
                 {aiCapabilities.map((cap, idx) => (
                   <div className="ai-capability-item" key={idx}>
@@ -664,6 +687,235 @@ const ServicesPage = () => {
               <p className="enterprise-callout-text">
                 Technology that adapts to your organisation— <br className="mobile-hide" />
                 <span className="highlight-orange">not the other way around.</span>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================
+          PAGE 06: EDUCATION TECHNOLOGY
+          ======================================================== */}
+      <section className="sp-showcase-section edtech-showcase-section animate-on-scroll" id="edtech-solutions">
+        <div className="section-grid-pattern"></div>
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          
+          <div className="ai-showcase-grid">
+            {/* Left Content Column */}
+            <div className="ai-showcase-left">
+              
+              {/* Standard Theme Section Header */}
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
+                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
+                  EDUCATION <span className="title-gradient-accent">TECHNOLOGY</span>
+                </h2>
+              </div>
+
+              {/* Main Headline */}
+              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
+                Reimagining the Digital <br />
+                <span className="title-gradient-accent">Education Ecosystem.</span>
+              </h2>
+
+              {/* Intro Narrative */}
+              <div className="sp-showcase-narrative">
+                <p className="narrative-lead">
+                  Education is no longer confined to the classroom.
+                </p>
+                <p className="narrative-body">
+                  We build technology ecosystems that connect <span className="highlight-dark">students, educators, institutions and industry</span>—creating a more connected journey from <span className="highlight-orange">learning to career.</span>
+                </p>
+              </div>
+
+              {/* Subsection Title */}
+              <div className="sp-subsection-header">
+                <h3 className="sp-subsection-title">Our EdTech solutions</h3>
+                <div className="orange-accent-bar"></div>
+              </div>
+
+              {/* 6 EdTech Solutions Grid */}
+              <div className="ai-capabilities-grid">
+                {edtechSolutions.map((sol, idx) => (
+                  <div className="ai-capability-item" key={idx}>
+                    <div className="ai-cap-icon-box">
+                      {sol.icon}
+                    </div>
+                    <span className="ai-cap-title">{sol.title}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Bottom Quote Callout Box */}
+              <div className="sp-callout-card edtech-callout-card">
+                <div className="callout-icon-wrapper">
+                  <FiBookOpen className="callout-icon" />
+                </div>
+                <div className="callout-text-content">
+                  <h4 className="callout-lead-title">
+                    Learn. Connect. Prepare. <span>Progress.</span>
+                  </h4>
+                  <p className="callout-desc">
+                    Our technology helps institutions move beyond fragmented systems towards a connected digital ecosystem designed around the complete student journey.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Visual / Campus Card Column */}
+            <div className="ai-showcase-right">
+              <div className="ai-humanoid-visual-card edtech-visual-card">
+                <div className="visual-ambient-glow"></div>
+                
+                {/* Geometric Accent Slanted Shapes */}
+                <div className="geo-accent-bar top-right-bar"></div>
+                <div className="geo-accent-bar bottom-left-bar"></div>
+
+                {/* Campus Image Frame */}
+                <div className="ai-img-frame">
+                  <img 
+                    src="/edtech-showcase.jpg" 
+                    alt="Reimagining the Digital Education Ecosystem" 
+                    className="ai-humanoid-image"
+                  />
+                  <div className="ai-img-overlay-gradient"></div>
+                </div>
+
+                {/* Floating Bottom Badge */}
+                <div className="ai-human-badge edtech-badge">
+                  <span className="human-text-top">LEARNING TODAY</span>
+                  <div className="badge-dash"></div>
+                  <span className="human-text-mid" style={{ color: '#ffffff', fontSize: '0.75rem' }}>A BRIGHTER TOMORROW</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      {/* ========================================================
+          PAGE 07: SMART GOVERNANCE & MOBILITY
+          ======================================================== */}
+      <section className="sp-showcase-section governance-showcase-section animate-on-scroll" id="governance-mobility">
+        <div className="section-grid-pattern"></div>
+        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
+          
+          {/* Header Row */}
+          <div className="enterprise-header-row">
+            <div className="enterprise-header-left">
+              {/* Standard Theme Section Header */}
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
+                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
+                  SMART GOVERNANCE & <span className="title-gradient-accent">MOBILITY</span>
+                </h2>
+              </div>
+
+              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
+                Smarter Cities. <br />
+                <span className="title-gradient-accent">Better Experiences.</span>
+              </h2>
+
+              <div className="sp-showcase-narrative">
+                <p className="narrative-lead" style={{ margin: 0 }}>
+                  When technology connects citizens, data, infrastructure and administration, <span className="highlight-orange">everyday services become simpler.</span>
+                </p>
+              </div>
+            </div>
+
+            {/* Top Right Skyline Visual & Pillar Badge */}
+            <div className="enterprise-header-right">
+              {/* Skyline Visual Card */}
+              <div className="enterprise-visual-banner">
+                <img 
+                  src="/smart-governance-showcase.jpg" 
+                  alt="Connected Cities Stronger Communities" 
+                  className="enterprise-banner-img"
+                />
+                <div className="banner-geo-accent"></div>
+                <div className="banner-text-tag">
+                  <span>CONNECTED CITIES</span>
+                  <strong>STRONGER COMMUNITIES</strong>
+                </div>
+              </div>
+
+              {/* 4 Pillars Badge */}
+              <div className="enterprise-pillars-box">
+                <div className="pillar-vertical-dash"></div>
+                <div className="enterprise-pillar-list">
+                  <span>PEOPLE</span>
+                  <span>CITIZENS</span>
+                  <span>TECHNOLOGY</span>
+                  <span>PROGRESS</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Dual Module Grid (Digital Governance + Smart Mobility) */}
+          <div className="gov-dual-modules-grid">
+            {/* Module 1: Digital Governance */}
+            <div className="gov-module-card">
+              <div className="gov-module-header">
+                <div className="gov-icon-badge">
+                  <FiShield />
+                </div>
+                <div className="gov-module-header-text">
+                  <h3 className="gov-module-title">Digital Governance</h3>
+                  <div className="orange-accent-bar" style={{ width: '32px', height: '3px' }}></div>
+                </div>
+              </div>
+              <p className="gov-module-desc">
+                We create platforms that help government organisations streamline citizen services, administrative workflows and information management.
+              </p>
+              <div className="gov-sub-items-grid">
+                {digitalGovernanceItems.map((item, idx) => (
+                  <div className="gov-sub-item-pill" key={idx}>
+                    <span className="gov-item-icon">{item.icon}</span>
+                    <span className="gov-item-title">{item.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Module 2: Smart Mobility */}
+            <div className="gov-module-card">
+              <div className="gov-module-header">
+                <div className="gov-icon-badge">
+                  <FiTruck />
+                </div>
+                <div className="gov-module-header-text">
+                  <h3 className="gov-module-title">Smart Mobility</h3>
+                  <div className="orange-accent-bar" style={{ width: '32px', height: '3px' }}></div>
+                </div>
+              </div>
+              <p className="gov-module-desc">
+                We bring intelligence into modern transportation through seamless digital transit solutions:
+              </p>
+              <div className="gov-sub-items-grid">
+                {smartMobilityItems.map((item, idx) => (
+                  <div className="gov-sub-item-pill" key={idx}>
+                    <span className="gov-item-icon">{item.icon}</span>
+                    <span className="gov-item-title">{item.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Callout Box */}
+          <div className="sp-callout-card governance-callout-card" style={{ marginTop: '2.5rem' }}>
+            <div className="callout-icon-wrapper">
+              <FiMapPin className="callout-icon" />
+            </div>
+            <div className="callout-text-content">
+              <h4 className="callout-lead-title">
+                From public systems to <span>public experiences.</span>
+              </h4>
+              <p className="callout-desc">
+                Technology designed to make services more accessible, transparent and efficient.
               </p>
             </div>
           </div>

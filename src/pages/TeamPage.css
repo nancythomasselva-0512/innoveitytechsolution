@@ -840,17 +840,65 @@
   }
 }
 
+@media (max-width: 768px) {
+  .team-page {
+    padding-top: 80px;
+  }
+  .team-hero {
+    padding: 3.5rem 1rem 3rem 1rem;
+  }
+  .team-section {
+    padding: 3.5rem 1rem;
+  }
+  .leadership-section {
+    padding: 3.5rem 1rem;
+  }
+  .hero-animated-title {
+    font-size: clamp(1.6rem, 5.8vw, 2.3rem);
+  }
+  .hero-animated-subtitle {
+    font-size: 0.96rem;
+  }
+  .team-cta {
+    padding: 3.5rem 1.5rem;
+    margin: 2.5rem 0.75rem;
+    border-radius: 24px;
+  }
+  .team-cta h2 {
+    font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+  }
+  .team-cta p {
+    font-size: 0.95rem;
+    margin-bottom: 2rem;
+  }
+}
+
 @media (max-width: 600px) {
   .cta-actions {
     flex-direction: column;
+    gap: 1rem;
+  }
+
+  .team-cta .btn-team-primary,
+  .team-cta .btn-team-outline {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
   }
   
   .stacked-details {
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 2rem;
   }
 
   .leadership-card {
     width: 100%;
+    max-width: 320px;
+  }
+
+  .team-members-grid {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+    margin: 0 auto;
   }
 }

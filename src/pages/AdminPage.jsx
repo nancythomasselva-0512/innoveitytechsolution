@@ -1872,8 +1872,8 @@ const AdminPage = () => {
                   <div className="dash-field-group">
                     <label className="dash-label">Account Password</label>
                     <input
-                      type="text"
-                      placeholder="Password (default: admin123)"
+                      type="password"
+                      placeholder="Enter account password"
                       className="dash-input-styled"
                       value={newAdmin.password}
                       onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
@@ -1921,7 +1921,7 @@ const AdminPage = () => {
                   <tr key={u.id}>
                     <td><strong>{u.name}</strong></td>
                     <td>{u.email}</td>
-                    <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{u.password || 'admin123'}</code></td>
+                    <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', letterSpacing: '2px' }}>••••••••</code></td>
                     <td><span className="category-badge-pill">{u.role}</span></td>
                     <td><span className="action-pill-btn" style={{ background: '#fff7ed', color: '#ea580c', borderColor: '#fdba74' }}>{u.status}</span></td>
                     <td style={{ color: '#64748b', fontSize: '0.85rem' }}>{u.lastLogin}</td>

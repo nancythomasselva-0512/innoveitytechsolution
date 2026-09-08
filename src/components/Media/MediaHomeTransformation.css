@@ -370,3 +370,48 @@
     gap: 24px;
   }
 }
+
+@media (max-width: 768px) {
+  .media-trans-section {
+    padding: 60px 16px 70px 16px;
+  }
+  .media-trans-header-row {
+    margin-bottom: 35px;
+  }
+  .media-pillar-badge-box {
+    justify-content: flex-start;
+  }
+  .media-trans-card {
+    padding: 14px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .media-trans-section {
+    padding: 45px 12px 55px 12px;
+  }
+  .media-hub-glow-box {
+    width: 270px;
+    height: 270px;
+  }
+  .media-hub-circle-outer {
+    width: 230px;
+    height: 230px;
+  }
+  .media-hub-circle-inner {
+    width: 210px;
+    height: 210px;
+    padding: 14px;
+  }
+  .hub-center-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.25rem;
+  }
+  .hub-center-title {
+    font-size: 1.15rem;
+  }
+  .hub-floating-badge {
+    display: none; /* Hide outer orbiting badges on very narrow screens to prevent viewport clipping */
+  }
+}

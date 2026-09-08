@@ -41,27 +41,8 @@ const AdminLoginPage = () => {
         setSuccessMsg(`Welcome back, ${result.user.name}! Access granted.`);
         if (result.user.role === 'Super Admin') {
           navigate('/super-admin', { replace: true });
-        }
-      } else {
-        setErrorMsg(result.message);
-      }
-    }, 250);
-  };
-
-  const handleQuickLogin = (demoEmail, demoPass, demoRole) => {
-    setRoleMode(demoRole);
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setErrorMsg('');
-    setLoading(true);
-
-    setTimeout(() => {
-      const result = loginAdmin(demoEmail, demoPass, demoRole);
-      setLoading(false);
-      if (result.success) {
-        setSuccessMsg(`Authorized as ${result.user.name}!`);
-        if (result.user.role === 'Super Admin') {
-          navigate('/super-admin', { replace: true });
+        } else {
+          navigate('/admin', { replace: true });
         }
       } else {
         setErrorMsg(result.message);
@@ -123,18 +104,11 @@ const AdminLoginPage = () => {
               <FiMail className="login-input-icon" />
               <input 
                 type="email" 
-                placeholder="innoveitytech@gmail.com or innoveityadmin@gmail.com"
+                placeholder="Enter your email address"
                 className="login-input"
                 value={email}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  setEmail(val);
-                  if (val.toLowerCase().includes('admin') && !val.toLowerCase().includes('super')) {
-                    setRoleMode('Admin');
-                  } else if (val.toLowerCase().includes('tech') || val.toLowerCase().includes('super')) {
-                    setRoleMode('Super Admin');
-                  }
-                }}
+                autoComplete="username"
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -149,6 +123,7 @@ const AdminLoginPage = () => {
                 placeholder="Enter your password"
                 className="login-input"
                 value={password}
+                autoComplete="current-password"
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />

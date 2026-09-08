@@ -648,10 +648,17 @@
   .philosophy-white-title { font-size: 44px; }
   
   .sd-main-title, .sd-gradient-title { font-size: 34px; }
-  .sd-pipeline-grid { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+  .sd-pipeline-grid { 
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+    justify-items: center;
+  }
   .sd-step-col.step-1, .sd-step-col.step-2, .sd-step-col.step-3, .sd-step-col.step-4 {
     transform: translateY(0);
-    max-width: 100%;
+    max-width: 260px;
+    width: 100%;
   }
 
   .impact-grid { max-width: 100%; }
@@ -663,16 +670,161 @@
   .black-footer-section { padding: 35px 24px; }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
+  .about-exact-clone-page {
+    padding-top: 80px;
+  }
+
+  .about-cream-mat-frame {
+    padding: 0 12px 30px 12px;
+  }
+
+  .about-left-column {
+    padding: 24px 16px;
+  }
+
+  .about-sections-wrapper {
+    gap: 45px;
+  }
+
+  .always-visible-impact-wrapper {
+    padding: 20px 16px !important;
+  }
+
+  .structured-delivery-section {
+    padding: 50px 14px 40px 14px;
+    text-align: center;
+  }
+
+  .sd-header-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 35px;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .sd-header-left,
+  .sd-header-right {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .sd-main-title {
+    text-align: center !important;
+  }
+
+  .sd-description {
+    text-align: center;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
   .about-internal-nav { flex-direction: column; align-items: flex-start; gap: 15px; }
-  .display-hero-gold { font-size: 46px; }
-  .sub-heading-white { font-size: 24px; }
-  .display-statement-navy, .display-statement-gold { font-size: 1.2rem; }
-  .philosophy-white-title { font-size: 36px; }
-  .sd-main-title, .sd-gradient-title { font-size: 26px; }
-  .sd-pipeline-grid { grid-template-columns: 1fr; gap: 24px; }
+  .display-hero-gold { font-size: clamp(2.2rem, 8vw, 2.8rem); }
+  .sub-heading-white { font-size: 22px; }
+  .display-statement-navy, .display-statement-gold { font-size: 1.15rem; }
+  .philosophy-white-title { font-size: 28px; }
+  .sd-main-title, .sd-gradient-title { font-size: 24px; }
+  
+  .sd-pipeline-grid { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .sd-step-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1.5px solid rgba(255, 107, 0, 0.28);
+    border-radius: 18px;
+    padding: 20px 24px;
+    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.08);
+    transform: none !important;
+    transition: all 0.3s ease;
+  }
+
+  .sd-step-col:hover {
+    background: #ffffff;
+    border-color: #ff6b00;
+    box-shadow: 0 10px 25px rgba(255, 107, 0, 0.16);
+    transform: translateY(-3px) !important;
+  }
+
+  .sd-step-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 12px;
+    width: 100%;
+  }
+
+  .sd-pillar-line {
+    display: none;
+  }
+
+  .sd-step-list {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .sd-step-list li {
+    text-align: center;
+    font-size: 14.5px;
+  }
+
+  .sd-step-list li:hover {
+    transform: translateY(-2px);
+  }
+
   .impact-grid { grid-template-columns: 1fr; }
   .about-right-column { height: auto; }
   .sticky-building-container { height: 260px; }
   .footer-top-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .about-cream-mat-frame {
+    padding: 0 8px 24px 8px;
+  }
+
+  .about-left-column {
+    padding: 18px 12px;
+  }
+
+  .sd-step-col {
+    max-width: 260px;
+    padding: 16px 18px;
+  }
+
+  .impact-card {
+    padding: 14px 16px;
+  }
+
+  .impact-number {
+    font-size: 28px;
+  }
+
+  .black-footer-section {
+    padding: 28px 16px;
+  }
 }

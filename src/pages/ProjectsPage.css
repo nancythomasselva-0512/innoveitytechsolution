@@ -203,16 +203,39 @@
 @media (max-width: 960px) {
   .projects-accordion-container {
     flex-direction: column;
-    height: 800px;
+    height: 700px;
   }
   
   .projects-accordion-item {
     border-right: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   }
   
   .projects-accordion-item:last-child {
     border-bottom: none;
+  }
+
+  .accordion-number {
+    font-size: 5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .projects-accordion-container {
+    height: 600px;
+    border-radius: 16px;
+  }
+
+  .accordion-number {
+    font-size: 3.8rem;
+  }
+
+  .accordion-info {
+    padding: 1.2rem 1.4rem;
+  }
+
+  .accordion-title {
+    font-size: 1.1rem;
   }
 }
 
@@ -445,12 +468,12 @@
 
 @media (max-width: 960px) {
   .sp-timeline-wrapper::after {
-    left: 31px;
+    left: 24px;
   }
   
   .timeline-step {
     width: 100%;
-    padding-left: 70px;
+    padding-left: 58px;
     padding-right: 0;
   }
   
@@ -461,6 +484,205 @@
   }
   
   .timeline-icon {
-    left: 6px !important;
+    left: 0px !important;
+    width: 44px;
+    height: 44px;
+    font-size: 1rem;
   }
 }
+
+@media (max-width: 480px) {
+  .timeline-content {
+    padding: 1.25rem;
+  }
+
+  .timeline-title {
+    font-size: 1.15rem;
+  }
+
+  .timeline-desc {
+    font-size: 0.88rem;
+  }
+}
+
+/* ========================================================
+   PREMIUM 3-PILLAR "WHAT WE BUILD" TECH DECK
+   ======================================================== */
+.saas-three-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px;
+  margin-top: 1.5rem;
+}
+
+.saas-pillar-card {
+  position: relative;
+  background: #ffffff;
+  border-radius: 22px;
+  border: 1.5px solid rgba(8, 34, 51, 0.08);
+  padding: 2.2rem 1.8rem;
+  box-shadow: 0 8px 25px rgba(8, 34, 51, 0.04);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.saas-pillar-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 107, 0, 0.45);
+  box-shadow: 0 20px 45px rgba(255, 107, 0, 0.12), 0 0 25px rgba(255, 107, 0, 0.06);
+}
+
+.pillar-top-aura {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 107, 0, 0.22) 0%, rgba(255, 107, 0, 0) 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 0.5;
+}
+
+.saas-pillar-card:hover .pillar-top-aura {
+  opacity: 1;
+  transform: scale(1.3);
+}
+
+.pillar-header-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 1.4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.pillar-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #fff3ea;
+  border: 1.5px solid rgba(255, 107, 0, 0.3);
+  color: #ff6b00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.pillar-header-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.pillar-title-tag-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+
+.pillar-index-tag {
+  font-family: var(--font-heading);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ff6b00;
+  background: rgba(255, 107, 0, 0.08);
+  border: 1px solid rgba(255, 107, 0, 0.25);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.saas-pillar-title {
+  font-family: var(--font-heading);
+  font-size: 1.22rem;
+  font-weight: 800;
+  color: #082233;
+  margin: 0;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+
+.pillar-sub-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.pillar-chips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.pillar-chip-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #f8fafc;
+  border: 1px solid rgba(8, 34, 51, 0.07);
+  padding: 10px 14px;
+  border-radius: 12px;
+  transition: all 0.25s ease;
+}
+
+.pillar-chip-item:hover {
+  background: #fff8f2;
+  border-color: rgba(255, 107, 0, 0.35);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(255, 107, 0, 0.06);
+}
+
+.pillar-chip-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid rgba(255, 107, 0, 0.2);
+  color: #ff6b00;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.pillar-chip-item:hover .pillar-chip-icon {
+  background: #ff6b00;
+  color: #ffffff;
+}
+
+.pillar-chip-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #082233;
+}
+
+@media (max-width: 1024px) {
+  .saas-three-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .saas-three-pillars-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

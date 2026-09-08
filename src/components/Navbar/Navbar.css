@@ -137,21 +137,35 @@
 }
 
 @media screen and (max-width: 992px) {
+  .navbar-wrapper {
+    padding: 0 1.25rem;
+  }
+
   .navbar-center-pill-wrap {
     position: absolute;
-    top: -1000px;
+    top: 100%;
     left: 0;
     width: 100%;
+    max-height: calc(100vh - 65px);
+    overflow-y: auto;
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 1.5rem 0;
-    transition: all 0.4s ease;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    pointer-events: none;
   }
 
   .navbar-center-pill-wrap.mobile-active {
-    top: 60px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
   }
 
   .navbar-nav-links-pill {
@@ -167,10 +181,57 @@
   .nav-link-pill-btn {
     width: 100%;
     text-align: center;
-    padding: 10px 0;
+    padding: 12px 0;
+    font-size: 1rem;
   }
 
   .mobile-toggle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 8px;
+    color: #082233;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-header {
+    padding: 0.65rem 0;
+  }
+
+  .navbar-header.header-scrolled {
+    padding: 0.55rem 0;
+  }
+
+  .navbar-wrapper {
+    padding: 0 0.85rem;
+  }
+
+  .innoveity-main-logo-img {
+    height: 38px !important;
+    max-width: 165px !important;
+  }
+
+  .navbar-actions {
+    gap: 0.6rem;
+  }
+
+  .pill-btn-login {
+    padding: 7px 14px;
+    font-size: 0.78rem;
+    letter-spacing: 0.2px;
+  }
+}
+
+@media screen and (max-width: 380px) {
+  .innoveity-main-logo-img {
+    height: 34px !important;
+    max-width: 140px !important;
+  }
+
+  .pill-btn-login {
+    padding: 6px 10px;
+    font-size: 0.72rem;
   }
 }

@@ -418,20 +418,143 @@
 }
 
 @media screen and (max-width: 768px) {
+  .about-mosaic-section {
+    padding: 50px 0;
+  }
+
   .about-mosaic-container {
     grid-template-columns: 1fr;
+    gap: 36px;
+    padding: 0 16px;
   }
 
   .mosaic-left-col {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    width: 100%;
+  }
+
+  .about-left-tag-wrap {
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-left-main-title {
+    text-align: center !important;
+  }
+
+  .mosaic-heading-line {
+    white-space: normal !important;
+  }
+
+  .mosaic-center-col {
+    padding: 0;
+    text-align: left;
   }
 
   .mosaic-right-col {
     grid-column: span 1;
+    margin-top: 10px;
   }
 
   .mosaic-main-heading {
-    font-size: 2.1rem;
+    font-size: clamp(1.8rem, 6vw, 2.3rem);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .about-mosaic-section {
+    padding: 40px 0;
+  }
+
+  .about-mosaic-container {
+    padding: 0 12px;
+    gap: 28px;
+  }
+
+  .mosaic-grid {
+    gap: 12px;
+    justify-content: center;
+  }
+
+  .tall-arch {
+    width: 135px;
+    height: 250px;
+    border-radius: 999px 999px 20px 20px;
+    border-width: 3px;
+  }
+
+  .mosaic-right-stack {
+    gap: 12px;
+  }
+
+  .top-capsule {
+    width: 125px;
+    height: 115px;
+    border-radius: 999px 999px 20px 999px;
+    border-width: 3px;
+  }
+
+  .bottom-capsule {
+    width: 125px;
+    height: 120px;
+    border-radius: 20px 999px 999px 999px;
+    border-width: 3px;
+  }
+
+  .floating-camper-badge {
+    bottom: -15px;
+    left: 5px;
+    padding: 6px 12px;
+    gap: 8px;
+  }
+
+  .camper-icon {
+    font-size: 16px;
+  }
+
+  .camper-text strong {
+    font-size: 11px;
+  }
+
+  .mosaic-impact-card {
+    flex-direction: column;
+    padding: 14px 16px;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .impact-vertical-divider {
+    display: none;
+  }
+
+  .impact-step-item {
+    font-size: 0.92rem;
+  }
+
+  .pill-btn-mosaic {
+    width: 100%;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 0.88rem;
+  }
+
+  .person-wrapper {
+    width: 220px;
+  }
+
+  .person-bg-circle {
+    width: 200px;
+    height: 200px;
+  }
+
+  .floating-stat-badge {
+    padding: 6px 10px;
+  }
+
+  .badge-stat-info strong {
+    font-size: 12px;
   }
 }

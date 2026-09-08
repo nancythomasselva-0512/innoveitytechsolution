@@ -4106,8 +4106,8 @@ const SuperAdminPage = () => {
                 <div className="dash-field-group">
                   <label className="dash-label">Account Password</label>
                   <input
-                    type="text"
-                    placeholder="Password (default: admin123)"
+                    type="password"
+                    placeholder="Enter account password"
                     className="dash-input-styled"
                     value={newUser.password}
                     onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
@@ -4151,7 +4151,7 @@ const SuperAdminPage = () => {
                   <tr key={u.id}>
                     <td><strong>{u.name}</strong></td>
                     <td>{u.email}</td>
-                    <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px' }}>{u.password || 'admin123'}</code></td>
+                    <td><code style={{ background: '#f1f5f9', padding: '2px 6px', borderRadius: '4px', letterSpacing: '2px' }}>••••••••</code></td>
                     <td><span className="category-badge-pill">{u.role}</span></td>
                     <td>
                       <span className="action-pill-btn" style={{ background: u.status === 'Active' ? '#fff7ed' : '#fef2f2', color: u.status === 'Active' ? '#ea580c' : '#ef4444' }}>

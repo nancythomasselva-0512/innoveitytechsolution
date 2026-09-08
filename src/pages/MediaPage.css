@@ -1774,36 +1774,77 @@
 
 @media (max-width: 768px) {
   .mp-hero {
-    padding: 7rem 1rem 4rem 1rem;
+    padding: 6.5rem 1rem 3.5rem 1rem;
+  }
+  .mp-section {
+    padding: 3.5rem 1rem;
+  }
+  .mp-showcase-section {
+    padding: 3.5rem 1rem;
   }
   .mp-hero-title {
-    font-size: 2.5rem;
+    font-size: clamp(1.8rem, 6vw, 2.4rem);
   }
   .mp-hero-tagline {
-    font-size: 1.15rem;
+    font-size: 1rem;
   }
   .mp-section-title {
-    font-size: 2rem;
+    font-size: clamp(1.7rem, 5.5vw, 2.1rem);
   }
   .cap-ui-card {
-    min-width: 300px;
-    max-width: 320px;
-    padding: 1.6rem 1.4rem;
+    min-width: 100%;
+    max-width: 100%;
+    padding: 1.4rem 1.2rem;
   }
   .mp-workflow-card {
-    padding: 1.75rem;
+    padding: 1.5rem 1.2rem;
   }
   .pipeline-node {
-    min-width: 80px;
+    min-width: 70px;
   }
   .cta-heading {
-    font-size: 1.85rem;
+    font-size: 1.6rem;
   }
   .mp-3d-deck-container {
-    height: 440px;
+    height: 420px;
   }
   .mp-3d-card {
-    width: 210px;
+    width: 220px;
     height: 350px;
+  }
+}
+
+@media (max-width: 480px) {
+  .mp-hero {
+    padding: 5.5rem 0.85rem 3rem 0.85rem;
+  }
+  .mp-hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btn-mp-primary, .btn-mp-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.5rem;
+  }
+  .mp-3d-deck-container {
+    height: 360px;
+  }
+  .mp-3d-card {
+    width: 185px;
+    height: 290px;
+  }
+  .media-service-card {
+    padding: 1.5rem 1.25rem;
+  }
+  .mp-service-title {
+    font-size: 1.15rem;
+  }
+  .mp-service-desc {
+    font-size: 0.88rem;
+  }
+  .btn-mp-cta-primary {
+    width: 100%;
+    justify-content: center;
   }
 }
