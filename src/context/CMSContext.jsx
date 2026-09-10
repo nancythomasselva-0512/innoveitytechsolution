@@ -729,6 +729,21 @@ export const CMSProvider = ({ children }) => {
     else sessionStorage.removeItem('cms_session_sec_v1');
   }, [currentUser]);
 
+  // Helper to only update React state if the payload has actually changed
+  const updateIfChanged = (setter, newVal) => {
+    if (newVal === undefined || newVal === null) return;
+    setter(prev => {
+      try {
+        if (JSON.stringify(prev) === JSON.stringify(newVal)) {
+          return prev;
+        }
+      } catch (e) {
+        // fallback
+      }
+      return newVal;
+    });
+  };
+
   // Load latest data from MySQL Database API
   const fetchLatestFromMySql = useCallback(async () => {
     if (!isMySqlConfigured()) {
@@ -750,81 +765,81 @@ export const CMSProvider = ({ children }) => {
 
       // 1. Collections - Prioritize list setting (which preserves exact display order) then database rows
       if (s.projects_list && Array.isArray(s.projects_list) && s.projects_list.length > 0) {
-        setProjects(s.projects_list);
+        updateIfChanged(setProjects, s.projects_list);
       } else if (data.projects && data.projects.length > 0) {
-        setProjects(data.projects);
+        updateIfChanged(setProjects, data.projects);
       }
 
       if (s.showcase_projects_list && Array.isArray(s.showcase_projects_list) && s.showcase_projects_list.length > 0) {
-        setShowcaseProjects(s.showcase_projects_list);
+        updateIfChanged(setShowcaseProjects, s.showcase_projects_list);
       } else if (data.showcaseProjects && data.showcaseProjects.length > 0) {
-        setShowcaseProjects(data.showcaseProjects);
+        updateIfChanged(setShowcaseProjects, data.showcaseProjects);
       }
 
       if (s.team_list && Array.isArray(s.team_list) && s.team_list.length > 0) {
-        setTeam(s.team_list);
+        updateIfChanged(setTeam, s.team_list);
       } else if (data.team && data.team.length > 0) {
-        setTeam(data.team);
+        updateIfChanged(setTeam, data.team);
       }
 
       if (s.admin_users_list && Array.isArray(s.admin_users_list) && s.admin_users_list.length > 0) {
-        setAdminUsers(s.admin_users_list);
+        updateIfChanged(setAdminUsers, s.admin_users_list);
       } else if (data.adminUsers && data.adminUsers.length > 0) {
-        setAdminUsers(data.adminUsers);
+        updateIfChanged(setAdminUsers, data.adminUsers);
       }
 
       if (s.testimonials && Array.isArray(s.testimonials)) {
-        setTestimonials(s.testimonials);
+        updateIfChanged(setTestimonials, s.testimonials);
       } else if (data.testimonials && Array.isArray(data.testimonials)) {
-        setTestimonials(data.testimonials);
+        updateIfChanged(setTestimonials, data.testimonials);
       }
 
       if (s.media_gallery && Array.isArray(s.media_gallery)) {
-        setMediaGallery(s.media_gallery);
+        updateIfChanged(setMediaGallery, s.media_gallery);
       } else if (data.mediaGallery && Array.isArray(data.mediaGallery)) {
-        setMediaGallery(data.mediaGallery);
+        updateIfChanged(setMediaGallery, data.mediaGallery);
       }
 
       if (s.careers && Array.isArray(s.careers)) {
-        setCareers(s.careers);
+        updateIfChanged(setCareers, s.careers);
       } else if (data.careers && Array.isArray(data.careers)) {
-        setCareers(data.careers);
+        updateIfChanged(setCareers, data.careers);
       }
 
       if (s.blog_posts && Array.isArray(s.blog_posts)) {
-        setBlogPosts(s.blog_posts);
+        updateIfChanged(setBlogPosts, s.blog_posts);
       } else if (data.blogPosts && Array.isArray(data.blogPosts)) {
-        setBlogPosts(data.blogPosts);
+        updateIfChanged(setBlogPosts, data.blogPosts);
       }
 
       if (s.services_list && Array.isArray(s.services_list)) {
-        setServicesList(s.services_list);
+        updateIfChanged(setServicesList, s.services_list);
       } else if (data.servicesList && Array.isArray(data.servicesList)) {
-        setServicesList(data.servicesList);
+        updateIfChanged(setServicesList, data.servicesList);
       }
 
       if (s.contact_inquiries && Array.isArray(s.contact_inquiries)) {
-        setContactInquiries(s.contact_inquiries);
+        updateIfChanged(setContactInquiries, s.contact_inquiries);
       } else if (data.contactInquiries && Array.isArray(data.contactInquiries)) {
-        setContactInquiries(data.contactInquiries);
+        updateIfChanged(setContactInquiries, data.contactInquiries);
       }
 
       if (s.hiring_alert_enabled !== undefined) {
-        setHiringAlertEnabled(Boolean(s.hiring_alert_enabled));
+        updateIfChanged(setHiringAlertEnabled, Boolean(s.hiring_alert_enabled));
       }
 
       // 2. Settings Objects
-      if (s.showcase_header) setShowcaseHeader(s.showcase_header);
-      if (s.team_header) setTeamHeaderContent(s.team_header);
-      if (s.contact) setContact(s.contact);
-      if (s.home_content) setHomeContent(s.home_content);
-      if (s.about_content) setAboutContent(s.about_content);
-      if (s.media_content) setMediaContent(s.media_content);
-      if (s.seo_settings) setSeoSettings(s.seo_settings);
-      if (s.page_seo_settings) setPageSeoSettings(s.page_seo_settings);
-      if (s.custom_fields) setCustomFields(s.custom_fields);
-      if (s.custom_page_sections) setCustomPageSections(s.custom_page_sections);
-      if (s.header_footer_settings) setHeaderFooterSettings(s.header_footer_settings);
+      if (s.showcase_header) updateIfChanged(setShowcaseHeader, s.showcase_header);
+      if (s.team_header) updateIfChanged(setTeamHeaderContent, s.team_header);
+      if (s.contact) updateIfChanged(setContact, s.contact);
+      if (s.home_content) updateIfChanged(setHomeContent, s.home_content);
+      if (s.about_content) updateIfChanged(setAboutContent, s.about_content);
+      if (s.media_content) updateIfChanged(setMediaContent, s.media_content);
+      if (s.seo_settings) updateIfChanged(setSeoSettings, s.seo_settings);
+      if (s.page_seo_settings) updateIfChanged(setPageSeoSettings, s.page_seo_settings);
+      if (s.custom_fields) updateIfChanged(setCustomFields, s.custom_fields);
+      if (s.custom_page_sections) updateIfChanged(setCustomPageSections, s.custom_page_sections);
+      if (s.header_footer_settings) updateIfChanged(setHeaderFooterSettings, s.header_footer_settings);
 
       setDbStatus('connected');
     } catch (err) {
@@ -833,7 +848,7 @@ export const CMSProvider = ({ children }) => {
     }
   }, []);
 
-  // Live Sync Engine: 3-Second Live Polling from MySQL Database
+  // Live Sync Engine: 30-Second Live Polling from MySQL Database
   useEffect(() => {
     fetchLatestFromMySql();
 
@@ -841,7 +856,7 @@ export const CMSProvider = ({ children }) => {
     if (isMySqlConfigured()) {
       pollInterval = setInterval(() => {
         fetchLatestFromMySql();
-      }, 3000);
+      }, 30000);
     }
 
     return () => {

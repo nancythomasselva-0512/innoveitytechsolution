@@ -223,25 +223,17 @@ const SuperAdminPage = () => {
 
   // CMS Form States
   const [newProject, setNewProject] = useState({ title: '', category: 'Web Development', description: '', image: '' });
-  const [editShowcaseHeader, setEditShowcaseHeader] = useState(showcaseHeader || {});
+  const [editShowcaseHeader, setEditShowcaseHeader] = useState(() => showcaseHeader || {});
   const [newShowcaseCard, setNewShowcaseCard] = useState({ tag: '', title: '', subtitle: '', description: '', image: '', tech: '' });
   const [newTeam, setNewTeam] = useState({ name: '', role: '', category: 'Team Member', image: '' });
-  const [editTeamHeader, setEditTeamHeader] = useState(teamHeaderContent || {});
-  const [editContact, setEditContact] = useState(contact || {});
-  const [editHome, setEditHome] = useState(homeContent || {});
-  const [editAbout, setEditAbout] = useState(aboutContent || {});
-  const [editMedia, setEditMedia] = useState(mediaContent || {});
-  const [editSeo, setEditSeo] = useState(seoSettings || {});
-  const [editHeaderFooter, setEditHeaderFooter] = useState(headerFooterSettings || {});
+  const [editTeamHeader, setEditTeamHeader] = useState(() => teamHeaderContent || {});
+  const [editContact, setEditContact] = useState(() => contact || {});
+  const [editHome, setEditHome] = useState(() => homeContent || {});
+  const [editAbout, setEditAbout] = useState(() => aboutContent || {});
+  const [editMedia, setEditMedia] = useState(() => mediaContent || {});
+  const [editSeo, setEditSeo] = useState(() => seoSettings || {});
+  const [editHeaderFooter, setEditHeaderFooter] = useState(() => headerFooterSettings || {});
   const [newNavLink, setNewNavLink] = useState({ name: '', to: '', isPage: true });
-
-  useEffect(() => {
-    if (headerFooterSettings) setEditHeaderFooter(headerFooterSettings);
-  }, [headerFooterSettings]);
-
-  useEffect(() => {
-    if (mediaContent) setEditMedia(mediaContent);
-  }, [mediaContent]);
 
   const handleSaveMedia = (e) => {
     e.preventDefault();
@@ -309,14 +301,7 @@ const SuperAdminPage = () => {
   const [selectedSeoPage, setSelectedSeoPage] = useState('home');
   const [editPageSeo, setEditPageSeo] = useState({});
 
-  useEffect(() => {
-    if (seoSettings) setEditSeo(seoSettings);
-  }, [seoSettings]);
 
-  useEffect(() => {
-    if (showcaseHeader) setEditShowcaseHeader(showcaseHeader);
-    if (teamHeaderContent) setEditTeamHeader(teamHeaderContent);
-  }, [showcaseHeader, teamHeaderContent]);
 
   const handleSaveTeamHeaderSubmit = (e) => {
     e.preventDefault();
@@ -403,11 +388,7 @@ const SuperAdminPage = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  useEffect(() => {
-    setEditContact(contact || {});
-    setEditHome(homeContent || {});
-    setEditAbout(aboutContent || {});
-  }, [contact, homeContent, aboutContent]);
+
 
   const triggerNotification = (msg) => {
     setNotification(msg);
@@ -536,11 +517,7 @@ const SuperAdminPage = () => {
   ]);
   const [newContactBlock, setNewContactBlock] = useState({ title: '', value: '' });
 
-  useEffect(() => {
-    if (homeContent?.homeBlocks) setHomeBlocks(homeContent.homeBlocks);
-    if (aboutContent?.aboutBlocks) setAboutBlocks(aboutContent.aboutBlocks);
-    if (contact?.contactBlocks) setContactBlocks(contact.contactBlocks);
-  }, [homeContent?.homeBlocks, aboutContent?.aboutBlocks, contact?.contactBlocks]);
+
 
   const handleAddHomeBlock = (e) => {
     e.preventDefault();
@@ -655,6 +632,33 @@ const SuperAdminPage = () => {
 
   return (
     <div className="admin-layout">
+
+      {/* FLOATING TOAST NOTIFICATION */}
+      {notification && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '24px',
+            right: '28px',
+            zIndex: 999999,
+            background: 'linear-gradient(135deg, #082233 0%, #0d344d 100%)',
+            color: '#ffffff',
+            padding: '14px 24px',
+            borderRadius: '16px',
+            boxShadow: '0 12px 35px rgba(8, 34, 51, 0.45), 0 0 0 2px rgba(255, 107, 0, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            fontSize: '0.95rem',
+            fontWeight: 700,
+            borderLeft: '5px solid #ff6b00',
+            animation: 'fadeIn 0.25s ease'
+          }}
+        >
+          <FiCheckCircle size={22} style={{ color: '#ff6b00', flexShrink: 0 }} />
+          <span>{notification}</span>
+        </div>
+      )}
 
       {/* CUSTOM SECTION ADD / EDIT MODAL OVERLAY */}
       {showSectionModal && (

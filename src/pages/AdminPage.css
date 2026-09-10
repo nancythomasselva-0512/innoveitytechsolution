@@ -495,19 +495,25 @@
 }
 
 .action-pill-btn.primary-pill {
-  background: #ffffff;
-  border: 1px solid #fdba74;
-  color: #ea580c;
-  box-shadow: 0 2px 8px rgba(255, 107, 0, 0.12);
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35) !important;
 }
 
-.action-pill-btn.primary-pill:hover,
+.action-pill-btn.primary-pill:hover {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(255, 107, 0, 0.45) !important;
+  transform: translateY(-2px) !important;
+}
+
 .action-pill-btn.primary-pill:focus,
 .action-pill-btn.primary-pill:active {
-  background: #082233 !important;
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%) !important;
   color: #ffffff !important;
-  border-color: #082233 !important;
-  box-shadow: 0 4px 14px rgba(8, 34, 51, 0.25) !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35) !important;
 }
 
 /* Mini Cards Row */
@@ -1020,9 +1026,18 @@ select.dash-input-styled {
 }
 
 .action-pill-btn.primary-pill:hover {
-  background: linear-gradient(135deg, #ea580c 0%, #047857 100%) !important;
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%) !important;
+  color: #ffffff !important;
   box-shadow: 0 8px 22px rgba(255, 107, 0, 0.45) !important;
   transform: translateY(-2px) !important;
+}
+
+.action-pill-btn.primary-pill:focus,
+.action-pill-btn.primary-pill:active {
+  background: linear-gradient(135deg, #ff6b00 0%, #ea580c 100%) !important;
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 0, 0.35) !important;
 }
 
 .action-pill-btn.secondary-pill {

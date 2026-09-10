@@ -1,6 +1,6 @@
 -- =========================================================================
--- INNOVEITY TECH SOLUTION - MYSQL PRODUCTION DATABASE SCHEMA
--- Execute this SQL script in your MySQL Database (phpMyAdmin, Workbench, CLI, PlanetScale, Hostinger, etc.)
+-- INNOVEITY TECH SOLUTION - MYSQL PRODUCTION DATABASE SCHEMA & SEED DATA
+-- Execute this SQL script in your MySQL Database (phpMyAdmin, cPanel, MySQL CLI, PlanetScale, AWS RDS, etc.)
 -- =========================================================================
 
 CREATE DATABASE IF NOT EXISTS `innoveity_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -131,4 +131,37 @@ CREATE TABLE IF NOT EXISTS `cms_contact_inquiries` (
     `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Success! Complete MySQL Schema created.
+-- =========================================================================
+-- INITIAL SEED DATA
+-- =========================================================================
+
+-- Seed Default Admin & Super Admin Accounts
+INSERT INTO `cms_admin_users` (`id`, `name`, `email`, `password`, `role`, `status`, `last_login`)
+VALUES
+(1, 'Super Admin Master', 'innoveitytech@gmail.com', 'superadmin123', 'Super Admin', 'Active', 'Just now'),
+(2, 'Admin Content Manager', 'innoveityadmin@gmail.com', 'admin123', 'Admin', 'Active', 'Just now')
+ON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `role`=VALUES(`role`), `status`=VALUES(`status`);
+
+-- Seed Default Leadership & Team Members
+INSERT INTO `cms_team` (`id`, `name`, `role`, `category`, `image`)
+VALUES
+(101, 'Founder & CEO', 'Founder & Managing Director', 'Leadership', '/Founder.jpeg'),
+(102, 'Co-Founder & CEO', 'Chief Executive Officer', 'Leadership', '/CEO.jpeg'),
+(1, 'Praveen', 'Team Member', 'Team Member', '/Praveen.jpeg'),
+(2, 'Nancy', 'Team Member', 'Team Member', '/Nancy.jpeg'),
+(3, 'Raghul', 'Team Member', 'Team Member', '/Raghul.jpeg'),
+(4, 'Zubariya', 'Team Member', 'Team Member', '/Zubariya.jpeg'),
+(5, 'Yeshwanth', 'Team Member', 'Team Member', '/Yeshwanth.jpeg'),
+(6, 'Anto', 'Team Member', 'Team Member', '/Anto.jpeg')
+ON DUPLICATE KEY UPDATE `name`=VALUES(`name`), `role`=VALUES(`role`), `image`=VALUES(`image`);
+
+-- Seed Default Projects
+INSERT INTO `cms_projects` (`id`, `title`, `category`, `description`, `image`)
+VALUES
+(1, 'AI Neural Engine', 'Artificial Intelligence', 'Experience high-performance, local client-side AI language processing and dynamic contextual learning within an intuitive web platform.', '/tech_blog_featured.png'),
+(2, 'Cloud Data Core', 'Data Infrastructure', 'A fully responsive and scalable data center telemetry platform designed for high-availability enterprise cloud workloads.', '/tech_blog_3.png'),
+(3, 'SaaS Workspace', 'Enterprise Software', 'A robust SaaS solution that allows users to create, manage, and analyze custom forms with advanced conditional logic.', '/service_software.png'),
+(4, 'Mobile Suite', 'Mobile App Engineering', 'A modern, accessible mobile application concept tailored for specialized service bookings and real-time tracking.', '/service_mobile.png'),
+(5, 'EduStream Hub', 'E-Learning Platform', 'An interactive, feature-rich e-learning platform connecting students and educators with secure video streaming and material distribution.', '/service_web.png'),
+(6, 'Core Systems', 'Digital Transformation', 'The official corporate presence for Innoveity Tech Solution, showcasing our engineering capabilities, team, and services.', '/service_cloud.png')
+ON DUPLICATE KEY UPDATE `title`=VALUES(`title`), `description`=VALUES(`description`), `image`=VALUES(`image`);
