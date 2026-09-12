@@ -110,13 +110,13 @@ const Hero = () => {
 
             <div className="hero-brand-tagline-row">
               <span className="hero-tagline-bar"></span>
-              <span className="hero-tagline-text">SMART TECHNOLOGY. CREATIVE SOLUTIONS.</span>
+              <span className="hero-tagline-text">{homeContent?.kicker || 'SMART TECHNOLOGY. CREATIVE SOLUTIONS.'}</span>
               <span className="hero-tagline-bar"></span>
             </div>
 
             {/* Description Text */}
             <p className="hero-body-text">
-              {homeContent.description}
+              {homeContent?.description || 'Empowering businesses with innovative software development, AI-powered solutions, cloud technologies, mobile applications, web development, and digital transformation services that help organizations achieve sustainable growth.'}
             </p>
 
             {/* Left-Aligned CTA Button */}
@@ -135,7 +135,7 @@ const Hero = () => {
             <div className="hero-3d-art-wrapper">
               <div className="hero-3d-glow-backdrop"></div>
               <img 
-                src="/hero-3d-in-emblem.png" 
+                src={homeContent?.image || "/hero-3d-in-emblem.png"} 
                 alt="Innoveity Tech 3D Artwork" 
                 className="hero-3d-in-img"
               />

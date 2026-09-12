@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import {
   isMySqlConfigured,
   fetchAllFromMySql,
@@ -12,6 +12,7 @@ const CMSContext = createContext();
 export const useCMS = () => useContext(CMSContext);
 
 export const CMSProvider = ({ children }) => {
+  const lastSavedRef = useRef(0);
   // Default Initial Data (Using AI-Generated High Resolution Renders)
   const defaultProjects = [
     {
@@ -745,9 +746,14 @@ export const CMSProvider = ({ children }) => {
   };
 
   // Load latest data from MySQL Database API
-  const fetchLatestFromMySql = useCallback(async () => {
+  const fetchLatestFromMySql = useCallback(async (force = false) => {
     if (!isMySqlConfigured()) {
       setDbStatus('fallback');
+      return;
+    }
+
+    // If recent save happened within 10 seconds and not forced, skip background overwrite
+    if (!force && Date.now() - lastSavedRef.current < 10000) {
       return;
     }
 
@@ -1082,28 +1088,41 @@ export const CMSProvider = ({ children }) => {
 
   const updateHomeContent = async (newContent) => {
     setHomeContent(newContent);
-    await saveCmsSettingToMySql('home_content', newContent);
+    saveLocalState('home_content', newContent);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('home_content', newContent);
+    return ok;
   };
 
   const updateAboutContent = async (newContent) => {
     setAboutContent(newContent);
-    await saveCmsSettingToMySql('about_content', newContent);
+    saveLocalState('about_content', newContent);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('about_content', newContent);
+    return ok;
   };
 
   const updateMediaContent = async (newMedia) => {
     const updated = { ...mediaContent, ...newMedia };
     setMediaContent(updated);
-    await saveCmsSettingToMySql('media_content', updated);
+    saveLocalState('media_content', updated);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('media_content', updated);
+    return ok;
   };
 
   const updateSeoSettings = async (newSeo) => {
     setSeoSettings(newSeo);
-    await saveCmsSettingToMySql('seo_settings', newSeo);
+    saveLocalState('seo_settings', newSeo);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('seo_settings', newSeo);
+    return ok;
   };
 
   const updateHeaderFooterSettings = async (newSettings) => {
     const updatedHF = { ...headerFooterSettings, ...newSettings };
     setHeaderFooterSettings(updatedHF);
+    saveLocalState('header_footer', updatedHF);
 
     const updatedContact = {
       ...contact,
@@ -1113,11 +1132,14 @@ export const CMSProvider = ({ children }) => {
       hours: newSettings.hours || contact.hours,
     };
     setContact(updatedContact);
+    saveLocalState('contact', updatedContact);
+    lastSavedRef.current = Date.now();
 
-    await Promise.allSettled([
+    const results = await Promise.allSettled([
       saveCmsSettingToMySql('header_footer_settings', updatedHF),
       saveCmsSettingToMySql('contact', updatedContact)
     ]);
+    return results.every(r => r.status === 'fulfilled' && r.value);
   };
 
   const updatePageSeoSettings = async (pageKey, newPageSeo) => {
@@ -1126,7 +1148,10 @@ export const CMSProvider = ({ children }) => {
       [pageKey]: { ...pageSeoSettings[pageKey], ...newPageSeo }
     };
     setPageSeoSettings(updated);
-    await saveCmsSettingToMySql('page_seo_settings', updated);
+    saveLocalState('page_seo_settings', updated);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('page_seo_settings', updated);
+    return ok;
   };
 
   const addCustomField = async (pageKey, field) => {

@@ -235,19 +235,19 @@ const SuperAdminPage = () => {
   const [editHeaderFooter, setEditHeaderFooter] = useState(() => headerFooterSettings || {});
   const [newNavLink, setNewNavLink] = useState({ name: '', to: '', isPage: true });
 
-  const handleSaveMedia = (e) => {
+  const handleSaveMedia = async (e) => {
     e.preventDefault();
     if (updateMediaContent) {
-      updateMediaContent(editMedia);
+      await updateMediaContent(editMedia);
       triggerNotification('Media Capabilities content saved & synced live across all devices!');
     }
   };
 
-  const handleSaveHeaderFooter = (e) => {
+  const handleSaveHeaderFooter = async (e) => {
     e.preventDefault();
     if (updateHeaderFooterSettings) {
-      updateHeaderFooterSettings(editHeaderFooter);
-      triggerNotification('Header & Footer configuration saved successfully!');
+      await updateHeaderFooterSettings(editHeaderFooter);
+      triggerNotification('Header & Footer configuration saved & synced live!');
     }
   };
 
@@ -301,13 +301,44 @@ const SuperAdminPage = () => {
   const [selectedSeoPage, setSelectedSeoPage] = useState('home');
   const [editPageSeo, setEditPageSeo] = useState({});
 
+  // Synchronize form states with live database data whenever CMSContext loads or updates
+  useEffect(() => {
+    if (homeContent) setEditHome(homeContent);
+  }, [homeContent]);
 
+  useEffect(() => {
+    if (aboutContent) setEditAbout(aboutContent);
+  }, [aboutContent]);
 
-  const handleSaveTeamHeaderSubmit = (e) => {
+  useEffect(() => {
+    if (contact) setEditContact(contact);
+  }, [contact]);
+
+  useEffect(() => {
+    if (mediaContent) setEditMedia(mediaContent);
+  }, [mediaContent]);
+
+  useEffect(() => {
+    if (seoSettings) setEditSeo(seoSettings);
+  }, [seoSettings]);
+
+  useEffect(() => {
+    if (headerFooterSettings) setEditHeaderFooter(headerFooterSettings);
+  }, [headerFooterSettings]);
+
+  useEffect(() => {
+    if (showcaseHeader) setEditShowcaseHeader(showcaseHeader);
+  }, [showcaseHeader]);
+
+  useEffect(() => {
+    if (teamHeaderContent) setEditTeamHeader(teamHeaderContent);
+  }, [teamHeaderContent]);
+
+  const handleSaveTeamHeaderSubmit = async (e) => {
     e.preventDefault();
     if (updateTeamHeaderContent) {
-      updateTeamHeaderContent(editTeamHeader);
-      triggerNotification('Team Section Headings & Subtitles updated!');
+      await updateTeamHeaderContent(editTeamHeader);
+      triggerNotification('Team Section Headings & Subtitles updated & synced live!');
     }
   };
 
@@ -317,20 +348,20 @@ const SuperAdminPage = () => {
     }
   }, [selectedSeoPage, pageSeoSettings]);
 
-  const handleSaveSeo = (e) => {
+  const handleSaveSeo = async (e) => {
     e.preventDefault();
-    updateSeoSettings(editSeo);
+    await updateSeoSettings(editSeo);
     if (updatePageSeoSettings) {
-      updatePageSeoSettings(selectedSeoPage, editPageSeo);
+      await updatePageSeoSettings(selectedSeoPage, editPageSeo);
     }
     triggerNotification(`SEO & Meta Configuration Saved for ${selectedSeoPage.toUpperCase()} Page!`);
   };
 
-  const handleSaveShowcaseHeaderSubmit = (e) => {
+  const handleSaveShowcaseHeaderSubmit = async (e) => {
     e.preventDefault();
     if (updateShowcaseHeader) {
-      updateShowcaseHeader(editShowcaseHeader);
-      triggerNotification('3D Showcase Section Header updated successfully!');
+      await updateShowcaseHeader(editShowcaseHeader);
+      triggerNotification('3D Showcase Section Header updated & synced live!');
     }
   };
 
@@ -582,22 +613,28 @@ const SuperAdminPage = () => {
     triggerNotification('Removed Contact channel block & synced live');
   };
 
-  const handleSaveContact = (e) => {
+  const handleSaveContact = async (e) => {
     e.preventDefault();
-    updateContact(editContact);
-    triggerNotification('Contact details updated!');
+    if (updateContact) {
+      await updateContact(editContact);
+      triggerNotification('Contact details updated & synced live!');
+    }
   };
 
-  const handleSaveHome = (e) => {
+  const handleSaveHome = async (e) => {
     e.preventDefault();
-    updateHomeContent(editHome);
-    triggerNotification('Homepage copy updated!');
+    if (updateHomeContent) {
+      await updateHomeContent(editHome);
+      triggerNotification('Homepage copy updated & synced live!');
+    }
   };
 
-  const handleSaveAbout = (e) => {
+  const handleSaveAbout = async (e) => {
     e.preventDefault();
-    updateAboutContent(editAbout);
-    triggerNotification('About Us section copy updated!');
+    if (updateAboutContent) {
+      await updateAboutContent(editAbout);
+      triggerNotification('About Us section copy updated & synced live!');
+    }
   };
 
   const handleAddUser = (e) => {

@@ -22,11 +22,21 @@ const AboutSummary = () => {
         >
           <div className="about-left-tag-wrap">
             <h2 className="about-left-main-title">
-              WHO WE <span className="title-gradient-accent">ARE</span>
+              {homeContent?.aboutKicker || (
+                <>WHO WE <span className="title-gradient-accent">ARE</span></>
+              )}
             </h2>
             <h2 className="mosaic-main-heading">
-              Technology Built Around <br />
-              <span className="title-gradient-accent">Possibility.</span>
+              {homeContent?.aboutTitle ? (
+                homeContent.aboutTitle.split('\n').map((line, idx) => (
+                  <React.Fragment key={idx}>
+                    {line}
+                    {idx === 0 && <br />}
+                  </React.Fragment>
+                ))
+              ) : (
+                <>Technology Built Around <br /><span className="title-gradient-accent">Possibility.</span></>
+              )}
             </h2>
             <div className="mosaic-title-bar"></div>
           </div>
@@ -102,7 +112,9 @@ const AboutSummary = () => {
           </p>
 
           <p className="mosaic-p-body">
-            At <strong style={{ color: '#082233' }}>Innoveity Tech Solutions</strong>, we design and build intelligent digital solutions for businesses, institutions, startups and government organisations.
+            {homeContent?.aboutDesc || (
+              <>At <strong style={{ color: '#082233' }}>Innoveity Tech Solutions</strong>, we design and build intelligent digital solutions for businesses, institutions, startups and government organisations.</>
+            )}
           </p>
 
           <p className="mosaic-p-body">
