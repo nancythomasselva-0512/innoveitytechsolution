@@ -185,16 +185,50 @@ const MediaHomeTransformation = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="media-hub-circle-outer">
-                <div className="media-hub-circle-spin"></div>
-                <div className="media-hub-circle-inner">
+              {/* Cinema Studio Viewfinder Frame (Replaced circle with modern production terminal) */}
+              <div className="media-hub-studio-frame">
+                {/* Ambient back-glow & rotating cyber aura */}
+                <div className="media-hub-ambient-glow"></div>
+                <div className="media-hub-aura-ring"></div>
+
+                {/* Viewfinder 4 Corner Brackets */}
+                <span className="vf-bracket bracket-tl"></span>
+                <span className="vf-bracket bracket-tr"></span>
+                <span className="vf-bracket bracket-bl"></span>
+                <span className="vf-bracket bracket-br"></span>
+
+                {/* Main Glassmorphic Studio Terminal */}
+                <div className="media-hub-terminal-inner">
+                  {/* Studio Status Bar */}
+                  <div className="hub-terminal-top-bar">
+                    <span className="hub-rec-badge">
+                      <span className="rec-live-dot"></span>
+                      REC 4K
+                    </span>
+                    <span className="hub-timecode">00:24:18:05</span>
+                    <span className="hub-fps-badge">60 FPS</span>
+                  </div>
+
+                  {/* Center Branding Content */}
                   <div className="hub-center-content">
-                    <div className="hub-center-icon">
+                    <div className="hub-center-icon-box">
                       <FiCamera />
+                      <div className="icon-aperture-glow"></div>
                     </div>
                     <span className="hub-center-tag">INNOVEITY</span>
                     <h3 className="hub-center-title">MEDIA LAB</h3>
                     <p className="hub-center-sub">Creative • Production • Scale</p>
+
+                    {/* Animated Soundwave / Equalizer Bars */}
+                    <div className="hub-equalizer-bars" aria-hidden="true">
+                      <span className="eq-bar bar-1"></span>
+                      <span className="eq-bar bar-2"></span>
+                      <span className="eq-bar bar-3"></span>
+                      <span className="eq-bar bar-4"></span>
+                      <span className="eq-bar bar-5"></span>
+                      <span className="eq-bar bar-6"></span>
+                      <span className="eq-bar bar-7"></span>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -583,6 +583,29 @@ export const CMSProvider = ({ children }) => {
     ]
   };
 
+  const defaultBrochurePopup = {
+    enabled: true,
+    displayMode: 'floating_card',
+    delaySeconds: 1,
+    badge: 'INTERNSHIP CALL',
+    title: 'Industry Immersion Programmes',
+    subtitle: 'Gain real-world skills & work on live projects with industry experts.',
+    brochureUrl: '/innoveity-brochure.jpeg',
+    brochureFileName: 'innoveity-brochure.jpeg',
+    googleFormUrl: 'https://forms.gle/G9tFYtJ53W9873wQ6',
+    googleFormEmbedUrl: '',
+    ctaText: 'Apply Now',
+    directDownloadText: 'Download Brochure',
+    showDirectDownload: true,
+    features: [
+      'AI & Generative AI • Machine Learning',
+      'FinTech, Analytics & Growth Strategy',
+      '45 Days Live Training & Certification'
+    ],
+    coverImage: '/innoveity-brochure.jpeg',
+    showOncePerSession: false
+  };
+
   // Helper security functions for transient session encryption
   const encryptData = (data) => {
     try {
@@ -671,6 +694,34 @@ export const CMSProvider = ({ children }) => {
   const [blogPosts, setBlogPosts] = useState(() => loadLocalState('blog_posts', defaultBlogPosts));
   const [servicesList, setServicesList] = useState(() => loadLocalState('services_list', defaultServicesList));
   const [hiringAlertEnabled, setHiringAlertEnabled] = useState(() => loadLocalState('hiring_alert_enabled', true));
+  const [brochurePopup, setBrochurePopup] = useState(() => {
+    const loaded = loadLocalState('brochure_popup', defaultBrochurePopup);
+    if (
+      !loaded ||
+      !loaded.coverImage ||
+      loaded.coverImage === '/tech_blog_featured.png' ||
+      loaded.coverImage.includes('tech_blog') ||
+      !loaded.googleFormUrl ||
+      loaded.googleFormUrl.includes('placeholder') ||
+      loaded.googleFormUrl.includes('1FAIpQLSc6J8qj') ||
+      loaded.googleFormUrl.includes('docs.google.com/forms/d/e/')
+    ) {
+      const updated = {
+        ...defaultBrochurePopup,
+        ...loaded,
+        coverImage: '/innoveity-brochure.jpeg',
+        brochureUrl: '/innoveity-brochure.jpeg',
+        googleFormUrl: 'https://forms.gle/G9tFYtJ53W9873wQ6',
+        ctaText: 'Apply Now',
+        title: (!loaded?.title || loaded?.title === 'Download Our Company Brochure') ? 'Industry Immersion Programmes' : loaded.title,
+        badge: (!loaded?.badge || loaded?.badge === 'OFFICIAL BROCHURE') ? 'INTERNSHIP CALL' : loaded.badge,
+        subtitle: (!loaded?.subtitle || loaded?.subtitle.includes('empowers enterprises through')) ? 'Gain real-world skills & work on live projects with industry experts.' : loaded.subtitle
+      };
+      saveLocalState('brochure_popup', updated);
+      return updated;
+    }
+    return loaded;
+  });
   const [customPageSections, setCustomPageSections] = useState(() => {
     const loaded = loadLocalState('custom_page_sections', defaultCustomPageSections);
     if (loaded) {
@@ -714,6 +765,7 @@ export const CMSProvider = ({ children }) => {
   useEffect(() => { saveLocalState('blog_posts', blogPosts); }, [blogPosts]);
   useEffect(() => { saveLocalState('services_list', servicesList); }, [servicesList]);
   useEffect(() => { saveLocalState('hiring_alert_enabled', hiringAlertEnabled); }, [hiringAlertEnabled]);
+  useEffect(() => { saveLocalState('brochure_popup', brochurePopup); }, [brochurePopup]);
 
   // Transient Admin Session
   const [currentUser, setCurrentUser] = useState(() => {
@@ -846,6 +898,7 @@ export const CMSProvider = ({ children }) => {
       if (s.custom_fields) updateIfChanged(setCustomFields, s.custom_fields);
       if (s.custom_page_sections) updateIfChanged(setCustomPageSections, s.custom_page_sections);
       if (s.header_footer_settings) updateIfChanged(setHeaderFooterSettings, s.header_footer_settings);
+      if (s.brochure_popup) updateIfChanged(setBrochurePopup, s.brochure_popup);
 
       setDbStatus('connected');
     } catch (err) {
@@ -909,6 +962,7 @@ export const CMSProvider = ({ children }) => {
       await saveCmsSettingToMySql('custom_fields', customFields);
       await saveCmsSettingToMySql('custom_page_sections', customPageSections);
       await saveCmsSettingToMySql('header_footer_settings', headerFooterSettings);
+      await saveCmsSettingToMySql('brochure_popup', brochurePopup);
 
       setDbStatus('connected');
       alert('Successfully seeded all website data to MySQL Database! Live sync active across all devices.');
@@ -1116,6 +1170,15 @@ export const CMSProvider = ({ children }) => {
     saveLocalState('seo_settings', newSeo);
     lastSavedRef.current = Date.now();
     const ok = await saveCmsSettingToMySql('seo_settings', newSeo);
+    return ok;
+  };
+
+  const updateBrochurePopup = async (newConfig) => {
+    const merged = { ...brochurePopup, ...newConfig };
+    setBrochurePopup(merged);
+    saveLocalState('brochure_popup', merged);
+    lastSavedRef.current = Date.now();
+    const ok = await saveCmsSettingToMySql('brochure_popup', merged);
     return ok;
   };
 
@@ -1612,6 +1675,7 @@ export const CMSProvider = ({ children }) => {
     setBlogPosts(defaultBlogPosts);
     setServicesList(defaultServicesList);
     setHiringAlertEnabled(true);
+    setBrochurePopup(defaultBrochurePopup);
 
     return true;
   };
@@ -1642,6 +1706,7 @@ export const CMSProvider = ({ children }) => {
       headerFooterSettings, updateHeaderFooterSettings,
       pageSeoSettings, updatePageSeoSettings,
       customFields, addCustomField, deleteCustomField,
+      brochurePopup, updateBrochurePopup,
       adminUsers, addAdminUser, deleteAdminUser, toggleUserStatus,
       currentUser, loginAdmin, logoutAdmin,
       clearAllCmsCache

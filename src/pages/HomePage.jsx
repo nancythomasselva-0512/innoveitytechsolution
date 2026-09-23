@@ -7,6 +7,7 @@ import Projects from '../components/Projects/Projects';
 import Testimonials from '../components/Testimonials/Testimonials';
 import Contact from '../components/Contact/Contact';
 import DynamicPageSections from '../components/UI/DynamicPageSections';
+import BrochurePopup from '../components/Brochure/BrochurePopup';
 
 const HomePage = () => {
   return (
@@ -19,6 +20,7 @@ const HomePage = () => {
       <DynamicPageSections page="home" />
       <Testimonials />
       <Contact />
+      <BrochurePopup />
     </>
   );
 };

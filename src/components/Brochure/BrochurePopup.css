@@ -1,0 +1,485 @@
+/* =========================================================================
+   INNOVEITY TECH SOLUTION - CENTERED BROCHURE & GOOGLE FORM POPUP
+   Pops up cleanly in the center of the page with smooth zoom-in & backdrop
+   ========================================================================= */
+
+/* POPUP CONTAINER (Centered on page, NO blur, NO dark background - page remains 100% visible) */
+.brochure-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  pointer-events: none;
+}
+
+@media (min-width: 992px) {
+  .brochure-popup-backdrop {
+    justify-content: center;
+    /* Shifted a little left to sit cleanly between the paragraph and 3D visual */
+    padding-left: 0;
+    padding-right: clamp(25px, 3.5vw, 50px);
+  }
+}
+
+/* CENTERED POPUP CARD CONTAINER - Clean, legible & balanced size */
+.brochure-center-card,
+.brochure-floating-widget {
+  position: relative;
+  pointer-events: auto;
+  width: 300px;
+  max-width: calc(100vw - 28px);
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 18px 50px -10px rgba(8, 34, 51, 0.38), 0 0 0 1px rgba(8, 34, 51, 0.09);
+  animation: popupCardZoomIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes popupCardZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* CIRCULAR CLOSE BUTTON (Overlapping top-right corner) */
+.floating-widget-close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #082233;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+
+.floating-widget-close:hover {
+  background: #ff6b00;
+  transform: rotate(90deg) scale(1.1);
+}
+
+/* INNER CARD WRAPPER */
+.floating-widget-inner {
+  padding: 12px 12px 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BROCHURE IMAGE THUMBNAIL */
+.floating-widget-media {
+  position: relative;
+  width: 100%;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+.floating-widget-img {
+  width: 100%;
+  height: auto;
+  max-height: min(54vh, 360px);
+  object-fit: contain;
+  background: #ffffff;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.floating-widget-media:hover .floating-widget-img {
+  transform: scale(1.02);
+}
+
+/* Hover Zoom Hint Overlay */
+.floating-widget-zoom-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 34, 51, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.floating-widget-media:hover .floating-widget-zoom-overlay {
+  opacity: 1;
+}
+
+.zoom-hint-pill {
+  background: #ffffff;
+  color: #082233;
+  font-size: 0.76rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* CAPTION & CONTENT */
+.floating-widget-content {
+  padding-top: 12px;
+  text-align: center;
+}
+
+.floating-widget-kicker {
+  display: inline-block;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ff6b00;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.floating-widget-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #082233;
+  line-height: 1.25;
+}
+
+.floating-widget-subtitle {
+  margin: 0 0 12px;
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* ACTIONS */
+.floating-widget-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Primary Apply Button (matches dark blue pill like image 2) */
+.floating-widget-apply-btn {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  background: #1e3a8a; /* Rich professional navy blue from image 2 */
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 11px;
+  font-size: 0.88rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.32);
+  transition: all 0.25s ease;
+}
+
+.floating-widget-apply-btn:hover {
+  background: #ff6b00;
+  box-shadow: 0 5px 16px rgba(255, 107, 0, 0.38);
+  transform: translateY(-1px);
+}
+
+/* Sub links */
+.floating-widget-sublinks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 4px;
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.floating-widget-link-btn {
+  background: none;
+  border: none;
+  color: #475569;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 4px;
+  transition: color 0.2s ease;
+}
+
+.floating-widget-link-btn:hover {
+  color: #ff6b00;
+  text-decoration: underline;
+}
+
+.link-divider {
+  color: #cbd5e1;
+}
+
+/* =========================================================================
+   RE-OPEN TAB (Appears when widget is closed so users can re-open)
+   ========================================================================= */
+.brochure-reopen-tab {
+  position: fixed;
+  top: 140px;
+  right: 0;
+  background: #ffffff;
+  color: #082233;
+  border: 1.5px solid #ff6b00;
+  border-right: none;
+  border-radius: 20px 0 0 20px;
+  padding: 10px 14px 10px 12px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  z-index: 998;
+  box-shadow: -4px 6px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+  animation: tabSlideIn 0.35s ease forwards;
+}
+
+.brochure-reopen-tab:hover {
+  background: #ff6b00;
+  color: #ffffff;
+  padding-right: 18px;
+  transform: translateX(-4px);
+}
+
+@keyframes tabSlideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.reopen-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ff6b00;
+  animation: pulseDot 1.5s infinite;
+}
+
+.brochure-reopen-tab:hover .reopen-dot {
+  background: #ffffff;
+}
+
+@keyframes pulseDot {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+}
+
+/* =========================================================================
+   FULLSCREEN LIGHTBOX MODAL (For viewing full high-res brochure poster)
+   ========================================================================= */
+.brochure-lightbox-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(8, 26, 43, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: lightboxFade 0.3s ease forwards;
+}
+
+@keyframes lightboxFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.brochure-lightbox-content {
+  position: relative;
+  max-width: 420px;
+  width: 92vw;
+  max-height: 92vh;
+  background: #ffffff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  animation: lightboxScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes lightboxScale {
+  from {
+    transform: scale(0.92);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(8, 34, 51, 0.9);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.lightbox-close-btn:hover {
+  background: #ff6b00;
+  transform: rotate(90deg) scale(1.08);
+}
+
+.lightbox-image-container {
+  overflow-y: auto;
+  max-height: calc(92vh - 65px);
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+}
+
+.lightbox-full-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.lightbox-bottom-bar {
+  padding: 10px 14px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lightbox-apply-btn {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #1e3a8a;
+  color: #ffffff;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+  transition: all 0.2s ease;
+}
+
+.lightbox-apply-btn:hover {
+  background: #ff6b00;
+  box-shadow: 0 4px 14px rgba(255, 107, 0, 0.35);
+}
+
+.lightbox-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  color: #082233;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lightbox-dl-btn:hover {
+  background: #e2e8f0;
+  color: #000000;
+}
+
+/* =========================================================================
+   RESPONSIVE QUERIES
+   ========================================================================= */
+@media (max-width: 768px) {
+  .brochure-popup-backdrop {
+    padding: 10px;
+    justify-content: center;
+  }
+
+  .brochure-center-card,
+  .brochure-floating-widget {
+    width: min(240px, calc(100vw - 28px));
+    border-radius: 16px;
+  }
+
+  .floating-widget-inner {
+    padding: 8px 8px 6px;
+  }
+
+  .floating-widget-img {
+    max-height: min(45vh, 260px);
+  }
+
+  .brochure-reopen-tab {
+    top: auto;
+    bottom: 16px;
+    right: 12px;
+    font-size: 0.74rem;
+    padding: 6px 12px;
+  }
+}

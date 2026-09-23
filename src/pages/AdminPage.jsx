@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {
   FiHome, FiFolder, FiUsers, FiFileText, FiPhone, FiInfo, FiDatabase,
   FiPlus, FiTrash2, FiEdit2, FiSearch, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
-  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiLayers, FiArrowUp, FiArrowDown, FiLayout, FiRefreshCw, FiMail,
+  FiCheck, FiCheckCircle, FiX, FiMenu, FiSettings, FiDownloadCloud, FiDownload, FiLayers, FiArrowUp, FiArrowDown, FiLayout, FiRefreshCw, FiMail,
   FiStar, FiBriefcase, FiBookOpen, FiBox, FiAward, FiTag
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,9 +31,92 @@ const AdminPage = () => {
     hiringAlertEnabled, toggleHiringAlert,
     blogPosts, addBlogPost, deleteBlogPost,
     servicesList, addServiceItem, deleteServiceItem,
+    brochurePopup, updateBrochurePopup,
     adminUsers, addAdminUser, currentUser, logoutAdmin, clearAllCmsCache,
     seedCloudDatabase, dbStatus
   } = useCMS();
+
+  // Brochure & Google Form Popup State
+  const [editBrochure, setEditBrochure] = useState(() => brochurePopup || {
+    enabled: true,
+    displayMode: 'floating_card',
+    delaySeconds: 1,
+    badge: 'INTERNSHIP CALL',
+    title: 'Industry Immersion Programmes',
+    subtitle: 'Gain real-world skills & work on live projects with industry experts.',
+    brochureUrl: '/innoveity-brochure.jpeg',
+    brochureFileName: 'innoveity-brochure.jpeg',
+    googleFormUrl: 'https://forms.gle/G9tFYtJ53W9873wQ6',
+    googleFormEmbedUrl: '',
+    ctaText: 'Apply Now',
+    directDownloadText: 'Download Brochure',
+    showDirectDownload: true,
+    features: [
+      'AI & Generative AI • Machine Learning',
+      'FinTech, Analytics & Growth Strategy',
+      '45 Days Live Training & Certification'
+    ],
+    coverImage: '/innoveity-brochure.jpeg',
+    showOncePerSession: false
+  });
+
+  useEffect(() => {
+    if (brochurePopup) {
+      setEditBrochure(brochurePopup);
+    }
+  }, [brochurePopup]);
+
+  const handleSaveBrochure = async (e) => {
+    if (e) e.preventDefault();
+    if (updateBrochurePopup) {
+      await updateBrochurePopup(editBrochure);
+      triggerNotification('Brochure & Google Form popup settings saved successfully!');
+    }
+  };
+
+  const handleToggleBrochureStatus = async () => {
+    const updated = { ...editBrochure, enabled: !editBrochure.enabled };
+    setEditBrochure(updated);
+    if (updateBrochurePopup) {
+      await updateBrochurePopup(updated);
+      triggerNotification(updated.enabled ? '🟢 Brochure popup activated on homepage!' : '⚪ Brochure popup deactivated.');
+    }
+  };
+
+  const handleBrochureFileUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 25 * 1024 * 1024) {
+        alert('File is larger than 25MB. Please upload a smaller file or host it externally.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        setEditBrochure(prev => ({
+          ...prev,
+          brochureUrl: uploadEvent.target.result,
+          brochureFileName: file.name
+        }));
+        triggerNotification(`Loaded file "${file.name}"! Click Save to apply.`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBrochureImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        setEditBrochure(prev => ({
+          ...prev,
+          coverImage: uploadEvent.target.result
+        }));
+        triggerNotification('Brochure preview image updated!');
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const users = adminUsers || [];
   const inquiries = contactInquiries || [];
@@ -714,6 +797,17 @@ const AdminPage = () => {
             <span className="nav-label">Careers Board</span>
             <span className="nav-badge">{jobs.length}</span>
           </button>
+
+          <button
+            className={`nav-item-btn ${activeTab === 'brochure_popup' ? 'active' : ''}`}
+            onClick={() => setActiveTab('brochure_popup')}
+          >
+            <span className="nav-icon"><FiFileText /></span>
+            <span className="nav-label">Brochure & Popup</span>
+            <span className="nav-badge" style={{ background: editBrochure?.enabled ? '#16a34a' : '#94a3b8', color: '#ffffff' }}>
+              {editBrochure?.enabled ? 'LIVE' : 'OFF'}
+            </span>
+          </button>
         </nav>
 
         {/* Sidebar Footer Link */}
@@ -743,6 +837,7 @@ const AdminPage = () => {
               {activeTab === 'testimonials' && 'Client Testimonials & Ratings'}
               {activeTab === 'media_gallery' && 'Media Capabilities & Video Showcase'}
               {activeTab === 'careers' && 'Careers & Job Openings Management'}
+              {activeTab === 'brochure_popup' && 'Brochure Popup & Google Form Settings'}
               {activeTab === 'blog' && 'Tech Blog & Engineering Articles'}
               {activeTab === 'services' && 'Services & Solution Packages'}
             </h1>
@@ -2782,6 +2877,349 @@ const AdminPage = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* TAB 11: BROCHURE POPUP & GOOGLE FORM MANAGEMENT */}
+        {activeTab === 'brochure_popup' && (
+          <div className="dash-cms-section" style={{ marginTop: 0 }}>
+            <div className="chart-header-row" style={{ alignItems: 'center' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiFileText style={{ color: '#ff6b00' }} /> Homepage Brochure & Google Form Popup
+                </h3>
+                <p style={{ color: '#64748b', fontSize: '0.85rem', margin: '4px 0 0' }}>
+                  Manage the promotional brochure modal, Google Form lead capture, direct PDF downloads, and popup display rules.
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <a
+                  href="/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="action-pill-btn"
+                  style={{ background: '#f1f5f9', color: '#082233', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <FiExternalLink /> Test on Home
+                </a>
+                <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
+                  Back to Overview
+                </button>
+              </div>
+            </div>
+
+            {/* MASTER TOGGLE BANNER */}
+            <div style={{
+              background: editBrochure.enabled ? '#fff7ed' : '#f8fafc',
+              border: editBrochure.enabled ? '2px solid #ff6b00' : '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '20px 24px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '16px',
+              boxShadow: editBrochure.enabled ? '0 6px 20px rgba(255, 107, 0, 0.12)' : 'none',
+              transition: 'all 0.3s ease',
+              marginTop: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div style={{
+                  width: '50px',
+                  height: '50px',
+                  borderRadius: '50%',
+                  background: editBrochure.enabled ? '#ff6b00' : '#e2e8f0',
+                  color: editBrochure.enabled ? '#ffffff' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.4rem',
+                  flexShrink: 0
+                }}>
+                  <FiFileText />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <h4 style={{ margin: 0, fontSize: '1.05rem', color: '#082233', fontWeight: 800 }}>
+                      Homepage Brochure Popup Status
+                    </h4>
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 800,
+                      padding: '3px 10px',
+                      borderRadius: '12px',
+                      background: editBrochure.enabled ? '#16a34a' : '#94a3b8',
+                      color: '#ffffff',
+                      textTransform: 'uppercase'
+                    }}>
+                      {editBrochure.enabled ? '🟢 Live on Home Landing Page' : '⚪ Inactive / Hidden'}
+                    </span>
+                  </div>
+                  <p style={{ margin: '4px 0 0', fontSize: '0.84rem', color: '#64748b' }}>
+                    {editBrochure.enabled
+                      ? 'Visitors visiting the homepage will see this popup with the brochure and Google Form.'
+                      : 'Popup is currently disabled. Toggle ON when ready to show leads and clients.'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleToggleBrochureStatus}
+                style={{
+                  padding: '10px 22px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.88rem',
+                  cursor: 'pointer',
+                  background: editBrochure.enabled ? '#ef4444' : '#ff6b00',
+                  color: '#ffffff',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                }}
+              >
+                {editBrochure.enabled ? 'Disable Popup' : 'Activate Popup'}
+              </button>
+            </div>
+
+            {/* FORM CONFIGURATION & PREVIEW GRID */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(320px, 1.4fr) minmax(300px, 1fr)', gap: '24px', marginTop: '24px' }}>
+              {/* Left: Configuration Form */}
+              <div className="dash-form-wrapper" style={{ background: '#ffffff', padding: '24px', borderRadius: '18px', border: '1px solid #e2e8f0', boxShadow: '0 2px 10px rgba(0,0,0,0.03)' }}>
+                <h4 style={{ margin: '0 0 16px', color: '#082233', fontSize: '1.05rem', fontWeight: 800 }}>
+                  Popup Content & Form Settings
+                </h4>
+
+                <form onSubmit={handleSaveBrochure} className="dash-form-grid">
+                  <div className="dash-field-group">
+                    <label className="dash-label">Kicker Badge</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      value={editBrochure.badge || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, badge: e.target.value })}
+                      placeholder="e.g. OFFICIAL BROCHURE 2025"
+                    />
+                  </div>
+
+                  <div className="dash-field-group">
+                    <label className="dash-label">Popup Delay (Seconds)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="60"
+                      className="dash-input-styled"
+                      value={editBrochure.delaySeconds || 2}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, delaySeconds: Number(e.target.value) })}
+                      placeholder="e.g. 2"
+                    />
+                  </div>
+
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label">Modal Title</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      value={editBrochure.title || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, title: e.target.value })}
+                      placeholder="e.g. Download Our Company Brochure"
+                      required
+                    />
+                  </div>
+
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label">Description / Subtitle</label>
+                    <textarea
+                      className="dash-input-styled"
+                      style={{ height: '75px' }}
+                      value={editBrochure.subtitle || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, subtitle: e.target.value })}
+                      placeholder="Explain what the brochure covers..."
+                    ></textarea>
+                  </div>
+
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label" style={{ color: '#ea580c', fontWeight: 800 }}>
+                      Google Form URL (Direct Link)
+                    </label>
+                    <input
+                      type="url"
+                      className="dash-input-styled"
+                      value={editBrochure.googleFormUrl || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, googleFormUrl: e.target.value })}
+                      placeholder="https://docs.google.com/forms/d/e/.../viewform"
+                    />
+                    <small style={{ color: '#64748b', fontSize: '0.76rem', marginTop: '4px', display: 'block' }}>
+                      Tip: When clicked, visitors are navigated to this Google Form to submit details.
+                    </small>
+                  </div>
+
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label">
+                      Google Form Embed URL (Iframe Source) <span style={{ fontWeight: 400, color: '#64748b' }}>(Optional)</span>
+                    </label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      value={editBrochure.googleFormEmbedUrl || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, googleFormEmbedUrl: e.target.value })}
+                      placeholder="https://docs.google.com/forms/d/e/.../viewform?embedded=true"
+                    />
+                    <small style={{ color: '#64748b', fontSize: '0.76rem', marginTop: '4px', display: 'block' }}>
+                      In Google Forms, click <strong>Send &gt; Embed HTML (&lt; &gt;)</strong> and copy the URL inside `src="..."`. Allows filling the form directly inside the popup!
+                    </small>
+                  </div>
+
+                  {/* Brochure Document URL and Upload */}
+                  <div className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                    <label className="dash-label" style={{ margin: 0, fontWeight: 800, color: '#082233' }}>
+                      Brochure PDF / Document File
+                    </label>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        style={{ flex: '1 1 240px' }}
+                        value={editBrochure.brochureUrl || ''}
+                        onChange={(e) => setEditBrochure({ ...editBrochure, brochureUrl: e.target.value })}
+                        placeholder="/Innoveity_Tech_Brochure.pdf or external URL"
+                      />
+                      <label className="action-pill-btn" style={{ background: '#e2e8f0', color: '#082233', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <FiDownload /> Upload PDF
+                        <input
+                          type="file"
+                          accept=".pdf,.doc,.docx,application/pdf"
+                          style={{ display: 'none' }}
+                          onChange={handleBrochureFileUpload}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Feature Highlights (3 points) */}
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label">Brochure Key Highlights (Bullet Points)</label>
+                    {[0, 1, 2].map((idx) => (
+                      <input
+                        key={idx}
+                        type="text"
+                        className="dash-input-styled"
+                        style={{ marginBottom: '8px' }}
+                        value={(editBrochure.features && editBrochure.features[idx]) || ''}
+                        onChange={(e) => {
+                          const newFeats = [...(editBrochure.features || ['', '', ''])];
+                          newFeats[idx] = e.target.value;
+                          setEditBrochure({ ...editBrochure, features: newFeats });
+                        }}
+                        placeholder={`Feature highlight ${idx + 1}`}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Preview Image / Cover */}
+                  <div className="dash-field-group full-width">
+                    <label className="dash-label">Brochure Cover Image Asset</label>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editBrochure.coverImage || ''}
+                        onChange={(e) => setEditBrochure({ ...editBrochure, coverImage: e.target.value })}
+                        placeholder="/tech_blog_featured.png"
+                      />
+                      <label className="action-pill-btn" style={{ background: '#e2e8f0', color: '#082233', cursor: 'pointer', whiteSpace: 'nowrap' }}>
+                        Upload Image
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          onChange={handleBrochureImageUpload}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* CTA Text */}
+                  <div className="dash-field-group">
+                    <label className="dash-label">Google Form Button Text</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      value={editBrochure.ctaText || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, ctaText: e.target.value })}
+                      placeholder="Fill Google Form to Download"
+                    />
+                  </div>
+
+                  <div className="dash-field-group">
+                    <label className="dash-label">Direct Download Button Text</label>
+                    <input
+                      type="text"
+                      className="dash-input-styled"
+                      value={editBrochure.directDownloadText || ''}
+                      onChange={(e) => setEditBrochure({ ...editBrochure, directDownloadText: e.target.value })}
+                      placeholder="Download Brochure Directly"
+                    />
+                  </div>
+
+                  <div className="dash-field-group full-width" style={{ marginTop: '10px' }}>
+                    <button type="submit" className="action-pill-btn primary-pill" style={{ width: '100%', padding: '14px', fontSize: '1rem' }}>
+                      <FiCheck /> Save Brochure & Popup Settings
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Right: Live Miniature Preview */}
+              <div>
+                <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.05rem', fontWeight: 800 }}>
+                  Live Card Preview (Homepage Right Side)
+                </h4>
+                <div style={{
+                  background: '#ffffff',
+                  borderRadius: '22px',
+                  border: '1px solid #e2e8f0',
+                  boxShadow: '0 14px 35px rgba(0,0,0,0.08)',
+                  overflow: 'hidden',
+                  position: 'sticky',
+                  top: '20px',
+                  padding: '16px',
+                  maxWidth: '320px'
+                }}>
+                  <div style={{ position: 'relative', borderRadius: '14px', overflow: 'hidden', border: '1px solid #e2e8f0', marginBottom: '12px' }}>
+                    <img
+                      src={editBrochure.coverImage || '/innoveity-brochure.jpeg'}
+                      alt="Preview"
+                      style={{ width: '100%', height: 'auto', maxHeight: '280px', objectFit: 'cover', objectPosition: 'top', display: 'block' }}
+                      onError={(e) => { e.currentTarget.src = '/innoveity broucher.jpeg'; }}
+                    />
+                  </div>
+
+                  <div style={{ textAlign: 'center', marginTop: '10px' }}>
+                    <button
+                      type="button"
+                      style={{
+                        width: '100%',
+                        background: '#1e3a8a',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '11px',
+                        borderRadius: '12px',
+                        fontWeight: 800,
+                        fontSize: '0.9rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '6px',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {editBrochure.ctaText || 'Apply Online'} <FiExternalLink />
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}
