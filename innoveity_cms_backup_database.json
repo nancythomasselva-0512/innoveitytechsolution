@@ -83,20 +83,6 @@
   ],
   "team": [
     {
-      "id": 101,
-      "name": "Founder & CEO",
-      "role": "Founder & Managing Director",
-      "category": "Leadership",
-      "image": "/Founder.jpeg"
-    },
-    {
-      "id": 102,
-      "name": "Co-Founder & CEO",
-      "role": "Chief Executive Officer",
-      "category": "Leadership",
-      "image": "/CEO.jpeg"
-    },
-    {
       "id": 1,
       "name": "Praveen N",
       "role": "Full Stack Developer",

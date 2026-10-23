@@ -206,27 +206,21 @@ ${applyForm.coverLetter || 'No additional notes provided.'}
     }
   };
 
-  const leadershipBadge = teamHeaderContent.leadershipBadge || 'EXECUTIVE LEADERSHIP';
-  const leadershipTitleLine1 = teamHeaderContent.leadershipTitleLine1 || 'Founder &';
-  const leadershipTitleHighlight = teamHeaderContent.leadershipTitleHighlight || 'Executive Leadership';
-  const leadershipSubtitle = teamHeaderContent.leadershipSubtitle || 'Guiding our technology vision, strategic growth, and engineering excellence.';
-  
-  const teamTitle = teamHeaderContent.teamTitle || (leadershipMembers?.length > 0 ? 'Our Engineering & Creative Experts' : 'Meet Our Experts');
-  const teamSubtitle = teamHeaderContent.teamSubtitle || 'The brilliant minds behind our innovative solutions.';
-
-  const defaultLeadership = [
-    { id: 101, name: 'Founder & CEO', role: 'Founder & Managing Director', category: 'Leadership', image: '/Founder.jpeg' },
-    { id: 102, name: 'Co-Founder & CEO', role: 'Chief Executive Officer', category: 'Leadership', image: '/CEO.jpeg' }
-  ];
-
-  const actualLeadership = teamMembers.filter(m => 
+  const leadershipMembers = teamMembers.filter(m => 
     m.category === 'Leadership' || 
     m.role?.toLowerCase().includes('founder') || 
     m.role?.toLowerCase().includes('ceo')
   );
 
-  const leadershipMembers = actualLeadership.length > 0 ? actualLeadership : defaultLeadership;
-  const generalMembers = teamMembers.filter(m => !actualLeadership.some(l => l.id === m.id));
+  const generalMembers = teamMembers.filter(m => !leadershipMembers.some(l => l.id === m.id));
+
+  const leadershipBadge = teamHeaderContent.leadershipBadge || 'EXECUTIVE LEADERSHIP';
+  const leadershipTitleLine1 = teamHeaderContent.leadershipTitleLine1 || 'Founder &';
+  const leadershipTitleHighlight = teamHeaderContent.leadershipTitleHighlight || 'Executive Leadership';
+  const leadershipSubtitle = teamHeaderContent.leadershipSubtitle || 'Guiding our technology vision, strategic growth, and engineering excellence.';
+  
+  const teamTitle = teamHeaderContent.teamTitle || (leadershipMembers.length > 0 ? 'Our Engineering & Creative Experts' : 'Meet Our Experts');
+  const teamSubtitle = teamHeaderContent.teamSubtitle || 'The brilliant minds behind our innovative solutions.';
 
   return (
     <div className="team-page">
@@ -288,39 +282,41 @@ ${applyForm.coverLetter || 'No additional notes provided.'}
         </div>
       </section>
 
-      {/* ⭐ Leadership & Executive Board Section (Founder & CEO) */}
-      <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(255, 107, 0, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
-        <div className="container">
-          <div className="leadership-header" style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                EXECUTIVE <span className="title-gradient-accent">LEADERSHIP</span>
-              </h2>
-            </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              {leadershipTitleLine1} <span className="title-gradient-accent">{leadershipTitleHighlight}</span>
-            </h2>
-            <p className="why-intro animate-on-scroll" style={{ textAlign: 'left', maxWidth: '650px', margin: '0' }}>
-              {leadershipSubtitle}
-            </p>
-          </div>
-
-          <div className="leadership-members-grid animate-on-scroll">
-            {leadershipMembers.map((member) => (
-              <div className="leadership-card" key={member.id}>
-                <div className="leadership-card-top-pill">★ LEADERSHIP</div>
-                <div className="leadership-image-wrapper">
-                  <img src={member.image || '/Founder.jpeg'} alt={member.name} className="leadership-image" />
-                </div>
-                <div className="leadership-info">
-                  <h3>{member.name}</h3>
-                  <p className="leadership-role">{member.role}</p>
-                </div>
+      {/* ⭐ Leadership & Executive Board Section (Founder & CEO) - Only shown if leadership members exist */}
+      {leadershipMembers.length > 0 && (
+        <section className="team-section leadership-section" style={{ background: 'linear-gradient(180deg, rgba(255, 107, 0, 0.04) 0%, rgba(255, 255, 255, 0) 100%)' }}>
+          <div className="container">
+            <div className="leadership-header" style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
+              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
+                <h2 className="section-main-title">
+                  EXECUTIVE <span className="title-gradient-accent">LEADERSHIP</span>
+                </h2>
               </div>
-            ))}
+              <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
+                {leadershipTitleLine1} <span className="title-gradient-accent">{leadershipTitleHighlight}</span>
+              </h2>
+              <p className="why-intro animate-on-scroll" style={{ textAlign: 'left', maxWidth: '650px', margin: '0' }}>
+                {leadershipSubtitle}
+              </p>
+            </div>
+
+            <div className="leadership-members-grid animate-on-scroll">
+              {leadershipMembers.map((member) => (
+                <div className="leadership-card" key={member.id}>
+                  <div className="leadership-card-top-pill">★ LEADERSHIP</div>
+                  <div className="leadership-image-wrapper">
+                    <img src={member.image || '/Founder.jpeg'} alt={member.name} className="leadership-image" />
+                  </div>
+                  <div className="leadership-info">
+                    <h3>{member.name}</h3>
+                    <p className="leadership-role">{member.role}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Meet Our Team / Experts Grid */}
       <section className="team-section" style={{ background: 'var(--bg-color)' }}>
