@@ -395,7 +395,8 @@
   max-width: 520px;
   margin: 0;
   font-weight: 450;
-  text-align: left;
+  text-align: justify;
+  text-justify: inter-word;
   opacity: 0.9;
 }
 

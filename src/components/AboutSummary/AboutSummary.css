@@ -163,6 +163,8 @@
   font-size: 0.98rem;
   line-height: 1.75;
   margin-bottom: 14px;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .mosaic-p-lead {
@@ -171,6 +173,8 @@
   font-weight: 500;
   line-height: 1.65;
   margin: 0 0 8px 0;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .mosaic-p-accent {
@@ -179,6 +183,8 @@
   font-weight: 700;
   line-height: 1.65;
   margin: 0 0 16px 0;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 .mosaic-p-accent strong {
@@ -190,6 +196,8 @@
   color: #475569;
   line-height: 1.75;
   margin: 0 0 14px 0;
+  text-align: justify;
+  text-justify: inter-word;
 }
 
 /* Orange Accent Bar */

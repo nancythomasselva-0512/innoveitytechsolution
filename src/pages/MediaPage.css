@@ -191,7 +191,7 @@
   border-radius: 26px;
   padding: 2.6rem 2.8rem;
   box-shadow: 0 12px 40px rgba(8, 34, 51, 0.04);
-  text-align: left;
+  text-align: justify;
 }
 
 .adelite-narrative-body {
@@ -199,6 +199,12 @@
   line-height: 1.8;
   color: #334e68;
   margin-bottom: 1.2rem;
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+.adelite-narrative-body:last-child {
+  margin-bottom: 0;
 }
 
 .adelite-narrative-body strong {

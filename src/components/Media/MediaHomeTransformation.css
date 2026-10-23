@@ -42,7 +42,8 @@
 }
 
 .media-trans-narrative-block {
-  text-align: left;
+  text-align: justify;
+  text-justify: inter-word;
   max-width: 440px;
 }
 
