@@ -1,1136 +1,526 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  FiShare2, 
-  FiPenTool, 
-  FiFilm, 
-  FiLayout, 
-  FiVideo, 
-  FiCamera, 
-  FiTrendingUp, 
-  FiSearch, 
-  FiCheckCircle, 
-  FiArrowRight, 
-  FiZap, 
-  FiCompass, 
-  FiSliders, 
-  FiPlayCircle, 
-  FiTarget, 
-  FiStar,
-  FiAward,
-  FiActivity,
-  FiChevronLeft,
-  FiChevronRight,
-  FiX,
-  FiVolume2,
-  FiFileText,
-  FiImage
-} from 'react-icons/fi';
-import LetterReveal from '../components/LetterReveal/LetterReveal';
+  FaAward,
+  FaBolt,
+  FaCircleCheck,
+  FaPenNib,
+  FaShareNodes,
+  FaChartLine,
+  FaVideo,
+  FaGlobe,
+  FaCalendarDays,
+  FaGraduationCap,
+  FaBriefcase,
+  FaCamera,
+  FaArrowRight,
+  FaEnvelope,
+  FaPhone,
+  FaArrowTrendUp,
+  FaBullhorn,
+  FaLightbulb,
+  FaPalette,
+  FaFilm,
+  FaRocket,
+  FaStar,
+  FaCompass,
+  FaUsers,
+  FaMagnifyingGlass,
+  FaDisplay
+} from 'react-icons/fa6';
 import { useCMS } from '../context/CMSContext';
-import DynamicPageSections from '../components/UI/DynamicPageSections';
+import adeliteLogo from '../assets/adelite-logo-transparent.png';
 import './MediaPage.css';
 
-const useScrollObserver = () => {
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-          }
-        });
-      },
-      { threshold: 0.12 }
-    );
-    const elements = document.querySelectorAll('.animate-on-scroll, .media-service-card, .cap-ui-card, .why-media-card, .built-for-chip');
-    elements.forEach((el) => observer.observe(el));
-    return () => elements.forEach((el) => observer.unobserve(el));
-  }, []);
+const ICON_MAP = {
+  FaPenNib,
+  FaShareNodes,
+  FaChartLine,
+  FaVideo,
+  FaGlobe,
+  FaCalendarDays,
+  FaGraduationCap,
+  FaBriefcase,
+  FaCamera,
+  FaAward,
+  FaBolt,
+  FaCircleCheck,
+  FaArrowRight,
+  FaBullhorn,
+  FaLightbulb,
+  FaPalette,
+  FaFilm,
+  FaRocket,
+  FaStar,
+  FaCompass,
+  FaUsers,
+  FaMagnifyingGlass,
+  FaDisplay
 };
 
-const MediaPage = () => {
-  const [activeStep, setActiveStep] = useState(0);
-  const [activeVideoModal, setActiveVideoModal] = useState(null);
-  const [activeDeckIndex, setActiveDeckIndex] = useState(2);
-  const [isDeckPaused, setIsDeckPaused] = useState(false);
-  const [isCapPaused, setIsCapPaused] = useState(false);
-  const [activeCardId, setActiveCardId] = useState(null);
-  const capabilitiesTrackRef = useRef(null);
+const resolveIcon = (iconVal, defaultIcon = FaCircleCheck) => {
+  if (!iconVal) return defaultIcon;
+  if (typeof iconVal === 'function' || typeof iconVal === 'object') return iconVal;
+  return ICON_MAP[iconVal] || defaultIcon;
+};
 
-  useEffect(() => {
-    if (window.location.hash) {
-      const hashId = window.location.hash.replace('#', '');
-      const cleanId = hashId.replace('media-card-', '');
-      setActiveCardId(cleanId);
-      setTimeout(() => {
-        const el = document.getElementById(hashId);
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-      }, 350);
-    } else {
-      window.scrollTo(0, 0);
-    }
-  }, []);
-  const deckCards = [
-    {
-      id: 'mmac-arch',
-      title: 'MMAC Studio',
-      subtitle: 'BRAND ARCHITECTURE',
-      tag: 'Visual Identity',
-      image: '/deck_arch_gold.png'
-    },
-    {
-      id: 'lifestyle-pour',
-      title: 'Pour, Breathe, Begin',
-      subtitle: 'REELS & SHORT FORM',
-      tag: 'Social Media',
-      image: '/deck_lifestyle.png'
-    },
-    {
-      id: 'muyal-chair',
-      title: 'Muyal Heritage',
-      subtitle: 'CONCEPT FILMS',
-      tag: 'Commercial Shoot',
-      image: '/deck_green_chair.png'
-    },
-    {
-      id: 'cinematic-urban',
-      title: 'Cinematic Urban',
-      subtitle: 'BRAND CAMPAIGN',
-      tag: 'Video Production',
-      image: '/deck_fashion.png'
-    },
-    {
-      id: 'coffee-craft',
-      title: 'Coffee & Craft',
-      subtitle: 'PRODUCT CINEMATOGRAPHY',
-      tag: 'High-End Studio',
-      image: '/deck_product.png'
-    },
-    {
-      id: 'editorial-design',
-      title: 'Editorial Craft',
-      subtitle: 'BRAND DESIGN',
-      tag: 'Creative Studio',
-      image: '/deck_design.png'
-    },
-    {
-      id: 'digital-growth',
-      title: 'Digital Scale',
-      subtitle: 'PERFORMANCE MEDIA',
-      tag: 'Growth Marketing',
-      image: '/deck_growth.png'
-    }
-  ];
+const WHAT_WE_DO_DATA = [
+  {
+    id: 'branding-design',
+    title: 'Branding & Design',
+    desc: 'Brand identity, logos, brochures, profiles and creative collateral.',
+    iconName: 'FaPenNib'
+  },
+  {
+    id: 'social-media',
+    title: 'Social Media Management',
+    desc: 'Content calendars, page management, community engagement and reporting.',
+    iconName: 'FaShareNodes'
+  },
+  {
+    id: 'digital-marketing',
+    title: 'Digital Marketing',
+    desc: 'Campaign strategy, online advertising, audience reach and lead generation.',
+    iconName: 'FaChartLine'
+  },
+  {
+    id: 'media-production',
+    title: 'Media Production',
+    desc: 'Promotional videos, reels, photography and visual storytelling.',
+    iconName: 'FaVideo'
+  },
+  {
+    id: 'digital-presence',
+    title: 'Digital Presence',
+    desc: 'Website content, landing pages and online brand visibility.',
+    iconName: 'FaGlobe'
+  },
+  {
+    id: 'event-campaign',
+    title: 'Event & Campaign Solutions',
+    desc: 'Event branding, promotional campaigns, creative assets and coverage.',
+    iconName: 'FaCalendarDays'
+  }
+];
+
+const SECTORS_DATA = [
+  {
+    id: 'education',
+    number: '01',
+    badge: 'ACADEMIC & INSTITUTIONAL',
+    title: 'Education & Institutional Branding',
+    summary: 'Admissions, campus storytelling, and digital recruitment campaigns.',
+    intro: 'Comprehensive recruitment, academic storytelling, and visual identity for schools, colleges, and educational groups.',
+    iconName: 'FaGraduationCap',
+    points: [
+      'Admission Campaigns and Student Recruitment Promotions',
+      'Institution Profiles, Prospectuses, Brochures and Presentations',
+      'Campus Events, Academic Achievements and Institutional Storytelling',
+      'Social Media Handling and Digital Engagement'
+    ]
+  },
+  {
+    id: 'corporate',
+    number: '02',
+    badge: 'ENTERPRISE & COMMERCIAL',
+    title: 'Corporate Branding & Business Communication',
+    summary: 'Executive messaging, brand positioning, and corporate media collateral.',
+    intro: 'Strengthening enterprise reputation, executive messaging, and corporate visual collateral.',
+    iconName: 'FaBriefcase',
+    points: [
+      'Corporate Profile Shoot, Brand Positioning and Visual Communication',
+      'Company Profiles, Sales Presentations and Business Collateral',
+      'Product Launches, Promotional Campaigns and Digital Advertising',
+      'Executive Videos, Customer Testimonials and Corporate Storytelling',
+      'Social Media Management and Brand Reputation Support'
+    ]
+  },
+  {
+    id: 'events',
+    number: '03',
+    badge: 'MEDIA & EXPERIENTIAL',
+    title: 'Events, Campaigns & Media Production',
+    summary: 'Event identity, reels, cinematography, and high-impact live coverage.',
+    intro: 'High-impact multi-angle coverage, creative backdrops, reels, and experiential campaign assets.',
+    iconName: 'FaCamera',
+    points: [
+      'Event Identity, Invitations, Backdrops and Promotional Materials',
+      'Photography, Videography, Reels and Post-Event Highlights',
+      'Campaign Creatives, Motion Graphics and Digital Announcements',
+      'Sponsorship Collateral and Audience Engagement Materials'
+    ]
+  },
+  {
+    id: 'marketing',
+    number: '04',
+    badge: 'GROWTH & PERFORMANCE',
+    title: 'Digital Performance Marketing & Lead Generation',
+    summary: 'Targeted Meta & Google ads, search optimization, and verified leads.',
+    intro: 'ROI-driven campaigns, organic discoverability, targeted paid funnels, and real-time analytics.',
+    iconName: 'FaChartLine',
+    points: [
+      'Improve search rankings, organic traffic, and online discoverability through Search Engine Optimisation (SEO).',
+      'Create and manage targeted Meta Ads campaigns across Facebook and Instagram.',
+      'Reach relevant audiences through Google Ads search, display, and other suitable advertising formats.',
+      'Generate prospective student enquiries, admission leads, and business opportunities through Lead Generation Campaigns.',
+      'Analytics & Performance Reporting to monitor reach, engagement, clicks, leads, and campaign performance to support data-driven decisions.'
+    ]
+  }
+];
+
+const MediaPage = () => {
+  const { mediaContent, headerFooterSettings, contact } = useCMS ? useCMS() : {};
+
+  const email = headerFooterSettings?.email || contact?.email || 'aachinancy@gmail.com';
+  const phone = headerFooterSettings?.phone || contact?.phone || '+91 7904327211';
+
+  // Dynamic Content Bindings with Fallbacks
+  const hero = mediaContent?.hero || {};
+  const motto = hero.motto || 'Transforming Brands into Experiences.';
+  const kicker = hero.kicker || 'BRAND & CAPABILITIES';
+  const heroTitle = (hero.title && hero.title !== 'MEDIA CAPABILITIES') 
+    ? hero.title 
+    : 'Your Vision. Our Creativity.';
+  const heroTitleHighlight = hero.titleHighlight || 'Greater Impact.';
+  const narrativeP1 = hero.narrativeP1 || 'AD ELITE is a creative media and digital solutions brand delivering integrated branding, social media management, digital marketing, and multimedia services for educational institutions, businesses, and organisations. We combine strategic thinking with compelling creativity to help brands communicate effectively, build recognition, and connect meaningfully with their audiences.';
+  const narrativeP2 = hero.narrativeP2 || 'Our approach goes beyond creating content. We build cohesive brand experiences that strengthen visibility, encourage engagement, and support measurable growth.';
+
+  const whatWeDoHeader = mediaContent?.whatWeDoHeader || {};
+  const whatWeDoKicker = whatWeDoHeader.kicker || 'CORE CAPABILITIES';
+  const whatWeDoTitle = whatWeDoHeader.title || 'What';
+  const whatWeDoTitleHighlight = whatWeDoHeader.titleHighlight || 'We Do';
+  const whatWeDoDesc = whatWeDoHeader.desc || 'Integrated creative, media, and digital solutions designed to strengthen recognition, engagement, and growth.';
+  const whatWeDoList = (Array.isArray(mediaContent?.whatWeDo) && mediaContent.whatWeDo.length > 0)
+    ? mediaContent.whatWeDo
+    : WHAT_WE_DO_DATA;
+
+  const philosophy = mediaContent?.philosophy || {};
+  const philosophyBadge = philosophy.badge || 'OUR CREATIVE PHILOSOPHY';
+  const philosophyQuote = philosophy.quote || 'Strategy before design. Purpose behind every message. Impact in every interaction.';
+  const philosophyDescription = philosophy.description || 'We align creativity with organisational goals to ensure every brand touch point communicates a consistent identity and creates a lasting impression.';
+  const philosophyChips = (Array.isArray(philosophy.chips) && philosophy.chips.length === 3)
+    ? philosophy.chips
+    : ['Strategy Before Design', 'Purpose Behind Every Message', 'Impact In Every Interaction'];
+
+  const solutionsHeader = mediaContent?.solutionsHeader || {};
+  const solutionsKicker = solutionsHeader.kicker || 'CLIENT SOLUTIONS & PARTNERSHIP';
+  const solutionsTitle = solutionsHeader.title || 'Creative Solutions.';
+  const solutionsTitleHighlight = solutionsHeader.titleHighlight || 'Tailored for Every Sector.';
+  const solutionsDesc = solutionsHeader.desc || 'AD ELITE develops customised media and marketing solutions that reflect the unique goals, audiences, and growth priorities of each organisation.';
+  const sectorsList = (Array.isArray(mediaContent?.sectors) && mediaContent.sectors.length > 0)
+    ? mediaContent.sectors
+    : SECTORS_DATA;
+
+  const [activeSectorIdx, setActiveSectorIdx] = useState(0);
+  const safeSectorIdx = (activeSectorIdx >= 0 && activeSectorIdx < sectorsList.length) ? activeSectorIdx : 0;
+  const activeSector = sectorsList[safeSectorIdx] || sectorsList[0] || SECTORS_DATA[0];
+
+  const cta = mediaContent?.cta || {};
+  const ctaHeading = cta.heading || "LET'S CREATE SOMETHING THAT MOVES";
+  const ctaLeadText = cta.leadText || "From building a distinctive identity to managing your digital presence, AD ELITE is your creative partner for stronger visibility, meaningful engagement, and sustainable growth.";
+  const ctaPartnerBadge = cta.partnerBadge || "Your Premier Event Partner";
+  const ctaBrandEndorsement = cta.brandEndorsement || "AD ELITE | A Creative Solutions Brand of INNOVEITY";
+  const ctaContactPrompt = cta.contactPrompt || "Contact us to discuss your branding, media, social media management, and digital marketing requirements.";
+  const ctaBtnText = cta.btnText || "START YOUR MEDIA PROJECT";
+  const ctaBtnLink = cta.btnLink || "/contact";
+  const ctaWebsiteLink = cta.websiteLink || "/contact";
+  const ctaEmail = cta.email || email;
+  const ctaPhone = cta.phone || phone;
+  const ctaSocialLink = cta.socialLink || "/contact";
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Smooth continuous auto-rotation for 3D deck carousel animation (Left to Right)
-  useEffect(() => {
-    if (isDeckPaused) return;
-    const interval = setInterval(() => {
-      setActiveDeckIndex((prev) => (prev - 1 + deckCards.length) % deckCards.length);
-    }, 3600);
-    return () => clearInterval(interval);
-  }, [isDeckPaused, deckCards.length]);
-
-  // Smooth continuous auto-scroll for Production Capabilities cards carousel
-  useEffect(() => {
-    if (isCapPaused) return;
-    const interval = setInterval(() => {
-      if (capabilitiesTrackRef.current) {
-        const track = capabilitiesTrackRef.current;
-        const maxScrollLeft = track.scrollWidth - track.clientWidth;
-        if (track.scrollLeft >= maxScrollLeft - 15) {
-          track.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          track.scrollBy({ left: 380, behavior: 'smooth' });
-        }
-      }
-    }, 3200);
-    return () => clearInterval(interval);
-  }, [isCapPaused]);
-
-  useScrollObserver();
-
-  const handleCapArrowClick = (direction) => {
-    if (capabilitiesTrackRef.current) {
-      const scrollAmount = direction === 'left' ? -380 : 380;
-      capabilitiesTrackRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const handleDeckNext = () => {
-    setActiveDeckIndex((prev) => (prev + 1) % deckCards.length);
-  };
-
-  const handleDeckPrev = () => {
-    setActiveDeckIndex((prev) => (prev - 1 + deckCards.length) % deckCards.length);
-  };
-
-  const services = [
-    {
-      num: '01',
-      title: 'Social Media Management',
-      desc: 'Strategic management of your social media presence with consistent, engaging and brand-focused content.',
-      icon: <FiShare2 />,
-      tag: 'Brand Growth'
-    },
-    {
-      num: '02',
-      title: 'Content Creation',
-      desc: 'Creative content designed around your brand, audience and business objectives.',
-      icon: <FiPenTool />,
-      tag: 'Creative Craft'
-    },
-    {
-      num: '03',
-      title: 'Reels & Short-Form Videos',
-      desc: 'High-quality reels and short-form videos built for attention, engagement and reach.',
-      icon: <FiFilm />,
-      tag: 'Viral Reach'
-    },
-    {
-      num: '04',
-      title: 'Creative Design',
-      desc: 'Premium visual creatives for campaigns, promotions, announcements and digital platforms.',
-      icon: <FiLayout />,
-      tag: 'Visual Identity'
-    },
-    {
-      num: '05',
-      title: 'Video Production',
-      desc: 'Professional video production for brands, products, events, campaigns and corporate communication.',
-      icon: <FiVideo />,
-      tag: 'Cinematic Excellence'
-    },
-    {
-      num: '06',
-      title: 'Photography',
-      desc: 'Product, corporate, event and promotional photography with a focus on strong visual storytelling.',
-      icon: <FiCamera />,
-      tag: 'Storytelling'
-    },
-    {
-      num: '07',
-      title: 'Performance Marketing',
-      desc: 'Targeted digital advertising designed to reach the right audience and support measurable business growth.',
-      icon: <FiTrendingUp />,
-      tag: 'Data Driven'
-    },
-    {
-      num: '08',
-      title: 'SEO',
-      desc: "Search engine optimization customized according to each client's business, industry, competition and objectives.",
-      icon: <FiSearch />,
-      tag: 'Organic Growth'
-    }
-  ];
-
-  const mediaCapabilitiesCards = [
-    {
-      id: 'branding',
-      num: '01',
-      icon: <FiStar />,
-      title: 'Branding',
-      desc: 'Brand architecture, visual identity, typography, brand guidelines and strategic market positioning.'
-    },
-    {
-      id: 'smm',
-      num: '02',
-      icon: <FiShare2 />,
-      title: 'Social Media Management (SMM)',
-      desc: 'Strategic management of your social media presence with consistent, engaging and brand-focused content.'
-    },
-    {
-      id: 'seo',
-      num: '03',
-      icon: <FiSearch />,
-      title: 'SEO',
-      desc: "Search engine optimization customized according to your industry, target audience and business objectives."
-    },
-    {
-      id: 'performance',
-      num: '04',
-      icon: <FiTrendingUp />,
-      title: 'Performance Marketing',
-      desc: 'Targeted digital advertising and data-driven campaigns designed to deliver measurable ROI and conversions.'
-    },
-    {
-      id: 'visual-creatives',
-      num: '05',
-      icon: <FiLayout />,
-      title: 'Visual Creatives',
-      desc: 'Premium graphic design, campaign creatives, digital banners, pitch decks and visual storytelling assets.'
-    },
-    {
-      id: 'video-production',
-      num: '06',
-      icon: <FiVideo />,
-      title: 'Video Production',
-      desc: 'Cinema-grade video production for brand films, commercials, corporate videos and product launches.'
-    },
-    {
-      id: 'reels-shorts',
-      num: '07',
-      icon: <FiFilm />,
-      title: 'Reels & Short-Form Videos',
-      desc: 'High-retention short-form videos and viral reels engineered for maximum audience attention and reach.'
-    },
-    {
-      id: 'content-creation',
-      num: '08',
-      icon: <FiPenTool />,
-      title: 'Content Creation',
-      desc: 'High-impact copy, storytelling, creative scripting and multi-channel editorial content development.'
-    },
-    {
-      id: 'digital-marketing',
-      num: '09',
-      icon: <FiZap />,
-      title: 'Digital Marketing',
-      desc: 'Comprehensive full-funnel digital marketing strategies connecting your brand with high-intent customers.'
-    }
-  ];
-
-  const storytellingItems = [
-    {
-      icon: <FiFileText />,
-      title: 'Content Creation',
-      desc: 'Creative content developed around your brand, audience and business objectives—from everyday communication to campaign-led storytelling.'
-    },
-    {
-      icon: <FiShare2 />,
-      title: 'Social Media Management',
-      desc: 'Build a consistent digital presence through strategic social media management and engaging, brand-focused content.'
-    },
-    {
-      icon: <FiPlayCircle />,
-      title: 'Reels & Short-Form Videos',
-      desc: 'Capture attention in seconds with high-quality short-form videos created for engagement, reach and digital consumption.'
-    },
-    {
-      icon: <FiImage />,
-      title: 'Creative Design',
-      desc: 'From campaign creatives to promotional assets, we develop premium visual communication for digital platforms, announcements and brand campaigns.'
-    }
-  ];
-
-  // 5 Production Capabilities with embedded animated video previews (matching reference UI style)
-  // 5 Production Capabilities with embedded animated video previews (matching reference UI style)
-  const productionCapabilities = [
-    {
-      id: 'camera-prod',
-      title: 'PROFESSIONAL CAMERA PRODUCTION',
-      quote: 'High-quality visual production using professional camera systems and production equipment.',
-      badge: '★ 4.9/5 • 8K RED & ARRI Cinema Systems',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cameraman-setting-up-a-camera-42861-large.mp4',
-      poster: '/cap_camera_prod.png',
-      icon: <FiCamera />,
-      specs: ['Cinema-Grade 8K RED & ARRI Systems', 'Studio & Multi-Angle Lighting', 'Professional Sound Rigs']
-    },
-    {
-      id: 'cinematic-vid',
-      title: 'CINEMATIC VIDEO',
-      quote: 'From brand films to promotional content, we create visually engaging stories built around your message.',
-      badge: '★ 5.0/5 • Anamorphic Commercial Films',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-filmmaker-with-a-camera-on-a-tripod-42862-large.mp4',
-      poster: '/cap_cinematic_vid.png',
-      icon: <FiFilm />,
-      specs: ['Brand Documentaries', 'Promotional Commercials', 'Narrative Storytelling']
-    },
-    {
-      id: 'gimbal-motion',
-      title: 'GIMBAL & MOTION',
-      quote: 'Smooth, dynamic camera movements for reels, advertisements, events and cinematic brand content.',
-      badge: '★ 4.9/5 • 3-Axis Stabilized Motion',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cameraman-filming-an-actor-with-a-stabilizer-42864-large.mp4',
-      poster: '/cap_gimbal_motion.png',
-      icon: <FiPlayCircle />,
-      specs: ['3-Axis Motorized Stabilization', 'Dynamic Tracking Shots', 'Action & Event Coverage']
-    },
-    {
-      id: 'aerial-content',
-      title: 'AERIAL CONTENT',
-      quote: 'Drone-based visuals for locations, events, real estate, institutions, hospitality and brand campaigns.',
-      badge: '★ 5.0/5 • 4K Drone Cinematography',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-city-at-sunset-41584-large.mp4',
-      poster: '/cap_aerial_drone.png',
-      icon: <FiCompass />,
-      specs: ['4K Drone Cinematography', 'Licensed Aerial Operators', 'Architectural & Landscape']
-    },
-    {
-      id: 'post-production',
-      title: 'POST-PRODUCTION',
-      quote: 'Professional editing, colour correction, sound design, motion graphics and final delivery optimized for each platform.',
-      badge: '★ 4.9/5 • Color Grading & Motion FX',
-      videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-video-editing-software-timeline-43343-large.mp4',
-      poster: '/cap_post_production.png',
-      icon: <FiSliders />,
-      specs: ['DaVinci Resolve Color Grading', '2D/3D Motion FX', 'Spatial Audio Mastering']
-    }
-  ];
-
-  const workflowSteps = [
-    { name: 'IDEA', subtitle: 'Concept & Vision', desc: 'Brainstorming creative angles and defining the core message that aligns with your brand personality.' },
-    { name: 'STRATEGY', subtitle: 'Audience & Target', desc: 'Mapping out distribution channels, campaign targets, tone of voice, and platform specifics.' },
-    { name: 'PRODUCTION', subtitle: 'Shoot & Record', desc: 'Executing high-end camera production with professional crew, lighting, sound, and direction.' },
-    { name: 'EDITING', subtitle: 'Post-Production', desc: 'Assembly, color grading, VFX, motion graphics, and audio mastering tuned to perfection.' },
-    { name: 'PUBLISHING', subtitle: 'Launch & Distribute', desc: 'Optimized formatting and strategic schedule delivery across primary digital and social channels.' },
-    { name: 'PERFORMANCE', subtitle: 'Analyze & Scale', desc: 'Tracking engagement metrics, viewer retention, conversions, and optimizing for maximum ROI.' }
-  ];
-
-  const whyChooseUs = [
-    {
-      title: 'Creative First',
-      desc: 'Ideas that make your brand stand out.',
-      icon: <FiStar />
-    },
-    {
-      title: 'Quality Driven',
-      desc: 'Professional production and attention to detail.',
-      icon: <FiAward />
-    },
-    {
-      title: 'Strategy Led',
-      desc: 'Every piece of content has a purpose.',
-      icon: <FiTarget />
-    },
-    {
-      title: 'Performance Focused',
-      desc: 'We create content with business results in mind.',
-      icon: <FiActivity />
-    },
-    {
-      title: 'End-to-End Execution',
-      desc: 'From concept and production to publishing and optimization.',
-      icon: <FiZap />
-    }
-  ];
-
-  const cms = useCMS ? useCMS() : null;
-  const mediaCMS = cms?.mediaContent || {};
-
-  const heroBadge = mediaCMS.hero?.badge || 'INNOVEITY MEDIA';
-  const heroSubBadge = mediaCMS.hero?.subBadge || 'Creative. Strategic. Data-Driven.';
-  const heroTitle = (mediaCMS.hero?.title === 'MEDIA DIVISION' ? 'MEDIA CAPABILITIES' : mediaCMS.hero?.title) || 'MEDIA CAPABILITIES';
-  const heroTagline1 = mediaCMS.hero?.tagline1 || 'Creative Stories.';
-  const heroTagline2 = mediaCMS.hero?.tagline2 || 'Powerful Visuals.';
-  const heroTagline3 = mediaCMS.hero?.tagline3 || 'Digital Growth.';
-  const heroDesc = mediaCMS.hero?.description?.replace(/Media Division/g, 'Media Capabilities') || 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.';
-  const heroBgImage = mediaCMS.hero?.bgImage || '/media_hero_bg.png';
-
-  const deckCardsList = mediaCMS.deckCards && mediaCMS.deckCards.length > 0
-    ? mediaCMS.deckCards
-    : deckCards;
-
-  const servicesList = mediaCMS.services && mediaCMS.services.length > 0
-    ? mediaCMS.services.map((s, idx) => ({ ...s, icon: services[idx]?.icon || <FiShare2 /> }))
-    : services;
-
-  const capabilitiesList = mediaCMS.capabilities && mediaCMS.capabilities.length > 0
-    ? mediaCMS.capabilities.map((c, idx) => ({ ...c, icon: productionCapabilities[idx]?.icon || <FiCamera />, specs: productionCapabilities[idx]?.specs || [] }))
-    : productionCapabilities;
-
-  const whyChooseUsList = mediaCMS.whyChooseUs && mediaCMS.whyChooseUs.length > 0
-    ? mediaCMS.whyChooseUs.map((w, idx) => ({ ...w, icon: whyChooseUs[idx]?.icon || <FiStar /> }))
-    : whyChooseUs;
-
-  const audienceTypesList = mediaCMS.audienceTypes || audienceTypes;
-
-  const ctaBrandTag = mediaCMS.cta?.brandTag || 'INNOVEITY MEDIA';
-  const ctaHeading = mediaCMS.cta?.heading || "LET'S CREATE SOMETHING THAT MOVES";
-  const ctaSub1 = mediaCMS.cta?.subheadingLine1 || 'Your brand has a story.';
-  const ctaSub2 = mediaCMS.cta?.subheadingLine2 || "Let's tell it better.";
-  const ctaBadges = mediaCMS.cta?.badges || 'Creative • Strategic • Data-Driven';
-  const ctaBtnText = mediaCMS.cta?.btnText || 'START YOUR MEDIA PROJECT';
-
   return (
-    <div className="media-page">
+    <div className="media-page adelite-media-page">
       
-      {/* Hero Section */}
-      <section className="mp-hero animate-on-scroll">
-        <div className="section-grid-pattern"></div>
-        <div className="container mp-hero-container">
-          
-          <div className="section-left-title-wrapper" style={{ textAlign: 'center', marginBottom: '12px' }}>
-            <h2 className="section-main-title">
-              MEDIA <span className="title-gradient-accent">CAPABILITIES</span>
-            </h2>
+      {/* 1. TOP BRAND HEADER LOCKUP */}
+      <header className="adelite-header-section">
+        <div className="adelite-logo-wrapper">
+          <div className="adelite-brand-lockup">
+            <img 
+              src={adeliteLogo} 
+              alt="ADelite Logo" 
+              className="adelite-hero-logo" 
+            />
+            <div className="adelite-motto-divider" aria-hidden="true"></div>
+            <p className="adelite-motto-text">{motto}</p>
+          </div>
+        </div>
+      </header>
+
+      <main className="adelite-content-container">
+
+        {/* 2. BRAND & CAPABILITIES HERO */}
+        <section className="adelite-hero-intro" aria-labelledby="hero-vision-heading">
+          <div className="adelite-kicker-badge">
+            <span className="kicker-icon-chip">
+              <FaAward />
+            </span>
+            <span className="kicker-label">{kicker}</span>
           </div>
 
-          <h1 className="section-title" style={{ textAlign: 'center', marginBottom: '18px' }}>
-            Creative Stories. <br />
-            <span className="title-gradient-accent">Powerful Visuals. Digital Growth.</span>
+          <h1 id="hero-vision-heading" className="adelite-display-title">
+            {heroTitle} <span className="adelite-gold-gradient">{heroTitleHighlight}</span>
           </h1>
 
-          <motion.p
-            className="mp-hero-reveal-text"
-            initial="hidden"
-            animate="visible"
-            variants={{
-              visible: { transition: { staggerChildren: 0.02 } },
-              hidden: {}
-            }}
-          >
-            {heroDesc.split(' ').map((word, i) => (
-              <motion.span
-                key={i}
-                style={{ display: 'inline-block', marginRight: '0.3em', whiteSpace: 'nowrap' }}
-                variants={{
-                  hidden: { opacity: 0, y: 14, filter: 'blur(6px)' },
-                  visible: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.45, ease: [0.25, 0.1, 0.25, 1.0] } }
-                }}
-              >
-                {word}
-              </motion.span>
-            ))}
-          </motion.p>
-
-
-
-        </div>
-      </section>
-
-      {/* ========================================================
-          PAGE 12: MEDIA SERVICES SHOWCASE (Creative Media That Builds Your Brand)
-          ======================================================== */}
-      <section id="services" className="mp-showcase-section media-services-showcase animate-on-scroll">
-        <div className="section-grid-pattern"></div>
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          
-          <div className="mp-showcase-grid">
-            {/* Left Column Content */}
-            <div className="mp-showcase-left">
-              
-              {/* Standard Theme Section Header */}
-              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
-                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
-                  MEDIA <span className="title-gradient-accent">SERVICES</span>
-                </h2>
-              </div>
-
-              {/* Main Headline */}
-              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
-                Creative Media <br />
-                <span className="title-gradient-accent">That Builds Your Brand.</span>
-              </h2>
-
-              {/* Narrative Copy */}
-              <div className="mp-showcase-narrative">
-                <p className="narrative-lead">
-                  In a digital-first world, your brand needs more than visibility. <br />
-                  It needs <span className="highlight-dark">consistent communication</span>, <span className="highlight-orange">compelling content and meaningful engagement.</span>
-                </p>
-                <p className="narrative-body">
-                  At Innoveity Tech Solutions, our media services bring together creative thinking, visual storytelling and digital marketing to help brands communicate with greater impact.
-                </p>
-              </div>
-
-              {/* Subsection Title */}
-              <div className="mp-subsection-header">
-                <h3 className="mp-subsection-title">Our Media Capabilities</h3>
-                <div className="orange-accent-bar"></div>
-              </div>
-
-              {/* 9 Capabilities Grid */}
-              <div className="mp-flyer-caps-grid">
-                {mediaCapabilitiesCards.map((cap, idx) => (
-                  <div 
-                    className={`mp-flyer-cap-card ${activeCardId === cap.id ? 'is-active-glowing' : ''}`} 
-                    key={idx}
-                    id={`media-card-${cap.id}`}
-                    onClick={() => setActiveCardId(cap.id)}
-                  >
-                    <div className="card-top-aura-glow"></div>
-                    <div className="mp-cap-num-icon-row">
-                      <div className="mp-cap-icon-box">
-                        {cap.icon}
-                      </div>
-                      <span className="mp-cap-num">{cap.num}</span>
-                    </div>
-                    <h4 className="mp-cap-card-title">{cap.title}</h4>
-                    <p className="mp-cap-card-desc">{cap.desc}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Quote Callout */}
-              <div className="mp-callout-card">
-                <div className="callout-icon-wrapper">
-                  <FiVolume2 className="callout-icon" />
-                </div>
-                <div className="callout-text-content">
-                  <h4 className="callout-lead-title">
-                    Create. Communicate. <span className="title-gradient-accent">Connect.</span>
-                  </h4>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Right Column Visual Banner & Pillar */}
-            <div className="mp-showcase-right">
-              
-              {/* 4 Pillar Words Box */}
-              <div className="mp-pillar-header-box">
-                <div className="pillar-vertical-dash"></div>
-                <div className="mp-pillar-words">
-                  <span>IDEAS</span>
-                  <span>STORIES</span>
-                  <span>BRANDS</span>
-                  <span>PEOPLE</span>
-                </div>
-              </div>
-
-              {/* Camera Production Showcase Visual Card */}
-              <div className="mp-visual-frame-card">
-                <div className="visual-ambient-glow"></div>
-                
-                {/* Diagonal Geometric Accent Bars */}
-                <div className="geo-accent-bar top-right-bar"></div>
-                <div className="geo-accent-bar bottom-left-bar"></div>
-
-                <div className="mp-img-inner-frame">
-                  <img 
-                    src="/media_camera_showcase.jpg" 
-                    alt="Creative Media Cinema Camera Production" 
-                    className="mp-showcase-img"
-                  />
-                  <div className="mp-img-overlay-gradient"></div>
-                </div>
-
-                <div className="mp-visual-floating-badge">
-                  <span className="badge-text-top">CINEMA GRADE</span>
-                  <div className="badge-dash"></div>
-                  <span className="badge-text-sub">VISUAL PRODUCTION</span>
-                </div>
-              </div>
-
-            </div>
+          <div className="adelite-narrative-card">
+            <p className="adelite-narrative-body">{narrativeP1}</p>
+            {narrativeP2 && <p className="adelite-narrative-body">{narrativeP2}</p>}
           </div>
+        </section>
 
-        </div>
-      </section>
-
-      {/* ========================================================
-          PAGE 13: CONTENT & VISUAL STORYTELLING (Turn Ideas Into Content)
-          ======================================================== */}
-      <section className="mp-showcase-section storytelling-showcase animate-on-scroll">
-        <div className="section-grid-pattern"></div>
-        <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-          
-          <div className="mp-showcase-grid">
-            {/* Left Column Content */}
-            <div className="mp-showcase-left">
-              
-              {/* Standard Theme Section Header */}
-              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '4px' }}>
-                <h2 className="section-main-title" style={{ margin: '0 0 4px 0' }}>
-                  CONTENT & <span className="title-gradient-accent">VISUAL STORYTELLING</span>
-                </h2>
-              </div>
-
-              {/* Main Headline */}
-              <h2 className="section-title" style={{ textAlign: 'left', margin: '0 0 1rem 0' }}>
-                Turn Ideas Into Content <br />
-                <span className="title-gradient-accent">People Remember.</span>
-              </h2>
-
-              {/* Narrative Copy */}
-              <div className="mp-showcase-narrative">
-                <p className="narrative-lead">
-                  Strong communication begins with content that feels relevant, authentic and visually engaging.
-                </p>
-                <p className="narrative-body">
-                  We create content and visual experiences designed around your <span className="highlight-orange">brand identity, audience and communication goals.</span>
-                </p>
-              </div>
-
-              {/* 4 Detailed Storytelling Capability Rows/Cards */}
-              <div className="mp-storytelling-list">
-                {storytellingItems.map((item, idx) => (
-                  <div className="mp-storytelling-row" key={idx}>
-                    <div className="mp-story-icon-box">
-                      {item.icon}
-                    </div>
-                    <div className="mp-story-content">
-                      <h4 className="mp-story-title">{item.title}</h4>
-                      <p className="mp-story-desc">{item.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Quote Callout */}
-              <div className="mp-callout-card storytelling-callout-card">
-                <div className="callout-icon-wrapper">
-                  <FiTarget className="callout-icon" />
-                </div>
-                <div className="callout-text-content">
-                  <h4 className="callout-lead-title" style={{ margin: 0 }}>
-                    Your brand has a story. <br className="mobile-hide" />
-                    <span className="title-gradient-accent">We make it worth watching.</span>
-                  </h4>
-                </div>
-              </div>
-
+        {/* 2.5 WHAT WE DO (6 CORE CAPABILITIES) */}
+        <section className="adelite-what-we-do-section" aria-labelledby="what-we-do-heading">
+          <div className="what-we-do-header">
+            <div className="adelite-kicker-badge">
+              <span className="kicker-icon-chip">
+                <FaBolt />
+              </span>
+              <span className="kicker-label">{whatWeDoKicker}</span>
             </div>
-
-            {/* Right Column Visual Banner & Pillar */}
-            <div className="mp-showcase-right">
-              
-              {/* 4 Pillar Words Box */}
-              <div className="mp-pillar-header-box">
-                <div className="pillar-vertical-dash"></div>
-                <div className="mp-pillar-words">
-                  <span>CONTENT</span>
-                  <span>CREATIVITY</span>
-                  <span>ENGAGEMENT</span>
-                  <span>GROWTH</span>
-                </div>
-              </div>
-
-              {/* Editing Studio Visual Card */}
-              <div className="mp-visual-frame-card">
-                <div className="visual-ambient-glow"></div>
-                
-                {/* Diagonal Geometric Accent Bars */}
-                <div className="geo-accent-bar top-right-bar"></div>
-                <div className="geo-accent-bar bottom-left-bar"></div>
-
-                <div className="mp-img-inner-frame">
-                  <img 
-                    src="/media_storytelling_showcase.jpg" 
-                    alt="Video Editing & Color Suite" 
-                    className="mp-showcase-img"
-                  />
-                  <div className="mp-img-overlay-gradient"></div>
-                </div>
-
-                <div className="mp-visual-floating-badge">
-                  <span className="badge-text-top">ENGAGING STORIES</span>
-                  <div className="badge-dash"></div>
-                  <span className="badge-text-sub">BUILT FOR IMPACT</span>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* ==========================================================================
-         3D FAN-OUT CARDS DECK SHOWCASE SECTION (MATCHING USER REFERENCE IMAGE)
-         ========================================================================== */}
-      <section className="mp-section mp-deck-section">
-        <div className="mp-deck-full-container">
-          
-          <div style={{ textAlign: 'left', marginBottom: '2.5rem', paddingLeft: '1.5rem', paddingRight: '1.5rem', maxWidth: '1280px', margin: '0 auto 2.5rem auto' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                EDITORIAL & <span className="title-gradient-accent">CAMPAIGNS</span>
-              </h2>
-            </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              Creative Stories <span className="title-gradient-accent">In Motion</span>
+            <h2 id="what-we-do-heading" className="what-we-do-title">
+              {whatWeDoTitle} <span className="adelite-gold-gradient">{whatWeDoTitleHighlight}</span>
             </h2>
-            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              Click or hover any 3D editorial card deck to explore brand stories, lifestyle reels, and commercial campaigns.
-            </p>
+            <p className="what-we-do-desc">{whatWeDoDesc}</p>
           </div>
 
-          {/* 3D FAN DECK CONTAINER */}
-          <div 
-            className="mp-3d-deck-wrapper"
-            onMouseEnter={() => setIsDeckPaused(true)}
-            onMouseLeave={() => setIsDeckPaused(false)}
-          >
-            <div className="mp-3d-deck-container">
-              {deckCardsList.map((card, idx) => {
-                const total = deckCardsList.length;
-                let diff = idx - activeDeckIndex;
-                // Circular wrap calculation for smooth infinite full page left-to-right flow
-                while (diff > total / 2) diff -= total;
-                while (diff < -total / 2) diff += total;
+          <div className="what-we-do-grid">
+            {whatWeDoList.map((item, index) => {
+              const Icon = resolveIcon(item.iconName || item.icon, FaBolt);
+              return (
+                <div key={item.id || index} className="what-we-do-card">
+                  <div className="what-we-do-icon-box">
+                    <Icon />
+                  </div>
+                  <div className="what-we-do-content">
+                    <h3 className="what-we-do-card-title">{item.title}</h3>
+                    <p className="what-we-do-card-desc">{item.desc}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
 
-                const isActive = diff === 0;
-                
-                // Calculate 3D transforms for tightly overlapping card deck (Zero Gaps)
-                const translateX = diff * 210; // 210px offset creates seamless 90px card overlap (zero gaps)
-                const rotateY = diff * -16; // 3D Y rotation
-                const rotateZ = diff * 5.5; // curved arc Z rotation
-                const translateZ = -Math.abs(diff) * 80; // depth offset
-                const scale = 1 - Math.abs(diff) * 0.07; // scale reduction for side cards
-                const opacity = 1 - Math.abs(diff) * 0.12; // fading for outer cards
-                const zIndex = 10 - Math.abs(diff);
+        {/* 3. OUR CREATIVE PHILOSOPHY */}
+        <section className="adelite-philosophy-section" aria-labelledby="philosophy-title">
+          <div className="adelite-philosophy-card">
+            <div className="philosophy-ambient-glow" aria-hidden="true"></div>
 
+            <div className="philosophy-top-badge">
+              <span>{philosophyBadge}</span>
+            </div>
+
+            <blockquote className="philosophy-quote">
+              &ldquo;{philosophyQuote}&rdquo;
+            </blockquote>
+
+            <p className="philosophy-description">{philosophyDescription}</p>
+
+            <div className="philosophy-pillars-chips">
+              {philosophyChips.map((chip, cIdx) => (
+                <span key={cIdx} className="philosophy-chip">
+                  <strong className="chip-num">{`0${cIdx + 1}`}</strong> {chip}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* 4. CLIENT SOLUTIONS & PARTNERSHIP */}
+        <section className="adelite-solutions-section" aria-labelledby="solutions-title">
+          
+          <div className="adelite-section-header">
+            <div className="adelite-kicker-badge">
+              <span className="kicker-icon-chip">
+                <FaCircleCheck />
+              </span>
+              <span className="kicker-label">{solutionsKicker}</span>
+            </div>
+            <h2 id="solutions-title" className="adelite-section-title">
+              {solutionsTitle} <span className="adelite-gold-gradient">{solutionsTitleHighlight}</span>
+            </h2>
+            <p className="adelite-section-desc">{solutionsDesc}</p>
+          </div>
+
+          {/* TWO-COLUMN SPLIT: LEFT SECTORS + RIGHT EXPLANATION BOX CARD */}
+          <div className="adelite-split-solutions-layout">
+            
+            {/* LEFT SIDE: Interactive Sector Cards */}
+            <div className="adelite-solutions-left-nav" role="tablist">
+              {sectorsList.map((sector, idx) => {
+                const Icon = resolveIcon(sector.iconName || sector.icon, FaBriefcase);
+                const isActive = safeSectorIdx === idx;
                 return (
-                  <div
-                    key={card.id || idx}
-                    className={`mp-3d-card ${isActive ? 'is-focused' : ''}`}
-                    onClick={() => setActiveDeckIndex(idx)}
-                    style={{
-                      transform: `perspective(1400px) translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`,
-                      zIndex: zIndex,
-                      opacity: opacity,
-                    }}
+                  <button
+                    key={sector.id || idx}
+                    type="button"
+                    className={`adelite-nav-card ${isActive ? 'is-active' : ''}`}
+                    onClick={() => setActiveSectorIdx(idx)}
+                    role="tab"
+                    aria-selected={isActive}
                   >
-                    <div className="mp-3d-card-inner">
-                      <img src={card.image} alt={card.title} className="mp-3d-card-img" />
-                      <div className="mp-3d-card-overlay">
-                        <span className="mp-3d-card-tag">{card.tag}</span>
-                        <h3 className="mp-3d-card-title">{card.title}</h3>
-                        <p className="mp-3d-card-sub">{card.subtitle}</p>
+                    <div className="nav-card-top">
+                      <div className="nav-card-icon-wrap">
+                        <Icon className="nav-card-icon" />
+                      </div>
+                      <div className="nav-card-status">
+                        {isActive ? (
+                          <span className="nav-card-pill is-active">
+                            <span className="pulse-dot" />
+                            <span>Active</span>
+                          </span>
+                        ) : (
+                          <span className="nav-card-pill">
+                            <span className="nav-card-num">{sector.number || `0${idx + 1}`}</span>
+                            <FaArrowRight className="nav-card-arrow" />
+                          </span>
+                        )}
                       </div>
                     </div>
-                  </div>
+
+                    <div className="nav-card-body">
+                      <span className="nav-card-kicker">{sector.badge}</span>
+                      <h4 className="nav-card-title">{sector.title}</h4>
+                    </div>
+
+                    <div className="nav-card-accent-bar" aria-hidden="true" />
+                  </button>
                 );
               })}
             </div>
 
-            {/* DECK NAVIGATION CONTROLS */}
-            <div className="mp-deck-controls">
-              <button className="deck-nav-btn" onClick={handleDeckPrev} aria-label="Previous card">
-                <FiChevronLeft size={22} />
-              </button>
-              <div className="deck-dots">
-                {deckCardsList.map((_, i) => (
-                  <span
-                    key={i}
-                    className={`deck-dot ${i === activeDeckIndex ? 'active' : ''}`}
-                    onClick={() => setActiveDeckIndex(i)}
-                  />
-                ))}
-              </div>
-              <button className="deck-nav-btn" onClick={handleDeckNext} aria-label="Next card">
-                <FiChevronRight size={22} />
-              </button>
-            </div>
-
-          </div>
-
-        </div>
-      </section>
-
-      {/* Concept to Content Journey / Workflow Section */}
-      <section className="mp-section mp-workflow-section">
-        <div className="container">
-          
-          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                SEAMLESS <span className="title-gradient-accent">PROCESS</span>
-              </h2>
-            </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              From Concept <span className="title-gradient-accent">To Content</span>
-            </h2>
-            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              We handle the complete content journey so your brand can focus on what it does best.
-            </p>
-          </div>
-
-          {/* Interactive Pipeline Steps Bar */}
-          <div className="mp-pipeline-bar">
-            {workflowSteps.map((step, idx) => (
-              <button
-                key={idx}
-                className={`pipeline-node ${activeStep === idx ? 'is-active' : ''}`}
-                onClick={() => setActiveStep(idx)}
-              >
-                <div className="node-num">0{idx + 1}</div>
-                <div className="node-name">{step.name}</div>
-                {idx < workflowSteps.length - 1 && <div className="node-connector"></div>}
-              </button>
-            ))}
-          </div>
-
-          {/* Active Step Showcase Card */}
-          <motion.div 
-            key={activeStep}
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="mp-workflow-card"
-          >
-            <div className="wf-card-header">
-              <span className="wf-step-index">STEP 0{activeStep + 1}</span>
-              <span className="wf-arrow-tag">
-                {workflowSteps[activeStep].name}
-              </span>
-            </div>
-            <h3 className="wf-card-title">{workflowSteps[activeStep].name}: {workflowSteps[activeStep].subtitle}</h3>
-            <p className="wf-card-desc">{workflowSteps[activeStep].desc}</p>
-
-            <div className="wf-journey-path">
-              {workflowSteps.map((s, i) => (
-                <span key={i} className={`journey-tag ${i === activeStep ? 'current' : ''}`}>
-                  {s.name} {i < workflowSteps.length - 1 ? '→' : ''}
-                </span>
-              ))}
-            </div>
-          </motion.div>
-
-        </div>
-      </section>
-
-      {/* ==========================================================================
-         PRODUCTION CAPABILITIES SHOWCASE SECTION (PLACED AFTER CONCEPT TO CONTENT)
-         ========================================================================== */}
-      <section className="mp-section mp-cap-ui-section">
-        <div className="mp-cap-bg-watermark">✦</div>
-        
-        <div className="container mp-cap-ui-container">
-          
-          {/* LEFT SIDE HEADER & CONTROLS */}
-          <div className="mp-cap-left-col">
-            
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                OUR <span className="title-gradient-accent">CAPABILITIES</span>
-              </h2>
-            </div>
-
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              What Our Production <br />
-              <span className="title-gradient-accent">Capabilities Deliver</span>
-            </h2>
-
-            <p className="mp-cap-left-desc">
-              High-end visual production using professional 8K cinema camera systems, 3-axis motion stabilizers, licensed aerial drones, and state-of-the-art post-production suites.
-            </p>
-
-            {/* LEFT / RIGHT CAROUSEL ARROWS */}
-            <div className="mp-cap-nav-arrows">
-              <button 
-                className="cap-arrow-btn" 
-                onClick={() => handleCapArrowClick('left')}
-                aria-label="Previous capability"
-              >
-                <FiChevronLeft size={20} />
-              </button>
-
-              <button 
-                className="cap-arrow-btn" 
-                onClick={() => handleCapArrowClick('right')}
-                aria-label="Next capability"
-              >
-                <FiChevronRight size={20} />
-              </button>
-            </div>
-
-          </div>
-
-          {/* RIGHT SIDE CAROUSEL OF CREAM/OFF-WHITE CAPABILITY CARDS */}
-          <div 
-            className="mp-cap-right-col"
-            onMouseEnter={() => setIsCapPaused(true)}
-            onMouseLeave={() => setIsCapPaused(false)}
-          >
-            <div className="mp-cap-track" ref={capabilitiesTrackRef}>
-              
-              {capabilitiesList.map((cap, idx) => (
-                <div className="cap-ui-card" key={cap.id}>
-                  
-                  {/* QUOTE ICON */}
-                  <div className="cap-card-quote-mark">“</div>
-
-                  {/* QUOTE / DESCRIPTION */}
-                  <p className="cap-card-quote-text">
-                    {cap.quote}
-                  </p>
-
-                  {/* TITLE & RATING BADGE */}
-                  <div className="cap-card-header">
-                    <div className="cap-card-icon-badge">{cap.icon}</div>
-                    <div className="cap-card-title-box">
-                      <h3 className="cap-card-title">{cap.title}</h3>
-                      <span className="cap-card-rating">{cap.badge}</span>
+            {/* RIGHT SIDE: Active Sector Explanation Box Card */}
+            <div className="adelite-solutions-right-content">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeSector.id || safeSectorIdx}
+                  className="neat-sector-sheet"
+                  initial={{ opacity: 0, x: 16 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -16 }}
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  {/* Sector Header Info */}
+                  <div className="neat-sector-header-info">
+                    <div className="neat-badge-row">
+                      <span className="neat-category-tag">{activeSector.badge}</span>
+                      <span className="neat-counter-tag">SECTOR {activeSector.number || `0${safeSectorIdx + 1}`} / {String(sectorsList.length).padStart(2, '0')}</span>
                     </div>
+                    <h3 className="neat-sector-main-title">{activeSector.title}</h3>
+                    <p className="neat-sector-main-intro">{activeSector.intro}</p>
                   </div>
 
-                  {/* ANIMATED VIDEO FRAME */}
-                  <div 
-                    className="cap-card-video-frame"
-                    onClick={() => setActiveVideoModal(cap)}
-                  >
-                    <video
-                      src={cap.videoUrl}
-                      poster={cap.poster}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="cap-card-video"
-                    />
-
-                    {/* OVERLAY & PLAY BADGE */}
-                    <div className="cap-video-overlay">
-                      <div className="cap-play-pill">
-                        <FiPlayCircle className="play-icon" />
-                        <span>PREVIEW VIDEO</span>
+                  {/* Clean, Neat Points */}
+                  <div className="neat-points-list">
+                    {(activeSector.points || []).map((pointText, pIdx) => (
+                      <div key={pIdx} className="neat-point-row">
+                        <div className="neat-bullet-wrap" aria-hidden="true">
+                          <span className="neat-gold-bullet"></span>
+                        </div>
+                        <p className="neat-point-text">{pointText}</p>
                       </div>
-                    </div>
-                  </div>
-
-                  {/* SPECS LIST */}
-                  <div className="cap-card-specs">
-                    {cap.specs && cap.specs.map((spec, i) => (
-                      <span key={i} className="spec-tag">✓ {spec}</span>
                     ))}
                   </div>
 
-                </div>
-              ))}
+                  {/* Clean Bottom Action Row */}
+                  <div className="neat-sector-footer-row">
+                    <span className="neat-footer-note">
+                      Tailored strategy &amp; full creative delivery by AD ELITE
+                    </span>
+                    <Link to="/contact" className="neat-action-link">
+                      <span>Inquire About {(activeSector.title || '').split('&')[0].trim()}</span>
+                      <FaArrowRight />
+                    </Link>
+                  </div>
 
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* FULLSCREEN VIDEO MODAL POPUP */}
-      {activeVideoModal && (
-        <div className="cap-video-modal-backdrop" onClick={() => setActiveVideoModal(null)}>
-          <div className="cap-video-modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="cap-modal-header">
-              <h3>{activeVideoModal.title}</h3>
-              <button className="cap-modal-close" onClick={() => setActiveVideoModal(null)}>
-                <FiX size={22} />
-              </button>
+                </motion.div>
+              </AnimatePresence>
             </div>
 
-            <div className="cap-modal-player-box">
-              <video
-                src={activeVideoModal.videoUrl}
-                poster={activeVideoModal.poster}
-                autoPlay
-                controls
-                playsInline
-                className="cap-modal-video"
-              />
-            </div>
-            <p className="cap-modal-desc">{activeVideoModal.quote}</p>
-          </div>
-        </div>
-      )}
-
-      {/* Why Innoveity Media */}
-      <section className="mp-section mp-why-section">
-        <div className="container">
-          
-          <div style={{ textAlign: 'left', marginBottom: '2.5rem' }}>
-            <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-              <h2 className="section-main-title">
-                OUR <span className="title-gradient-accent">EDGE</span>
-              </h2>
-            </div>
-            <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: '14px' }}>
-              Why Choose <span className="title-gradient-accent">Innoveity Media</span>
-            </h2>
-            <p className="mp-section-desc" style={{ maxWidth: '650px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              Strategic direction coupled with cinema-grade execution to make your content impactful.
-            </p>
           </div>
 
-          <div className="mp-why-grid">
-            {whyChooseUsList.map((item, idx) => (
-              <div className="why-media-card" key={idx}>
-                <div className="why-icon-box">
-                  {item.icon}
-                </div>
-                <h3 className="why-title">{item.title}</h3>
-                <p className="why-desc">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+        </section>
 
-        </div>
-      </section>
+        {/* 5. CALL TO ACTION - BRAND CARD */}
+        <section className="adelite-cta-section" aria-labelledby="cta-heading">
+          <div className="adelite-cta-card">
+            <div className="cta-ambient-glow" aria-hidden="true"></div>
 
-      {/* Built For Section */}
-      <section className="mp-section mp-built-for-section">
-        <div className="container">
-          
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.5rem' }}>
-            <div>
-              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-                <h2 className="section-main-title">
-                  TAILORED <span className="title-gradient-accent">SOLUTIONS</span>
-                </h2>
-              </div>
-              <h2 className="section-title animate-on-scroll" style={{ textAlign: 'left', marginBottom: 0 }}>
-                Built For <span className="title-gradient-accent">Your Audience</span>
-              </h2>
-            </div>
-            <p className="mp-section-desc" style={{ maxWidth: '540px', margin: '0', textAlign: 'left', color: '#475569' }}>
-              Whether you are launching a brand, promoting a product, covering an event or building your digital presence, our Media Capabilities create content designed for your audience.
-            </p>
-          </div>
-
-          {/* Infinite Marquee Single Line Moving Track */}
-          <div className="mp-built-marquee-wrapper">
-            <div className="mp-built-marquee-track">
-              {[...audienceTypesList, ...audienceTypesList, ...audienceTypesList, ...audienceTypesList].map((aud, idx) => (
-                <div className="built-for-chip" key={idx}>
-                  <span className="chip-bullet">•</span>
-                  <span className="chip-label">{aud}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      {/* DYNAMIC CUSTOM SECTIONS */}
-      <DynamicPageSections page="media" />
-
-      {/* 7. Bottom Contact / Project CTA Banner */}
-      <section className="mp-section mp-cta-section">
-        <div className="container">
-          <div className="mp-cta-card">
-            
-            <div className="mp-cta-left">
-              <div className="section-left-title-wrapper" style={{ textAlign: 'left', marginBottom: '10px' }}>
-                <h2 className="section-main-title">
-                  START YOUR <span className="title-gradient-accent">PROJECT</span>
-                </h2>
-              </div>
-
-              <h2 className="section-title" style={{ textAlign: 'left', marginBottom: '14px' }}>
-                Let's Tell Your <span className="title-gradient-accent">Brand Story</span>
+            <div className="cta-inner-content">
+              <h2 id="cta-heading" className="cta-gold-title">
+                {ctaHeading}
               </h2>
 
-              <p className="cta-subheading">
-                {ctaSub1}<br />
-                <strong>{ctaSub2}</strong>
-              </p>
-            </div>
+              <p className="cta-lead-text">{ctaLeadText}</p>
 
-            <div className="mp-cta-right">
-              <div className="cta-badges">
-                <span>{ctaBadges}</span>
-              </div>
+              {ctaPartnerBadge && (
+                <div className="cta-partner-badge">
+                  <span>{ctaPartnerBadge}</span>
+                </div>
+              )}
 
-              <div className="cta-actions">
-                <Link to="/contact" className="btn-mp-cta-primary">
+              {ctaBrandEndorsement && (
+                <div className="cta-brand-endorsement">
+                  {ctaBrandEndorsement}
+                </div>
+              )}
+
+              {ctaContactPrompt && (
+                <p className="cta-contact-prompt">{ctaContactPrompt}</p>
+              )}
+
+              <div className="cta-actions-row">
+                <div className="cta-quick-links">
+                  {ctaWebsiteLink.startsWith('http') ? (
+                    <a href={ctaWebsiteLink} target="_blank" rel="noopener noreferrer" className="cta-link-pill">
+                      <FaGlobe className="link-pill-icon" />
+                      <span>Website</span>
+                    </a>
+                  ) : (
+                    <Link to={ctaWebsiteLink} className="cta-link-pill">
+                      <FaGlobe className="link-pill-icon" />
+                      <span>Website</span>
+                    </Link>
+                  )}
+
+                  <a href={`mailto:${ctaEmail}`} className="cta-link-pill">
+                    <FaEnvelope className="link-pill-icon" />
+                    <span>Email</span>
+                  </a>
+
+                  <a href={`tel:${String(ctaPhone).replace(/\s+/g, '')}`} className="cta-link-pill">
+                    <FaPhone className="link-pill-icon" />
+                    <span>Phone</span>
+                  </a>
+
+                  {ctaSocialLink.startsWith('http') ? (
+                    <a href={ctaSocialLink} target="_blank" rel="noopener noreferrer" className="cta-link-pill">
+                      <FaShareNodes className="link-pill-icon" />
+                      <span>Social Media</span>
+                    </a>
+                  ) : (
+                    <Link to={ctaSocialLink} className="cta-link-pill">
+                      <FaShareNodes className="link-pill-icon" />
+                      <span>Social Media</span>
+                    </Link>
+                  )}
+                </div>
+
+                <Link to={ctaBtnLink || "/contact"} className="cta-primary-btn">
                   <span>{ctaBtnText}</span>
-                  <FiArrowRight />
+                  <FaArrowTrendUp size={16} />
                 </Link>
               </div>
-            </div>
 
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+      </main>
 
     </div>
   );

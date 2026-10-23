@@ -483,3 +483,26 @@
     padding: 6px 12px;
   }
 }
+
+@media (max-width: 480px) {
+  .brochure-popup-backdrop {
+    padding: 8px;
+  }
+
+  .brochure-center-card,
+  .brochure-floating-widget {
+    width: min(230px, calc(100vw - 24px));
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .floating-widget-title {
+    font-size: 0.95rem;
+  }
+
+  .floating-widget-apply-btn {
+    padding: 9px 14px;
+    font-size: 0.82rem;
+  }
+}
+

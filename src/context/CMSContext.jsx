@@ -146,6 +146,7 @@ export const CMSProvider = ({ children }) => {
     titleLine1: 'Innoveity Tech',
     titleLine2: 'Solution',
     description: 'Empowering businesses with innovative software development, AI-powered solutions, cloud technologies, mobile applications, web development, and digital transformation services that help organizations achieve sustainable growth.',
+    splitBannerEnabled: true,
     aboutKicker: "WHO WE ARE",
     aboutTitle: 'Technology Built Around\nPossibility.',
     aboutDesc: 'At Innoveity Tech Solutions, we design and build intelligent digital solutions for businesses, institutions, startups and government organisations.',
@@ -309,15 +310,141 @@ export const CMSProvider = ({ children }) => {
 
   const defaultMediaContent = {
     hero: {
+      motto: 'Transforming Brands into Experiences.',
+      kicker: 'BRAND & CAPABILITIES',
+      title: 'Your Vision. Our Creativity.',
+      titleHighlight: 'Greater Impact.',
+      narrativeP1: 'AD ELITE is a creative media and digital solutions brand delivering integrated branding, social media management, digital marketing, and multimedia services for educational institutions, businesses, and organisations. We combine strategic thinking with compelling creativity to help brands communicate effectively, build recognition, and connect meaningfully with their audiences.',
+      narrativeP2: 'Our approach goes beyond creating content. We build cohesive brand experiences that strengthen visibility, encourage engagement, and support measurable growth.',
       badge: 'INNOVEITY MEDIA',
       subBadge: 'Creative. Strategic. Data-Driven.',
-      title: 'MEDIA CAPABILITIES',
-      tagline1: 'Creative Stories.',
-      tagline2: 'Powerful Visuals.',
-      tagline3: 'Digital Growth.',
-      description: 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world. From an idea to the final frame, we create content that looks premium, communicates clearly and delivers purpose.',
+      description: 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world.',
       bgImage: '/media_hero_bg.png'
     },
+    whatWeDoHeader: {
+      kicker: 'CORE CAPABILITIES',
+      title: 'What',
+      titleHighlight: 'We Do',
+      desc: 'Integrated creative, media, and digital solutions designed to strengthen recognition, engagement, and growth.'
+    },
+    whatWeDo: [
+      {
+        id: 'branding-design',
+        title: 'Branding & Design',
+        desc: 'Brand identity, logos, brochures, profiles and creative collateral.',
+        iconName: 'FaPenNib'
+      },
+      {
+        id: 'social-media',
+        title: 'Social Media Management',
+        desc: 'Content calendars, page management, community engagement and reporting.',
+        iconName: 'FaShareNodes'
+      },
+      {
+        id: 'digital-marketing',
+        title: 'Digital Marketing',
+        desc: 'Campaign strategy, online advertising, audience reach and lead generation.',
+        iconName: 'FaChartLine'
+      },
+      {
+        id: 'media-production',
+        title: 'Media Production',
+        desc: 'Promotional videos, reels, photography and visual storytelling.',
+        iconName: 'FaVideo'
+      },
+      {
+        id: 'digital-presence',
+        title: 'Digital Presence',
+        desc: 'Website content, landing pages and online brand visibility.',
+        iconName: 'FaGlobe'
+      },
+      {
+        id: 'event-campaign',
+        title: 'Event & Campaign Solutions',
+        desc: 'Event branding, promotional campaigns, creative assets and coverage.',
+        iconName: 'FaCalendarDays'
+      }
+    ],
+    philosophy: {
+      badge: 'OUR CREATIVE PHILOSOPHY',
+      quote: 'Strategy before design. Purpose behind every message. Impact in every interaction.',
+      description: 'We align creativity with organisational goals to ensure every brand touch point communicates a consistent identity and creates a lasting impression.',
+      chips: [
+        'Strategy Before Design',
+        'Purpose Behind Every Message',
+        'Impact In Every Interaction'
+      ]
+    },
+    solutionsHeader: {
+      kicker: 'CLIENT SOLUTIONS & PARTNERSHIP',
+      title: 'Creative Solutions.',
+      titleHighlight: 'Tailored for Every Sector.',
+      desc: 'AD ELITE develops customised media and marketing solutions that reflect the unique goals, audiences, and growth priorities of each organisation.'
+    },
+    sectors: [
+      {
+        id: 'education',
+        number: '01',
+        badge: 'ACADEMIC & INSTITUTIONAL',
+        title: 'Education & Institutional Branding',
+        summary: 'Admissions, campus storytelling, and digital recruitment campaigns.',
+        intro: 'Comprehensive recruitment, academic storytelling, and visual identity for schools, colleges, and educational groups.',
+        iconName: 'FaGraduationCap',
+        points: [
+          'Admission Campaigns and Student Recruitment Promotions',
+          'Institution Profiles, Prospectuses, Brochures and Presentations',
+          'Campus Events, Academic Achievements and Institutional Storytelling',
+          'Social Media Handling and Digital Engagement'
+        ]
+      },
+      {
+        id: 'corporate',
+        number: '02',
+        badge: 'ENTERPRISE & COMMERCIAL',
+        title: 'Corporate Branding & Business Communication',
+        summary: 'Executive messaging, brand positioning, and corporate media collateral.',
+        intro: 'Strengthening enterprise reputation, executive messaging, and corporate visual collateral.',
+        iconName: 'FaBriefcase',
+        points: [
+          'Corporate Profile Shoot, Brand Positioning and Visual Communication',
+          'Company Profiles, Sales Presentations and Business Collateral',
+          'Product Launches, Promotional Campaigns and Digital Advertising',
+          'Executive Videos, Customer Testimonials and Corporate Storytelling',
+          'Social Media Management and Brand Reputation Support'
+        ]
+      },
+      {
+        id: 'events',
+        number: '03',
+        badge: 'MEDIA & EXPERIENTIAL',
+        title: 'Events, Campaigns & Media Production',
+        summary: 'Event identity, reels, cinematography, and high-impact live coverage.',
+        intro: 'High-impact multi-angle coverage, creative backdrops, reels, and experiential campaign assets.',
+        iconName: 'FaCamera',
+        points: [
+          'Event Identity, Invitations, Backdrops and Promotional Materials',
+          'Photography, Videography, Reels and Post-Event Highlights',
+          'Campaign Creatives, Motion Graphics and Digital Announcements',
+          'Sponsorship Collateral and Audience Engagement Materials'
+        ]
+      },
+      {
+        id: 'marketing',
+        number: '04',
+        badge: 'GROWTH & PERFORMANCE',
+        title: 'Digital Performance Marketing & Lead Generation',
+        summary: 'Targeted Meta & Google ads, search optimization, and verified leads.',
+        intro: 'ROI-driven campaigns, organic discoverability, targeted paid funnels, and real-time analytics.',
+        iconName: 'FaChartLine',
+        points: [
+          'Improve search rankings, organic traffic, and online discoverability through Search Engine Optimisation (SEO).',
+          'Create and manage targeted Meta Ads campaigns across Facebook and Instagram.',
+          'Reach relevant audiences through Google Ads search, display, and other suitable advertising formats.',
+          'Generate prospective student enquiries, admission leads, and business opportunities through Lead Generation Campaigns.',
+          'Analytics & Performance Reporting to monitor reach, engagement, clicks, leads, and campaign performance to support data-driven decisions.'
+        ]
+      }
+    ],
     deckCards: [
       { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', image: '/deck_arch_gold.png' },
       { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', image: '/deck_lifestyle.png' },
@@ -327,16 +454,6 @@ export const CMSProvider = ({ children }) => {
       { id: 'editorial-design', title: 'Editorial Craft', subtitle: 'BRAND DESIGN', tag: 'Creative Studio', image: '/deck_design.png' },
       { id: 'digital-growth', title: 'Digital Scale', subtitle: 'PERFORMANCE MEDIA', tag: 'Growth Marketing', image: '/deck_growth.png' }
     ],
-    services: [
-      { num: '01', title: 'Social Media Management', desc: 'Strategic management of your social media presence with consistent, engaging and brand-focused content.', tag: 'Brand Growth' },
-      { num: '02', title: 'Content Creation', desc: 'Creative content designed around your brand, audience and business objectives.', tag: 'Creative Craft' },
-      { num: '03', title: 'Reels & Short-Form Videos', desc: 'High-quality reels and short-form videos built for attention, engagement and reach.', tag: 'Viral Reach' },
-      { num: '04', title: 'Creative Design', desc: 'Premium visual creatives for campaigns, promotions, announcements and digital platforms.', tag: 'Visual Identity' },
-      { num: '05', title: 'Video Production', desc: 'Professional video production for brands, products, events, campaigns and corporate communication.', tag: 'Cinematic Excellence' },
-      { num: '06', title: 'Photography', desc: 'Product, corporate, event and promotional photography with a focus on strong visual storytelling.', tag: 'Storytelling' },
-      { num: '07', title: 'Performance Marketing', desc: 'Targeted digital advertising designed to reach the right audience and support measurable business growth.', tag: 'Data Driven' },
-      { num: '08', title: 'SEO', desc: "Search engine optimization customized according to each client's business, industry, competition and objectives.", tag: 'Organic Growth' }
-    ],
     capabilities: [
       { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', quote: 'High-quality visual production using professional camera systems and production equipment.', badge: '★ 4.9/5 • 8K RED & ARRI Cinema Systems', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-cameraman-setting-up-a-camera-42861-large.mp4', poster: '/cap_camera_prod.png' },
       { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', quote: 'From brand films to promotional content, we create visually engaging stories built around your message.', badge: '★ 5.0/5 • Anamorphic Commercial Films', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-filmmaker-with-a-camera-on-a-tripod-42862-large.mp4', poster: '/cap_cinematic_vid.png' },
@@ -344,21 +461,19 @@ export const CMSProvider = ({ children }) => {
       { id: 'aerial-content', title: 'AERIAL CONTENT', quote: 'Drone-based visuals for locations, events, real estate, institutions, hospitality and brand campaigns.', badge: '★ 5.0/5 • 4K Drone Cinematography', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-aerial-view-of-a-city-at-sunset-41584-large.mp4', poster: '/cap_aerial_drone.png' },
       { id: 'post-production', title: 'POST-PRODUCTION', quote: 'Professional editing, colour correction, sound design, motion graphics and final delivery optimized for each platform.', badge: '★ 4.9/5 • Color Grading & Motion FX', videoUrl: 'https://assets.mixkit.co/videos/preview/mixkit-video-editing-software-timeline-43343-large.mp4', poster: '/cap_post_production.png' }
     ],
-    whyChooseUs: [
-      { title: 'Creative First', desc: 'Ideas that make your brand stand out.' },
-      { title: 'Quality Driven', desc: 'Professional production and attention to detail.' },
-      { title: 'Strategy Led', desc: 'Every piece of content has a purpose.' },
-      { title: 'Performance Focused', desc: 'We create content with business results in mind.' },
-      { title: 'End-to-End Execution', desc: 'From concept and production to publishing and optimization.' }
-    ],
-    audienceTypes: ['Brands', 'Businesses', 'Startups', 'Institutions', 'Events', 'Products', 'Personal Brands'],
     cta: {
-      brandTag: 'INNOVEITY MEDIA',
       heading: "LET'S CREATE SOMETHING THAT MOVES",
-      subheadingLine1: 'Your brand has a story.',
-      subheadingLine2: "Let's tell it better.",
-      badges: 'Creative • Strategic • Data-Driven',
-      btnText: 'START YOUR MEDIA PROJECT'
+      leadText: 'From building a distinctive identity to managing your digital presence, AD ELITE is your creative partner for stronger visibility, meaningful engagement, and sustainable growth.',
+      partnerBadge: 'Your Premier Event Partner',
+      brandEndorsement: 'AD ELITE | A Creative Solutions Brand of INNOVEITY',
+      contactPrompt: 'Contact us to discuss your branding, media, social media management, and digital marketing requirements.',
+      btnText: 'START YOUR MEDIA PROJECT',
+      btnLink: '/contact',
+      brandTag: 'AD ELITE MEDIA',
+      websiteLink: '/contact',
+      email: 'aachinancy@gmail.com',
+      phone: '+91 7904327211',
+      socialLink: '/contact'
     }
   };
 
@@ -656,15 +771,35 @@ export const CMSProvider = ({ children }) => {
   const [contact, setContact] = useState(() => loadLocalState('contact', defaultContact));
   const [homeContent, setHomeContent] = useState(() => loadLocalState('home_content', defaultHomeContent));
   const [aboutContent, setAboutContent] = useState(() => loadLocalState('about_content', defaultAboutContent));
+  const sanitizeMediaContent = (loaded, defaults) => {
+    if (!loaded) return defaults;
+    const hero = { ...defaults.hero, ...(loaded.hero || {}) };
+    if (!hero.title || hero.title === 'MEDIA CAPABILITIES') {
+      hero.title = defaults.hero.title; // Exactly 'Your Vision. Our Creativity.'
+    }
+    return {
+      ...defaults,
+      ...loaded,
+      hero,
+      whatWeDoHeader: { ...defaults.whatWeDoHeader, ...(loaded.whatWeDoHeader || {}) },
+      whatWeDo: (Array.isArray(loaded.whatWeDo) && loaded.whatWeDo.length > 0) ? loaded.whatWeDo : defaults.whatWeDo,
+      philosophy: {
+        ...defaults.philosophy,
+        ...(loaded.philosophy || {}),
+        chips: (Array.isArray(loaded.philosophy?.chips) && loaded.philosophy.chips.length === 3)
+          ? loaded.philosophy.chips
+          : defaults.philosophy.chips
+      },
+      solutionsHeader: { ...defaults.solutionsHeader, ...(loaded.solutionsHeader || {}) },
+      sectors: (Array.isArray(loaded.sectors) && loaded.sectors.length > 0) ? loaded.sectors : defaults.sectors,
+      cta: { ...defaults.cta, ...(loaded.cta || {}) }
+    };
+  };
+
+
   const [mediaContent, setMediaContent] = useState(() => {
     const loaded = loadLocalState('media_content', defaultMediaContent);
-    if (loaded?.hero) {
-      if (loaded.hero.title === 'MEDIA DIVISION') loaded.hero.title = 'MEDIA CAPABILITIES';
-      if (loaded.hero.description) {
-        loaded.hero.description = loaded.hero.description.replace(/Media Division/g, 'Media Capabilities');
-      }
-    }
-    return loaded;
+    return sanitizeMediaContent(loaded, defaultMediaContent);
   });
   const [showcaseHeader, setShowcaseHeader] = useState(() => loadLocalState('showcase_header', defaultShowcaseHeader));
   const [showcaseProjects, setShowcaseProjects] = useState(() => loadLocalState('showcase_projects', defaultShowcaseProjects));
@@ -892,7 +1027,7 @@ export const CMSProvider = ({ children }) => {
       if (s.contact) updateIfChanged(setContact, s.contact);
       if (s.home_content) updateIfChanged(setHomeContent, s.home_content);
       if (s.about_content) updateIfChanged(setAboutContent, s.about_content);
-      if (s.media_content) updateIfChanged(setMediaContent, s.media_content);
+      if (s.media_content) updateIfChanged(setMediaContent, sanitizeMediaContent(s.media_content, defaultMediaContent));
       if (s.seo_settings) updateIfChanged(setSeoSettings, s.seo_settings);
       if (s.page_seo_settings) updateIfChanged(setPageSeoSettings, s.page_seo_settings);
       if (s.custom_fields) updateIfChanged(setCustomFields, s.custom_fields);

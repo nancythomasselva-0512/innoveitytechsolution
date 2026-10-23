@@ -14,6 +14,8 @@ const Hero = () => {
 
   const activeJobs = (careers || []).filter(c => c.status === 'Active');
 
+  const isSplitActive = homeContent?.splitBannerEnabled !== false;
+
   const partnerLogos = [
     { name: 'MICROSOFT', subtitle: 'ENTERPRISE PARTNER' },
     { name: 'AWS', subtitle: 'CLOUD SOLUTIONS' },
@@ -57,11 +59,11 @@ const Hero = () => {
         ></div>
       </div>
 
-      <div className="hero-content-wrapper container">
-        {/* 2-Column Split Hero Body: Left Content | Right 3D Visual */}
-        <div className="hero-split-grid">
+      <div className="hero-content-wrapper">
+        {/* Hero Split Grid: Switchable between Split (Image 2) and Filled (Image 1) */}
+        <div className={`hero-split-grid ${isSplitActive ? 'hero-split-active' : 'hero-split-deactivated'}`}>
           
-          {/* Left Column: Headline, Tagline, Description, CTA */}
+          {/* Headline, Tagline, Description, CTA */}
           <div className="hero-left-content">
             
             {/* Dynamic Hiring Notification Pill */}
@@ -114,8 +116,8 @@ const Hero = () => {
               <span className="hero-tagline-bar"></span>
             </div>
 
-            {/* Description Text */}
-            <p className="hero-body-text">
+            {/* Description Text: Image 2 (split-active) or Image 1 (split-filled) */}
+            <p className={`hero-body-text ${isSplitActive ? 'split-active' : 'split-filled'}`}>
               {homeContent?.description || 'Empowering businesses with innovative software development, AI-powered solutions, cloud technologies, mobile applications, web development, and digital transformation services that help organizations achieve sustainable growth.'}
             </p>
 
@@ -130,7 +132,7 @@ const Hero = () => {
             </div>
           </div>
 
-          {/* Right Column: 3D "IN" Emblem Artwork */}
+          {/* Right Column: 3D "IN" Emblem Artwork (Always visible in both modes) */}
           <div className="hero-right-visual">
             <div className="hero-3d-art-wrapper">
               <div className="hero-3d-glow-backdrop"></div>

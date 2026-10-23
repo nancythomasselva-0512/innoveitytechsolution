@@ -305,10 +305,17 @@
 @media screen and (max-width: 1024px) {
   .lens-featured-card {
     grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .featured-video-wrap {
+    height: 220px;
+    max-height: none;
   }
 
   .lens-featured-content {
-    padding: 30px;
+    padding: 24px;
+    height: auto;
   }
 
   .lens-grid {
@@ -318,17 +325,18 @@
 
 @media screen and (max-width: 768px) {
   .lens-heading {
-    font-size: 30px;
+    font-size: clamp(1.8rem, 6vw, 2.3rem);
     letter-spacing: -0.8px;
   }
 
   .lens-header-bottom {
     flex-direction: column;
     align-items: flex-start;
+    gap: 14px;
   }
 
   .featured-title {
-    font-size: 22px;
+    font-size: 20px;
     letter-spacing: -0.5px;
   }
 
@@ -336,3 +344,39 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media screen and (max-width: 480px) {
+  .lens-container {
+    padding: 0 12px;
+  }
+
+  .lens-heading {
+    font-size: clamp(1.5rem, 6.5vw, 1.95rem);
+  }
+
+  .lens-featured-card {
+    border-radius: 14px;
+    margin-bottom: 24px;
+  }
+
+  .featured-video-wrap {
+    height: 185px;
+  }
+
+  .lens-featured-content {
+    padding: 16px 14px;
+  }
+
+  .featured-title {
+    font-size: 17px;
+  }
+
+  .featured-desc {
+    font-size: 12.5px;
+  }
+
+  .grid-video {
+    height: 175px;
+  }
+}
+

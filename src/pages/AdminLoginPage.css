@@ -316,3 +316,74 @@
   color: #ff6b00;
   text-decoration: underline;
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVE MEDIA QUERIES
+   ========================================================================== */
+@media screen and (max-width: 480px) {
+  .login-page-container {
+    padding: 24px 12px;
+  }
+
+  .login-card-wrapper {
+    padding: 26px 18px;
+    border-radius: 20px;
+    max-width: 100%;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .login-title {
+    font-size: 1.45rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .login-role-tabs {
+    padding: 4px;
+    margin-bottom: 18px;
+  }
+
+  .login-role-tab {
+    padding: 9px 8px;
+    font-size: 0.82rem;
+    gap: 5px;
+  }
+
+  .login-input {
+    font-size: 16px !important; /* Prevents auto zoom in iOS Safari */
+    padding: 12px 38px 12px 38px;
+  }
+
+  .login-submit-btn {
+    padding: 12px 18px;
+    font-size: 0.94rem;
+  }
+
+  .login-quick-buttons {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .login-quick-btn {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .login-page-container {
+    padding: 16px 8px;
+  }
+
+  .login-card-wrapper {
+    padding: 20px 14px;
+    border-radius: 16px;
+  }
+
+  .login-title {
+    font-size: 1.3rem;
+  }
+}
+

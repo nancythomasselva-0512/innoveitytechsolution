@@ -260,34 +260,60 @@ img {
   }
 }
 
-/* Global Responsive Typography & Viewport Enhancements */
+/* ==========================================================================
+   GLOBAL RESPONSIVE TYPOGRAPHY & VIEWPORT MEDIA QUERIES (SITE-WIDE)
+   ========================================================================== */
+
+/* 1. Large Tablets & Small Laptops (<= 1024px) */
 @media screen and (max-width: 1024px) {
   .section-padding {
-    padding: 4rem 1.5rem;
+    padding: 3.8rem 1.5rem;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0 1.5rem;
   }
 }
 
+/* 2. Tablets & Landscape Mobiles (<= 768px) */
 @media screen and (max-width: 768px) {
-  html, body {
-    overflow-x: hidden;
-    width: 100%;
-    max-width: 100vw;
+  html, body, #root, .app {
+    overflow-x: hidden !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
   }
   
   .section-padding {
-    padding: 3rem 1rem;
+    padding: 2.8rem 1rem;
   }
 
   .container {
     padding: 0 1rem;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 
+  /* Safe Media Scaling */
+  img, video, iframe, canvas {
+    max-width: 100% !important;
+    height: auto;
+  }
+
+  /* Prevent iOS Safari Viewport Auto-Zoom on Input Focus */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Left-Aligned / Compact Section Main Titles */
   .section-main-title,
   .about-left-main-title {
     font-size: clamp(1.25rem, 4.5vw, 1.6rem) !important;
     margin-bottom: 0.75rem !important;
   }
 
+  /* Hero & Showcase Display Headings */
   .section-title,
   .mosaic-main-heading,
   .chaos-headline,
@@ -313,15 +339,38 @@ img {
     line-height: 1.2 !important;
   }
 
+  /* Buttons & CTAs Touch Target */
   .btn {
-    padding: 0.7rem 1.25rem;
-    font-size: 0.9rem;
+    padding: 0.75rem 1.35rem;
+    font-size: 0.92rem;
+  }
+
+  /* Ensure long words, URLs, and emails never bleed horizontally */
+  h1, h2, h3, h4, h5, h6, p, span, a {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
+  /* Modals & Dialogs Mobile Containment */
+  .modal-overlay,
+  .modal-backdrop,
+  .dialog-backdrop {
+    padding: 12px !important;
+  }
+
+  .modal-content,
+  .dialog-box,
+  .popup-card {
+    max-width: calc(100vw - 24px) !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
   }
 }
 
+/* 3. Standard Mobile Phones (<= 480px) */
 @media screen and (max-width: 480px) {
   .section-padding {
-    padding: 2.4rem 0.75rem;
+    padding: 2.2rem 0.75rem;
   }
 
   .container {
@@ -330,7 +379,8 @@ img {
 
   .section-main-title,
   .about-left-main-title {
-    font-size: clamp(1.15rem, 4.8vw, 1.4rem) !important;
+    font-size: clamp(1.12rem, 4.8vw, 1.38rem) !important;
+    margin-bottom: 0.65rem !important;
   }
 
   .section-title,
@@ -353,12 +403,80 @@ img {
   .careers-hero-title,
   .projects-page-title,
   .sd-main-title {
-    font-size: clamp(1.5rem, 6.5vw, 1.95rem) !important;
+    font-size: clamp(1.48rem, 6.5vw, 1.95rem) !important;
     letter-spacing: -0.5px !important;
+    line-height: 1.22 !important;
   }
 
   .section-subtitle {
-    font-size: 0.78rem;
-    letter-spacing: 1.5px;
+    font-size: 0.76rem;
+    letter-spacing: 1.4px;
+    margin-bottom: 0.4rem;
+  }
+
+  /* Human Interface Guideline minimum touch target for primary clickable items */
+  button.btn, 
+  a.btn, 
+  .btn-primary,
+  .pill-btn-login {
+    min-height: 42px;
+  }
+
+  /* Form controls fill mobile screens nicely */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  select,
+  textarea {
+    width: 100%;
+    box-sizing: border-box;
   }
 }
+
+/* 4. Ultra-Compact Mobile Phones (<= 360px - e.g. iPhone SE 1st gen, small devices) */
+@media screen and (max-width: 360px) {
+  .section-padding {
+    padding: 1.8rem 0.5rem;
+  }
+
+  .container {
+    padding: 0 0.5rem;
+  }
+
+  .section-main-title,
+  .about-left-main-title {
+    font-size: 1.1rem !important;
+  }
+
+  .section-title,
+  .mosaic-main-heading,
+  .chaos-headline,
+  .confidence-headline,
+  .showcase-title,
+  .showcase-main-title,
+  .info-title,
+  .contact-title,
+  .form-title,
+  .cta-title,
+  .sp-section-title,
+  .sp-hero-title,
+  .sp-hero-main-title,
+  .team-section-title,
+  .team-hero-title,
+  .mp-section-title,
+  .careers-title,
+  .careers-hero-title,
+  .projects-page-title,
+  .sd-main-title {
+    font-size: 1.35rem !important;
+    letter-spacing: -0.3px !important;
+  }
+
+  .btn {
+    padding: 0.65rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+

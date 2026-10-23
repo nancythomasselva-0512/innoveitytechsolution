@@ -6,13 +6,38 @@ import {
   FiDownloadCloud, FiDownload, FiRefreshCw, FiLock, FiCpu, FiExternalLink, FiCalendar, FiClock, FiVideo, FiFilm,
   FiUserPlus, FiTrash2, FiZap, FiFolder, FiFileText, FiPhone, FiImage, FiUpload,
   FiPlus, FiEdit2, FiCheck, FiLayers, FiInfo, FiGlobe, FiShare2, FiCode, FiArrowUp, FiArrowDown, FiLayout,
-  FiMail, FiBriefcase
+  FiMail, FiBriefcase, FiAward
 } from 'react-icons/fi';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCMS } from '../context/CMSContext';
 import { InnoveityBrandLogo } from '../components/Navbar/Navbar';
 import CustomFieldsManager from '../components/UI/CustomFieldsManager';
 import './AdminPage.css';
+
+const MEDIA_ICON_OPTIONS = [
+  { value: 'FaPenNib', label: '✒️ Pen / Branding & Design' },
+  { value: 'FaShareNodes', label: '🔗 Nodes / Social Media & Network' },
+  { value: 'FaChartLine', label: '📈 Chart / Digital Marketing & Performance' },
+  { value: 'FaVideo', label: '🎥 Video / Media Production & Films' },
+  { value: 'FaGlobe', label: '🌐 Globe / Digital Presence & Web' },
+  { value: 'FaCalendarDays', label: '📅 Calendar / Events & Campaigns' },
+  { value: 'FaGraduationCap', label: '🎓 Graduation Cap / Education & Institutional' },
+  { value: 'FaBriefcase', label: '💼 Briefcase / Corporate & Business' },
+  { value: 'FaCamera', label: '📷 Camera / Events & Photography' },
+  { value: 'FaAward', label: '🏆 Award / Brand & Excellence' },
+  { value: 'FaBolt', label: '⚡ Bolt / Core Capabilities & Impact' },
+  { value: 'FaCircleCheck', label: '✅ Circle Check / Solutions' },
+  { value: 'FaBullhorn', label: '📢 Bullhorn / Promotions & PR' },
+  { value: 'FaLightbulb', label: '💡 Lightbulb / Ideas & Innovation' },
+  { value: 'FaPalette', label: '🎨 Palette / Design & Creative' },
+  { value: 'FaFilm', label: '🎞️ Film Reel / Commercial Cinematography' },
+  { value: 'FaRocket', label: '🚀 Rocket / Launch & Scale' },
+  { value: 'FaStar', label: '⭐ Star / Premium & Highlights' },
+  { value: 'FaCompass', label: '🧭 Compass / Strategic Positioning' },
+  { value: 'FaUsers', label: '👥 Users / Community Engagement' },
+  { value: 'FaMagnifyingGlass', label: '🔍 Magnifying Glass / SEO & Search' },
+  { value: 'FaDisplay', label: '🖥️ Display / Digital Screen' }
+];
 
 const SuperAdminPage = () => {
   const navigate = useNavigate();
@@ -313,17 +338,238 @@ const SuperAdminPage = () => {
   const [editContact, setEditContact] = useState(() => contact || {});
   const [editHome, setEditHome] = useState(() => homeContent || {});
   const [editAbout, setEditAbout] = useState(() => aboutContent || {});
-  const [editMedia, setEditMedia] = useState(() => mediaContent || {});
   const [editSeo, setEditSeo] = useState(() => seoSettings || {});
   const [editHeaderFooter, setEditHeaderFooter] = useState(() => headerFooterSettings || {});
   const [newNavLink, setNewNavLink] = useState({ name: '', to: '', isPage: true });
+  const getSafeMediaState = (raw) => ({
+    hero: {
+      motto: raw?.hero?.motto || 'Transforming Brands into Experiences.',
+      kicker: raw?.hero?.kicker || 'BRAND & CAPABILITIES',
+      title: (raw?.hero?.title && raw?.hero?.title !== 'MEDIA CAPABILITIES')
+        ? raw.hero.title
+        : 'Your Vision. Our Creativity.',
+      titleHighlight: raw?.hero?.titleHighlight || 'Greater Impact.',
+      narrativeP1: raw?.hero?.narrativeP1 || 'AD ELITE is a creative media and digital solutions brand delivering integrated branding, social media management, digital marketing, and multimedia services for educational institutions, businesses, and organisations. We combine strategic thinking with compelling creativity to help brands communicate effectively, build recognition, and connect meaningfully with their audiences.',
+      narrativeP2: raw?.hero?.narrativeP2 || 'Our approach goes beyond creating content. We build cohesive brand experiences that strengthen visibility, encourage engagement, and support measurable growth.',
+      badge: raw?.hero?.badge || 'INNOVEITY MEDIA',
+      subBadge: raw?.hero?.subBadge || 'Creative. Strategic. Data-Driven.',
+      description: raw?.hero?.description || 'Our Media Capabilities bring together creative production, digital content, social media and performance-driven marketing to help brands build a stronger presence in the digital world.',
+      bgImage: raw?.hero?.bgImage || '/media_hero_bg.png'
+    },
+    whatWeDoHeader: {
+      kicker: raw?.whatWeDoHeader?.kicker || 'CORE CAPABILITIES',
+      title: raw?.whatWeDoHeader?.title || 'What',
+      titleHighlight: raw?.whatWeDoHeader?.titleHighlight || 'We Do',
+      desc: raw?.whatWeDoHeader?.desc || 'Integrated creative, media, and digital solutions designed to strengthen recognition, engagement, and growth.'
+    },
+    whatWeDo: (Array.isArray(raw?.whatWeDo) && raw.whatWeDo.length > 0)
+      ? raw.whatWeDo
+      : [
+          { id: 'branding-design', title: 'Branding & Design', desc: 'Brand identity, logos, brochures, profiles and creative collateral.', iconName: 'FaPenNib' },
+          { id: 'social-media', title: 'Social Media Management', desc: 'Content calendars, page management, community engagement and reporting.', iconName: 'FaShareNodes' },
+          { id: 'digital-marketing', title: 'Digital Marketing', desc: 'Campaign strategy, online advertising, audience reach and lead generation.', iconName: 'FaChartLine' },
+          { id: 'media-production', title: 'Media Production', desc: 'Promotional videos, reels, photography and visual storytelling.', iconName: 'FaVideo' },
+          { id: 'digital-presence', title: 'Digital Presence', desc: 'Website content, landing pages and online brand visibility.', iconName: 'FaGlobe' },
+          { id: 'event-campaign', title: 'Event & Campaign Solutions', desc: 'Event branding, promotional campaigns, creative assets and coverage.', iconName: 'FaCalendarDays' }
+        ],
+    philosophy: {
+      badge: raw?.philosophy?.badge || 'OUR CREATIVE PHILOSOPHY',
+      quote: raw?.philosophy?.quote || 'Strategy before design. Purpose behind every message. Impact in every interaction.',
+      description: raw?.philosophy?.description || 'We align creativity with organisational goals to ensure every brand touch point communicates a consistent identity and creates a lasting impression.',
+      chips: (Array.isArray(raw?.philosophy?.chips) && raw.philosophy.chips.length === 3)
+        ? raw.philosophy.chips
+        : ['Strategy Before Design', 'Purpose Behind Every Message', 'Impact In Every Interaction']
+    },
+    solutionsHeader: {
+      kicker: raw?.solutionsHeader?.kicker || 'CLIENT SOLUTIONS & PARTNERSHIP',
+      title: raw?.solutionsHeader?.title || 'Creative Solutions.',
+      titleHighlight: raw?.solutionsHeader?.titleHighlight || 'Tailored for Every Sector.',
+      desc: raw?.solutionsHeader?.desc || 'AD ELITE develops customised media and marketing solutions that reflect the unique goals, audiences, and growth priorities of each organisation.'
+    },
+    sectors: (Array.isArray(raw?.sectors) && raw.sectors.length > 0)
+      ? raw.sectors
+      : [
+          {
+            id: 'education',
+            number: '01',
+            badge: 'ACADEMIC & INSTITUTIONAL',
+            title: 'Education & Institutional Branding',
+            summary: 'Admissions, campus storytelling, and digital recruitment campaigns.',
+            intro: 'Comprehensive recruitment, academic storytelling, and visual identity for schools, colleges, and educational groups.',
+            iconName: 'FaGraduationCap',
+            points: [
+              'Admission Campaigns and Student Recruitment Promotions',
+              'Institution Profiles, Prospectuses, Brochures and Presentations',
+              'Campus Events, Academic Achievements and Institutional Storytelling',
+              'Social Media Handling and Digital Engagement'
+            ]
+          },
+          {
+            id: 'corporate',
+            number: '02',
+            badge: 'ENTERPRISE & COMMERCIAL',
+            title: 'Corporate Branding & Business Communication',
+            summary: 'Executive messaging, brand positioning, and corporate media collateral.',
+            intro: 'Strengthening enterprise reputation, executive messaging, and corporate visual collateral.',
+            iconName: 'FaBriefcase',
+            points: [
+              'Corporate Profile Shoot, Brand Positioning and Visual Communication',
+              'Company Profiles, Sales Presentations and Business Collateral',
+              'Product Launches, Promotional Campaigns and Digital Advertising',
+              'Executive Videos, Customer Testimonials and Corporate Storytelling',
+              'Social Media Management and Brand Reputation Support'
+            ]
+          },
+          {
+            id: 'events',
+            number: '03',
+            badge: 'MEDIA & EXPERIENTIAL',
+            title: 'Events, Campaigns & Media Production',
+            summary: 'Event identity, reels, cinematography, and high-impact live coverage.',
+            intro: 'High-impact multi-angle coverage, creative backdrops, reels, and experiential campaign assets.',
+            iconName: 'FaCamera',
+            points: [
+              'Event Identity, Invitations, Backdrops and Promotional Materials',
+              'Photography, Videography, Reels and Post-Event Highlights',
+              'Campaign Creatives, Motion Graphics and Digital Announcements',
+              'Sponsorship Collateral and Audience Engagement Materials'
+            ]
+          },
+          {
+            id: 'marketing',
+            number: '04',
+            badge: 'GROWTH & PERFORMANCE',
+            title: 'Digital Performance Marketing & Lead Generation',
+            summary: 'Targeted Meta & Google ads, search optimization, and verified leads.',
+            intro: 'ROI-driven campaigns, organic discoverability, targeted paid funnels, and real-time analytics.',
+            iconName: 'FaChartLine',
+            points: [
+              'Improve search rankings, organic traffic, and online discoverability through Search Engine Optimisation (SEO).',
+              'Create and manage targeted Meta Ads campaigns across Facebook and Instagram.',
+              'Reach relevant audiences through Google Ads search, display, and other suitable advertising formats.',
+              'Generate prospective student enquiries, admission leads, and business opportunities through Lead Generation Campaigns.',
+              'Analytics & Performance Reporting to monitor reach, engagement, clicks, leads, and campaign performance to support data-driven decisions.'
+            ]
+          }
+        ],
+    cta: {
+      heading: raw?.cta?.heading || "LET'S CREATE SOMETHING THAT MOVES",
+      leadText: raw?.cta?.leadText || 'From building a distinctive identity to managing your digital presence, AD ELITE is your creative partner for stronger visibility, meaningful engagement, and sustainable growth.',
+      partnerBadge: raw?.cta?.partnerBadge || 'Your Premier Event Partner',
+      brandEndorsement: raw?.cta?.brandEndorsement || 'AD ELITE | A Creative Solutions Brand of INNOVEITY',
+      contactPrompt: raw?.cta?.contactPrompt || 'Contact us to discuss your branding, media, social media management, and digital marketing requirements.',
+      btnText: raw?.cta?.btnText || 'START YOUR MEDIA PROJECT',
+      btnLink: raw?.cta?.btnLink || '/contact',
+      websiteLink: raw?.cta?.websiteLink || '/contact',
+      email: raw?.cta?.email || 'aachinancy@gmail.com',
+      phone: raw?.cta?.phone || '+91 7904327211',
+      socialLink: raw?.cta?.socialLink || '/contact',
+      ...(raw?.cta || {})
+    }
+  });
+
+  const [editMedia, setEditMedia] = useState(() => getSafeMediaState(mediaContent));
+  const [mediaAdminSubTab, setMediaAdminSubTab] = useState('all');
+  const [selectedAdminSectorIdx, setSelectedAdminSectorIdx] = useState(0);
 
   const handleSaveMedia = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     if (updateMediaContent) {
       await updateMediaContent(editMedia);
-      triggerNotification('Media Capabilities content saved & synced live across all devices!');
+      triggerNotification('AD ELITE Media Capabilities content saved & synced live across all devices!');
     }
+  };
+
+  const handleAddCapabilityCard = () => {
+    const newCard = {
+      id: `cap-${Date.now()}`,
+      title: 'New Capability',
+      desc: 'Description of this capability and client value.',
+      iconName: 'FaBolt'
+    };
+    setEditMedia(prev => ({
+      ...prev,
+      whatWeDo: [...(prev.whatWeDo || []), newCard]
+    }));
+    triggerNotification('Added new Capability card. Remember to click Save.');
+  };
+
+  const handleDeleteCapabilityCard = (indexToDelete) => {
+    setEditMedia(prev => ({
+      ...prev,
+      whatWeDo: (prev.whatWeDo || []).filter((_, idx) => idx !== indexToDelete)
+    }));
+    triggerNotification('Removed capability card.');
+  };
+
+  const handleAddSector = () => {
+    const nextNum = String((editMedia.sectors?.length || 0) + 1).padStart(2, '0');
+    const newSector = {
+      id: `sector-${Date.now()}`,
+      number: nextNum,
+      badge: 'NEW SECTOR',
+      title: 'New Sector Solution',
+      summary: 'Summary description for this sector.',
+      intro: 'Detailed introduction outlining tailored solutions for this sector.',
+      iconName: 'FaBriefcase',
+      points: [
+        'Deliverable point 1',
+        'Deliverable point 2'
+      ]
+    };
+    setEditMedia(prev => {
+      const updatedSectors = [...(prev.sectors || []), newSector];
+      return { ...prev, sectors: updatedSectors };
+    });
+    setSelectedAdminSectorIdx(editMedia.sectors?.length || 0);
+    triggerNotification(`Added Sector ${nextNum}. Click Save to sync.`);
+  };
+
+  const handleDeleteSector = (indexToDelete) => {
+    if ((editMedia.sectors?.length || 0) <= 1) {
+      alert('You must keep at least one sector.');
+      return;
+    }
+    setEditMedia(prev => ({
+      ...prev,
+      sectors: (prev.sectors || []).filter((_, idx) => idx !== indexToDelete)
+    }));
+    setSelectedAdminSectorIdx(0);
+    triggerNotification('Removed sector.');
+  };
+
+  const handleAddSectorPoint = (sectorIdx) => {
+    setEditMedia(prev => {
+      const updatedSectors = [...(prev.sectors || [])];
+      const targetSector = { ...updatedSectors[sectorIdx] };
+      targetSector.points = [...(targetSector.points || []), 'New solution deliverable point'];
+      updatedSectors[sectorIdx] = targetSector;
+      return { ...prev, sectors: updatedSectors };
+    });
+    triggerNotification('Added new bullet point to sector.');
+  };
+
+  const handleUpdateSectorPoint = (sectorIdx, pointIdx, value) => {
+    setEditMedia(prev => {
+      const updatedSectors = [...(prev.sectors || [])];
+      const targetSector = { ...updatedSectors[sectorIdx] };
+      const updatedPoints = [...(targetSector.points || [])];
+      updatedPoints[pointIdx] = value;
+      targetSector.points = updatedPoints;
+      updatedSectors[sectorIdx] = targetSector;
+      return { ...prev, sectors: updatedSectors };
+    });
+  };
+
+  const handleDeleteSectorPoint = (sectorIdx, pointIdx) => {
+    setEditMedia(prev => {
+      const updatedSectors = [...(prev.sectors || [])];
+      const targetSector = { ...updatedSectors[sectorIdx] };
+      targetSector.points = (targetSector.points || []).filter((_, idx) => idx !== pointIdx);
+      updatedSectors[sectorIdx] = targetSector;
+      return { ...prev, sectors: updatedSectors };
+    });
+    triggerNotification('Removed bullet point.');
   };
 
   const handleSaveHeaderFooter = async (e) => {
@@ -398,7 +644,7 @@ const SuperAdminPage = () => {
   }, [contact]);
 
   useEffect(() => {
-    if (mediaContent) setEditMedia(mediaContent);
+    if (mediaContent) setEditMedia(getSafeMediaState(mediaContent));
   }, [mediaContent]);
 
   useEffect(() => {
@@ -709,6 +955,20 @@ const SuperAdminPage = () => {
     if (updateHomeContent) {
       await updateHomeContent(editHome);
       triggerNotification('Homepage copy updated & synced live!');
+    }
+  };
+
+  const handleToggleHeroSplitBanner = async () => {
+    const isCurrentlyEnabled = editHome.splitBannerEnabled !== false;
+    const updated = { ...editHome, splitBannerEnabled: !isCurrentlyEnabled };
+    setEditHome(updated);
+    if (updateHomeContent) {
+      await updateHomeContent(updated);
+      triggerNotification(
+        !isCurrentlyEnabled 
+          ? '🟢 Split Hero Banner activated on homepage!' 
+          : '⚪ Split Hero Banner deactivated. Full-width text mode active.'
+      );
     }
   };
 
@@ -3179,57 +3439,6 @@ const SuperAdminPage = () => {
                   ></textarea>
                 </div>
 
-                {/* HERO GRAPHIC / MEDIA BANNER IMAGE ASSET */}
-                <div className="dash-field-group full-width" style={{ marginTop: '14px', background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                    <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      <FiImage /> Hero Graphic / Media Banner Image Asset
-                    </label>
-                    <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
-                      ★ Live Banner Asset
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                    <div style={{ flex: '1 1 260px' }}>
-                      <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          id="home-hero-upload"
-                          style={{ display: 'none' }}
-                          onChange={(e) => handleImageUpload(e, setEditHome, editHome)}
-                        />
-                        <label htmlFor="home-hero-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          <FiUpload /> Upload Hero Image
-                        </label>
-                      </div>
-                      <input
-                        type="text"
-                        className="dash-input-styled"
-                        placeholder="e.g. /hero_banner.png or data:image/jpeg;base64,..."
-                        value={editHome.image || ''}
-                        onChange={(e) => setEditHome({ ...editHome, image: e.target.value })}
-                      />
-                    </div>
-                    {editHome.image && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                        <img
-                          src={editHome.image}
-                          alt="Hero Banner Preview"
-                          style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setEditHome({ ...editHome, image: '' })}
-                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
-                        >
-                          <FiTrash2 /> Clear
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 <div className="dash-field-group full-width">
                   <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content' }}>
                     <FiCheck /> Save Homepage Content
@@ -3792,409 +4001,994 @@ const SuperAdminPage = () => {
         {/* TAB: MEDIA CAPABILITIES PAGE MANAGEMENT */}
         {activeTab === 'media' && (
           <div className="dash-cms-section" style={{ marginTop: 0 }}>
-            <div className="chart-header-row">
-              <h3 className="chart-title">Media Capabilities Page Live CMS Management</h3>
-              <button className="action-pill-btn primary-pill" onClick={() => setActiveTab('overview')}>
-                Back to Overview
-              </button>
+            {/* TOP HEADER & ACTIONS */}
+            <div className="chart-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+              <div>
+                <h3 className="chart-title" style={{ margin: 0, fontSize: '1.25rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <FiFilm style={{ color: '#ea580c' }} /> AD ELITE Media Capabilities CMS Management
+                </h3>
+                <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: '#64748b' }}>
+                  Dynamically update hero narratives, 6 core capabilities, creative philosophy, sector deliverables &amp; CTA.
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+                <a
+                  href="/media"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="action-pill-btn"
+                  style={{ background: '#f1f5f9', color: '#334155', border: '1px solid #cbd5e1', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <FiExternalLink /> View Live /media
+                </a>
+                <button
+                  type="button"
+                  onClick={handleSaveMedia}
+                  className="action-pill-btn primary-pill"
+                  style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#ff6b00', color: '#ffffff' }}
+                >
+                  <FiCheck /> Save All Changes (Live Sync)
+                </button>
+                <button className="action-pill-btn" onClick={() => setActiveTab('overview')}>
+                  Back to Overview
+                </button>
+              </div>
+            </div>
+
+            {/* SUB-NAVIGATION TABS */}
+            <div style={{ display: 'flex', gap: '8px', marginTop: '16px', overflowX: 'auto', paddingBottom: '6px' }}>
+              {[
+                { id: 'all', label: 'All Sections' },
+                { id: 'hero', label: '1. Hero & Narrative' },
+                { id: 'what_we_do', label: `2. What We Do (${editMedia.whatWeDo?.length || 6})` },
+                { id: 'philosophy', label: '3. Creative Philosophy' },
+                { id: 'sectors', label: `4. Sectors & Deliverables (${editMedia.sectors?.length || 4})` },
+                { id: 'cta', label: '5. Call To Action (CTA)' }
+              ].map(subTab => (
+                <button
+                  key={subTab.id}
+                  type="button"
+                  onClick={() => setMediaAdminSubTab(subTab.id)}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: '20px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    border: '1px solid',
+                    borderColor: mediaAdminSubTab === subTab.id ? '#ea580c' : '#e2e8f0',
+                    background: mediaAdminSubTab === subTab.id ? '#fff7ed' : '#ffffff',
+                    color: mediaAdminSubTab === subTab.id ? '#ea580c' : '#475569',
+                    cursor: 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {subTab.label}
+                </button>
+              ))}
             </div>
 
             <div className="dash-form-wrapper" style={{ marginTop: '16px' }}>
               <form onSubmit={handleSaveMedia} className="dash-form-grid">
 
-                {/* HERO SECTION CONFIGURATION */}
-                <div className="dash-field-group full-width">
-                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FiFilm /> 1. Hero Section Content
-                  </h4>
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Hero Brand Pill Badge</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.badge || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, badge: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Hero Pill Subtitle</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.subBadge || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, subBadge: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Main Hero Title</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.title || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, title: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Tagline 1</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.tagline1 || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, tagline1: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group">
-                  <label className="dash-label">Tagline 2</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.tagline2 || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, tagline2: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Tagline 3</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.hero?.tagline3 || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, tagline3: e.target.value } })}
-                  />
-                </div>
-
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">Hero Description Text</label>
-                  <textarea
-                    rows={4}
-                    className="dash-input-styled"
-                    value={editMedia.hero?.description || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, description: e.target.value } })}
-                  />
-                </div>
-
-                {/* HERO BACKGROUND IMAGE MANAGEMENT */}
-                <div className="dash-field-group full-width" style={{ marginTop: '16px', background: '#f8fafc', padding: '16px', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
-                  <label className="dash-label" style={{ display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700, color: '#082233', fontSize: '0.95rem' }}>
-                    <FiImage /> Hero Background Image Asset
-                  </label>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '8px' }}>
-                    <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        id="hero-bg-upload"
-                        style={{ display: 'none' }}
-                        onChange={(e) => {
-                          const file = e.target.files[0];
-                          if (file) {
-                            compressAndSetImage(file, (compressedResult) => {
-                              setEditMedia(prev => ({
-                                ...prev,
-                                hero: { ...(prev?.hero || {}), bgImage: compressedResult }
-                              }));
-                            });
-                          }
-                        }}
-                      />
-                      <label htmlFor="hero-bg-upload" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '8px 16px', fontSize: '0.85rem', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                        <FiUpload /> Upload Hero Background Image
-                      </label>
-                      <span style={{ fontSize: '0.8rem', color: '#64748b' }}>Upload local image file or specify path/URL below:</span>
+                {/* 1. HERO SECTION CONFIGURATION */}
+                {(mediaAdminSubTab === 'all' || mediaAdminSubTab === 'hero') && (
+                  <>
+                    <div className="dash-field-group full-width" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginTop: '8px' }}>
+                      <h4 style={{ margin: 0, color: '#082233', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiFilm style={{ color: '#ea580c' }} /> 1. Brand Header &amp; Hero Section
+                      </h4>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                        Controls the top brand lockup motto, kicker tag, headline and 2-paragraph narrative.
+                      </p>
                     </div>
-                    <input
-                      type="text"
-                      className="dash-input-styled"
-                      placeholder="e.g. /media_hero_bg.png or data:image/jpeg;base64,..."
-                      value={editMedia.hero?.bgImage || ''}
-                      onChange={(e) => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, bgImage: e.target.value } })}
-                    />
-                    {editMedia.hero?.bgImage && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '6px', background: '#ffffff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #cbd5e1' }}>
-                        <img
-                          src={editMedia.hero.bgImage}
-                          alt="Hero Background Preview"
-                          style={{ width: '110px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
-                        />
-                        <div style={{ flex: 1, overflow: 'hidden' }}>
-                          <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#082233' }}>Hero Background Preview</div>
-                          <div style={{ fontSize: '0.74rem', color: '#64748b', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>
-                            {editMedia.hero.bgImage.startsWith('data:') ? 'Custom Uploaded Image (Base64)' : editMedia.hero.bgImage}
-                          </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Top Brand Lockup Motto</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. Transforming Brands into Experiences."
+                        value={editMedia.hero?.motto || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), motto: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Hero Kicker Badge Tag</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. BRAND & CAPABILITIES"
+                        value={editMedia.hero?.kicker || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), kicker: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Main Display Title (White Text)</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. Your Vision. Our Creativity."
+                        value={editMedia.hero?.title || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), title: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Title Highlight (Gold Gradient Text)</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. Greater Impact."
+                        value={editMedia.hero?.titleHighlight || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), titleHighlight: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Narrative Paragraph 1 (Overview &amp; Brand Story)</label>
+                      <textarea
+                        rows={3}
+                        className="dash-input-styled"
+                        value={editMedia.hero?.narrativeP1 || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), narrativeP1: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Narrative Paragraph 2 (Strategic Approach &amp; Measurable Growth)</label>
+                      <textarea
+                        rows={3}
+                        className="dash-input-styled"
+                        value={editMedia.hero?.narrativeP2 || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          hero: { ...(editMedia.hero || {}), narrativeP2: e.target.value }
+                        })}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* 2. WHAT WE DO (CORE CAPABILITIES) */}
+                {(mediaAdminSubTab === 'all' || mediaAdminSubTab === 'what_we_do') && (
+                  <>
+                    <div className="dash-field-group full-width" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginTop: '24px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h4 style={{ margin: 0, color: '#082233', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FiZap style={{ color: '#ea580c' }} /> 2. &quot;What We Do&quot; (Core Capabilities)
+                          </h4>
+                          <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                            Manage the 6 core capability cards, icons, descriptions and section header.
+                          </p>
                         </div>
                         <button
                           type="button"
-                          onClick={() => setEditMedia({ ...editMedia, hero: { ...editMedia.hero, bgImage: '' } })}
-                          style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '6px 12px', fontSize: '0.78rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                          onClick={handleAddCapabilityCard}
+                          className="action-pill-btn"
+                          style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
                         >
-                          <FiTrash2 /> Remove
+                          <FiPlus /> Add New Capability Card
                         </button>
                       </div>
-                    )}
-                  </div>
-                </div>
+                    </div>
 
-                {/* 3D DECK CARDS IMAGE MANAGEMENT */}
-                <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FiLayers /> 2. 3D Deck Showcase Images Management
-                  </h4>
-                </div>
+                    <div className="dash-field-group">
+                      <label className="dash-label">Section Kicker Tag</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.whatWeDoHeader?.kicker || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          whatWeDoHeader: { ...(editMedia.whatWeDoHeader || {}), kicker: e.target.value }
+                        })}
+                      />
+                    </div>
 
-                {[
-                  { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', defaultImg: '/deck_arch_gold.png' },
-                  { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', defaultImg: '/deck_lifestyle.png' },
-                  { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', defaultImg: '/deck_green_chair.png' },
-                  { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', defaultImg: '/deck_fashion.png' },
-                  { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'High-End Studio', defaultImg: '/deck_product.png' },
-                  { id: 'editorial-design', title: 'Editorial Craft', subtitle: 'BRAND DESIGN', tag: 'Creative Studio', defaultImg: '/deck_design.png' },
-                  { id: 'digital-growth', title: 'Digital Scale', subtitle: 'PERFORMANCE MEDIA', tag: 'Growth Marketing', defaultImg: '/deck_growth.png' }
-                ].map((cardMeta, idx) => {
-                  const defaultDeckCards = [
-                    { id: 'mmac-arch', title: 'MMAC Studio', subtitle: 'BRAND ARCHITECTURE', tag: 'Visual Identity', image: '/deck_arch_gold.png' },
-                    { id: 'lifestyle-pour', title: 'Pour, Breathe, Begin', subtitle: 'REELS & SHORT FORM', tag: 'Social Media', image: '/deck_lifestyle.png' },
-                    { id: 'muyal-chair', title: 'Muyal Heritage', subtitle: 'CONCEPT FILMS', tag: 'Commercial Shoot', image: '/deck_green_chair.png' },
-                    { id: 'cinematic-urban', title: 'Cinematic Urban', subtitle: 'BRAND CAMPAIGN', tag: 'Video Production', image: '/deck_fashion.png' },
-                    { id: 'coffee-craft', title: 'Coffee & Craft', subtitle: 'PRODUCT CINEMATOGRAPHY', tag: 'High-End Studio', image: '/deck_product.png' },
-                    { id: 'editorial-design', title: 'Editorial Craft', subtitle: 'BRAND DESIGN', tag: 'Creative Studio', image: '/deck_design.png' },
-                    { id: 'digital-growth', title: 'Digital Scale', subtitle: 'PERFORMANCE MEDIA', tag: 'Growth Marketing', image: '/deck_growth.png' }
-                  ];
-                  const currentDeck = editMedia.deckCards && editMedia.deckCards.length > 0 ? editMedia.deckCards : defaultDeckCards;
-                  const cardItem = currentDeck[idx] || cardMeta;
-                  const cardImg = cardItem.image || cardMeta.defaultImg;
-
-                  return (
-                    <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233' }}>
-                          Deck Card {idx + 1}: {cardMeta.title} ({cardMeta.subtitle})
-                        </label>
-                        <span style={{ fontSize: '0.72rem', background: '#e0f2fe', color: '#0369a1', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
-                          {cardMeta.tag}
-                        </span>
-                      </div>
-                      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <div style={{ flex: '1 1 260px' }}>
-                          <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              id={`deck-img-upload-${idx}`}
-                              style={{ display: 'none' }}
-                              onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                  compressAndSetImage(file, (compressedResult) => {
-                                    const updatedDeck = [...currentDeck];
-                                    updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: compressedResult };
-                                    setEditMedia({ ...editMedia, deckCards: updatedDeck });
-                                  });
-                                }
-                              }}
-                            />
-                            <label htmlFor={`deck-img-upload-${idx}`} className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 12px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                              <FiUpload /> Upload Image
-                            </label>
-                          </div>
-                          <input
-                            type="text"
-                            className="dash-input-styled"
-                            placeholder={`e.g. /deck_${idx + 1}.png`}
-                            value={cardItem.image || ''}
-                            onChange={(e) => {
-                              const updatedDeck = [...currentDeck];
-                              updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: e.target.value };
-                              setEditMedia({ ...editMedia, deckCards: updatedDeck });
-                            }}
-                          />
-                        </div>
-                        {cardImg && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                            <img
-                              src={cardImg}
-                              alt={cardMeta.title}
-                              style={{ width: '60px', height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const updatedDeck = [...currentDeck];
-                                updatedDeck[idx] = { ...(updatedDeck[idx] || cardMeta), image: '' };
-                                setEditMedia({ ...editMedia, deckCards: updatedDeck });
-                              }}
-                              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
-                            >
-                              <FiTrash2 /> Clear
-                            </button>
-                          </div>
-                        )}
+                    <div className="dash-field-group">
+                      <label className="dash-label">Section Title</label>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <input
+                          type="text"
+                          placeholder="What"
+                          style={{ flex: 1 }}
+                          className="dash-input-styled"
+                          value={editMedia.whatWeDoHeader?.title || ''}
+                          onChange={(e) => setEditMedia({
+                            ...editMedia,
+                            whatWeDoHeader: { ...(editMedia.whatWeDoHeader || {}), title: e.target.value }
+                          })}
+                        />
+                        <input
+                          type="text"
+                          placeholder="We Do (Gold)"
+                          style={{ flex: 1 }}
+                          className="dash-input-styled"
+                          value={editMedia.whatWeDoHeader?.titleHighlight || ''}
+                          onChange={(e) => setEditMedia({
+                            ...editMedia,
+                            whatWeDoHeader: { ...(editMedia.whatWeDoHeader || {}), titleHighlight: e.target.value }
+                          })}
+                        />
                       </div>
                     </div>
-                  );
-                })}
 
-                {/* PRODUCTION CAPABILITIES POSTER IMAGES MANAGEMENT */}
-                <div className="dash-field-group full-width" style={{ marginTop: '24px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FiVideo /> 3. Production Capabilities Poster Images Management
-                  </h4>
-                </div>
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Section Description</label>
+                      <textarea
+                        rows={2}
+                        className="dash-input-styled"
+                        value={editMedia.whatWeDoHeader?.desc || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          whatWeDoHeader: { ...(editMedia.whatWeDoHeader || {}), desc: e.target.value }
+                        })}
+                      />
+                    </div>
 
-                {[
-                  { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', badge: '★ 4.9/5 • 8K RED & ARRI Cinema Systems', defaultPoster: '/cap_camera_prod.png' },
-                  { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', badge: '★ 5.0/5 • Anamorphic Commercial Films', defaultPoster: '/cap_cinematic_vid.png' },
-                  { id: 'gimbal-motion', title: 'GIMBAL & MOTION', badge: '★ 4.9/5 • 3-Axis Stabilized Motion', defaultPoster: '/cap_gimbal_motion.png' },
-                  { id: 'aerial-content', title: 'AERIAL CONTENT', badge: '★ 5.0/5 • 4K Drone Cinematography', defaultPoster: '/cap_aerial_drone.png' },
-                  { id: 'post-production', title: 'POST-PRODUCTION', badge: '★ 4.9/5 • Color Grading & Motion FX', defaultPoster: '/cap_post_production.png' }
-                ].map((capMeta, idx) => {
-                  const defaultCapabilities = [
-                    { id: 'camera-prod', title: 'PROFESSIONAL CAMERA PRODUCTION', poster: '/cap_camera_prod.png' },
-                    { id: 'cinematic-vid', title: 'CINEMATIC VIDEO', poster: '/cap_cinematic_vid.png' },
-                    { id: 'gimbal-motion', title: 'GIMBAL & MOTION', poster: '/cap_gimbal_motion.png' },
-                    { id: 'aerial-content', title: 'AERIAL CONTENT', poster: '/cap_aerial_drone.png' },
-                    { id: 'post-production', title: 'POST-PRODUCTION', poster: '/cap_post_production.png' }
-                  ];
-                  const currentCaps = editMedia.capabilities && editMedia.capabilities.length > 0 ? editMedia.capabilities : defaultCapabilities;
-                  const capItem = currentCaps[idx] || capMeta;
-                  const capPoster = capItem.poster || capMeta.defaultPoster;
-
-                  return (
-                    <div key={idx} className="dash-field-group full-width" style={{ background: '#f8fafc', padding: '14px', borderRadius: '12px', border: '1px solid #e2e8f0', marginBottom: '8px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                        <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233' }}>
-                          Capability {idx + 1}: {capMeta.title}
-                        </label>
-                        <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
-                          {capMeta.badge}
-                        </span>
-                      </div>
-                      <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-                        <div style={{ flex: '1 1 260px' }}>
-                          <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              id={`cap-poster-upload-${idx}`}
-                              style={{ display: 'none' }}
-                              onChange={(e) => {
-                                const file = e.target.files[0];
-                                if (file) {
-                                  compressAndSetImage(file, (compressedResult) => {
-                                    const updatedCaps = [...currentCaps];
-                                    updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: compressedResult };
-                                    setEditMedia({ ...editMedia, capabilities: updatedCaps });
-                                  });
-                                }
-                              }}
-                            />
-                            <label htmlFor={`cap-poster-upload-${idx}`} className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 12px', fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                              <FiUpload /> Upload Poster Image
-                            </label>
-                          </div>
-                          <input
-                            type="text"
-                            className="dash-input-styled"
-                            placeholder={`e.g. /cap_poster_${idx + 1}.png`}
-                            value={capItem.poster || ''}
-                            onChange={(e) => {
-                              const updatedCaps = [...currentCaps];
-                              updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: e.target.value };
-                              setEditMedia({ ...editMedia, capabilities: updatedCaps });
+                    {/* Capabilities Cards Grid */}
+                    <div className="dash-field-group full-width">
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '14px' }}>
+                        {(editMedia.whatWeDo || []).map((card, idx) => (
+                          <div
+                            key={card.id || idx}
+                            style={{
+                              background: '#f8fafc',
+                              border: '1px solid #e2e8f0',
+                              borderRadius: '12px',
+                              padding: '14px',
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '10px'
                             }}
-                          />
-                        </div>
-                        {capPoster && (
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#ffffff', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
-                            <img
-                              src={capPoster}
-                              alt={capMeta.title}
-                              style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => {
-                                const updatedCaps = [...currentCaps];
-                                updatedCaps[idx] = { ...(updatedCaps[idx] || capMeta), poster: '' };
-                                setEditMedia({ ...editMedia, capabilities: updatedCaps });
-                              }}
-                              style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
-                            >
-                              <FiTrash2 /> Clear
-                            </button>
+                          >
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                              <span style={{ fontSize: '0.78rem', fontWeight: 800, color: '#ea580c', background: '#fff7ed', padding: '2px 8px', borderRadius: '6px' }}>
+                                Card {idx + 1}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteCapabilityCard(idx)}
+                                style={{
+                                  background: 'none',
+                                  border: 'none',
+                                  color: '#ef4444',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 600
+                                }}
+                              >
+                                <FiTrash2 /> Remove
+                              </button>
+                            </div>
+
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.75rem' }}>Card Title</label>
+                              <input
+                                type="text"
+                                className="dash-input-styled"
+                                value={card.title || ''}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.whatWeDo || [])];
+                                  updated[idx] = { ...updated[idx], title: e.target.value };
+                                  setEditMedia({ ...editMedia, whatWeDo: updated });
+                                }}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.75rem' }}>Icon Selection</label>
+                              <select
+                                className="dash-input-styled"
+                                value={card.iconName || 'FaBolt'}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.whatWeDo || [])];
+                                  updated[idx] = { ...updated[idx], iconName: e.target.value };
+                                  setEditMedia({ ...editMedia, whatWeDo: updated });
+                                }}
+                              >
+                                {MEDIA_ICON_OPTIONS.map(opt => (
+                                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                              </select>
+                            </div>
+
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.75rem' }}>Description</label>
+                              <textarea
+                                rows={2}
+                                className="dash-input-styled"
+                                value={card.desc || ''}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.whatWeDo || [])];
+                                  updated[idx] = { ...updated[idx], desc: e.target.value };
+                                  setEditMedia({ ...editMedia, whatWeDo: updated });
+                                }}
+                              />
+                            </div>
                           </div>
-                        )}
+                        ))}
                       </div>
                     </div>
-                  );
-                })}
+                  </>
+                )}
 
-                {/* CALL TO ACTION CONFIGURATION */}
-                <div className="dash-field-group full-width" style={{ marginTop: '20px' }}>
-                  <h4 style={{ margin: '0 0 12px', color: '#082233', fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <FiZap /> 4. Call to Action (CTA) Section
-                  </h4>
-                </div>
+                {/* 3. OUR CREATIVE PHILOSOPHY */}
+                {(mediaAdminSubTab === 'all' || mediaAdminSubTab === 'philosophy') && (
+                  <>
+                    <div className="dash-field-group full-width" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginTop: '24px' }}>
+                      <h4 style={{ margin: 0, color: '#082233', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiAward style={{ color: '#ea580c' }} /> 3. Our Creative Philosophy
+                      </h4>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                        Edit the central quote, philosophy description, and 3 pillar badges.
+                      </p>
+                    </div>
 
-                <div className="dash-field-group">
-                  <label className="dash-label">CTA Badge Tag</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.cta?.brandTag || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, cta: { ...editMedia.cta, brandTag: e.target.value } })}
-                  />
-                </div>
+                    <div className="dash-field-group">
+                      <label className="dash-label">Philosophy Badge Tag</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.badge || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          philosophy: { ...(editMedia.philosophy || {}), badge: e.target.value }
+                        })}
+                      />
+                    </div>
 
-                <div className="dash-field-group">
-                  <label className="dash-label">CTA Primary Button Text</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.cta?.btnText || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, cta: { ...editMedia.cta, btnText: e.target.value } })}
-                  />
-                </div>
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Central Philosophy Quote</label>
+                      <textarea
+                        rows={2}
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.quote || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          philosophy: { ...(editMedia.philosophy || {}), quote: e.target.value }
+                        })}
+                      />
+                    </div>
 
-                <div className="dash-field-group full-width">
-                  <label className="dash-label">CTA Main Heading</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.cta?.heading || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, cta: { ...editMedia.cta, heading: e.target.value } })}
-                  />
-                </div>
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Philosophy Narrative / Supporting Description</label>
+                      <textarea
+                        rows={3}
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.description || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          philosophy: { ...(editMedia.philosophy || {}), description: e.target.value }
+                        })}
+                      />
+                    </div>
 
-                <div className="dash-field-group">
-                  <label className="dash-label">Subheading Line 1</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.cta?.subheadingLine1 || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, cta: { ...editMedia.cta, subheadingLine1: e.target.value } })}
-                  />
-                </div>
+                    <div className="dash-field-group">
+                      <label className="dash-label">Pillar 01 Chip</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.chips?.[0] || ''}
+                        onChange={(e) => {
+                          const currentChips = [...(editMedia.philosophy?.chips || ['Strategy Before Design', 'Purpose Behind Every Message', 'Impact In Every Interaction'])];
+                          currentChips[0] = e.target.value;
+                          setEditMedia({
+                            ...editMedia,
+                            philosophy: { ...(editMedia.philosophy || {}), chips: currentChips }
+                          });
+                        }}
+                      />
+                    </div>
 
-                <div className="dash-field-group">
-                  <label className="dash-label">Subheading Line 2</label>
-                  <input
-                    type="text"
-                    className="dash-input-styled"
-                    value={editMedia.cta?.subheadingLine2 || ''}
-                    onChange={(e) => setEditMedia({ ...editMedia, cta: { ...editMedia.cta, subheadingLine2: e.target.value } })}
-                  />
-                </div>
+                    <div className="dash-field-group">
+                      <label className="dash-label">Pillar 02 Chip</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.chips?.[1] || ''}
+                        onChange={(e) => {
+                          const currentChips = [...(editMedia.philosophy?.chips || ['Strategy Before Design', 'Purpose Behind Every Message', 'Impact In Every Interaction'])];
+                          currentChips[1] = e.target.value;
+                          setEditMedia({
+                            ...editMedia,
+                            philosophy: { ...(editMedia.philosophy || {}), chips: currentChips }
+                          });
+                        }}
+                      />
+                    </div>
 
-                <div className="dash-field-group full-width">
-                  <button type="submit" className="action-pill-btn primary-pill" style={{ width: 'fit-content', marginTop: '12px' }}>
-                    <FiCheck /> Save All Media Capabilities Content (Live Sync)
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Pillar 03 Chip</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.philosophy?.chips?.[2] || ''}
+                        onChange={(e) => {
+                          const currentChips = [...(editMedia.philosophy?.chips || ['Strategy Before Design', 'Purpose Behind Every Message', 'Impact In Every Interaction'])];
+                          currentChips[2] = e.target.value;
+                          setEditMedia({
+                            ...editMedia,
+                            philosophy: { ...(editMedia.philosophy || {}), chips: currentChips }
+                          });
+                        }}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* 4. CLIENT SOLUTIONS & PARTNERSHIP (SECTORS & DETAILED POINTS) */}
+                {(mediaAdminSubTab === 'all' || mediaAdminSubTab === 'sectors') && (
+                  <>
+                    <div className="dash-field-group full-width" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginTop: '24px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h4 style={{ margin: 0, color: '#082233', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FiBriefcase style={{ color: '#ea580c' }} /> 4. Client Solutions &amp; Partnership (Sectors &amp; Deliverables)
+                          </h4>
+                          <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                            Edit each of the 4 sectors (Education, Corporate, Events, Marketing) and add/edit/delete individual solution bullet points.
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleAddSector}
+                          className="action-pill-btn"
+                          style={{ background: '#ecfdf5', color: '#059669', border: '1px solid #a7f3d0', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                        >
+                          <FiPlus /> Add New Sector
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Solutions Section Kicker</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        value={editMedia.solutionsHeader?.kicker || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          solutionsHeader: { ...(editMedia.solutionsHeader || {}), kicker: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Solutions Section Title</label>
+                      <div style={{ display: 'flex', gap: '8px' }}>
+                        <input
+                          type="text"
+                          placeholder="Creative Solutions."
+                          style={{ flex: 1 }}
+                          className="dash-input-styled"
+                          value={editMedia.solutionsHeader?.title || ''}
+                          onChange={(e) => setEditMedia({
+                            ...editMedia,
+                            solutionsHeader: { ...(editMedia.solutionsHeader || {}), title: e.target.value }
+                          })}
+                        />
+                        <input
+                          type="text"
+                          placeholder="Tailored for Every Sector. (Gold)"
+                          style={{ flex: 1 }}
+                          className="dash-input-styled"
+                          value={editMedia.solutionsHeader?.titleHighlight || ''}
+                          onChange={(e) => setEditMedia({
+                            ...editMedia,
+                            solutionsHeader: { ...(editMedia.solutionsHeader || {}), titleHighlight: e.target.value }
+                          })}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Solutions Section Description</label>
+                      <textarea
+                        rows={2}
+                        className="dash-input-styled"
+                        value={editMedia.solutionsHeader?.desc || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          solutionsHeader: { ...(editMedia.solutionsHeader || {}), desc: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    {/* Sector Selector Tabs */}
+                    <div className="dash-field-group full-width" style={{ marginTop: '8px' }}>
+                      <label className="dash-label" style={{ fontWeight: 700, color: '#082233' }}>
+                        Select Sector to Edit ({editMedia.sectors?.length || 0} Total):
+                      </label>
+                      <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+                        {(editMedia.sectors || []).map((sec, sIdx) => {
+                          const isSelected = selectedAdminSectorIdx === sIdx;
+                          return (
+                            <button
+                              key={sec.id || sIdx}
+                              type="button"
+                              onClick={() => setSelectedAdminSectorIdx(sIdx)}
+                              style={{
+                                padding: '8px 14px',
+                                borderRadius: '10px',
+                                border: isSelected ? '2px solid #ea580c' : '1px solid #cbd5e1',
+                                background: isSelected ? '#fff7ed' : '#ffffff',
+                                color: isSelected ? '#ea580c' : '#334155',
+                                fontWeight: isSelected ? 800 : 600,
+                                fontSize: '0.82rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px'
+                              }}
+                            >
+                              <span style={{ background: isSelected ? '#ea580c' : '#e2e8f0', color: isSelected ? '#ffffff' : '#64748b', borderRadius: '4px', padding: '1px 6px', fontSize: '0.72rem' }}>
+                                {sec.number || `0${sIdx + 1}`}
+                              </span>
+                              <span>{sec.title ? sec.title.split('&')[0].trim() : `Sector ${sIdx + 1}`}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Selected Sector Details Box */}
+                    {(() => {
+                      const secIdx = (selectedAdminSectorIdx >= 0 && selectedAdminSectorIdx < (editMedia.sectors?.length || 0))
+                        ? selectedAdminSectorIdx
+                        : 0;
+                      const sector = editMedia.sectors?.[secIdx];
+                      if (!sector) return null;
+
+                      return (
+                        <div
+                          className="dash-field-group full-width"
+                          style={{
+                            background: '#f8fafc',
+                            border: '1.5px solid #cbd5e1',
+                            borderRadius: '14px',
+                            padding: '18px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '14px'
+                          }}
+                        >
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '10px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <span style={{ background: '#ea580c', color: '#ffffff', borderRadius: '6px', padding: '2px 8px', fontWeight: 800, fontSize: '0.8rem' }}>
+                                Sector {sector.number || `0${secIdx + 1}`}
+                              </span>
+                              <h5 style={{ margin: 0, fontSize: '1rem', color: '#082233', fontWeight: 700 }}>
+                                {sector.title || 'Untitled Sector'}
+                              </h5>
+                            </div>
+                            {(editMedia.sectors?.length || 0) > 1 && (
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteSector(secIdx)}
+                                style={{
+                                  background: '#fee2e2',
+                                  color: '#dc2626',
+                                  border: '1px solid #fca5a5',
+                                  borderRadius: '6px',
+                                  padding: '4px 10px',
+                                  fontSize: '0.75rem',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                              >
+                                <FiTrash2 /> Delete This Sector
+                              </button>
+                            )}
+                          </div>
+
+                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.78rem' }}>Sector Number (e.g. 01, 02)</label>
+                              <input
+                                type="text"
+                                className="dash-input-styled"
+                                value={sector.number || ''}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.sectors || [])];
+                                  updated[secIdx] = { ...updated[secIdx], number: e.target.value };
+                                  setEditMedia({ ...editMedia, sectors: updated });
+                                }}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.78rem' }}>Category Badge Tag</label>
+                              <input
+                                type="text"
+                                className="dash-input-styled"
+                                placeholder="e.g. ACADEMIC & INSTITUTIONAL"
+                                value={sector.badge || ''}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.sectors || [])];
+                                  updated[secIdx] = { ...updated[secIdx], badge: e.target.value };
+                                  setEditMedia({ ...editMedia, sectors: updated });
+                                }}
+                              />
+                            </div>
+
+                            <div>
+                              <label className="dash-label" style={{ fontSize: '0.78rem' }}>Icon Selection</label>
+                              <select
+                                className="dash-input-styled"
+                                value={sector.iconName || 'FaBriefcase'}
+                                onChange={(e) => {
+                                  const updated = [...(editMedia.sectors || [])];
+                                  updated[secIdx] = { ...updated[secIdx], iconName: e.target.value };
+                                  setEditMedia({ ...editMedia, sectors: updated });
+                                }}
+                              >
+                                {MEDIA_ICON_OPTIONS.map(opt => (
+                                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                                ))}
+                              </select>
+                            </div>
+                          </div>
+
+                          <div>
+                            <label className="dash-label" style={{ fontSize: '0.78rem' }}>Sector Full Title</label>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              value={sector.title || ''}
+                              onChange={(e) => {
+                                const updated = [...(editMedia.sectors || [])];
+                                updated[secIdx] = { ...updated[secIdx], title: e.target.value };
+                                setEditMedia({ ...editMedia, sectors: updated });
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="dash-label" style={{ fontSize: '0.78rem' }}>Short Summary (Nav preview)</label>
+                            <input
+                              type="text"
+                              className="dash-input-styled"
+                              value={sector.summary || ''}
+                              onChange={(e) => {
+                                const updated = [...(editMedia.sectors || [])];
+                                updated[secIdx] = { ...updated[secIdx], summary: e.target.value };
+                                setEditMedia({ ...editMedia, sectors: updated });
+                              }}
+                            />
+                          </div>
+
+                          <div>
+                            <label className="dash-label" style={{ fontSize: '0.78rem' }}>Introductory Paragraph</label>
+                            <textarea
+                              rows={2}
+                              className="dash-input-styled"
+                              value={sector.intro || ''}
+                              onChange={(e) => {
+                                const updated = [...(editMedia.sectors || [])];
+                                updated[secIdx] = { ...updated[secIdx], intro: e.target.value };
+                                setEditMedia({ ...editMedia, sectors: updated });
+                              }}
+                            />
+                          </div>
+
+                          {/* DELIVERABLE BULLET POINTS MANAGER */}
+                          <div style={{ marginTop: '8px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '10px', padding: '14px' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                              <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233' }}>
+                                Solution Deliverable Points ({(sector.points || []).length} Bullet Points)
+                              </label>
+                              <button
+                                type="button"
+                                onClick={() => handleAddSectorPoint(secIdx)}
+                                style={{
+                                  background: '#f0fdf4',
+                                  color: '#16a34a',
+                                  border: '1px solid #bbf7d0',
+                                  borderRadius: '6px',
+                                  padding: '4px 10px',
+                                  fontSize: '0.76rem',
+                                  fontWeight: 700,
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '4px'
+                                }}
+                              >
+                                <FiPlus /> Add Bullet Point
+                              </button>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                              {(sector.points || []).map((pointText, pIdx) => (
+                                <div key={pIdx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                  <span style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ea580c', background: '#fff7ed', padding: '6px 8px', borderRadius: '6px', minWidth: '28px', textAlign: 'center' }}>
+                                    {pIdx + 1}
+                                  </span>
+                                  <input
+                                    type="text"
+                                    className="dash-input-styled"
+                                    style={{ flex: 1 }}
+                                    value={pointText}
+                                    onChange={(e) => handleUpdateSectorPoint(secIdx, pIdx, e.target.value)}
+                                  />
+                                  <button
+                                    type="button"
+                                    onClick={() => handleDeleteSectorPoint(secIdx, pIdx)}
+                                    title="Remove this point"
+                                    style={{
+                                      background: '#fee2e2',
+                                      color: '#dc2626',
+                                      border: '1px solid #fca5a5',
+                                      borderRadius: '6px',
+                                      width: '32px',
+                                      height: '32px',
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      cursor: 'pointer',
+                                      flexShrink: 0
+                                    }}
+                                  >
+                                    <FiTrash2 size={13} />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </>
+                )}
+
+                {/* 5. CALL TO ACTION (CTA) CONFIGURATION */}
+                {(mediaAdminSubTab === 'all' || mediaAdminSubTab === 'cta') && (
+                  <>
+                    <div className="dash-field-group full-width" style={{ borderBottom: '2px solid #e2e8f0', paddingBottom: '8px', marginTop: '24px' }}>
+                      <h4 style={{ margin: 0, color: '#082233', fontSize: '1.15rem', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <FiCheckCircle style={{ color: '#ea580c' }} /> 5. Call to Action (CTA) Section
+                      </h4>
+                      <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                        Configure the gold heading, lead paragraph, partner badge, brand endorsement line, and button text.
+                      </p>
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">CTA Main Gold Heading</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. Let's Build Your Brand Together."
+                        value={editMedia.cta?.heading || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), heading: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">CTA Lead Narrative Text</label>
+                      <textarea
+                        rows={3}
+                        className="dash-input-styled"
+                        value={editMedia.cta?.leadText || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), leadText: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Partner Badge Pill</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. Your Premier Event Partner"
+                        value={editMedia.cta?.partnerBadge || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), partnerBadge: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Brand Endorsement Line</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="e.g. AD ELITE | A Creative Solutions Brand of INNOVEITY"
+                        value={editMedia.cta?.brandEndorsement || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), brandEndorsement: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group full-width">
+                      <label className="dash-label">Contact Prompt Text</label>
+                      <textarea
+                        rows={2}
+                        className="dash-input-styled"
+                        placeholder="Contact us to discuss your branding, media, social media management..."
+                        value={editMedia.cta?.contactPrompt || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), contactPrompt: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    {/* SUB-SECTION A: PRIMARY ACTION BUTTON */}
+                    <div className="dash-field-group full-width" style={{ marginTop: '14px', borderTop: '1px dashed #cbd5e1', paddingTop: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h5 style={{ margin: 0, color: '#082233', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FiExternalLink style={{ color: '#ea580c' }} /> Primary CTA Button (Yellow Banner Button)
+                          </h5>
+                          <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                            Controls the large golden CTA button displayed at the bottom-right of the CTA banner on the Media page.
+                          </p>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '3px 8px', borderRadius: '12px', background: '#fef3c7', color: '#b45309' }}>
+                          Live Button
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Primary Button Text</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="START YOUR MEDIA PROJECT"
+                        value={editMedia.cta?.btnText || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), btnText: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Primary Button Target Link</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="/contact"
+                        value={editMedia.cta?.btnLink || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), btnLink: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    {/* SUB-SECTION B: QUICK CONTACT LINK PILLS */}
+                    <div className="dash-field-group full-width" style={{ marginTop: '14px', borderTop: '1px dashed #cbd5e1', paddingTop: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
+                        <div>
+                          <h5 style={{ margin: 0, color: '#082233', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <FiShare2 style={{ color: '#ea580c' }} /> Quick Contact Pills (Bottom-Left Pill Bar)
+                          </h5>
+                          <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+                            Configure the 4 contact pills: Website, Email, Phone, and Social Media links.
+                          </p>
+                        </div>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '3px 8px', borderRadius: '12px', background: '#ecfdf5', color: '#047857' }}>
+                          4 Contact Pills
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Website Pill Target Link</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="/contact"
+                        value={editMedia.cta?.websiteLink || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), websiteLink: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Email Pill Address</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="aachinancy@gmail.com"
+                        value={editMedia.cta?.email || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), email: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Phone Pill Number</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="+91 7904327211"
+                        value={editMedia.cta?.phone || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), phone: e.target.value }
+                        })}
+                      />
+                    </div>
+
+                    <div className="dash-field-group">
+                      <label className="dash-label">Social Media Pill Target Link</label>
+                      <input
+                        type="text"
+                        className="dash-input-styled"
+                        placeholder="/contact or https://instagram.com/..."
+                        value={editMedia.cta?.socialLink || ''}
+                        onChange={(e) => setEditMedia({
+                          ...editMedia,
+                          cta: { ...(editMedia.cta || {}), socialLink: e.target.value }
+                        })}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* BOTTOM STICKY SAVE BAR */}
+                <div className="dash-field-group full-width" style={{ marginTop: '20px', borderTop: '2px solid #e2e8f0', paddingTop: '16px', display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+                  <button
+                    type="submit"
+                    className="action-pill-btn primary-pill"
+                    style={{ background: '#ff6b00', color: '#ffffff', padding: '12px 24px', fontSize: '0.95rem', fontWeight: 800, display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <FiCheck /> Save All AD ELITE Media Content (Live Sync)
                   </button>
+                  <a
+                    href="/media"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="action-pill-btn"
+                    style={{ background: '#f1f5f9', color: '#334155', border: '1px solid #cbd5e1', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <FiExternalLink /> Preview Live Media Page
+                  </a>
+                  <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                    Changes are automatically saved to LocalStorage and synced to the MySQL database in real time.
+                  </span>
                 </div>
 
               </form>
@@ -4939,7 +5733,147 @@ const SuperAdminPage = () => {
               </div>
             </div>
 
-            {/* MASTER STATUS TOGGLE BANNER */}
+            {/* 1. HERO 3D GRAPHIC / SPLIT BANNER STATUS & ASSET CONTROLS */}
+            <div style={{
+              background: (editHome.splitBannerEnabled !== false) ? 'linear-gradient(135deg, #ecfdf5 0%, #f0fdf4 100%)' : '#f8fafc',
+              border: (editHome.splitBannerEnabled !== false) ? '2px solid #16a34a' : '1px solid #e2e8f0',
+              borderRadius: '20px',
+              padding: '22px 28px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '16px',
+              boxShadow: (editHome.splitBannerEnabled !== false) ? '0 8px 24px rgba(22, 163, 74, 0.12)' : 'none',
+              transition: 'all 0.3s ease',
+              marginTop: '20px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
+                <div style={{
+                  width: '54px',
+                  height: '54px',
+                  borderRadius: '16px',
+                  background: (editHome.splitBannerEnabled !== false) ? 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)' : '#e2e8f0',
+                  color: (editHome.splitBannerEnabled !== false) ? '#ffffff' : '#64748b',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1.6rem',
+                  flexShrink: 0,
+                  boxShadow: (editHome.splitBannerEnabled !== false) ? '0 6px 16px rgba(22, 163, 74, 0.3)' : 'none'
+                }}>
+                  <FiImage />
+                </div>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <h4 style={{ margin: 0, fontSize: '1.15rem', color: '#082233', fontWeight: 800 }}>
+                      Live Hero Split Banner & 3D Graphic Status
+                    </h4>
+                    <span style={{
+                      fontSize: '0.74rem',
+                      fontWeight: 800,
+                      padding: '3px 12px',
+                      borderRadius: '14px',
+                      background: (editHome.splitBannerEnabled !== false) ? '#16a34a' : '#94a3b8',
+                      color: '#ffffff',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.04em'
+                    }}>
+                      {(editHome.splitBannerEnabled !== false) ? '🟢 Split Banner Active' : '⚪ Split Banner Deactivated'}
+                    </span>
+                  </div>
+                  <p style={{ margin: '6px 0 0', fontSize: '0.88rem', color: '#475569' }}>
+                    {(editHome.splitBannerEnabled !== false)
+                      ? 'Split Banner is ACTIVE (Split Layout): Text is formatted in 410px width with the split space in the center, and 3D graphic on the right.'
+                      : 'Split Banner is DEACTIVATED (Filled Layout): Text expands to 620px filling the section with zero center gap, and 3D graphic sits right beside it.'}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleToggleHeroSplitBanner}
+                style={{
+                  padding: '12px 26px',
+                  borderRadius: '14px',
+                  border: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.92rem',
+                  cursor: 'pointer',
+                  background: (editHome.splitBannerEnabled !== false) ? '#ef4444' : '#ff6b00',
+                  color: '#ffffff',
+                  boxShadow: '0 4px 14px rgba(0,0,0,0.12)',
+                  transition: 'all 0.2s ease'
+                }}
+              >
+                {(editHome.splitBannerEnabled !== false) ? 'Deactivate Split Banner' : 'Activate Split Banner'}
+              </button>
+            </div>
+
+            {/* Hero Banner Image Asset Controls */}
+            <div style={{ marginTop: '14px', marginBottom: '28px', background: '#ffffff', padding: '18px 24px', borderRadius: '16px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.02)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                <label className="dash-label" style={{ margin: 0, fontWeight: 700, color: '#082233', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <FiImage /> Hero Graphic / Media Banner Image Asset
+                </label>
+                <span style={{ fontSize: '0.72rem', background: '#dcfce7', color: '#15803d', padding: '2px 8px', borderRadius: '10px', fontWeight: 700 }}>
+                  ★ Live Banner Asset
+                </span>
+              </div>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
+                <div style={{ flex: '1 1 260px' }}>
+                  <div style={{ display: 'flex', gap: '8px', marginBottom: '6px' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="home-hero-upload-modal"
+                      style={{ display: 'none' }}
+                      onChange={async (e) => {
+                        await handleImageUpload(e, setEditHome, editHome);
+                      }}
+                    />
+                    <label htmlFor="home-hero-upload-modal" className="action-pill-btn primary-pill" style={{ cursor: 'pointer', padding: '6px 14px', fontSize: '0.82rem', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                      <FiUpload /> Upload Hero Image
+                    </label>
+                  </div>
+                  <input
+                    type="text"
+                    className="dash-input-styled"
+                    placeholder="e.g. /hero_banner.png or data:image/jpeg;base64,..."
+                    value={editHome.image || ''}
+                    onChange={(e) => {
+                      const updated = { ...editHome, image: e.target.value };
+                      setEditHome(updated);
+                    }}
+                    onBlur={() => {
+                      if (updateHomeContent) updateHomeContent(editHome);
+                    }}
+                  />
+                </div>
+                {editHome.image && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', background: '#f8fafc', padding: '6px 10px', borderRadius: '8px', border: '1px solid #cbd5e1' }}>
+                    <img
+                      src={editHome.image}
+                      alt="Hero Banner Preview"
+                      style={{ width: '80px', height: '48px', borderRadius: '6px', objectFit: 'cover', border: '1px solid #e2e8f0' }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updated = { ...editHome, image: '' };
+                        setEditHome(updated);
+                        if (updateHomeContent) updateHomeContent(updated);
+                      }}
+                      style={{ background: '#fef2f2', color: '#ef4444', border: '1px solid #fecaca', borderRadius: '6px', padding: '4px 8px', fontSize: '0.72rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px', fontWeight: 700 }}
+                    >
+                      <FiTrash2 /> Clear
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 2. MASTER STATUS TOGGLE FOR BROCHURE MODAL */}
             <div style={{
               background: editBrochure.enabled ? 'linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)' : '#f8fafc',
               border: editBrochure.enabled ? '2px solid #ff6b00' : '1px solid #e2e8f0',

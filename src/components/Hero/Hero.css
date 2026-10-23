@@ -58,20 +58,27 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 115px 2rem 30px 2rem;
+  padding: 115px 2.5rem 30px 2.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
 }
 
+.hero-content-wrapper.container {
+  max-width: 1400px;
+  width: 100%;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+}
+
 /* 2-Column Split Hero Layout */
 .hero-split-grid {
   display: grid;
   grid-template-columns: 1.15fr 0.95fr;
-  gap: 48px;
+  gap: 36px;
   align-items: center;
   width: 100%;
   margin: auto 0;
@@ -83,6 +90,33 @@
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+}
+
+/* Mode: Split Banner ACTIVE (Image 2 style: Narrow 410px text with center gap) */
+.hero-split-grid.hero-split-active {
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 48px;
+}
+
+.hero-body-text.split-active {
+  max-width: 410px;
+  text-align: justify;
+  text-justify: inter-word;
+  opacity: 0.85;
+}
+
+/* Mode: Split Banner DEACTIVATED (Image 1 style: Filled layout, wider text, no center gap) */
+.hero-split-grid.hero-split-deactivated {
+  grid-template-columns: 1.15fr 0.95fr;
+  gap: 36px;
+}
+
+.hero-body-text.split-filled {
+  max-width: 620px;
+  width: 100%;
+  text-align: justify;
+  text-justify: inter-word;
+  opacity: 0.88;
 }
 
 .hero-display-title {
@@ -173,16 +207,31 @@
 }
 
 .hero-body-text {
-  font-size: 1.02rem;
-  line-height: 1.75;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.78;
   color: #0b192c;
   font-weight: 500;
-  max-width: 410px;
-  margin: 1rem 0 0 0;
+  margin: 1.1rem 0 0 0;
   text-align: justify;
   text-justify: inter-word;
-  opacity: 0.85;
   animation: heroLiftUp 0.95s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+}
+
+/* Image 2 style: Split Banner ACTIVE (Narrow 410px text with center gap) */
+.hero-body-text.split-active {
+  max-width: 410px;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  opacity: 0.85;
+}
+
+/* Image 1 style: Split Banner DEACTIVATED (Filled layout, 620px text, no center gap) */
+.hero-body-text.split-filled {
+  max-width: 620px;
+  width: 100%;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 1.78;
+  opacity: 0.88;
 }
 
 .hero-action-group {
@@ -199,14 +248,15 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  margin-top: 18px;
+  margin-top: 14px;
+  width: 100%;
   animation: heroLiftUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 }
 
 .hero-3d-art-wrapper {
   position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 580px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -214,8 +264,8 @@
 
 .hero-3d-glow-backdrop {
   position: absolute;
-  width: 85%;
-  height: 85%;
+  width: 90%;
+  height: 90%;
   background: radial-gradient(circle, rgba(255, 107, 0, 0.25) 0%, rgba(255, 145, 0, 0.08) 45%, transparent 72%);
   filter: blur(45px);
   z-index: 1;
@@ -225,7 +275,7 @@
 .hero-3d-in-img {
   width: 100%;
   height: auto;
-  max-height: 470px;
+  max-height: 520px;
   object-fit: contain;
   position: relative;
   z-index: 2;
@@ -408,6 +458,18 @@
 
 /* Responsive Media Queries */
 @media screen and (max-width: 1024px) {
+  .hero-split-grid,
+  .hero-split-grid.hero-split-active,
+  .hero-split-grid.hero-split-deactivated {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .hero-body-text.split-active,
+  .hero-body-text.split-filled {
+    max-width: 100%;
+  }
+
   .hero-display-title {
     font-size: 2.8rem;
     white-space: normal;
@@ -427,8 +489,26 @@
 
 @media screen and (max-width: 768px) {
   .hero-content-wrapper {
-    padding: 95px 1rem 20px 1rem;
+    padding: 90px 1.25rem 20px 1.25rem;
     min-height: auto;
+    width: 100%;
+  }
+
+  .hero-content-wrapper.container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .hero-split-grid,
+  .hero-split-grid.hero-split-active,
+  .hero-split-grid.hero-split-deactivated {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin: 1.5rem 0;
+  }
+
+  .hero-left-content {
+    width: 100%;
   }
 
   .hero-display-title {
@@ -446,7 +526,23 @@
   .hero-body-text {
     font-size: 0.95rem;
     line-height: 1.65;
-    padding: 0 0.5rem;
+    padding: 0;
+    max-width: 100%;
+    text-align: left;
+    text-justify: auto;
+  }
+
+  .hero-body-text.split-active,
+  .hero-body-text.split-filled {
+    max-width: 100%;
+    text-align: left;
+    text-justify: auto;
+  }
+
+  .hero-right-visual {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
   }
 
   .pill-btn-hero {
@@ -470,7 +566,12 @@
 
 @media screen and (max-width: 480px) {
   .hero-content-wrapper {
-    padding: 85px 0.75rem 15px 0.75rem;
+    padding: 80px 0.85rem 15px 0.85rem;
+  }
+
+  .hero-content-wrapper.container {
+    padding-left: 0.85rem;
+    padding-right: 0.85rem;
   }
 
   .hero-display-title {
